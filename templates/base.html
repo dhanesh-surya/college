@@ -1276,14 +1276,68 @@
     <header class="modern-header">
         <!-- Get active header info -->
         {% if header_info and header_info.is_active %}
+        {% if header_info.college_name_font_family %}
+        <link href="https://fonts.googleapis.com/css2?family={{ header_info.college_name_font_family|cut:", sans-serif"|cut:", serif" }}:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+        {% endif %}
+        
         <style>
-            /* Dynamic font loading and typography */
-            {% if header_info.college_name_font_family %}
-            @import url('https://fonts.googleapis.com/css2?family={{ header_info.college_name_font_family|cut:", sans-serif"|cut:", serif" }}:wght@300;400;500;600;700;800;900&display=swap');
-            {% endif %}
+            .modern-header {
+                font-family: var(--header-font-family);
+                background: var(--header-bg-color);
+                box-shadow: var(--header-shadow);
+                border-radius: var(--header-border-radius);
+                border-bottom: 3px solid var(--header-border-color);
+                margin: var(--header-margin);
+                position: relative;
+                z-index: 100;
+            }
             
-            /* Header animation effects */
-            {% if header_info.enable_animations %}
+            .header-college-name {
+                font-family: var(--header-font-family);
+                font-size: var(--header-font-size);
+                color: var(--header-font-color);
+                text-shadow: var(--header-text-shadow);
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+            }
+            
+            .header-logos img {
+                max-height: var(--logo-max-height);
+                max-width: var(--logo-max-width);
+                width: auto;
+                height: auto;
+                object-fit: contain;
+            }
+            
+            @media (max-width: 768px) {
+                .header-college-name {
+                    font-size: calc(var(--header-font-size) * 0.7);
+                }
+            }
+        </style>
+        
+        {% if header_info.header_gradient_colors %}
+        <style>
+            .modern-header {
+                background: var(--header-gradient);
+            }
+        </style>
+        {% endif %}
+        
+        {% if header_info.enable_animations %}
+        <style>
+            .modern-header {
+                animation: var(--animation-type) var(--animation-duration) ease-in-out;
+            }
+            
+            .header-college-name {
+                animation: slideInDown var(--animation-duration) ease-out;
+            }
+            
+            .header-logos img {
+                animation: zoomIn calc(var(--animation-duration) * 0.8) ease-out;
+            }
+            
             .logo-hover-effect {
                 transition: transform 0.3s ease;
             }
@@ -1306,78 +1360,10 @@
                     transform: translateY(0);
                 }
             }
-            {% endif %}
             
-            .modern-header {
-                font-family: var(--header-font-family);
-                background: var(--header-bg-color);
-                {% if header_info.header_gradient_colors %}
-                background: var(--header-gradient);
-                {% endif %}
-                box-shadow: var(--header-shadow);
-                border-radius: var(--header-border-radius);
-                border-bottom: 3px solid var(--header-border-color);
-                margin: var(--header-margin);
-                position: relative;
-                z-index: 100;
-                
-                {% if header_info.enable_animations %}
-                animation: var(--animation-type) var(--animation-duration) ease-in-out;
-                {% endif %}
-            }
-            
-            .header-college-name {
-                font-family: var(--header-font-family);
-                font-size: var(--header-font-size);
-                color: var(--header-font-color);
-                text-shadow: var(--header-text-shadow);
-                font-weight: {{ header_info.font_weight|default:"700" }};
-                margin-bottom: 0.5rem;
-                {% if header_info.enable_animations %}
-                animation: slideInDown var(--animation-duration) ease-out;
-                {% endif %}
-            }
-            
-            .header-logos img {
-                max-height: var(--logo-max-height);
-                max-width: var(--logo-max-width);
-                width: auto;
-                height: auto;
-                object-fit: contain;
-                {% if header_info.enable_animations %}
-                animation: zoomIn calc(var(--animation-duration) * 0.8) ease-out;
-                {% endif %}
-            }
-            
-            /* Mobile responsive adjustments */
-            @media (max-width: 768px) {
-                {% if header_info.hide_on_mobile %}
-                .modern-header .header-mobile-hide {
-                    display: none !important;
-                }
-                {% endif %}
-                
-                .header-college-name {
-                    font-size: calc(var(--header-font-size) * 0.7);
-                }
-            }
-            
-            /* Animation keyframes */
-            {% if header_info.enable_animations %}
             @keyframes fadeIn {
                 from { opacity: 0; }
                 to { opacity: 1; }
-            }
-            
-            @keyframes slideInDown {
-                from {
-                    opacity: 0;
-                    transform: translateY(-30px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
             }
             
             @keyframes zoomIn {
@@ -1390,8 +1376,34 @@
                     transform: scale(1);
                 }
             }
-            {% endif %}
         </style>
+        {% endif %}
+        
+        {% if header_info.hide_on_mobile %}
+        <style>
+            @media (max-width: 768px) {
+                .modern-header .header-mobile-hide {
+                    display: none !important;
+                }
+            }
+        </style>
+        {% endif %}
+        
+        {% if header_info.header_shadow %}
+        <style>
+            .college-header {
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+        </style>
+        {% endif %}
+        
+        {% if header_info.header_border_bottom %}
+        <style>
+            .college-header {
+                border-bottom: 3px solid #dc2626;
+            }
+        </style>
+        {% endif %}
         
         <!-- Top Contact Bar (if enabled) -->
         {% if header_info.show_top_bar and not header_info.hide_on_mobile %}
@@ -1446,12 +1458,7 @@
         {% endif %}
         
         <!-- Main Header Section -->
-        <div class="college-header header-dynamic-styles" style="
-            padding: var(--header-padding);
-            background: {{ header_info.header_background_color|default:'#ffffff' }};
-            {% if header_info.header_shadow %}box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);{% endif %}
-            {% if header_info.header_border_bottom %}border-bottom: 3px solid {{ header_info.header_border_color|default:'#dc2626' }};{% endif %}
-        ">
+        <div class="college-header header-dynamic-styles" style="padding: var(--header-padding); background: {{ header_info.header_background_color|default:'#ffffff' }};">
             <div class="container">
                 <div class="row align-items-center 
                     {% if header_info.header_layout == 'centered' %}justify-content-center{% endif %}
@@ -1505,30 +1512,17 @@
                     <!-- Main Content Area -->
                     <div class="{% if header_info.left_logo_1 or header_info.left_logo_2 or header_info.left_logo_3 or header_info.right_logo_1 or header_info.right_logo_2 or header_info.right_logo_3 %}col-lg-8 col-md-6{% else %}col-12{% endif %} text-center order-2">
                         {% if header_info.show_college_name and header_info.college_name %}
-                        <h1 class="header-college-name mb-2 {% if header_info.enable_animations %}animate-text{% endif %}" style="
-                            font-family: {{ header_info.college_name_font_family }};
-                            font-size: {{ header_info.college_name_font_size }}px;
-                            font-weight: {{ header_info.college_name_font_weight }};
-                            color: {{ header_info.college_name_color }};
-                        ">{{ header_info.college_name }}</h1>
+                        <h1 class="header-college-name mb-2 {% if header_info.enable_animations %}animate-text{% endif %}">{{ header_info.college_name }}</h1>
                         {% endif %}
                         
                         {% if header_info.show_affiliations and header_info.college_affiliations %}
-                        <div class="college-affiliation mb-2 {% if header_info.hide_affiliations_mobile %}d-md-block d-none{% endif %}" style="
-                            font-size: {{ header_info.affiliations_font_size }}px;
-                            font-weight: {{ header_info.affiliations_font_weight }};
-                            color: {{ header_info.affiliations_color }};
-                        ">
+                        <div class="college-affiliation mb-2 {% if header_info.hide_affiliations_mobile %}d-md-block d-none{% endif %}">
                             {{ header_info.college_affiliations|linebreaksbr }}
                         </div>
                         {% endif %}
                         
                         {% if header_info.show_address and header_info.college_address %}
-                        <small class="college-address d-block {% if header_info.hide_affiliations_mobile %}d-md-block d-none{% endif %}" style="
-                            font-size: {{ header_info.address_font_size }}px;
-                            font-weight: {{ header_info.address_font_weight }};
-                            color: {{ header_info.address_color }};
-                        ">
+                        <small class="college-address d-block {% if header_info.hide_affiliations_mobile %}d-md-block d-none{% endif %}">
                             <i class="fas fa-map-marker-alt me-1"></i>{{ header_info.college_address }}
                         </small>
                         {% endif %}
@@ -1581,12 +1575,7 @@
                     {% if header_info.show_contact_info and header_info.header_layout != 'three_column' %}
                     <div class="col-12 mt-3 order-4">
                         <div class="text-center">
-                            <div class="contact-panel d-inline-block px-4 py-2 rounded" style="
-                                background: rgba(220, 38, 38, 0.05); 
-                                border-left: 4px solid {{ header_info.header_border_color|default:'#dc2626' }};
-                                font-size: {{ header_info.contact_font_size }}px;
-                                color: {{ header_info.contact_color }};
-                            ">
+                            <div class="contact-panel d-inline-block px-4 py-2 rounded" style="background: rgba(220, 38, 38, 0.05);">
                                 {% if header_info.email %}
                                 <small class="d-block"><i class="fas fa-envelope me-2"></i>{{ header_info.email }}</small>
                                 {% endif %}

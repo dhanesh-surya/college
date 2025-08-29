@@ -1,0 +1,410 @@
+/* Gallery Admin Styling */
+
+/* Gallery Form Styling */
+.gallery-admin-form {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Gallery Fieldset Styling */
+.gallery-admin-form fieldset {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: white;
+}
+
+.gallery-admin-form fieldset legend {
+    background: #28a745;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 0;
+    width: auto;
+}
+
+/* Image Upload Styling */
+.gallery-image-upload {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+    background: #f8f9fa;
+}
+
+.gallery-image-upload:hover {
+    border-color: #28a745;
+    background: #f0f8f0;
+}
+
+.gallery-image-upload input[type="file"] {
+    margin: 10px 0;
+}
+
+/* Image Preview Styling */
+.image-preview {
+    position: relative;
+    display: inline-block;
+    margin: 5px;
+}
+
+.image-preview img {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease;
+}
+
+.image-preview:hover img {
+    transform: scale(1.05);
+}
+
+.image-preview .delete-overlay {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.image-preview:hover .delete-overlay {
+    opacity: 1;
+}
+
+/* Gallery Inline Styling */
+.gallery-inline {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.gallery-inline h3 {
+    background: #28a745;
+    color: white;
+    padding: 10px 15px;
+    margin: -15px -15px 15px -15px;
+    border-radius: 8px 8px 0 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Tabular Inline for Images */
+.gallery-images-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.gallery-images-table th {
+    background: #28a745;
+    color: white;
+    padding: 12px;
+    border: 1px solid #20c997;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.gallery-images-table td {
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+    background: white;
+}
+
+.gallery-images-table tr:nth-child(even) td {
+    background: #f8f9fa;
+}
+
+/* Image Count Badges */
+.image-count-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.image-count-none {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.image-count-few {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.image-count-good {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Gallery Actions */
+.gallery-actions {
+    margin-top: 15px;
+    padding: 10px;
+    background: #e9ecef;
+    border-radius: 4px;
+}
+
+.gallery-actions .btn {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+/* Drag and Drop for Images */
+.sortable-image {
+    cursor: move;
+    position: relative;
+}
+
+.sortable-image:hover {
+    background: #e3f2fd;
+}
+
+.sortable-handle {
+    color: #6c757d;
+    padding: 5px;
+    cursor: move;
+}
+
+.sortable-handle:hover {
+    color: #28a745;
+}
+
+.ui-sortable-helper {
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 2px solid #28a745;
+}
+
+.ui-sortable-placeholder {
+    height: 60px;
+    background: #f0f8f0;
+    border: 2px dashed #28a745;
+    margin: 5px 0;
+}
+
+/* File Input Styling */
+.gallery-file-input {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    background: #28a745;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.gallery-file-input:hover {
+    background: #218838;
+}
+
+.gallery-file-input input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+/* Caption Input Styling */
+.caption-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.caption-input:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    outline: 0;
+}
+
+/* Ordering Input */
+.ordering-input {
+    width: 60px;
+    padding: 4px 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* Gallery Statistics */
+.gallery-stats {
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.gallery-stats .stat-item {
+    display: inline-block;
+    margin-right: 20px;
+    padding: 8px 12px;
+    background: white;
+    border-radius: 4px;
+    border-left: 4px solid #28a745;
+}
+
+.gallery-stats .stat-number {
+    font-size: 18px;
+    font-weight: 600;
+    color: #28a745;
+}
+
+.gallery-stats .stat-label {
+    font-size: 12px;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .gallery-admin-form {
+        padding: 15px;
+    }
+    
+    .gallery-inline {
+        padding: 10px;
+    }
+    
+    .gallery-images-table {
+        font-size: 12px;
+    }
+    
+    .gallery-images-table th,
+    .gallery-images-table td {
+        padding: 8px;
+    }
+    
+    .image-preview img {
+        max-width: 80px;
+        max-height: 60px;
+    }
+    
+    .gallery-stats .stat-item {
+        display: block;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+}
+
+/* Loading States */
+.gallery-loading {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.gallery-loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #28a745;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Error States */
+.gallery-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.gallery-error .error-icon {
+    margin-right: 8px;
+    font-weight: 600;
+}
+
+/* Success States */
+.gallery-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.gallery-success .success-icon {
+    margin-right: 8px;
+    font-weight: 600;
+}
+
+/* Bulk Actions */
+.gallery-bulk-actions {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.gallery-bulk-actions h4 {
+    margin-bottom: 10px;
+    color: #495057;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.gallery-bulk-actions .btn-group {
+    margin-right: 10px;
+}
+
+/* Image Validation Messages */
+.image-validation {
+    font-size: 11px;
+    margin-top: 5px;
+    padding: 4px 8px;
+    border-radius: 3px;
+}
+
+.image-validation.valid {
+    background: #d4edda;
+    color: #155724;
+}
+
+.image-validation.invalid {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.image-validation.warning {
+    background: #fff3cd;
+    color: #856404;
+}

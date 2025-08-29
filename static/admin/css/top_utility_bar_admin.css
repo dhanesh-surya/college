@@ -1,0 +1,384 @@
+/* Top Utility Bar Admin CSS */
+
+/* General Form Styling */
+.top-utility-bar-form {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Fieldset enhancements */
+.top-utility-bar-form fieldset {
+    margin-bottom: 1.5rem;
+    border: 1px solid #e3e3e3;
+    border-radius: 8px;
+    background: #fafafa;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.top-utility-bar-form fieldset h2 {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    color: white;
+    padding: 12px 20px;
+    margin: 0 -1px -1px -1px;
+    border-radius: 7px 7px 0 0;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.top-utility-bar-form .form-row {
+    padding: 20px;
+    background: white;
+    margin: 0 -1px;
+    border-radius: 0 0 7px 7px;
+}
+
+/* Color picker enhancements */
+.form-control-color {
+    width: 60px !important;
+    height: 40px !important;
+    border-radius: 8px !important;
+    border: 2px solid #dee2e6 !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-control-color:hover {
+    border-color: #0d6efd !important;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Form field groups */
+.field-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    align-items: start;
+}
+
+/* Toggle field styling */
+.form-check-input {
+    width: 1.2em !important;
+    height: 1.2em !important;
+    margin-top: 0.15em !important;
+}
+
+/* Conditional field hiding/showing */
+.social-media-fields.hidden,
+.contact-info-fields.hidden,
+.custom-links-fields.hidden {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.social-media-fields.visible,
+.contact-info-fields.visible,
+.custom-links-fields.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.3s ease;
+}
+
+/* URL field styling */
+input[type="url"], input[data-validation="url"], input[data-validation="custom-url"] {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 13px;
+}
+
+/* Validation indicators */
+.field-wrapper {
+    position: relative;
+}
+
+.field-wrapper .validation-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+}
+
+.field-wrapper .validation-icon.valid {
+    color: #28a745;
+}
+
+.field-wrapper .validation-icon.invalid {
+    color: #dc3545;
+}
+
+/* Help text improvements */
+.helptext {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+.helptext .icon {
+    margin-right: 5px;
+    color: #0d6efd;
+}
+
+/* Required field indicators */
+.required label:after {
+    content: " *";
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Custom link pair styling */
+.custom-link-pair {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 15px;
+    align-items: start;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #0d6efd;
+}
+
+.custom-link-pair .link-number {
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+/* Status indicators in list view */
+.utility-bar-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.utility-bar-status.active {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.utility-bar-status.inactive {
+    background: #f8d7da;
+    color: #842029;
+}
+
+/* Feature summary styling */
+.features-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.feature-badge {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+/* Preview button styling */
+.preview-button {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.preview-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+}
+
+/* Mobile responsiveness for admin */
+@media (max-width: 768px) {
+    .field-group {
+        grid-template-columns: 1fr;
+    }
+    
+    .custom-link-pair {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-control-color {
+        width: 100% !important;
+        height: 45px !important;
+    }
+}
+
+/* Animation for fieldset expansion */
+.fieldset-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.fieldset-content.expanded {
+    max-height: 1000px;
+}
+
+/* Enhanced error styling */
+.errorlist {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin: 10px 0;
+    list-style: none;
+}
+
+.errorlist li {
+    color: #721c24;
+    font-size: 13px;
+    margin: 0;
+    padding: 2px 0;
+}
+
+.errorlist li:before {
+    content: "⚠ ";
+    margin-right: 5px;
+}
+
+/* Success styling for saved forms */
+.form-success {
+    background: #d1e7dd;
+    border: 1px solid #badbcc;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 15px 0;
+    color: #0f5132;
+}
+
+.form-success:before {
+    content: "✓ ";
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+/* Utility bar changelist page styling */
+.utility-bar-changelist-stats {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0d6efd;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Action button styling */
+.button, .btn {
+    transition: all 0.2s ease;
+}
+
+.button:hover, .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+    );
+    animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Tooltip styling */
+.tooltip-trigger {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dashed #6c757d;
+}
+
+.tooltip-content {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1000;
+}
+
+.tooltip-trigger:hover .tooltip-content {
+    opacity: 1;
+}
+
+.tooltip-content::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #333;
+}

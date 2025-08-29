@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: /sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /ckeditor/
+Disallow: /media/uploads/
+
+# Allow important pages
+Allow: /
+Allow: /about/
+Allow: /programs/
+Allow: /events/
+Allow: /notices/
+Allow: /contact/
+Allow: /gallery/
+Allow: /student-corner/
+Allow: /social-impact/
+Allow: /achievements/
