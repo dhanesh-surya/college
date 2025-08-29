@@ -1,0 +1,526 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">About Us</li>
+{% endblock %}
+
+{% block content %}
+<!-- Modern Hero Section -->
+<section class="position-relative overflow-hidden tw-bg-gradient-to-br tw-from-indigo-900 tw-via-blue-800 tw-to-purple-900 tw-py-20">
+    <div class="tw-absolute tw-inset-0">
+        <div class="tw-absolute tw-top-10 tw-right-10 tw-w-72 tw-h-72 tw-bg-white tw-rounded-full tw-opacity-10 tw-animate-pulse"></div>
+        <div class="tw-absolute tw-bottom-10 tw-left-10 tw-w-48 tw-h-48 tw-bg-yellow-400 tw-rounded-full tw-opacity-20"></div>
+    </div>
+    <div class="tw-absolute tw-inset-0 tw-bg-black tw-opacity-30"></div>
+    
+    <div class="container position-relative tw-z-10">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-white">
+                <div class="tw-animate-fade-in-up">
+                    <span class="badge tw-bg-white tw-bg-opacity-20 tw-backdrop-blur-sm rounded-pill px-4 py-2 mb-4">
+                        <i class="fas fa-university text-warning me-2"></i>Since 2001
+                    </span>
+                    <h1 class="display-3 fw-bold mb-4 tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-white tw-to-blue-200">
+                        About <span class="tw-text-yellow-300">{{ college_info.name|default:"Our College" }}</span>
+                    </h1>
+                    <p class="lead fs-4 tw-text-blue-100 tw-max-w-2xl mb-5">
+                        {{ college_info.mission_statement_long|default:"Established in 2001, Chaitanya Science and Arts College has been a beacon of quality education in rural Chhattisgarh, empowering students with knowledge and skills for a brighter future." }}
+                    </p>
+                    
+                    <div class="row g-3 mb-5">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3">
+                                <div class="tw-bg-gradient-to-r tw-from-yellow-400 tw-to-orange-400 tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                    <i class="fas fa-calendar-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 text-white fw-medium">Established</h6>
+                                    <span class="tw-text-blue-200">{{ college_info.establishment_year|default:"2001" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3">
+                                <div class="tw-bg-gradient-to-r tw-from-blue-400 tw-to-indigo-400 tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                    <i class="fas fa-university text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 text-white fw-medium">Affiliation</h6>
+                                    <span class="tw-text-blue-200">{{ college_info.affiliation|default:"SNPU Raigarh" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{% url 'college_website:programs_list' %}" class="btn btn-warning btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                            <i class="fas fa-graduation-cap me-2"></i>Our Programs
+                        </a>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                            <i class="fas fa-envelope me-2"></i>Get in Touch
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 text-center mt-5 mt-lg-0">
+                <div class="position-relative tw-animate-float">
+                    {% if college_info.hero_image %}
+                    <img src="{{ college_info.hero_image.url }}" alt="College Campus" 
+                         class="img-fluid rounded-4 shadow-2xl tw-transform tw-transition-all tw-duration-700 hover:tw-scale-105">
+                    {% else %}
+                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-lg rounded-4 p-8 shadow-2xl">
+                        <i class="fas fa-university fa-5x text-warning mb-4 tw-animate-pulse"></i>
+                        <h3 class="text-white fw-bold mb-3">{{ college_info.name|default:"Chaitanya College" }}</h3>
+                        <p class="tw-text-blue-200 mb-0">Knowledge Meets Innovation</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+
+    <!-- Enhanced Statistics Section -->
+    <section class="py-5 tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50 rounded-4 mb-5">
+        <div class="text-center mb-5">
+            <h2 class="section-title text-primary mb-3">Our Impact in Numbers</h2>
+            <p class="lead text-muted">Over two decades of educational excellence</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4">
+                            <i class="fas fa-clock text-white fa-2x"></i>
+                        </div>
+                        <h2 class="display-4 fw-bold text-primary counter-number mb-2">{{ college_info.years_of_excellence|default:"25" }}</h2>
+                        <p class="text-muted fw-medium">Years of Excellence</p>
+                        <div class="tw-w-12 tw-h-1 tw-bg-gradient-to-r tw-from-blue-400 tw-to-indigo-400 tw-mx-auto tw-rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-r tw-from-green-500 tw-to-emerald-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4">
+                            <i class="fas fa-book-open text-white fa-2x"></i>
+                        </div>
+                        <h2 class="display-4 fw-bold text-success counter-number mb-2">{{ college_info.courses_count|default:"18" }}</h2>
+                        <p class="text-muted fw-medium">Courses Offered</p>
+                        <div class="tw-w-12 tw-h-1 tw-bg-gradient-to-r tw-from-green-400 tw-to-emerald-400 tw-mx-auto tw-rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-yellow-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4">
+                            <i class="fas fa-users text-white fa-2x"></i>
+                        </div>
+                        <h2 class="display-4 fw-bold text-warning counter-number mb-2">{{ college_info.students_count|default:"8000" }}</h2>
+                        <p class="text-muted fw-medium">Students Enrolled</p>
+                        <div class="tw-w-12 tw-h-1 tw-bg-gradient-to-r tw-from-orange-400 tw-to-yellow-400 tw-mx-auto tw-rounded"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4">
+                            <i class="fas fa-chalkboard-teacher text-white fa-2x"></i>
+                        </div>
+                        <h2 class="display-4 fw-bold text-info counter-number mb-2">{{ college_info.faculty_staff_count|default:"50" }}</h2>
+                        <p class="text-muted fw-medium">Faculty & Staff</p>
+                        <div class="tw-w-12 tw-h-1 tw-bg-gradient-to-r tw-from-purple-400 tw-to-pink-400 tw-mx-auto tw-rounded"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Section -->
+    <section class="mb-5">
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-user-tie fa-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-1">{{ college_info.founder_name|default:"Mr Veerendra Tiwari" }}</h5>
+                                <small class="text-muted">Founder</small>
+                            </div>
+                        </div>
+                        <blockquote class="blockquote">
+                            <p class="mb-0">"{{ college_info.founder_message|default:"Education is the foundation of progress. Our mission is to make quality education accessible to all, especially those from rural backgrounds." }}"</p>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-graduation-cap fa-lg"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-1">{{ college_info.principal_name|default:"Dr Vinod Kumar Gupta" }}</h5>
+                                <small class="text-muted">Principal</small>
+                            </div>
+                        </div>
+                        <blockquote class="blockquote">
+                            <p class="mb-0">"{{ college_info.principal_message|default:"We strive to create an environment where knowledge meets innovation and students can flourish academically and personally." }}"</p>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="mb-5">
+        <h2 class="section-title text-primary mb-4">Our Achievements</h2>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-award fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">{{ college_info.naac_grade|default:"NAAC Grade A" }}</h5>
+                        <p class="card-text text-muted">Accredited by National Assessment and Accreditation Council</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-star fa-2x"></i>
+                        </div>
+                        <h5 class="card-title">{{ college_info.iic_rating|default:"IIC 3 Star Rating" }}</h5>
+                        <p class="card-text text-muted">Institution's Innovation Council recognition</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Contact Information -->
+    <section class="tw-bg-gradient-to-br tw-from-blue-600 tw-via-purple-600 tw-to-pink-600 rounded-4 p-5 text-white position-relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="tw-absolute tw-top-0 tw-right-0 tw-w-32 tw-h-32 tw-bg-white tw-rounded-full tw-opacity-10 tw-transform tw-translate-x-16 tw--translate-y-16"></div>
+        <div class="tw-absolute tw-bottom-0 tw-left-0 tw-w-24 tw-h-24 tw-bg-yellow-400 tw-rounded-full tw-opacity-20 tw-transform tw--translate-x-12 tw-translate-y-12"></div>
+        
+        <div class="row align-items-center position-relative tw-z-10">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <h3 class="fw-bold mb-3">
+                            <i class="fas fa-phone-alt me-3"></i>Ready to Start Your Journey?
+                        </h3>
+                        <p class="tw-text-blue-100 mb-0 lead">Get in touch with us today and take the first step towards your bright future.</p>
+                    </div>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3">
+                            <div class="tw-bg-gradient-to-r tw-from-red-400 tw-to-pink-400 tw-w-10 tw-h-10 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-medium">Address</h6>
+                                <small class="tw-text-blue-200">{{ college_info.address_line|default:"Pamgarh, Janjgir Champa, CG" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3">
+                            <div class="tw-bg-gradient-to-r tw-from-green-400 tw-to-emerald-400 tw-w-10 tw-h-10 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                <i class="fas fa-phone text-white"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-medium">Phone</h6>
+                                <small class="tw-text-blue-200">{{ college_info.phone|default:"+91-9425540666" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3">
+                            <div class="tw-bg-gradient-to-r tw-from-blue-400 tw-to-indigo-400 tw-w-10 tw-h-10 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                <i class="fas fa-envelope text-white"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-medium">Email</h6>
+                                <small class="tw-text-blue-200">{{ college_info.email|default:"chaitanyapamgarh@gmail.com" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3">
+                            <div class="tw-bg-gradient-to-r tw-from-purple-400 tw-to-pink-400 tw-w-10 tw-h-10 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-medium">Office Hours</h6>
+                                <small class="tw-text-blue-200">Mon-Sat: 9AM-5PM</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 text-center">
+                <div class="d-flex flex-column gap-3">
+                    <a href="{% url 'college_website:contact' %}" 
+                       class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
+                        <i class="fas fa-paper-plane me-2 text-primary"></i>Contact Us
+                    </a>
+                    <a href="{% url 'college_website:admissions' %}" 
+                       class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                        <i class="fas fa-graduation-cap me-2"></i>Apply Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Enhanced Custom Styles -->
+<style>
+/* Floating Animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
+.tw-animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tw-animate-fade-in-up {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Counter Animation */
+@keyframes countUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.counter-number {
+    animation: countUp 0.8s ease-out forwards;
+}
+
+/* Enhanced Card Hover Effects */
+.card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15) !important;
+}
+
+/* Section Title Styling */
+.section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--bs-primary), #fbbf24);
+    border-radius: 2px;
+}
+
+/* Button Enhancements */
+.btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .tw-py-20 {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* Background Animation */
+@keyframes backgroundMove {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(20px, -20px) rotate(120deg); }
+    66% { transform: translate(-15px, 15px) rotate(240deg); }
+}
+
+.tw-animate-pulse {
+    animation: backgroundMove 6s ease-in-out infinite;
+}
+
+/* Loading Animation for Cards */
+.card {
+    opacity: 0;
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+.card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<!-- Enhanced JavaScript for Interactions -->
+<script>
+// Counter Animation Function
+function animateCounters() {
+    const counters = document.querySelectorAll('.counter-number');
+    const speed = 2000; // Animation duration in ms
+    
+    counters.forEach(counter => {
+        const target = parseInt(counter.textContent.replace(/\D/g, ''));
+        const increment = target / (speed / 16); // 60fps
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            counter.textContent = Math.floor(current) + (target >= 1000 ? '+' : '');
+        }, 16);
+    });
+}
+
+// Intersection Observer for Animations
+const observerOptions = {
+    threshold: 0.2,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            
+            // Trigger counter animation for statistics
+            if (entry.target.classList.contains('counter-number')) {
+                setTimeout(animateCounters, 500);
+            }
+        }
+    });
+}, observerOptions);
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Observe elements for animation
+    document.querySelectorAll('section, .card, .counter-number').forEach(el => {
+        observer.observe(el);
+    });
+    
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Add stagger animation to cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+    });
+});
+
+// Parallax effect for hero section
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const parallaxElements = document.querySelectorAll('.tw-animate-float');
+    
+    parallaxElements.forEach(element => {
+        const speed = 0.1;
+        element.style.transform = `translateY(${scrolled * speed}px)`;
+    });
+});
+</script>
+{% endblock %}

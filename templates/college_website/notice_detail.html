@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ notice.title }} - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:notices_list' %}" class="text-white-50">Notices</a></li>
+<li class="breadcrumb-item active text-white">{{ notice.title }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Notice Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-3">
+                {% if notice.priority == 'urgent' %}
+                <span class="badge bg-danger me-3 px-3 py-2">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Urgent
+                </span>
+                {% elif notice.priority == 'important' %}
+                <span class="badge bg-warning me-3 px-3 py-2">
+                    <i class="fas fa-star me-1"></i>Important
+                </span>
+                {% else %}
+                <span class="badge bg-info me-3 px-3 py-2">
+                    <i class="fas fa-bell me-1"></i>General
+                </span>
+                {% endif %}
+                <span class="text-muted">
+                    <i class="fas fa-calendar me-1"></i>{{ notice.published_date|date:"F d, Y" }}
+                </span>
+            </div>
+            <h1 class="display-5 fw-bold text-primary mb-3">{{ notice.title }}</h1>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <div class="d-flex flex-column gap-2">
+                {% if notice.attachment %}
+                <a href="{{ notice.attachment.url }}" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-download me-2"></i>Download Attachment
+                </a>
+                {% endif %}
+                <a href="{% url 'college_website:notices_list' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Notices
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Notice Content -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="card-text">
+                        {{ notice.content|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Notice Info -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-info me-2"></i>Notice Details</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-calendar text-primary me-2"></i>Published</span>
+                            <strong>{{ notice.published_date|date:"M d, Y" }}</strong>
+                        </div>
+                        {% if notice.expiry_date %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-clock text-primary me-2"></i>Valid Till</span>
+                            <strong>{{ notice.expiry_date|date:"M d, Y" }}</strong>
+                        </div>
+                        {% endif %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-flag text-primary me-2"></i>Priority</span>
+                            {% if notice.priority == 'urgent' %}
+                            <span class="badge bg-danger">Urgent</span>
+                            {% elif notice.priority == 'important' %}
+                            <span class="badge bg-warning">Important</span>
+                            {% else %}
+                            <span class="badge bg-info">General</span>
+                            {% endif %}
+                        </div>
+                        {% if notice.attachment %}
+                        <div class="list-group-item">
+                            <span><i class="fas fa-paperclip text-primary me-2"></i>Attachment</span>
+                            <div class="mt-2">
+                                <a href="{{ notice.attachment.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                    <i class="fas fa-download me-1"></i>Download File
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-phone me-2"></i>Need Help?</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="card-text mb-3">For queries related to this notice, contact our office:</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-success">
+                            <i class="fas fa-envelope me-2"></i>Send Message
+                        </a>
+                        <a href="tel:{{ college_info.phone|default:'+919425540666' }}" class="btn btn-outline-success">
+                            <i class="fas fa-phone me-2"></i>Call Office
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Share Notice -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-share me-2"></i>Share Notice</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-grid gap-2">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+                           class="btn btn-outline-primary btn-sm" target="_blank">
+                            <i class="fab fa-facebook me-1"></i>Share on Facebook
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ notice.title }}" 
+                           class="btn btn-outline-info btn-sm" target="_blank">
+                            <i class="fab fa-twitter me-1"></i>Share on Twitter
+                        </a>
+                        <a href="https://wa.me/?text={{ notice.title }} - {{ request.build_absolute_uri }}" 
+                           class="btn btn-outline-success btn-sm" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i>Share on WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- More Notices -->
+    <div class="mt-5">
+        <h3 class="text-primary mb-4">More Notices</h3>
+        <div class="d-flex gap-3 flex-wrap">
+            <a href="{% url 'college_website:notices_list' %}" class="btn btn-outline-primary">
+                <i class="fas fa-bell me-1"></i>All Notices
+            </a>
+            <a href="{% url 'college_website:home' %}" class="btn btn-outline-primary">
+                <i class="fas fa-home me-1"></i>Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

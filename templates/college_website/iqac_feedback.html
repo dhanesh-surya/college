@@ -1,0 +1,501 @@
+{% extends "college_website/iqac_base.html" %}
+{% load static %}
+
+{% block page_title %}IQAC Feedback{% endblock %}
+{% block page_subtitle %}Share Your Valuable Feedback{% endblock %}
+
+{% block iqac_content %}
+<div class="iqac-section">
+    <!-- Feedback Overview -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-comments me-2"></i>
+                        IQAC Feedback System
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <p class="lead text-muted mb-4">
+                        Your feedback is invaluable in helping us maintain and improve the quality of education 
+                        and services. Please share your thoughts, suggestions, and experiences.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="text-center">
+                                <div class="h2 fw-bold text-primary">500+</div>
+                                <div class="text-muted">Feedback Received</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="text-center">
+                                <div class="h2 fw-bold text-success">95%</div>
+                                <div class="text-muted">Response Rate</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="text-center">
+                                <div class="h2 fw-bold text-info">4.2/5</div>
+                                <div class="text-muted">Average Rating</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="text-center">
+                                <div class="h2 fw-bold text-warning">85%</div>
+                                <div class="text-muted">Implementation Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Categories -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-list me-2"></i>
+                Feedback Categories
+            </h3>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 feedback-card">
+                <div class="card-body p-4 text-center">
+                    <div class="feedback-icon mb-3">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Student Feedback</h5>
+                    <p class="text-muted mb-4">
+                        Share your experience about courses, teaching quality, facilities, and overall satisfaction.
+                    </p>
+                    <a href="#student-feedback" class="btn btn-primary">
+                        <i class="fas fa-edit me-2"></i>Give Feedback
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 feedback-card">
+                <div class="card-body p-4 text-center">
+                    <div class="feedback-icon mb-3">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Faculty Feedback</h5>
+                    <p class="text-muted mb-4">
+                        Provide insights on institutional support, resources, and suggestions for improvement.
+                    </p>
+                    <a href="#faculty-feedback" class="btn btn-success">
+                        <i class="fas fa-edit me-2"></i>Give Feedback
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 feedback-card">
+                <div class="card-body p-4 text-center">
+                    <div class="feedback-icon mb-3">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Employer Feedback</h5>
+                    <p class="text-muted mb-4">
+                        Help us understand how well our graduates perform in the industry and workplace.
+                    </p>
+                    <a href="#employer-feedback" class="btn btn-info">
+                        <i class="fas fa-edit me-2"></i>Give Feedback
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 feedback-card">
+                <div class="card-body p-4 text-center">
+                    <div class="feedback-icon mb-3">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Alumni Feedback</h5>
+                    <p class="text-muted mb-4">
+                        Share your post-graduation experience and suggestions for current students.
+                    </p>
+                    <a href="#alumni-feedback" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>Give Feedback
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 feedback-card">
+                <div class="card-body p-4 text-center">
+                    <div class="feedback-icon mb-3">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Parent Feedback</h5>
+                    <p class="text-muted mb-4">
+                        Parents' perspective on their ward's educational experience and institutional support.
+                    </p>
+                    <a href="#parent-feedback" class="btn btn-secondary">
+                        <i class="fas fa-edit me-2"></i>Give Feedback
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm h-100 feedback-card">
+                <div class="card-body p-4 text-center">
+                    <div class="feedback-icon mb-3">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">General Feedback</h5>
+                    <p class="text-muted mb-4">
+                        Any other suggestions, complaints, or appreciation you'd like to share with us.
+                    </p>
+                    <a href="#general-feedback" class="btn btn-dark">
+                        <i class="fas fa-edit me-2"></i>Give Feedback
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Form -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-edit me-2"></i>
+                Submit Your Feedback
+            </h3>
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form id="feedbackForm" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-6 mb-3">
+                                <label for="feedbackType" class="form-label fw-bold">Feedback Type *</label>
+                                <select class="form-select" id="feedbackType" name="feedback_type" required>
+                                    <option value="">Select feedback type</option>
+                                    <option value="student">Student Feedback</option>
+                                    <option value="faculty">Faculty Feedback</option>
+                                    <option value="employer">Employer Feedback</option>
+                                    <option value="alumni">Alumni Feedback</option>
+                                    <option value="parent">Parent Feedback</option>
+                                    <option value="general">General Feedback</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-lg-6 mb-3">
+                                <label for="name" class="form-label fw-bold">Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            
+                            <div class="col-lg-6 mb-3">
+                                <label for="email" class="form-label fw-bold">Email *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            
+                            <div class="col-lg-6 mb-3">
+                                <label for="phone" class="form-label fw-bold">Phone</label>
+                                <input type="tel" class="form-control" id="phone" name="phone">
+                            </div>
+                            
+                            <div class="col-12 mb-3">
+                                <label for="subject" class="form-label fw-bold">Subject *</label>
+                                <input type="text" class="form-control" id="subject" name="subject" required>
+                            </div>
+                            
+                            <div class="col-12 mb-3">
+                                <label for="message" class="form-label fw-bold">Your Feedback *</label>
+                                <textarea class="form-control" id="message" name="message" rows="6" required 
+                                          placeholder="Please share your detailed feedback, suggestions, or concerns..."></textarea>
+                            </div>
+                            
+                            <div class="col-lg-6 mb-3">
+                                <label for="rating" class="form-label fw-bold">Overall Rating</label>
+                                <select class="form-select" id="rating" name="rating">
+                                    <option value="">Select rating</option>
+                                    <option value="5">Excellent (5/5)</option>
+                                    <option value="4">Very Good (4/5)</option>
+                                    <option value="3">Good (3/5)</option>
+                                    <option value="2">Fair (2/5)</option>
+                                    <option value="1">Poor (1/5)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-lg-6 mb-3">
+                                <label for="anonymous" class="form-label fw-bold">Privacy</label>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous">
+                                    <label class="form-check-label" for="anonymous">
+                                        Submit anonymously
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="d-flex gap-3">
+                                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                                    </button>
+                                    <button type="reset" class="btn btn-outline-secondary btn-lg px-4">
+                                        <i class="fas fa-undo me-2"></i>Reset Form
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Statistics -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-chart-pie me-2"></i>
+                Feedback Statistics
+            </h3>
+            
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Feedback Distribution by Category</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Student Feedback</span>
+                                        <span class="fw-bold">45%</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-primary" style="width: 45%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Faculty Feedback</span>
+                                        <span class="fw-bold">25%</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: 25%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Alumni Feedback</span>
+                                        <span class="fw-bold">15%</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-warning" style="width: 15%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Employer Feedback</span>
+                                        <span class="fw-bold">10%</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-info" style="width: 10%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Parent Feedback</span>
+                                        <span class="fw-bold">3%</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-secondary" style="width: 3%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>General Feedback</span>
+                                        <span class="fw-bold">2%</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-dark" style="width: 2%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Recent Achievements</h5>
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-trophy text-warning me-3" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <div class="fw-bold">Best Feedback System</div>
+                                    <small class="text-muted">State Level Recognition</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-star text-success me-3" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <div class="fw-bold">95% Response Rate</div>
+                                    <small class="text-muted">Above National Average</small>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-thumbs-up text-primary me-3" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <div class="fw-bold">4.2/5 Rating</div>
+                                    <small class="text-muted">Overall Satisfaction</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+.section-title {
+    color: #1e40af;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    border-radius: 2px;
+}
+
+.feedback-card {
+    transition: all 0.3s ease;
+}
+
+.feedback-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.feedback-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #3b82f6, #1e40af);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 1.8rem;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.feedback-card:hover .feedback-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 10px 25px rgba(30, 64, 175, 0.3);
+}
+
+.progress {
+    border-radius: 10px;
+    background-color: #e5e7eb;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+.btn-lg {
+    padding: 0.75rem 2rem;
+    border-radius: 10px;
+    font-weight: 600;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation and submission
+    const feedbackForm = document.getElementById('feedbackForm');
+    
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Basic form validation
+            const requiredFields = feedbackForm.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (isValid) {
+                // Show success message
+                alert('Thank you for your feedback! We will review it and take appropriate action.');
+                feedbackForm.reset();
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        });
+    }
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

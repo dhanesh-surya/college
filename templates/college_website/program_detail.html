@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ program.name }} - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:programs_list' %}" class="text-white-50">Programs</a></li>
+<li class="breadcrumb-item active text-white">{{ program.name }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Program Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-primary me-3 px-3 py-2">
+                    {% if program.discipline == 'science' %}<i class="fas fa-flask me-1"></i>Science
+                    {% elif program.discipline == 'arts' %}<i class="fas fa-palette me-1"></i>Arts
+                    {% elif program.discipline == 'commerce' %}<i class="fas fa-chart-line me-1"></i>Commerce
+                    {% elif program.discipline == 'management' %}<i class="fas fa-users-cog me-1"></i>Management
+                    {% else %}<i class="fas fa-graduation-cap me-1"></i>{{ program.get_discipline_display }}
+                    {% endif %}
+                </span>
+                {% if program.duration %}
+                <span class="text-muted">
+                    <i class="fas fa-clock me-1"></i>{{ program.duration }}
+                </span>
+                {% endif %}
+            </div>
+            <h1 class="display-5 fw-bold text-primary mb-3">{{ program.name }}</h1>
+            <p class="lead text-muted">{{ program.short_description|default:program.description|striptags|truncatewords:30 }}</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <div class="d-flex flex-column gap-2">
+                {% if program.brochure %}
+                <a href="{{ program.brochure.url }}" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-download me-2"></i>Download Brochure
+                </a>
+                {% endif %}
+                <a href="{% url 'college_website:contact' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-paper-plane me-2"></i>Apply Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Program Description -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-primary mb-3">
+                        <i class="fas fa-info-circle me-2"></i>About This Program
+                    </h3>
+                    <div class="card-text">
+                        {{ program.description|safe }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Curriculum -->
+            {% if program.curriculum %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-primary mb-3">
+                        <i class="fas fa-book-open me-2"></i>Curriculum
+                    </h3>
+                    <div class="card-text">
+                        {{ program.curriculum|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Career Opportunities -->
+            {% if program.career_opportunities %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-primary mb-3">
+                        <i class="fas fa-briefcase me-2"></i>Career Opportunities
+                    </h3>
+                    <div class="card-text">
+                        {{ program.career_opportunities|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Admission Requirements -->
+            {% if program.admission_requirements %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-primary mb-3">
+                        <i class="fas fa-clipboard-check me-2"></i>Admission Requirements
+                    </h3>
+                    <div class="card-text">
+                        {{ program.admission_requirements|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Info -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-info me-2"></i>Quick Information</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-graduation-cap text-primary me-2"></i>Discipline</span>
+                            <strong>{{ program.get_discipline_display }}</strong>
+                        </div>
+                        {% if program.duration %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-clock text-primary me-2"></i>Duration</span>
+                            <strong>{{ program.duration }}</strong>
+                        </div>
+                        {% endif %}
+                        {% if program.seats %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-users text-primary me-2"></i>Total Seats</span>
+                            <strong>{{ program.seats }}</strong>
+                        </div>
+                        {% endif %}
+                        {% if program.fees %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-rupee-sign text-primary me-2"></i>Annual Fees</span>
+                            <strong>₹{{ program.fees|floatformat:0 }}</strong>
+                        </div>
+                        {% endif %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-calendar text-primary me-2"></i>Status</span>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact for Admission -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-phone me-2"></i>Admission Inquiry</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="card-text mb-3">Have questions about this program? Get in touch with our admission team.</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-success">
+                            <i class="fas fa-envelope me-2"></i>Contact Admission Office
+                        </a>
+                        <a href="tel:{{ college_info.phone|default:'+919425540666' }}" class="btn btn-outline-success">
+                            <i class="fas fa-phone me-2"></i>Call Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Programs -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>Related Programs</h5>
+                </div>
+                <div class="card-body p-3">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'college_website:programs_list' %}?discipline={{ program.discipline }}" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-list me-1"></i>More {{ program.get_discipline_display }} Programs
+                        </a>
+                        <a href="{% url 'college_website:programs_list' %}" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-th-large me-1"></i>All Programs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3 p-5 mt-5 text-center">
+        <h3 class="text-primary mb-3">Ready to Join This Program?</h3>
+        <p class="text-muted mb-4">Take the first step towards your academic and professional success.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-paper-plane me-2"></i>Apply Now
+            </a>
+            {% if program.brochure %}
+            <a href="{{ program.brochure.url }}" class="btn btn-outline-primary btn-lg" target="_blank">
+                <i class="fas fa-download me-2"></i>Download Brochure
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #dbeafe, #e0e7ff);
+}
+</style>
+{% endblock %}

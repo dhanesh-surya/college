@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ initiative.title }} - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:social_impact' %}" class="text-white-50">Social Impact</a></li>
+<li class="breadcrumb-item active text-white">{{ initiative.title }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Initiative Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success me-3 px-3 py-2">
+                    <i class="fas fa-hands-helping me-1"></i>Social Initiative
+                </span>
+                {% if initiative.date %}
+                <span class="text-muted">
+                    <i class="fas fa-calendar me-1"></i>{{ initiative.date|date:"F d, Y" }}
+                </span>
+                {% endif %}
+            </div>
+            <h1 class="display-5 fw-bold text-primary mb-3">{{ initiative.title }}</h1>
+            {% if initiative.location %}
+            <p class="lead text-muted">
+                <i class="fas fa-map-marker-alt me-2"></i>{{ initiative.location }}
+            </p>
+            {% endif %}
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <div class="d-flex flex-column gap-2">
+                <a href="{% url 'college_website:contact' %}" class="btn btn-success">
+                    <i class="fas fa-hands-helping me-2"></i>Get Involved
+                </a>
+                <a href="{% url 'college_website:social_impact' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Social Impact
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Initiative Image -->
+            {% if initiative.featured_image %}
+            <div class="mb-4">
+                <img src="{{ initiative.featured_image.url }}" class="img-fluid rounded-3 shadow-sm w-100" alt="{{ initiative.title }}" style="max-height: 400px; object-fit: cover;">
+            </div>
+            {% endif %}
+
+            <!-- Initiative Description -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-primary mb-3">
+                        <i class="fas fa-info-circle me-2"></i>About This Initiative
+                    </h3>
+                    <div class="card-text">
+                        {{ initiative.description|safe }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Impact & Results -->
+            {% if initiative.impact_achieved %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-success mb-3">
+                        <i class="fas fa-chart-line me-2"></i>Impact & Results
+                    </h3>
+                    <div class="card-text">
+                        {{ initiative.impact_achieved|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Future Plans -->
+            {% if initiative.future_plans %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-info mb-3">
+                        <i class="fas fa-road me-2"></i>Future Plans
+                    </h3>
+                    <div class="card-text">
+                        {{ initiative.future_plans|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Initiative Info -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-info me-2"></i>Initiative Details</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        {% if initiative.date %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-calendar text-success me-2"></i>Date</span>
+                            <strong>{{ initiative.date|date:"M d, Y" }}</strong>
+                        </div>
+                        {% endif %}
+                        {% if initiative.location %}
+                        <div class="list-group-item">
+                            <span><i class="fas fa-map-marker-alt text-success me-2"></i>Location</span>
+                            <div class="mt-1"><strong>{{ initiative.location }}</strong></div>
+                        </div>
+                        {% endif %}
+                        {% if initiative.beneficiaries_count %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-users text-success me-2"></i>Beneficiaries</span>
+                            <strong>{{ initiative.beneficiaries_count }}+</strong>
+                        </div>
+                        {% endif %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-heart text-success me-2"></i>Status</span>
+                            <span class="badge bg-success">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Get Involved -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-hands-helping me-2"></i>Get Involved</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="card-text mb-3">Want to contribute to this initiative? Here's how you can help:</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-primary">
+                            <i class="fas fa-volunteer-alt me-2"></i>Volunteer
+                        </a>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-outline-success">
+                            <i class="fas fa-donate me-2"></i>Donate
+                        </a>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-outline-info">
+                            <i class="fas fa-handshake me-2"></i>Partner
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-phone me-2"></i>Contact</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="card-text mb-3">For more information about this initiative:</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-info">
+                            <i class="fas fa-envelope me-2"></i>Send Message
+                        </a>
+                        <a href="tel:{{ college_info.phone|default:'+919425540666' }}" class="btn btn-outline-info">
+                            <i class="fas fa-phone me-2"></i>Call Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Initiatives -->
+    <div class="mt-5">
+        <h3 class="text-primary mb-4">More Social Initiatives</h3>
+        <div class="d-flex gap-3 flex-wrap">
+            <a href="{% url 'college_website:social_impact' %}" class="btn btn-outline-success">
+                <i class="fas fa-hands-helping me-1"></i>All Initiatives
+            </a>
+            <a href="{% url 'college_website:contact' %}" class="btn btn-outline-primary">
+                <i class="fas fa-volunteer-alt me-1"></i>Volunteer With Us
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

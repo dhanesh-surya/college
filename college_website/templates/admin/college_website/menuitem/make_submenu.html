@@ -1,0 +1,281 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url 'admin:college_website_menuitem_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="submenu-container">
+    <h1>{{ title }}</h1>
+    
+    <div class="selected-items-preview card">
+        <h3><i class="fas fa-list"></i> Selected Items ({{ selected_items.count }})</h3>
+        <div class="selected-items-list">
+            {% for item in selected_items %}
+            <div class="menu-item-preview">
+                <strong>{{ item.title }}</strong>
+                <span class="menu-info">
+                    <i class="fas fa-sitemap"></i> {{ item.menu.title }}
+                    {% if item.parent %}
+                        → <i class="fas fa-arrow-right"></i> {{ item.parent.title }}
+                    {% endif %}
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <form method="post" class="submenu-form card">
+        {% csrf_token %}
+        
+        <div class="form-section">
+            <h3><i class="fas fa-level-down-alt"></i> Make Submenus</h3>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="parent" class="required">
+                        <i class="fas fa-arrow-up"></i> Select Parent Menu Item:
+                    </label>
+                    <select name="parent" id="parent" class="parent-select" required>
+                        <option value="">Choose a parent menu item...</option>
+                        {% for parent in potential_parents %}
+                        <option value="{{ parent.id }}" data-menu="{{ parent.menu.title }}">
+                            {{ parent.menu.title }} → {{ parent.title }}
+                            {% if parent.parent %}
+                                (Sub-item of {{ parent.parent.title }})
+                            {% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <p class="help-text">
+                        Select which menu item should become the parent of the selected items.
+                        The selected items will be moved to the same menu as their new parent.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-level-down-alt"></i> Make Submenus
+            </button>
+            <a href="{% url 'admin:college_website_menuitem_changelist' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+    </form>
+
+    <div class="info-card card">
+        <h4><i class="fas fa-info-circle"></i> What will happen:</h4>
+        <ul>
+            <li>Selected menu items will become sub-items of the chosen parent</li>
+            <li>Items will be moved to the same menu as their new parent</li>
+            <li>Existing menu hierarchy will be preserved where possible</li>
+            <li>Circular references are automatically prevented</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+.submenu-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.selected-items-preview h3 {
+    color: #2196F3;
+    border-bottom: 2px solid #2196F3;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.menu-item-preview {
+    padding: 10px;
+    margin: 5px 0;
+    background: #f8f9fa;
+    border-left: 4px solid #2196F3;
+    border-radius: 4px;
+}
+
+.menu-item-preview strong {
+    display: block;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.menu-info {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.menu-info i {
+    margin-right: 5px;
+}
+
+.form-section h3 {
+    color: #28a745;
+    border-bottom: 2px solid #28a745;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+.form-group label i {
+    margin-right: 8px;
+    color: #6c757d;
+}
+
+.parent-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+}
+
+.parent-select:focus {
+    outline: none;
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+.help-text {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 8px;
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+}
+
+.info-card {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border: 1px solid #bbdefb;
+}
+
+.info-card h4 {
+    color: #1976d2;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.info-card ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.info-card li {
+    margin-bottom: 8px;
+    color: #424242;
+    line-height: 1.4;
+}
+
+.required::after {
+    content: " *";
+    color: #dc3545;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const parentSelect = document.getElementById('parent');
+    
+    if (parentSelect) {
+        // Add search functionality to the parent select
+        parentSelect.addEventListener('focus', function() {
+            this.style.borderColor = '#28a745';
+        });
+        
+        parentSelect.addEventListener('blur', function() {
+            this.style.borderColor = '#ced4da';
+        });
+        
+        // Highlight selection
+        parentSelect.addEventListener('change', function() {
+            if (this.value) {
+                this.style.backgroundColor = '#f8fff8';
+                this.style.borderColor = '#28a745';
+            } else {
+                this.style.backgroundColor = '#fff';
+                this.style.borderColor = '#ced4da';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

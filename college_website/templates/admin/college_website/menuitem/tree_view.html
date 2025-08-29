@@ -1,0 +1,505 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url 'admin:college_website_menuitem_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="tree-view-container">
+    <div class="tree-header">
+        <h1><i class="fas fa-sitemap"></i> {{ title }}</h1>
+        <div class="tree-actions">
+            <a href="{% url 'admin:college_website_menuitem_changelist' %}" class="btn btn-secondary">
+                <i class="fas fa-list"></i> Back to List View
+            </a>
+            <a href="{% url 'admin:college_website_menu_add' %}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add New Menu
+            </a>
+        </div>
+    </div>
+
+    {% if menus %}
+        {% for menu in menus %}
+        <div class="menu-tree-card card">
+            <div class="menu-header">
+                <div class="menu-title">
+                    <i class="fas fa-sitemap menu-icon"></i>
+                    <h2>{{ menu.title }}</h2>
+                    <span class="menu-slug">{{ menu.slug }}</span>
+                    {% if not menu.is_active %}
+                        <span class="status-badge inactive">Inactive</span>
+                    {% else %}
+                        <span class="status-badge active">Active</span>
+                    {% endif %}
+                </div>
+                <div class="menu-actions">
+                    <a href="{% url 'admin:college_website_menu_change' menu.pk %}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-edit"></i> Edit Menu
+                    </a>
+                    <a href="{% url 'admin:college_website_menuitem_add' %}?menu={{ menu.pk }}" class="btn btn-sm btn-success">
+                        <i class="fas fa-plus"></i> Add Item
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-tree">
+                {% if menu.items.all %}
+                    <ul class="tree-list">
+                        {% for item in menu.items.all %}
+                            {% if not item.parent %}
+                                {% include "admin/college_website/menuitem/tree_item.html" with item=item level=0 %}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="empty-menu">
+                        <i class="fas fa-inbox"></i>
+                        <p>No menu items in this menu</p>
+                        <a href="{% url 'admin:college_website_menuitem_add' %}?menu={{ menu.pk }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add First Item
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state card">
+            <div class="empty-content">
+                <i class="fas fa-sitemap"></i>
+                <h3>No Menus Found</h3>
+                <p>Create your first menu to get started with navigation management.</p>
+                <a href="{% url 'admin:college_website_menu_add' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create First Menu
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Tree Item Template (Included Inline) -->
+<script type="text/template" id="tree-item-template">
+    <!-- This would normally be in tree_item.html, but including inline for simplicity -->
+</script>
+
+<style>
+.tree-view-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tree-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #e9ecef;
+}
+
+.tree-header h1 {
+    margin: 0;
+    color: #495057;
+    font-size: 28px;
+}
+
+.tree-header h1 i {
+    margin-right: 12px;
+    color: #28a745;
+}
+
+.tree-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+    overflow: hidden;
+}
+
+.menu-tree-card {
+    border-left: 4px solid #28a745;
+}
+
+.menu-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.menu-icon {
+    font-size: 20px;
+    color: #28a745;
+}
+
+.menu-title h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #495057;
+}
+
+.menu-slug {
+    background: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #6c757d;
+    font-family: monospace;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-badge.inactive {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.menu-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.menu-tree {
+    padding: 20px;
+}
+
+.tree-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tree-item {
+    margin: 8px 0;
+    position: relative;
+}
+
+.tree-item-content {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.tree-item-content:hover {
+    background: #e3f2fd;
+    border-color: #2196f3;
+    transform: translateX(4px);
+}
+
+.tree-item-content.inactive {
+    opacity: 0.6;
+    background: #fff3cd;
+    border-color: #ffeaa7;
+}
+
+.tree-item-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tree-item-icon {
+    font-size: 16px;
+    color: #6c757d;
+    min-width: 20px;
+}
+
+.tree-item-title {
+    font-weight: 600;
+    color: #495057;
+    margin: 0;
+}
+
+.tree-item-url {
+    font-size: 12px;
+    color: #6c757d;
+    font-family: monospace;
+    background: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: auto;
+}
+
+.tree-item-actions {
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.tree-item-content:hover .tree-item-actions {
+    opacity: 1;
+}
+
+.tree-children {
+    margin-left: 40px;
+    margin-top: 8px;
+    padding-left: 20px;
+    border-left: 2px dashed #dee2e6;
+    position: relative;
+}
+
+.tree-children::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -2px;
+    width: 20px;
+    height: 20px;
+    border-bottom: 2px dashed #dee2e6;
+    border-left: 2px dashed #dee2e6;
+    border-bottom-left-radius: 8px;
+}
+
+.empty-menu {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-menu i {
+    font-size: 48px;
+    color: #dee2e6;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.empty-menu p {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.empty-state {
+    border: 2px dashed #dee2e6;
+    background: #f8f9fa;
+}
+
+.empty-content {
+    text-align: center;
+    padding: 80px 20px;
+    color: #6c757d;
+}
+
+.empty-content i {
+    font-size: 64px;
+    color: #dee2e6;
+    margin-bottom: 30px;
+    display: block;
+}
+
+.empty-content h3 {
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+.empty-content p {
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+    transform: translateY(-1px);
+}
+
+.btn-warning {
+    background: #ffc107;
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background: #e0a800;
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tree-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .menu-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .menu-title {
+        justify-content: center;
+    }
+    
+    .tree-children {
+        margin-left: 20px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add collapsible functionality to tree items with children
+    const treeItems = document.querySelectorAll('.tree-item-content');
+    
+    treeItems.forEach(item => {
+        const children = item.parentNode.querySelector('.tree-children');
+        if (children) {
+            item.style.cursor = 'pointer';
+            
+            // Add expand/collapse icon
+            const icon = document.createElement('i');
+            icon.className = 'fas fa-chevron-down tree-toggle-icon';
+            icon.style.marginLeft = '8px';
+            icon.style.fontSize = '12px';
+            icon.style.transition = 'transform 0.2s ease';
+            
+            item.querySelector('.tree-item-info').appendChild(icon);
+            
+            item.addEventListener('click', function(e) {
+                // Don't toggle if clicking on action buttons
+                if (e.target.closest('.tree-item-actions')) {
+                    return;
+                }
+                
+                e.stopPropagation();
+                
+                if (children.style.display === 'none') {
+                    children.style.display = 'block';
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    children.style.display = 'none';
+                    icon.style.transform = 'rotate(-90deg)';
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
+
+<!-- Inline tree item template -->
+{% comment %}
+This would normally be in a separate file called tree_item.html:
+
+<li class="tree-item" data-item-id="{{ item.id }}">
+    <div class="tree-item-content {% if not item.is_active %}inactive{% endif %}">
+        <div class="tree-item-info">
+            <i class="tree-item-icon fas fa-{% if item.children.exists %}folder{% else %}file{% endif %}"></i>
+            <h4 class="tree-item-title">{{ item.title }}</h4>
+            <span class="tree-item-url">{{ item.get_url|default:"#" }}</span>
+        </div>
+        <div class="tree-item-actions">
+            <a href="{% url 'admin:college_website_menuitem_change' item.pk %}" class="btn btn-sm btn-warning">
+                <i class="fas fa-edit"></i>
+            </a>
+            <a href="{% url 'admin:college_website_menuitem_add' %}?parent={{ item.pk }}" class="btn btn-sm btn-success">
+                <i class="fas fa-plus"></i>
+            </a>
+        </div>
+    </div>
+    {% if item.children.exists %}
+    <ul class="tree-children">
+        {% for child in item.children.all %}
+            {% include "admin/college_website/menuitem/tree_item.html" with item=child level=level|add:1 %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</li>
+{% endcomment %}

@@ -1,0 +1,616 @@
+{% extends "college_website/iqac_base.html" %}
+
+{% block title %}NIRF Rankings - {{ block.super }}{% endblock %}
+
+{% block meta_description %}NIRF ranking details, category-wise rankings, performance indicators, and institutional ranking data.{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* NIRF Ranking Display */
+.ranking-hero {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    margin-bottom: 2rem;
+}
+
+.ranking-hero .rank-number {
+    font-size: 4rem;
+    font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.5rem;
+}
+
+.ranking-hero .rank-label {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Category Rankings */
+.category-rankings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.category-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.category-card:hover {
+    border-color: #10b981;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+}
+
+.category-card.top-ranking {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #ffffff 100%);
+}
+
+.category-icon {
+    width: 50px;
+    height: 50px;
+    background: #10b981;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.category-card.top-ranking .category-icon {
+    background: #f59e0b;
+}
+
+.category-name {
+    color: #1e40af;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.category-rank {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #059669;
+    margin-bottom: 0.25rem;
+}
+
+.category-card.top-ranking .category-rank {
+    color: #d97706;
+}
+
+.category-year {
+    color: #6b7280;
+    font-size: 0.85rem;
+}
+
+/* Performance Indicators */
+.indicators-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.indicator-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    border-left: 4px solid #3b82f6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.indicator-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.indicator-card:nth-child(5n+1) { border-left-color: #ef4444; }
+.indicator-card:nth-child(5n+2) { border-left-color: #f59e0b; }
+.indicator-card:nth-child(5n+3) { border-left-color: #10b981; }
+.indicator-card:nth-child(5n+4) { border-left-color: #3b82f6; }
+.indicator-card:nth-child(5n+5) { border-left-color: #8b5cf6; }
+
+.indicator-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 0.5rem;
+}
+
+.indicator-label {
+    color: #6b7280;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.indicator-description {
+    color: #4b5563;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+/* Ranking History */
+.ranking-history {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin: 2rem 0;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.history-table th,
+.history-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.history-table th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #1e40af;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+}
+
+.history-table tr:hover {
+    background: #f8fafc;
+}
+
+.trend-up {
+    color: #059669;
+}
+
+.trend-down {
+    color: #ef4444;
+}
+
+.trend-same {
+    color: #6b7280;
+}
+
+/* Chart Container */
+.chart-container {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin: 2rem 0;
+}
+
+/* Methodology Section */
+.methodology-card {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 10px;
+    padding: 2rem;
+    border-left: 4px solid #0ea5e9;
+    margin: 2rem 0;
+}
+
+.methodology-card h3 {
+    color: #0c4a6e;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.methodology-card ul {
+    margin-bottom: 0;
+}
+
+.methodology-card li {
+    margin-bottom: 0.5rem;
+    color: #0f172a;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .ranking-hero .rank-number {
+        font-size: 3rem;
+    }
+    
+    .category-rankings {
+        grid-template-columns: 1fr;
+    }
+    
+    .indicators-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    
+    .history-table {
+        font-size: 0.85rem;
+    }
+}
+
+/* Participation Badge */
+.participation-badge {
+    background: linear-gradient(135deg, #dbeafe 0%, #3b82f6 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+</style>
+{% endblock %}
+
+{% block page_title %}NIRF Rankings{% endblock %}
+{% block page_subtitle %}
+{% if nirf_info %}
+    {% if nirf_info.current_ranking %}
+        Rank {{ nirf_info.current_ranking }} - {{ nirf_info.ranking_year }}
+    {% else %}
+        Participating Institution - {{ nirf_info.ranking_year }}
+    {% endif %}
+{% else %}
+    National Institutional Ranking Framework
+{% endif %}
+{% endblock %}
+
+{% block iqac_content %}
+<!-- Current Ranking Display -->
+{% if nirf_info %}
+<div class="ranking-hero">
+    {% if nirf_info.current_ranking %}
+        <div class="rank-number"># {{ nirf_info.current_ranking }}</div>
+        <div class="rank-label">NIRF Ranking {{ nirf_info.ranking_year }}</div>
+        {% if nirf_info.category %}
+            <p class="mt-2 mb-0">{{ nirf_info.get_category_display }} Category</p>
+        {% endif %}
+    {% else %}
+        <div class="rank-number">
+            <i class="fas fa-medal fa-2x"></i>
+        </div>
+        <div class="rank-label">NIRF Participant {{ nirf_info.ranking_year }}</div>
+        <div class="participation-badge mt-3">Participating Institution</div>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- About NIRF -->
+<div class="iqac-section">
+    <h2>About NIRF Rankings</h2>
+    {% if nirf_info and nirf_info.overview %}
+        <div>{{ nirf_info.overview|safe }}</div>
+    {% else %}
+        <p>The National Institutional Ranking Framework (NIRF) was approved by the MHRD and launched by Honourable Minister of Human Resource Development on 29th September 2015. This framework outlines a methodology to rank institutions across the country based on specific parameters.</p>
+        
+        <p>The ranking framework is based on five broad generic parameters:</p>
+        <ul>
+            <li><strong>Teaching, Learning and Resources (TLR):</strong> Faculty-student ratio, combined metric for faculty with PhD and Experience</li>
+            <li><strong>Research and Professional Practice (RP):</strong> Publications, citations, patents, funded projects</li>
+            <li><strong>Graduation Outcomes (GO):</strong> University examinations, median salary, number of students placed</li>
+            <li><strong>Outreach and Inclusivity (OI):</strong> Percentage of students from other states/countries, women, economically and socially challenged students</li>
+            <li><strong>Perception (PR):</strong> Peer perception, employer perception</li>
+        </ul>
+    {% endif %}
+</div>
+
+<!-- Category-wise Rankings -->
+{% if nirf_categories %}
+<div class="iqac-section">
+    <h2>Category-wise Rankings</h2>
+    <div class="category-rankings">
+        {% for category in nirf_categories %}
+        <div class="category-card {% if category.rank <= 50 %}top-ranking{% endif %}">
+            <div class="category-icon">
+                {% if category.category == 'overall' %}
+                    <i class="fas fa-trophy"></i>
+                {% elif category.category == 'university' %}
+                    <i class="fas fa-university"></i>
+                {% elif category.category == 'college' %}
+                    <i class="fas fa-graduation-cap"></i>
+                {% elif category.category == 'engineering' %}
+                    <i class="fas fa-cogs"></i>
+                {% elif category.category == 'management' %}
+                    <i class="fas fa-briefcase"></i>
+                {% elif category.category == 'pharmacy' %}
+                    <i class="fas fa-pills"></i>
+                {% elif category.category == 'medical' %}
+                    <i class="fas fa-stethoscope"></i>
+                {% elif category.category == 'law' %}
+                    <i class="fas fa-balance-scale"></i>
+                {% elif category.category == 'architecture' %}
+                    <i class="fas fa-drafting-compass"></i>
+                {% else %}
+                    <i class="fas fa-star"></i>
+                {% endif %}
+            </div>
+            <div class="category-name">{{ category.get_category_display }}</div>
+            {% if category.rank %}
+                <div class="category-rank"># {{ category.rank }}</div>
+            {% else %}
+                <div class="category-rank">Participated</div>
+            {% endif %}
+            <div class="category-year">{{ category.year }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Performance Indicators -->
+{% if nirf_info %}
+<div class="iqac-section">
+    <h2>Performance Indicators</h2>
+    <div class="indicators-grid">
+        {% if nirf_info.tlr_score %}
+        <div class="indicator-card">
+            <div class="indicator-value">{{ nirf_info.tlr_score }}</div>
+            <div class="indicator-label">TLR Score</div>
+            <div class="indicator-description">Teaching, Learning & Resources</div>
+        </div>
+        {% endif %}
+        
+        {% if nirf_info.rp_score %}
+        <div class="indicator-card">
+            <div class="indicator-value">{{ nirf_info.rp_score }}</div>
+            <div class="indicator-label">RP Score</div>
+            <div class="indicator-description">Research & Professional Practice</div>
+        </div>
+        {% endif %}
+        
+        {% if nirf_info.go_score %}
+        <div class="indicator-card">
+            <div class="indicator-value">{{ nirf_info.go_score }}</div>
+            <div class="indicator-label">GO Score</div>
+            <div class="indicator-description">Graduation Outcomes</div>
+        </div>
+        {% endif %}
+        
+        {% if nirf_info.oi_score %}
+        <div class="indicator-card">
+            <div class="indicator-value">{{ nirf_info.oi_score }}</div>
+            <div class="indicator-label">OI Score</div>
+            <div class="indicator-description">Outreach & Inclusivity</div>
+        </div>
+        {% endif %}
+        
+        {% if nirf_info.pr_score %}
+        <div class="indicator-card">
+            <div class="indicator-value">{{ nirf_info.pr_score }}</div>
+            <div class="indicator-label">PR Score</div>
+            <div class="indicator-description">Perception</div>
+        </div>
+        {% endif %}
+        
+        {% if nirf_info.total_score %}
+        <div class="indicator-card">
+            <div class="indicator-value">{{ nirf_info.total_score }}</div>
+            <div class="indicator-label">Total Score</div>
+            <div class="indicator-description">Overall NIRF Score</div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Ranking History -->
+{% if nirf_history %}
+<div class="iqac-section">
+    <h2>Ranking History</h2>
+    <div class="ranking-history">
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Category</th>
+                    <th>Rank</th>
+                    <th>Score</th>
+                    <th>Trend</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in nirf_history %}
+                <tr>
+                    <td><strong>{{ history.year }}</strong></td>
+                    <td>{{ history.get_category_display }}</td>
+                    <td>
+                        {% if history.rank %}
+                            # {{ history.rank }}
+                        {% else %}
+                            Participated
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if history.score %}
+                            {{ history.score }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if history.trend == 'up' %}
+                            <i class="fas fa-arrow-up trend-up"></i>
+                        {% elif history.trend == 'down' %}
+                            <i class="fas fa-arrow-down trend-down"></i>
+                        {% else %}
+                            <i class="fas fa-minus trend-same"></i>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<!-- NIRF Reports -->
+{% if nirf_reports %}
+<div class="iqac-section">
+    <h2>NIRF Related Reports</h2>
+    <div class="reports-grid">
+        {% for report in nirf_reports %}
+        <div class="report-card">
+            <div class="report-card-body">
+                <h4>{{ report.title }}</h4>
+                <div class="report-meta">
+                    <i class="fas fa-calendar-alt me-2"></i>{{ report.academic_year }}
+                    {% if report.file_size %}
+                        <i class="fas fa-file-pdf ms-3 me-2"></i>{{ report.file_size }}
+                    {% endif %}
+                </div>
+                {% if report.description %}
+                    <p>{{ report.description|truncatewords:20 }}</p>
+                {% endif %}
+                <a href="{{ report.report_file.url }}" target="_blank" class="btn btn-primary btn-sm">
+                    <i class="fas fa-download me-1"></i>Download
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-3">
+        <a href="{% url 'college_website:iqac_reports' %}?report_type=nirf" class="btn btn-outline-primary">
+            <i class="fas fa-eye me-2"></i>View All NIRF Reports
+        </a>
+    </div>
+</div>
+{% endif %}
+
+<!-- Methodology -->
+<div class="iqac-section">
+    <div class="methodology-card">
+        <h3>NIRF Ranking Methodology</h3>
+        <p>The NIRF ranking methodology is based on five key parameters with specific weightages:</p>
+        <ul>
+            <li><strong>Teaching, Learning and Resources (30%):</strong> Student strength, faculty-student ratio, combined metric for faculty with PhD</li>
+            <li><strong>Research and Professional Practice (30%):</strong> Publications, citations, patents, consultancy projects</li>
+            <li><strong>Graduation Outcomes (20%):</strong> University examinations, median salary, number of PhD students graduated</li>
+            <li><strong>Outreach and Inclusivity (10%):</strong> Regional diversity, women diversity, economically and socially challenged students</li>
+            <li><strong>Perception (10%):</strong> Peer perception of academic peers and employers</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Data Visualization -->
+{% if nirf_info and nirf_info.tlr_score %}
+<div class="iqac-section">
+    <h2>Score Distribution</h2>
+    <div class="chart-container">
+        <canvas id="nirf-chart" width="400" height="200"></canvas>
+    </div>
+</div>
+{% endif %}
+
+<!-- Contact Information -->
+{% if nirf_info.coordinator_name or nirf_info.contact_email %}
+<div class="iqac-section border-top">
+    <h2>NIRF Coordinator</h2>
+    <div class="row">
+        <div class="col-md-8">
+            {% if nirf_info.coordinator_name %}
+                <p><strong>{{ nirf_info.coordinator_name }}</strong></p>
+            {% endif %}
+            {% if nirf_info.coordinator_designation %}
+                <p>{{ nirf_info.coordinator_designation }}</p>
+            {% endif %}
+            {% if nirf_info.contact_phone %}
+                <p><i class="fas fa-phone me-2"></i>{{ nirf_info.contact_phone }}</p>
+            {% endif %}
+            {% if nirf_info.contact_email %}
+                <p><i class="fas fa-envelope me-2"></i>{{ nirf_info.contact_email }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+{% if nirf_info and nirf_info.tlr_score %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('nirf-chart').getContext('2d');
+    
+    const data = {
+        labels: ['TLR', 'RP', 'GO', 'OI', 'PR'],
+        datasets: [{
+            label: 'NIRF Scores',
+            data: [
+                {{ nirf_info.tlr_score|default:0 }},
+                {{ nirf_info.rp_score|default:0 }},
+                {{ nirf_info.go_score|default:0 }},
+                {{ nirf_info.oi_score|default:0 }},
+                {{ nirf_info.pr_score|default:0 }}
+            ],
+            backgroundColor: [
+                'rgba(239, 68, 68, 0.8)',
+                'rgba(245, 158, 11, 0.8)',
+                'rgba(16, 185, 129, 0.8)',
+                'rgba(59, 130, 246, 0.8)',
+                'rgba(139, 92, 246, 0.8)'
+            ],
+            borderColor: [
+                'rgba(239, 68, 68, 1)',
+                'rgba(245, 158, 11, 1)',
+                'rgba(16, 185, 129, 1)',
+                'rgba(59, 130, 246, 1)',
+                'rgba(139, 92, 246, 1)'
+            ],
+            borderWidth: 2
+        }]
+    };
+    
+    const config = {
+        type: 'radar',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'NIRF Parameter Scores'
+                },
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            }
+        }
+    };
+    
+    new Chart(ctx, config);
+});
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ principal_message.message_title|default:"Principal's Message" }} - {{ college_info.name|default:"Chaitanya College" }}{% endblock %}
+
+{% block meta_description %}{{ principal_message.meta_description|default:"Read the inspiring message from our esteemed Principal about our educational philosophy and commitment to student success." }}{% endblock %}
+
+{% block banner %}
+<section class="position-relative overflow-hidden tw-bg-gradient-to-br tw-from-blue-800 tw-via-indigo-600 tw-to-purple-600">
+    <div class="container position-relative tw-z-10 py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'college_website:home' %}" class="text-white-50">Home</a></li>
+                        <li class="breadcrumb-item"><span class="text-white-50">Leadership</span></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">Principal's Message</li>
+                    </ol>
+                </nav>
+                <h1 class="display-4 fw-bold text-white mb-3">{{ principal_message.message_title|default:"Principal's Message" }}</h1>
+                <p class="lead text-white mb-0">{{ principal_message.name }} - {{ principal_message.designation }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Principal's Profile -->
+            <div class="col-lg-4 mb-5">
+                <div class="card border-0 shadow-lg h-100">
+                    <div class="card-body text-center p-4">
+                        {% if principal_message.profile_photo %}
+                        <img src="{{ principal_message.profile_photo.url }}" 
+                             alt="{{ principal_message.name }}" 
+                             class="rounded-circle mb-4" 
+                             style="width: 200px; height: 200px; object-fit: cover; border: 5px solid #2563eb;">
+                        {% else %}
+                        <div class="tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-500 tw-w-48 tw-h-48 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4">
+                            <i class="fas fa-user-graduate text-white fa-4x"></i>
+                        </div>
+                        {% endif %}
+                        
+                        <h3 class="card-title text-primary mb-2">{{ principal_message.name }}</h3>
+                        <p class="text-muted mb-3">{{ principal_message.designation }}</p>
+                        
+                        {% if principal_message.qualifications %}
+                        <div class="mb-3">
+                            <h6 class="text-primary mb-2">Qualifications</h6>
+                            <p class="small text-muted">{{ principal_message.qualifications }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if principal_message.specialization %}
+                        <div class="mb-3">
+                            <h6 class="text-primary mb-2">Specialization</h6>
+                            <p class="small text-info">{{ principal_message.specialization }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if principal_message.experience_years %}
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center justify-content-center text-success">
+                                <i class="fas fa-star me-2"></i>
+                                <span class="fw-bold">{{ principal_message.experience_years }}+ Years Experience</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if principal_message.show_office_hours and principal_message.office_hours %}
+                        <div class="mb-3">
+                            <h6 class="text-primary mb-2">Office Hours</h6>
+                            <div class="d-flex align-items-center justify-content-center text-success">
+                                <i class="fas fa-clock me-2"></i>
+                                <span>{{ principal_message.office_hours }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if principal_message.show_contact_info %}
+                        <div class="mt-4">
+                            <h6 class="text-primary mb-3">Contact Information</h6>
+                            <div class="d-grid gap-2">
+                                {% if principal_message.email %}
+                                <a href="mailto:{{ principal_message.email }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-envelope me-2"></i>{{ principal_message.email }}
+                                </a>
+                                {% endif %}
+                                {% if principal_message.phone %}
+                                <a href="tel:{{ principal_message.phone }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-phone me-2"></i>{{ principal_message.phone }}
+                                </a>
+                                {% endif %}
+                            </div>
+                            
+                            {% if principal_message.linkedin_url or principal_message.researchgate_url or principal_message.orcid_url or principal_message.twitter_url %}
+                            <div class="mt-3">
+                                <h6 class="text-primary mb-2">Academic Profiles</h6>
+                                <div class="d-flex justify-content-center gap-2">
+                                    {% if principal_message.linkedin_url %}
+                                    <a href="{{ principal_message.linkedin_url }}" target="_blank" class="btn btn-sm btn-outline-primary" title="LinkedIn">
+                                        <i class="fab fa-linkedin"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if principal_message.researchgate_url %}
+                                    <a href="{{ principal_message.researchgate_url }}" target="_blank" class="btn btn-sm btn-outline-success" title="ResearchGate">
+                                        <i class="fab fa-researchgate"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if principal_message.orcid_url %}
+                                    <a href="{{ principal_message.orcid_url }}" target="_blank" class="btn btn-sm btn-outline-info" title="ORCID">
+                                        <i class="fab fa-orcid"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if principal_message.twitter_url %}
+                                    <a href="{{ principal_message.twitter_url }}" target="_blank" class="btn btn-sm btn-outline-primary" title="Twitter">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Principal's Message Content -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        {% if principal_message.message_content %}
+                        <div class="message-content mb-5">
+                            <h2 class="text-primary mb-4">{{ principal_message.message_title|default:"Message from Principal" }}</h2>
+                            <div class="content-text">
+                                {{ principal_message.message_content|safe }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if principal_message.educational_philosophy %}
+                        <div class="philosophy-content mb-5">
+                            <h3 class="text-primary mb-3">
+                                <i class="fas fa-book-open me-2"></i>Educational Philosophy
+                            </h3>
+                            <div class="p-4 bg-light rounded">
+                                <p class="mb-0 fst-italic">{{ principal_message.educational_philosophy }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if principal_message.show_achievements and principal_message.achievements %}
+                        <div class="achievements-content">
+                            <h3 class="text-primary mb-3">
+                                <i class="fas fa-trophy me-2"></i>Academic Achievements & Publications
+                            </h3>
+                            <div class="achievements-text">
+                                {{ principal_message.achievements|safe }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Academic Excellence Section -->
+<section class="py-5 tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h3 class="text-primary mb-4">Academic Excellence & Student Success</h3>
+                <p class="lead text-muted mb-4">
+                    Our commitment to providing quality education and fostering intellectual growth ensures that every student reaches their full potential.
+                </p>
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-book-reader fa-2x text-primary mb-3"></i>
+                                <h5>Quality Education</h5>
+                                <p class="text-muted mb-0">Comprehensive curriculum designed for holistic development</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users fa-2x text-success mb-3"></i>
+                                <h5>Expert Faculty</h5>
+                                <p class="text-muted mb-0">Experienced educators committed to student success</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-trophy fa-2x text-warning mb-3"></i>
+                                <h5>Outstanding Results</h5>
+                                <p class="text-muted mb-0">Consistent academic achievements and career success</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="{% url 'college_website:programs_list' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-graduation-cap me-2"></i>Explore Programs
+                    </a>
+                    <a href="{% url 'college_website:admissions' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-file-alt me-2"></i>Admissions
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Custom styling for principal message page */
+.content-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.content-text p {
+    margin-bottom: 1.5rem;
+}
+
+.content-text blockquote {
+    border-left: 4px solid #2563eb;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #666;
+}
+
+.achievements-text ul {
+    list-style: none;
+    padding: 0;
+}
+
+.achievements-text ul li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.achievements-text ul li:before {
+    content: '🎓';
+    margin-right: 0.75rem;
+}
+
+.philosophy-content .bg-light {
+    border-left: 4px solid #2563eb;
+}
+
+/* Academic profiles social icons */
+.btn-outline-success:hover {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-outline-info:hover {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body.p-5 {
+        padding: 2rem !important;
+    }
+    
+    .content-text {
+        font-size: 1rem;
+    }
+}
+</style>
+{% endblock %}

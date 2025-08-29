@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admissions - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.admission-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0 2rem;
+}
+
+.admission-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.admission-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.admission-type-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.process-step {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.process-step:hover {
+    background: #e9ecef;
+    transform: translateY(-3px);
+}
+
+.process-number {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin: 0 auto 1rem;
+}
+
+.download-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    color: white;
+}
+
+.contact-info {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 2rem;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Admissions</li>
+{% endblock %}
+
+{% block content %}
+<!-- Admissions Hero Section -->
+<div class="admission-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Admissions</h1>
+                <p class="lead mb-4">Join our community of learners and embark on your educational journey with us. Explore our admission procedures and requirements.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#admission-process" class="btn btn-light btn-lg">
+                        <i class="fas fa-route me-2"></i>Admission Process
+                    </a>
+                    <a href="#download-forms" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-download me-2"></i>Download Forms
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-graduation-cap fa-8x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Admission Types -->
+    <div class="row g-4 mb-5">
+        {% for admission in admissions %}
+        <div class="col-lg-6">
+            <div class="card admission-card h-100">
+                <div class="admission-type-badge">
+                    {{ admission.get_admission_type_display }}
+                </div>
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-3">{{ admission.title }}</h4>
+                    <p class="card-text text-muted mb-4">{{ admission.description|truncatewords:25 }}</p>
+                    
+                    <div class="row g-3 mb-4">
+                        {% if admission.application_form %}
+                        <div class="col-6">
+                            <a href="{{ admission.application_form.url }}" class="download-btn w-100 justify-content-center" target="_blank">
+                                <i class="fas fa-file-alt"></i>
+                                Application Form
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if admission.brochure %}
+                        <div class="col-6">
+                            <a href="{{ admission.brochure.url }}" class="download-btn w-100 justify-content-center" target="_blank">
+                                <i class="fas fa-book"></i>
+                                Brochure
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <a href="{{ admission.get_absolute_url }}" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-info-circle me-2"></i>View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-info-circle fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">Admission Information Coming Soon</h4>
+            <p class="text-muted">Please check back later for admission details and procedures.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Admission Process -->
+    <div id="admission-process" class="mb-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Admission Process</h2>
+            <p class="lead text-muted">Follow these simple steps to complete your admission</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="process-step">
+                    <div class="process-number">1</div>
+                    <h5>Choose Program</h5>
+                    <p class="text-muted mb-0">Select your desired course and check eligibility criteria</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="process-step">
+                    <div class="process-number">2</div>
+                    <h5>Fill Application</h5>
+                    <p class="text-muted mb-0">Complete the application form with required details</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="process-step">
+                    <div class="process-number">3</div>
+                    <h5>Submit Documents</h5>
+                    <p class="text-muted mb-0">Upload all necessary documents and certificates</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="process-step">
+                    <div class="process-number">4</div>
+                    <h5>Pay Fees</h5>
+                    <p class="text-muted mb-0">Complete the fee payment to confirm admission</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="contact-info">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3">Need Help with Admissions?</h3>
+                <p class="text-muted mb-3">Our admission counselors are here to help you with any questions about the admission process, eligibility criteria, or course selection.</p>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-phone text-primary me-3"></i>
+                            <div>
+                                <strong>Phone</strong><br>
+                                <span class="text-muted">+91-XXXX-XXXXXX</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-envelope text-primary me-3"></i>
+                            <div>
+                                <strong>Email</strong><br>
+                                <span class="text-muted">admissions@college.edu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-comments me-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

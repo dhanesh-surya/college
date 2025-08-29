@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load gallery_extras %}
+
+{% block title %}Gallery - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/gallery.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Gallery</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">Photo Gallery</h1>
+        <p class="lead text-muted">Capturing moments of learning, growth, and celebration at our college</p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <ul class="nav nav-pills justify-content-center gallery-filters" id="gallery-filters">
+                <li class="nav-item">
+                    <a class="nav-link {% if current_category == 'all' %}active{% endif %}" 
+                       href="?category=all">All <span class="badge">{{ total_count }}</span></a>
+                </li>
+                {% for category_code, category_name in categories %}
+                <li class="nav-item">
+                    <a class="nav-link {% if current_category == category_code %}active{% endif %}" 
+                       href="?category={{ category_code }}">{{ category_name }} 
+                       <span class="badge">{{ category_counts|get_item:category_code|default:0 }}</span></a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Gallery Content -->
+    <div class="gallery-content">
+        <div class="row g-4" id="galleryGrid">
+            {% if galleries %}
+                {% for gallery in galleries %}
+                <div class="col-lg-4 col-md-6 gallery-item" data-category="{{ gallery.category }}">
+                    <div class="card border-0 shadow-sm gallery-card h-100">
+                        <div class="position-relative overflow-hidden">
+                            {% if gallery.cover_image %}
+                                <img src="{{ gallery.cover_image.url }}" class="card-img-top gallery-img" alt="{{ gallery.title }}" style="height: 250px; object-fit: cover;">
+                            {% elif gallery.photos.first %}
+                                <img src="{{ gallery.photos.first.image.url }}" class="card-img-top gallery-img" alt="{{ gallery.title }}" style="height: 250px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-gradient-primary text-white d-flex align-items-center justify-content-center" style="height: 250px;">
+                                    <i class="fas fa-images fa-3x opacity-50"></i>
+                                </div>
+                            {% endif %}
+                            <div class="gallery-overlay">
+                                <a href="{% url 'college_website:gallery_detail' gallery.slug %}" 
+                                   class="btn btn-light btn-sm">
+                                    <i class="fas fa-expand me-1"></i>View Gallery
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            <h6 class="card-title mb-1">{{ gallery.title }}</h6>
+                            <small class="text-muted d-block mb-2">{{ gallery.get_category_display }}</small>
+                            {% if gallery.description %}
+                                <p class="card-text small text-muted mb-2">{{ gallery.description|truncatewords:15 }}</p>
+                            {% endif %}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-images me-1"></i>{{ gallery.photos.count }} photo{{ gallery.photos.count|pluralize }}
+                                </small>
+                                {% if gallery.is_featured %}
+                                    <span class="badge bg-warning text-dark">Featured</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="text-center py-5">
+                        <i class="fas fa-images fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">No galleries found</h4>
+                        <p class="text-muted">{% if current_category != 'all' %}No galleries in this category yet.{% else %}No galleries have been added yet.{% endif %}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Photo View</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <img src="" class="img-fluid w-100" id="modalImage" alt="Gallery Image">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">
+                    <i class="fas fa-download me-1"></i>Download
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.gallery-card {
+    transition: all 0.3s ease;
+}
+.gallery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+.gallery-img {
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.gallery-card:hover .gallery-img {
+    transform: scale(1.05);
+}
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.gallery-card:hover .gallery-overlay {
+    opacity: 1;
+}
+.bg-gradient-to-br {
+    background: linear-gradient(135deg, var(--bs-primary), var(--bs-primary-dark, #b91c1c));
+}
+.nav-pills .nav-link {
+    color: #6c757d;
+    border-radius: 25px;
+    margin: 0 5px;
+}
+.nav-pills .nav-link.active {
+    background-color: var(--bs-primary);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('#galleryTabs .nav-link');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const filter = this.getAttribute('href').substring(1);
+            
+            galleryItems.forEach(item => {
+                if (filter === 'all' || item.dataset.category === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Load more functionality
+    document.getElementById('loadMoreBtn').addEventListener('click', function() {
+        // Add more gallery items dynamically
+        this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading...';
+        setTimeout(() => {
+            this.innerHTML = '<i class="fas fa-plus me-2"></i>Load More Photos';
+        }, 1000);
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    {% block head_meta %}
+    <title>{% block title %}{{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ college_info.mission_statement_short|default:'Chaitanya Science and Arts College - Empowering rural youth through quality education' }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}college, education, Pamgarh, Chhattisgarh, science, arts, rural education{% endblock %}">
+    <meta name="author" content="{{ college_info.name|default:'Chaitanya Science and Arts College' }}">
+    
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}{{ college_info.name|default:'Chaitanya Science and Arts College' }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ college_info.mission_statement_short|default:'Empowering rural youth through quality education' }}{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    {% if college_info.logo %}
+    <meta property="og:image" content="{{ request.build_absolute_uri }}{{ college_info.logo.url }}">
+    {% endif %}
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ college_info.name|default:'Chaitanya Science and Arts College' }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ college_info.mission_statement_short|default:'Empowering rural youth through quality education' }}{% endblock %}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    {% endblock %}
+    
+    <!-- Favicon -->
+    {% if college_info.logo %}
+    <link rel="icon" type="image/x-icon" href="{{ college_info.logo.url }}">
+    {% endif %}
+    
+    {% block styles %}
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            prefix: 'tw-',
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/clean-navbar.css' %}">
+    
+    <style>
+        :root {
+            --primary-color: #dc2626;
+            --primary-dark: #b91c1c;
+            --secondary-color: #1f2937;
+            --accent-color: #f59e0b;
+            --text-color: #374151;
+            --light-bg: #f9fafb;
+            --navbar-bg: #ffffff;
+            --navbar-text: #374151;
+            --navbar-hover: #dc2626;
+            --dropdown-bg: #ffffff;
+            --dropdown-hover: #dc2626;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        /* Main content wrapper to account for fixed navbar */
+        main {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+        
+        /* Container adjustments */
+        .container, .container-fluid {
+            margin-top: 0 !important;
+        }
+        
+        /* Navbar responsive width fixes */
+        .navbar-nav {
+            width: 100%;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .navbar-collapse {
+            flex-grow: 1;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .navbar-brand img {
+            height: 50px;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #991b1b 100%);
+            color: white;
+            margin-top: 0 !important;
+            position: relative !important;
+            z-index: 1 !important;
+            clear: both !important;
+        }
+        
+        /* Specific navbar visibility fixes only */
+        .navbar {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .navbar-nav, .nav-item, .nav-link {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+        
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #b91c1c;
+            border-color: #b91c1c;
+        }
+        
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+        
+        /* Modern Bootstrap 5 Navbar Styling */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1e40af 100%) !important;
+            border-bottom: none;
+            padding: 1rem 0;
+            position: relative !important;
+            width: 100% !important;
+            z-index: 9999 !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+            margin: 0 0 0 0 !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            clear: both !important;
+        }
+        
+        /* Navbar Brand Styling */
+        .navbar-brand {
+            font-weight: 700 !important;
+            color: white !important;
+            text-decoration: none !important;
+            z-index: 10000 !important;
+            position: relative !important;
+        }
+        
+        .navbar-brand:hover {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        /* Nav Links Styling - Modern Bootstrap 5 + Tailwind Design */
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.95) !important;
+            font-weight: 500;
+            padding: 0.75rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0 0.25rem;
+            z-index: 10000 !important;
+            position: relative !important;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            display: flex !important;
+            align-items: center !important;
+            text-transform: capitalize;
+            letter-spacing: 0.025em;
+        }
+        
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .navbar-nav .nav-link.active {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.25);
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Modern Dropdown Menu Styling with Tailwind-inspired design */
+        .dropdown-menu {
+            border: none !important;
+            border-radius: 12px !important;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+            padding: 0.75rem 0 !important;
+            margin-top: 0.5rem !important;
+            background: #ffffff !important;
+            backdrop-filter: blur(16px) !important;
+            z-index: 1050 !important;
+            position: absolute !important;
+            min-width: 240px !important;
+            border: 1px solid rgba(229, 231, 235, 0.8) !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        
+        .dropdown-menu.show {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) !important;
+        }
+        
+        .dropdown-item {
+            padding: 0.75rem 1.25rem !important;
+            color: #374151 !important;
+            font-weight: 500;
+            border-radius: 8px !important;
+            margin: 0.25rem 0.75rem !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex !important;
+            align-items: center !important;
+            text-decoration: none !important;
+            font-size: 0.875rem;
+            position: relative;
+            letter-spacing: 0.025em;
+        }
+        
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #ef4444 100%) !important;
+            color: white !important;
+            transform: translateX(4px) scale(1.02);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25) !important;
+        }
+        
+        .dropdown-item i {
+            margin-right: 0.75rem !important;
+            font-size: 0.875rem !important;
+            width: 16px !important;
+            text-align: center !important;
+        }
+        
+        /* Dropdown Show States */
+        .dropdown-menu.show {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        /* Dropdown positioning fix */
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-menu {
+            top: 100% !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
+        
+        .dropdown-menu.show {
+            transform: translateX(-50%) translateY(0) !important;
+        }
+        
+        .dropdown-header {
+            font-weight: 700 !important;
+            color: var(--primary-color) !important;
+            font-size: 0.6875rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.75rem 1.5rem 0.5rem 1.5rem !important;
+            margin: 0.5rem 0.75rem 0.75rem 0.75rem !important;
+            border-bottom: 2px solid rgba(220, 38, 38, 0.15) !important;
+            position: relative;
+        }
+        
+        .dropdown-divider {
+            margin: 0.5rem 1rem !important;
+            border-color: rgba(220, 38, 38, 0.2) !important;
+            opacity: 0.6 !important;
+        }
+        
+        /* Search Form Styling */
+        .navbar .form-control {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            color: white !important;
+            border-radius: 8px 0 0 8px !important;
+        }
+        
+        .navbar .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        .navbar .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.25) !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25) !important;
+            color: white !important;
+        }
+        
+        .navbar .btn-light {
+            border-radius: 0 8px 8px 0 !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-left: none !important;
+        }
+        
+        /* Mobile Toggle Button */
+        .navbar-toggler {
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 8px !important;
+            padding: 0.5rem !important;
+            z-index: 10000 !important;
+            position: relative !important;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25) !important;
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
+        
+        /* Quick Actions Button */
+        .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            color: white !important;
+        }
+        
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            border-color: rgba(255, 255, 255, 0.7) !important;
+            color: white !important;
+        }
+        
+        /* Header section styling */
+        header {
+            position: relative !important;
+            z-index: 100 !important;
+            width: 100% !important;
+            display: block !important;
+        }
+        
+        /* Top bar adjustments */
+        .top-bar {
+            position: relative !important;
+            width: 100% !important;
+            z-index: 15 !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+        }
+        
+        /* Ensure no body padding or margin issues */
+        body {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+        
+        body.with-topbar {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+        
+        body:not(.with-topbar) {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
+        }
+        
+        /* Main content spacing */
+        main {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+        
+        /* Prevent any overlap between navbar and content */
+        .navbar + * {
+            margin-top: 20px !important;
+        }
+        
+        .navbar-brand {
+            font-size: 1rem;
+            color: white !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+        
+        .navbar-brand:hover {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.95) !important;
+            transition: all 0.3s ease;
+            padding: 0.4rem 0.5rem !important;
+            border-radius: 6px;
+            margin: 0 0.1rem;
+            display: flex !important;
+            align-items: center !important;
+            white-space: nowrap;
+            width: auto !important;
+            min-width: auto !important;
+            font-size: 0.8rem;
+            flex-shrink: 1;
+            flex-grow: 0;
+        }
+        
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .navbar-nav .nav-link.active {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-nav .dropdown-toggle::after {
+            margin-left: 0.5rem;
+            color: white;
+        }
+        
+        .navbar-nav .dropdown-menu {
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            background-color: var(--dropdown-bg);
+            min-width: 200px;
+        }
+        
+        .navbar-nav .dropdown-item {
+            padding: 0.75rem 1.25rem;
+            transition: all 0.3s ease;
+            color: var(--navbar-text);
+            font-weight: 500;
+        }
+        
+        .navbar-nav .dropdown-item:hover,
+        .navbar-nav .dropdown-item:focus {
+            background-color: var(--dropdown-hover);
+            color: white !important;
+            transform: translateX(5px);
+        }
+        
+        .navbar-nav .dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .navbar-nav .nav-link i {
+            width: 14px;
+            text-align: center;
+            margin-right: 0.3rem !important;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+        
+        .navbar-toggler {
+            border: 2px solid var(--primary-color);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            background-color: transparent;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.25rem rgba(220, 38, 38, 0.25);
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23dc2626' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        
+        /* Search Form Styling */
+        .navbar .input-group {
+            width: 250px;
+        }
+        
+        .navbar .form-control {
+            border: 1px solid #d1d5db;
+            border-radius: 6px 0 0 6px;
+            font-size: 0.875rem;
+        }
+        
+        .navbar .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25);
+        }
+        
+        .navbar .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .navbar .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Desktop Navbar Specific Styles */
+        @media (min-width: 992px) {
+            /* Desktop navbar display */
+            #desktopNavbar {
+                display: block !important;
+                padding: 0.75rem 0;
+            }
+            
+            #mobileNavbar {
+                display: none !important;
+            }
+            
+            /* Desktop navbar layout */
+            #desktopNavbar .navbar-nav {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+                justify-content: flex-start !important;
+                align-items: center !important;
+                width: auto !important;
+                margin: 0;
+                gap: 0;
+            }
+            
+            #desktopNavbar .nav-item {
+                flex: 0 0 auto;
+                margin-right: 0.5rem;
+            }
+            
+            #desktopNavbar .nav-link {
+                font-size: 0.9rem !important;
+                padding: 0.5rem 0.75rem !important;
+                margin: 0;
+                white-space: nowrap;
+                display: flex !important;
+                align-items: center !important;
+                width: auto !important;
+                min-width: fit-content !important;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+            }
+            
+            #desktopNavbar .nav-link i {
+                font-size: 0.8rem !important;
+                width: auto;
+                margin-right: 0.5rem !important;
+                flex-shrink: 0;
+            }
+            
+            /* Desktop search form positioning */
+            #desktopNavbar .d-flex {
+                margin-left: auto !important;
+            }
+            
+            /* Desktop dropdown positioning */
+            #desktopNavbar .dropdown-menu {
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+            }
+            
+            #desktopNavbar .dropdown-menu.show {
+                transform: translateX(-50%) translateY(0) !important;
+            }
+        }
+        
+        /* Mobile and Tablet Responsive */
+        @media (max-width: 1199.98px) {
+            .college-name {
+                font-size: 2rem;
+            }
+            
+            .college-affiliation {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 991.98px) {
+            .top-bar {
+                display: none !important;
+            }
+            
+            .college-header {
+                padding: 2rem 0 !important;
+            }
+            
+            .college-header .row {
+                text-align: center !important;
+            }
+            
+            .college-header .col-md-2,
+            .college-header .col-md-8,
+            .college-header .col-md-2 {
+                margin-bottom: 1rem;
+            }
+            
+            .college-name {
+                font-size: 1.75rem !important;
+            }
+            
+            .college-affiliation {
+                font-size: 0.9rem !important;
+            }
+            
+            .college-contact {
+                margin-top: 1rem;
+                padding: 0.75rem;
+            }
+            
+            /* CRITICAL: Hide desktop navbar completely on mobile */
+            #desktopNavbar {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                position: absolute !important;
+                left: -9999px !important;
+                width: 0 !important;
+                height: 0 !important;
+                overflow: hidden !important;
+            }
+            
+            /* Show mobile navbar on mobile devices */
+            #mobileNavbar {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                position: relative !important;
+                padding: 0.75rem 0 !important;
+                width: 100% !important;
+            }
+            
+            #mobileNavbar .container-fluid {
+                justify-content: space-between !important;
+                align-items: center !important;
+                display: flex !important;
+                width: 100% !important;
+            }
+            
+            /* Mobile navbar toggler - always visible */
+            #mobileNavbar .navbar-toggler {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                border: 2px solid rgba(255, 255, 255, 0.3) !important;
+                border-radius: 8px !important;
+                padding: 0.5rem !important;
+                background-color: transparent !important;
+                position: relative !important;
+                z-index: 1051 !important;
+            }
+            
+            #mobileNavbar .navbar-toggler:focus {
+                box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25) !important;
+            }
+            
+            #mobileNavbar .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+                width: 1em !important;
+                height: 1em !important;
+            }
+            
+            /* Mobile navbar collapse - HIDDEN BY DEFAULT */
+            #mobileNavbar .navbar-collapse {
+                background: linear-gradient(135deg, var(--primary-color) 0%, #1e40af 100%);
+                border-radius: 12px;
+                margin-top: 1rem;
+                padding: 1rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                /* CRITICAL: Hidden by default - only shows when hamburger clicked */
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                max-height: 0 !important;
+                overflow: hidden !important;
+                transition: all 0.3s ease-in-out !important;
+            }
+            
+            /* When collapse is shown via Bootstrap */
+            #mobileNavbar .navbar-collapse.show {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                max-height: none !important;
+                overflow: visible !important;
+            }
+            
+            /* Collapsing animation state */
+            #mobileNavbar .navbar-collapse.collapsing {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                overflow: hidden !important;
+                transition: height 0.35s ease !important;
+            }
+            
+            /* Navigation items container */
+            #mobileNavbar .navbar-nav {
+                width: 100% !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+                align-items: stretch !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            /* Individual navigation links */
+            #mobileNavbar .navbar-nav .nav-link {
+                padding: 0.75rem 1rem !important;
+                margin: 0.25rem 0 !important;
+                border-radius: 8px !important;
+                background-color: rgba(255, 255, 255, 0.1) !important;
+                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                color: white !important;
+                display: flex !important;
+                align-items: center !important;
+                width: 100% !important;
+                font-size: 0.9rem !important;
+                text-align: left !important;
+                text-decoration: none !important;
+                transition: all 0.2s ease !important;
+            }
+            
+            #mobileNavbar .navbar-nav .nav-link:hover,
+            #mobileNavbar .navbar-nav .nav-link:focus {
+                background-color: rgba(255, 255, 255, 0.2) !important;
+                color: white !important;
+                transform: none !important;
+                text-decoration: none !important;
+            }
+            
+            #mobileNavbar .navbar-nav .nav-link.active {
+                background-color: rgba(255, 255, 255, 0.3) !important;
+                font-weight: 600 !important;
+            }
+            
+            /* Mobile dropdown menus */
+            #mobileNavbar .navbar-nav .dropdown-menu {
+                background: rgba(255, 255, 255, 0.95) !important;
+                backdrop-filter: blur(10px) !important;
+                margin-top: 0.5rem !important;
+                margin-left: 1rem !important;
+                margin-right: 1rem !important;
+                border-radius: 8px !important;
+                border: 1px solid rgba(255, 255, 255, 0.2) !important;
+                width: calc(100% - 2rem) !important;
+                position: static !important;
+                box-shadow: none !important;
+                transform: none !important;
+                float: none !important;
+            }
+            
+            #mobileNavbar .navbar-nav .dropdown-item {
+                padding: 0.75rem 1rem !important;
+                font-size: 0.9rem !important;
+                color: #374151 !important;
+                width: 100% !important;
+                text-decoration: none !important;
+            }
+            
+            #mobileNavbar .navbar-nav .dropdown-item:hover,
+            #mobileNavbar .navbar-nav .dropdown-item:focus {
+                background-color: var(--primary-color) !important;
+                color: white !important;
+            }
+            
+            /* Mobile search form styling */
+            #mobileNavbar .mt-3 {
+                margin-top: 1rem !important;
+            }
+            
+            #mobileNavbar .input-group {
+                width: 100% !important;
+                max-width: 300px !important;
+                margin-left: auto !important;
+            }
+            
+            #mobileNavbar .form-control {
+                background-color: rgba(255, 255, 255, 0.15) !important;
+                border-color: rgba(255, 255, 255, 0.3) !important;
+                color: white !important;
+            }
+            
+            #mobileNavbar .form-control::placeholder {
+                color: rgba(255, 255, 255, 0.7) !important;
+            }
+            
+            #mobileNavbar .form-control:focus {
+                background-color: rgba(255, 255, 255, 0.25) !important;
+                border-color: rgba(255, 255, 255, 0.5) !important;
+                box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25) !important;
+                color: white !important;
+            }
+        }
+        
+        /* Small mobile devices */
+        @media (max-width: 576px) {
+            .college-header {
+                padding: 1.5rem 0 !important;
+            }
+            
+            .college-name {
+                font-size: 1.5rem !important;
+            }
+            
+            .college-affiliation {
+                font-size: 0.8rem !important;
+            }
+            
+            .college-address {
+                font-size: 0.75rem !important;
+            }
+            
+            .college-logo {
+                max-height: 60px !important;
+            }
+            
+            .college-contact {
+                padding: 0.5rem;
+                margin-top: 0.5rem;
+            }
+            
+            .college-contact small {
+                font-size: 0.7rem !important;
+            }
+            
+            .navbar-nav .nav-link {
+                font-size: 0.85rem;
+                padding: 0.6rem 0.8rem !important;
+            }
+            
+            .navbar-nav .nav-link i {
+                font-size: 0.75rem;
+                width: 16px;
+            }
+        }
+        
+        /* Large Screen Optimizations */
+        @media (min-width: 1200px) {
+            .navbar {
+                padding: 1.25rem 0;
+            }
+            
+            .navbar-nav .nav-link {
+                padding: 0.75rem 1.25rem !important;
+                margin: 0 0.5rem;
+            }
+            
+            .navbar-brand .fs-5 {
+                font-size: 1.5rem !important;
+            }
+        }
+        
+        /* Top Bar Styling */
+        .top-bar {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #374151 100%);
+            color: white;
+            font-size: 0.875rem;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+        
+        .top-bar a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .top-bar a:hover {
+            color: white;
+        }
+        
+        /* College Header Styling */
+        .college-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-bottom: 3px solid var(--primary-color);
+            position: relative;
+            z-index: 5;
+        }
+        
+        .college-logo {
+            max-height: 80px;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .college-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 0.5rem;
+        }
+        
+        .college-affiliation {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--secondary-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .college-address {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .college-contact {
+            background: rgba(220, 38, 38, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .college-contact small {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+        }
+        
+        /* Scrolling Notification Bar Styles - Professional White/Maroon Theme - Seamless Loop */
+        .scrolling-notification-bar {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            background: #ffffff;
+            border-top: 2px solid #800020;
+            border-bottom: 2px solid #800020;
+            box-shadow: 0 2px 8px rgba(128, 0, 32, 0.1);
+            z-index: 8;
+            white-space: nowrap;
+            height: auto;
+            min-height: 55px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .scrolling-notification-container {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            white-space: nowrap;
+            gap: 0;
+            /* Create seamless infinite scroll with no gaps */
+            animation: seamlessScroll 60s linear infinite;
+            will-change: transform;
+        }
+        
+        .scrolling-notification-bar:hover .scrolling-notification-container {
+            animation-play-state: paused;
+        }
+        
+        .notification-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.875rem 2rem;
+            margin: 0;
+            border-radius: 0;
+            white-space: nowrap;
+            flex-shrink: 0;
+            position: relative;
+            min-width: fit-content;
+            width: auto;
+            background: #ffffff;
+            color: #800020;
+            border-right: 1px solid rgba(128, 0, 32, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .notification-item:hover {
+            background: #f8f8f8;
+            color: #600018;
+        }
+        
+        .notification-item:last-child {
+            border-right: none;
+        }
+        
+        .notification-item.notification-urgent {
+            background: #fff5f5 !important;
+            color: #dc2626 !important;
+            font-weight: 600;
+            border-left: 4px solid #dc2626;
+            padding-left: 1.75rem;
+        }
+        
+        .notification-item.notification-high {
+            background: #fffbf5 !important;
+            color: #ea580c !important;
+            font-weight: 500;
+            border-left: 4px solid #ea580c;
+            padding-left: 1.75rem;
+        }
+        
+        .notification-content {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            gap: 0.75rem;
+        }
+        
+        .notification-text {
+            white-space: nowrap;
+            margin-right: 0;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .notification-icon {
+            color: #800020;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .notification-item.notification-urgent .notification-icon {
+            color: #dc2626;
+        }
+        
+        .notification-item.notification-high .notification-icon {
+            color: #ea580c;
+        }
+        
+        .notification-item .btn {
+            flex-shrink: 0;
+            font-size: 0.8rem;
+            padding: 0.375rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: #800020;
+            color: white;
+            border: 1px solid #800020;
+            font-weight: 500;
+        }
+        
+        .notification-item .btn:hover {
+            background: #600018;
+            border-color: #600018;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(128, 0, 32, 0.3);
+        }
+        
+        .notification-item.notification-urgent .btn {
+            background: #dc2626;
+            border-color: #dc2626;
+        }
+        
+        .notification-item.notification-urgent .btn:hover {
+            background: #b91c1c;
+            border-color: #b91c1c;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+        
+        .notification-item.notification-high .btn {
+            background: #ea580c;
+            border-color: #ea580c;
+        }
+        
+        .notification-item.notification-high .btn:hover {
+            background: #c2410c;
+            border-color: #c2410c;
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+        }
+        
+        /* Professional separator between notifications */
+        .notification-separator {
+            width: 1px;
+            height: 30px;
+            background: rgba(128, 0, 32, 0.2);
+            flex-shrink: 0;
+            margin: 0;
+        }
+        
+        /* Seamless infinite scroll animation with no gaps */
+        @keyframes seamlessScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        /* Responsive adjustments for notifications */
+        @media (max-width: 768px) {
+            .scrolling-notification-bar {
+                min-height: 50px;
+            }
+            
+            .notification-item {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .notification-text {
+                font-size: 0.9rem;
+            }
+            
+            .notification-item .btn {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.75rem;
+            }
+            
+            .scrolling-notification-container {
+                animation: seamlessScroll 45s linear infinite;
+            }
+            
+            .notification-icon {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Navbar positioning adjustments */
+        .navbar {
+            position: relative !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0.75rem 0 !important;
+        }
+        
+        .navbar .container-fluid {
+            max-width: 100%;
+            width: 100%;
+            padding: 0 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        
+        .navbar-collapse {
+            width: 100% !important;
+            display: flex !important;
+            justify-content: flex-start !important;
+        }
+        
+        .footer {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .stats-section {
+            background: var(--light-bg);
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .rating-stars {
+            color: var(--accent-color);
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+    <!-- Top Utility Bar -->
+    <div class="tw-bg-gray-800 tw-text-white tw-py-2 tw-text-sm d-none d-md-block" id="topUtilityBar">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Left: Social Media Icons -->
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center tw-space-x-3">
+                        <span class="tw-text-gray-300 tw-mr-3">Follow Us:</span>
+                        <a href="#" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200" title="Facebook" target="_blank">
+                            <i class="fab fa-facebook-f tw-text-lg"></i>
+                        </a>
+                        <a href="#" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200" title="Twitter" target="_blank">
+                            <i class="fab fa-twitter tw-text-lg"></i>
+                        </a>
+                        <a href="#" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200" title="Instagram" target="_blank">
+                            <i class="fab fa-instagram tw-text-lg"></i>
+                        </a>
+                        <a href="#" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200" title="LinkedIn" target="_blank">
+                            <i class="fab fa-linkedin-in tw-text-lg"></i>
+                        </a>
+                        <a href="#" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200" title="YouTube" target="_blank">
+                            <i class="fab fa-youtube tw-text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Right: Quick Links -->
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-end align-items-center tw-space-x-4">
+                        <a href="{% url 'college_website:online_application' %}" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200 tw-flex tw-items-center">
+                            <i class="fas fa-file-signature tw-mr-1"></i>Apply Online
+                        </a>
+                        <a href="{% url 'college_website:notices_list' %}" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200 tw-flex tw-items-center">
+                            <i class="fas fa-bell tw-mr-1"></i>Notices
+                            {% if recent_notices_count > 0 %}
+                            <span class="badge bg-danger tw-ml-1" style="font-size: 0.6rem;">{{ recent_notices_count }}</span>
+                            {% endif %}
+                        </a>
+                        <a href="/student-portal/" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200 tw-flex tw-items-center">
+                            <i class="fas fa-user-graduate tw-mr-1"></i>Student Portal
+                        </a>
+                        <a href="/faculty-portal/" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200 tw-flex tw-items-center">
+                            <i class="fas fa-chalkboard-teacher tw-mr-1"></i>Faculty Portal
+                        </a>
+                        <a href="{% url 'college_website:contact' %}" class="tw-text-gray-300 hover:tw-text-white tw-transition-colors tw-duration-200 tw-flex tw-items-center">
+                            <i class="fas fa-phone tw-mr-1"></i>Contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block header %}
+    <header class="modern-header">
+        <!-- Get active header info -->
+        {% if header_info and header_info.is_active %}
+        <style>
+            /* Dynamic font loading and typography */
+            {% if header_info.college_name_font_family %}
+            @import url('https://fonts.googleapis.com/css2?family={{ header_info.college_name_font_family|cut:", sans-serif"|cut:", serif" }}:wght@300;400;500;600;700;800;900&display=swap');
+            {% endif %}
+            
+            /* Header animation effects */
+            {% if header_info.enable_animations %}
+            .logo-hover-effect {
+                transition: transform 0.3s ease;
+            }
+            
+            .logo-hover-effect:hover {
+                transform: scale(1.05);
+            }
+            
+            .animate-text {
+                animation: slideInDown 0.6s ease-out;
+            }
+            
+            @keyframes slideInDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            {% endif %}
+            
+            .modern-header {
+                font-family: var(--header-font-family);
+                background: var(--header-bg-color);
+                {% if header_info.header_gradient_colors %}
+                background: var(--header-gradient);
+                {% endif %}
+                box-shadow: var(--header-shadow);
+                border-radius: var(--header-border-radius);
+                border-bottom: 3px solid var(--header-border-color);
+                margin: var(--header-margin);
+                position: relative;
+                z-index: 100;
+                
+                {% if header_info.enable_animations %}
+                animation: var(--animation-type) var(--animation-duration) ease-in-out;
+                {% endif %}
+            }
+            
+            .header-college-name {
+                font-family: var(--header-font-family);
+                font-size: var(--header-font-size);
+                color: var(--header-font-color);
+                text-shadow: var(--header-text-shadow);
+                font-weight: {{ header_info.font_weight|default:"700" }};
+                margin-bottom: 0.5rem;
+                {% if header_info.enable_animations %}
+                animation: slideInDown var(--animation-duration) ease-out;
+                {% endif %}
+            }
+            
+            .header-logos img {
+                max-height: var(--logo-max-height);
+                max-width: var(--logo-max-width);
+                width: auto;
+                height: auto;
+                object-fit: contain;
+                {% if header_info.enable_animations %}
+                animation: zoomIn calc(var(--animation-duration) * 0.8) ease-out;
+                {% endif %}
+            }
+            
+            /* Mobile responsive adjustments */
+            @media (max-width: 768px) {
+                {% if header_info.hide_on_mobile %}
+                .modern-header .header-mobile-hide {
+                    display: none !important;
+                }
+                {% endif %}
+                
+                .header-college-name {
+                    font-size: calc(var(--header-font-size) * 0.7);
+                }
+            }
+            
+            /* Animation keyframes */
+            {% if header_info.enable_animations %}
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            @keyframes slideInDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            @keyframes zoomIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.8);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+            {% endif %}
+        </style>
+        
+        <!-- Top Contact Bar (if enabled) -->
+        {% if header_info.show_top_bar and not header_info.hide_on_mobile %}
+        <div class="top-bar py-2 {{ header_info.top_bar_background_class|default:'bg-dark' }} text-white d-none d-md-block">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <small class="d-flex flex-wrap align-items-center gap-3">
+                            {% if header_info.contact_info %}
+                            <span><i class="fas fa-envelope me-2"></i>{{ header_info.contact_info }}</span>
+                            {% endif %}
+                            {% if header_info.phone %}
+                            <span><i class="fas fa-phone me-2"></i>{{ header_info.phone }}</span>
+                            {% endif %}
+                            {% if header_info.address %}
+                            <span><i class="fas fa-map-marker-alt me-2"></i>{{ header_info.address }}</span>
+                            {% endif %}
+                        </small>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="social-links">
+                            {% if header_info.facebook_url %}
+                            <a href="{{ header_info.facebook_url }}" class="text-white me-3" target="_blank" title="Facebook" rel="noopener">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            {% endif %}
+                            {% if header_info.twitter_url %}
+                            <a href="{{ header_info.twitter_url }}" class="text-white me-3" target="_blank" title="Twitter" rel="noopener">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            {% endif %}
+                            {% if header_info.instagram_url %}
+                            <a href="{{ header_info.instagram_url }}" class="text-white me-3" target="_blank" title="Instagram" rel="noopener">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            {% endif %}
+                            {% if header_info.linkedin_url %}
+                            <a href="{{ header_info.linkedin_url }}" class="text-white me-3" target="_blank" title="LinkedIn" rel="noopener">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            {% endif %}
+                            {% if header_info.youtube_url %}
+                            <a href="{{ header_info.youtube_url }}" class="text-white" target="_blank" title="YouTube" rel="noopener">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Main Header Section -->
+        <div class="college-header header-dynamic-styles" style="
+            padding: var(--header-padding);
+            background: {{ header_info.header_background_color|default:'#ffffff' }};
+            {% if header_info.header_shadow %}box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);{% endif %}
+            {% if header_info.header_border_bottom %}border-bottom: 3px solid {{ header_info.header_border_color|default:'#dc2626' }};{% endif %}
+        ">
+            <div class="container">
+                <div class="row align-items-center 
+                    {% if header_info.header_layout == 'centered' %}justify-content-center{% endif %}
+                    {% if header_info.header_layout == 'left_right' %}justify-content-between{% endif %}
+                    {% if header_info.header_layout == 'three_column' %}justify-content-center{% endif %}
+                ">
+                    
+                    <!-- Left Side Logos -->
+                    {% if header_info.left_logo_1 or header_info.left_logo_2 or header_info.left_logo_3 %}
+                    <div class="col-lg-2 col-md-3 text-center text-md-start mb-3 mb-md-0 order-1">
+                        <div class="header-logos d-flex flex-wrap align-items-center justify-content-center justify-content-md-start gap-2">
+                            {% if header_info.left_logo_1 %}
+                            <div class="logo-item {% if header_info.enable_animations %}logo-hover-effect{% endif %}">
+                                {% if header_info.left_logo_1_link %}
+                                <a href="{{ header_info.left_logo_1_link }}" {% if header_info.left_logo_1_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
+                                {% endif %}
+                                <img src="{{ header_info.left_logo_1.url }}" alt="{{ header_info.left_logo_1_alt|default:'College Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                {% if header_info.left_logo_1_link %}
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            
+                            {% if header_info.left_logo_2 %}
+                            <div class="logo-item {% if header_info.enable_animations %}logo-hover-effect{% endif %}">
+                                {% if header_info.left_logo_2_link %}
+                                <a href="{{ header_info.left_logo_2_link }}" {% if header_info.left_logo_2_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
+                                {% endif %}
+                                <img src="{{ header_info.left_logo_2.url }}" alt="{{ header_info.left_logo_2_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                {% if header_info.left_logo_2_link %}
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            
+                            {% if header_info.left_logo_3 %}
+                            <div class="logo-item {% if header_info.enable_animations %}logo-hover-effect{% endif %}">
+                                {% if header_info.left_logo_3_link %}
+                                <a href="{{ header_info.left_logo_3_link }}" {% if header_info.left_logo_3_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
+                                {% endif %}
+                                <img src="{{ header_info.left_logo_3.url }}" alt="{{ header_info.left_logo_3_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                {% if header_info.left_logo_3_link %}
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Main Content Area -->
+                    <div class="{% if header_info.left_logo_1 or header_info.left_logo_2 or header_info.left_logo_3 or header_info.right_logo_1 or header_info.right_logo_2 or header_info.right_logo_3 %}col-lg-8 col-md-6{% else %}col-12{% endif %} text-center order-2">
+                        {% if header_info.show_college_name and header_info.college_name %}
+                        <h1 class="header-college-name mb-2 {% if header_info.enable_animations %}animate-text{% endif %}" style="
+                            font-family: {{ header_info.college_name_font_family }};
+                            font-size: {{ header_info.college_name_font_size }}px;
+                            font-weight: {{ header_info.college_name_font_weight }};
+                            color: {{ header_info.college_name_color }};
+                        ">{{ header_info.college_name }}</h1>
+                        {% endif %}
+                        
+                        {% if header_info.show_affiliations and header_info.college_affiliations %}
+                        <div class="college-affiliation mb-2 {% if header_info.hide_affiliations_mobile %}d-md-block d-none{% endif %}" style="
+                            font-size: {{ header_info.affiliations_font_size }}px;
+                            font-weight: {{ header_info.affiliations_font_weight }};
+                            color: {{ header_info.affiliations_color }};
+                        ">
+                            {{ header_info.college_affiliations|linebreaksbr }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if header_info.show_address and header_info.college_address %}
+                        <small class="college-address d-block {% if header_info.hide_affiliations_mobile %}d-md-block d-none{% endif %}" style="
+                            font-size: {{ header_info.address_font_size }}px;
+                            font-weight: {{ header_info.address_font_weight }};
+                            color: {{ header_info.address_color }};
+                        ">
+                            <i class="fas fa-map-marker-alt me-1"></i>{{ header_info.college_address }}
+                        </small>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Right Side Logos -->
+                    {% if header_info.right_logo_1 or header_info.right_logo_2 or header_info.right_logo_3 %}
+                    <div class="col-lg-2 col-md-3 text-center text-md-end mt-3 mt-md-0 order-3">
+                        <div class="header-logos d-flex flex-wrap align-items-center justify-content-center justify-content-md-end gap-2">
+                            {% if header_info.right_logo_1 %}
+                            <div class="logo-item {% if header_info.enable_animations %}logo-hover-effect{% endif %}">
+                                {% if header_info.right_logo_1_link %}
+                                <a href="{{ header_info.right_logo_1_link }}" {% if header_info.right_logo_1_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
+                                {% endif %}
+                                <img src="{{ header_info.right_logo_1.url }}" alt="{{ header_info.right_logo_1_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                {% if header_info.right_logo_1_link %}
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            
+                            {% if header_info.right_logo_2 %}
+                            <div class="logo-item {% if header_info.enable_animations %}logo-hover-effect{% endif %}">
+                                {% if header_info.right_logo_2_link %}
+                                <a href="{{ header_info.right_logo_2_link }}" {% if header_info.right_logo_2_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
+                                {% endif %}
+                                <img src="{{ header_info.right_logo_2.url }}" alt="{{ header_info.right_logo_2_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                {% if header_info.right_logo_2_link %}
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            
+                            {% if header_info.right_logo_3 %}
+                            <div class="logo-item {% if header_info.enable_animations %}logo-hover-effect{% endif %}">
+                                {% if header_info.right_logo_3_link %}
+                                <a href="{{ header_info.right_logo_3_link }}" {% if header_info.right_logo_3_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
+                                {% endif %}
+                                <img src="{{ header_info.right_logo_3.url }}" alt="{{ header_info.right_logo_3_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                {% if header_info.right_logo_3_link %}
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Contact Info Panel (for non-three-column layouts) -->
+                    {% if header_info.show_contact_info and header_info.header_layout != 'three_column' %}
+                    <div class="col-12 mt-3 order-4">
+                        <div class="text-center">
+                            <div class="contact-panel d-inline-block px-4 py-2 rounded" style="
+                                background: rgba(220, 38, 38, 0.05); 
+                                border-left: 4px solid {{ header_info.header_border_color|default:'#dc2626' }};
+                                font-size: {{ header_info.contact_font_size }}px;
+                                color: {{ header_info.contact_color }};
+                            ">
+                                {% if header_info.email %}
+                                <small class="d-block"><i class="fas fa-envelope me-2"></i>{{ header_info.email }}</small>
+                                {% endif %}
+                                {% if header_info.phone %}
+                                <small class="d-block"><i class="fas fa-phone me-2"></i>{{ header_info.phone }}</small>
+                                {% endif %}
+                                {% if header_info.website_url %}
+                                <small class="d-block"><i class="fas fa-globe me-2"></i><a href="{{ header_info.website_url }}" target="_blank" rel="noopener">Visit Website</a></small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        {% else %}
+        <!-- Fallback header when no HeaderInfo is active -->
+        <div class="college-header py-4 bg-white shadow-sm">
+            <div class="container">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-md-2 text-center">
+                        {% if college_info.logo %}
+                        <img src="{{ college_info.logo.url }}" alt="{{ college_info.name }}" class="college-logo" height="80">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8 text-center">
+                        <h1 class="college-name mb-1">{{ college_info.name|default:"Chaitanya Science and Arts College" }}</h1>
+                        <p class="college-affiliation mb-0 text-muted">{{ college_info.affiliation|default:"Shaheed Nandkumar Patel Vishwavidyalaya, Raigarh" }}</p>
+                        <small class="college-address text-muted">{{ college_info.address_line|default:"Pamgarh, Janjgir Champa, Chhattisgarh, India" }}</small>
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <div class="college-contact">
+                            <small class="d-block text-muted">
+                                <i class="fas fa-phone me-1"></i>{{ college_info.phone|default:"+91-9425540666" }}
+                            </small>
+                            <small class="d-block text-muted">
+                                <i class="fas fa-envelope me-1"></i>{{ college_info.email|default:"chaitanyapamgarh@gmail.com" }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </header>
+    {% endblock %}
+    
+    <!-- Scrolling Notification Bar - Professional White/Maroon Theme - Seamless Loop -->
+    {% if scrolling_notifications %}
+    <div class="scrolling-notification-bar">
+        <div class="scrolling-notification-container">
+            <!-- First set of notifications -->
+            {% for notification in scrolling_notifications %}
+            <div class="notification-item 
+                        {% if notification.priority == 'urgent' %}notification-urgent{% endif %}
+                        {% if notification.priority == 'high' %}notification-high{% endif %}"
+                 data-scroll-speed="{{ notification.scroll_speed }}"
+                 data-pause-hover="{{ notification.pause_on_hover|yesno:'true,false' }}">
+                <div class="notification-content">
+                    {% if notification.show_icon %}
+                    <i class="{{ notification.icon_class }} notification-icon"></i>
+                    {% endif %}
+                    <span class="notification-text">
+                        <strong>{{ notification.title }}:</strong> {{ notification.message }}
+                    </span>
+                    {% if notification.link_text and notification.link_url %}
+                    <a href="{{ notification.link_url }}" 
+                       class="btn btn-sm"
+                       target="{% if 'http' in notification.link_url %}blank{% else %}_self{% endif %}">
+                        {{ notification.link_text }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="notification-separator"></div>
+            {% endfor %}
+            
+            <!-- Duplicate set for seamless loop - EXACTLY SAME CONTENT -->
+            {% for notification in scrolling_notifications %}
+            <div class="notification-item 
+                        {% if notification.priority == 'urgent' %}notification-urgent{% endif %}
+                        {% if notification.priority == 'high' %}notification-high{% endif %}"
+                 data-scroll-speed="{{ notification.scroll_speed }}"
+                 data-pause-hover="{{ notification.pause_on_hover|yesno:'true,false' }}">
+                <div class="notification-content">
+                    {% if notification.show_icon %}
+                    <i class="{{ notification.icon_class }} notification-icon"></i>
+                    {% endif %}
+                    <span class="notification-text">
+                        <strong>{{ notification.title }}:</strong> {{ notification.message }}
+                    </span>
+                    {% if notification.link_text and notification.link_url %}
+                    <a href="{{ notification.link_url }}" 
+                       class="btn btn-sm"
+                       target="{% if 'http' in notification.link_url %}blank{% else %}_self{% endif %}">
+                        {{ notification.link_text }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="notification-separator"></div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- HYBRID NAVBAR: Beautiful Static Design + CMS Menu System -->
+    {% include 'includes/hybrid_navbar.html' %}
+                                <span>Quick Access</span><i class="fas fa-cog ms-3"></i>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-user me-2 text-primary"></i>Student Login
+                            </a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-chalkboard-teacher me-2 text-success"></i>Faculty Login
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i class="fas fa-download me-2 text-info"></i>Downloads
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    {% block banner %}
+    {% if show_banner|default:True %}
+    <div class="hero-section py-4" style="margin-top: 20px !important;">
+        <div class="container">
+            {% block breadcrumbs %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{% url 'college_website:home' %}" class="text-white">Home</a></li>
+                    {% block breadcrumb_items %}{% endblock %}
+                </ol>
+            </nav>
+            {% endblock %}
+        </div>
+    </div>
+    {% endif %}
+    {% endblock %}
+    
+    <main>
+        {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    
+    {% block sidebar %}{% endblock %}
+    
+    {% block footer %}
+    <footer class="footer mt-5 py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        {% if college_info.logo %}
+                        <img src="{{ college_info.logo.url }}" alt="{{ college_info.name }}" style="height: 60px;" class="me-3">
+                        {% endif %}
+                        <div>
+                            <h5 class="text-white mb-1">{{ college_info.name|default:"Chaitanya Science and Arts College" }}</h5>
+                            <small class="text-light">Knowledge Meets Innovation</small>
+                        </div>
+                    </div>
+                    <p class="text-light">{{ college_info.mission_statement_short|default:"Empowering rural youth through quality education and fostering academic excellence." }}</p>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="text-white mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        {% for link in quick_links %}
+                        <li class="mb-2">
+                            <a href="{{ link.url }}" class="text-light text-decoration-none">
+                                {% if link.icon_class %}<i class="{{ link.icon_class }} me-2"></i>{% endif %}
+                                {{ link.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="text-white mb-3">Important Links</h6>
+                    <ul class="list-unstyled">
+                        {% for link in important_links %}
+                        <li class="mb-2">
+                            <a href="{{ link.url }}" class="text-light text-decoration-none" target="_blank">
+                                {% if link.icon_class %}<i class="{{ link.icon_class }} me-2"></i>{% endif %}
+                                {{ link.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2 col-md-12 mb-4">
+                    <h6 class="text-white mb-3">Contact Info</h6>
+                    <div class="text-light">
+                        <p class="mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            {{ college_info.address_line|default:"Pamgarh, Janjgir Champa, Chhattisgarh, India, 495554" }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone me-2"></i>
+                            {{ college_info.phone|default:"+91-9425540666" }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope me-2"></i>
+                            {{ college_info.email|default:"chaitanyapamgarh@gmail.com" }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-4 border-light">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-light mb-0">
+                        &copy; {% now "Y" %} {{ college_info.name|default:"Chaitanya Science and Arts College" }}. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-links">
+                        {% if college_info.facebook_url %}
+                        <a href="{{ college_info.facebook_url }}" class="text-light me-3" target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        {% endif %}
+                        {% if college_info.youtube_url %}
+                        <a href="{{ college_info.youtube_url }}" class="text-light me-3" target="_blank">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        {% endif %}
+                        {% if college_info.instagram_url %}
+                        <a href="{{ college_info.instagram_url }}" class="text-light" target="_blank">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+    
+    {% block scripts %}
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    {% load static %}
+    <script src="{% static 'js/navbar-enhancements.js' %}"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Bootstrap components
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Navbar active link highlighting
+            const currentLocation = location.pathname;
+            const menuItems = document.querySelectorAll('.navbar-nav .nav-link');
+            
+            menuItems.forEach(item => {
+                if(item.getAttribute('href') === currentLocation) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Remove smooth scrolling - direct navigation only
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if(target) {
+                        target.scrollIntoView({
+                            behavior: 'auto',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Ensure navbar visibility and proper dropdown functionality
+            const navbar = document.querySelector('.navbar');
+            const topBar = document.querySelector('.top-bar');
+            
+            if (navbar) {
+                navbar.style.display = 'block';
+                navbar.style.visibility = 'visible';
+                navbar.style.opacity = '1';
+                navbar.style.position = 'relative';
+                navbar.style.width = '100%';
+                navbar.style.zIndex = '9999';
+                
+                // Ensure all nav links are visible
+                const navLinks = navbar.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.style.visibility = 'visible';
+                    link.style.opacity = '1';
+                    link.style.display = 'block';
+                });
+                
+                // Reset dropdown menus to default hidden state
+                const dropdowns = navbar.querySelectorAll('.dropdown-menu');
+                dropdowns.forEach(dropdown => {
+                    dropdown.style.display = 'none';
+                    dropdown.style.visibility = 'hidden';
+                    dropdown.style.opacity = '0';
+                    dropdown.style.zIndex = '10001';
+                    dropdown.style.position = 'absolute';
+                    dropdown.style.minWidth = '220px';
+                });
+            }
+            
+            if (topBar) {
+                topBar.style.display = 'block';
+                topBar.style.visibility = 'visible';
+                topBar.style.opacity = '1';
+                topBar.style.position = 'relative';
+                topBar.style.width = '100%';
+                topBar.style.zIndex = '100';
+            }
+            
+            // Enhanced dropdown functionality with proper Bootstrap 5 behavior
+            const dropdowns = document.querySelectorAll('.navbar-nav .dropdown');
+            dropdowns.forEach(dropdown => {
+                const toggle = dropdown.querySelector('.dropdown-toggle');
+                const menu = dropdown.querySelector('.dropdown-menu');
+                
+                if (toggle && menu) {
+                    // Initialize Bootstrap dropdown with proper options
+                    const bsDropdown = new bootstrap.Dropdown(toggle, {
+                        autoClose: true,
+                        boundary: 'viewport'
+                    });
+                    
+                    // Handle click on dropdown toggle
+                    toggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Close all other dropdowns first
+                        document.querySelectorAll('.navbar-nav .dropdown-menu.show').forEach(otherMenu => {
+                            if (otherMenu !== menu) {
+                                const otherDropdown = bootstrap.Dropdown.getInstance(otherMenu.previousElementSibling);
+                                if (otherDropdown) {
+                                    otherDropdown.hide();
+                                }
+                            }
+                        });
+                        
+                        // Toggle current dropdown
+                        if (menu.classList.contains('show')) {
+                            bsDropdown.hide();
+                        } else {
+                            bsDropdown.show();
+                        }
+                    });
+                    
+                    // Show dropdown on hover (desktop only)
+                    if (window.innerWidth > 991) {
+                        let hoverTimeout;
+                        
+                        dropdown.addEventListener('mouseenter', function() {
+                            clearTimeout(hoverTimeout);
+                            // Close other dropdowns
+                            document.querySelectorAll('.navbar-nav .dropdown-menu.show').forEach(otherMenu => {
+                                if (otherMenu !== menu) {
+                                    const otherDropdown = bootstrap.Dropdown.getInstance(otherMenu.previousElementSibling);
+                                    if (otherDropdown) {
+                                        otherDropdown.hide();
+                                    }
+                                }
+                            });
+                            bsDropdown.show();
+                        });
+                        
+                        dropdown.addEventListener('mouseleave', function() {
+                            hoverTimeout = setTimeout(() => {
+                                if (!dropdown.matches(':hover')) {
+                                    bsDropdown.hide();
+                                }
+                            }, 150);
+                        });
+                    }
+                    
+                    // Handle dropdown item clicks
+                    menu.addEventListener('click', function(e) {
+                        if (e.target.classList.contains('dropdown-item')) {
+                            bsDropdown.hide();
+                        }
+                    });
+                    
+                    // Ensure proper positioning
+                    toggle.addEventListener('shown.bs.dropdown', function() {
+                        menu.style.display = 'block';
+                        menu.style.visibility = 'visible';
+                        menu.style.opacity = '1';
+                    });
+                    
+                    toggle.addEventListener('hidden.bs.dropdown', function() {
+                        menu.style.display = 'none';
+                    });
+                }
+            });
+            
+            // Auto-hide alerts after 5 seconds
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+            
+            // Navbar collapse on mobile link click
+            const navbarCollapse = document.querySelector('.navbar-collapse');
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 992) {
+                        const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                            toggle: false
+                        });
+                        bsCollapse.hide();
+                    }
+                });
+            });
+        });
+    </script>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,325 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Results - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.results-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0 2rem;
+}
+
+.result-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.result-type-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.featured-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.date-info {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.date-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.date-item:last-child {
+    margin-bottom: 0;
+}
+
+.date-icon {
+    width: 30px;
+    height: 30px;
+    background: #667eea;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.view-result-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.view-result-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.download-result-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.download-result-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    color: white;
+}
+
+.filter-tabs {
+    background: white;
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.filter-tab {
+    background: transparent;
+    border: 2px solid #e9ecef;
+    color: #6c757d;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    margin: 0.25rem;
+}
+
+.filter-tab:hover,
+.filter-tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: white;
+}
+
+.info-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 2rem;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Results</li>
+{% endblock %}
+
+{% block content %}
+<!-- Results Hero Section -->
+<div class="results-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Examination Results</h1>
+                <p class="lead mb-4">Check your examination results and download certificates. Stay updated with the latest result announcements.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#latest-results" class="btn btn-light btn-lg">
+                        <i class="fas fa-chart-line me-2"></i>Latest Results
+                    </a>
+                    <a href="#result-instructions" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-info-circle me-2"></i>Instructions
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-trophy fa-8x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Filter Tabs -->
+    <div class="filter-tabs text-center">
+        <a href="?type=all" class="filter-tab {% if not request.GET.type or request.GET.type == 'all' %}active{% endif %}">
+            <i class="fas fa-list"></i>All Results
+        </a>
+        <a href="?type=semester" class="filter-tab {% if request.GET.type == 'semester' %}active{% endif %}">
+            <i class="fas fa-calendar-alt"></i>Semester
+        </a>
+        <a href="?type=annual" class="filter-tab {% if request.GET.type == 'annual' %}active{% endif %}">
+            <i class="fas fa-calendar-check"></i>Annual
+        </a>
+        <a href="?type=entrance" class="filter-tab {% if request.GET.type == 'entrance' %}active{% endif %}">
+            <i class="fas fa-door-open"></i>Entrance
+        </a>
+        <a href="?type=supplementary" class="filter-tab {% if request.GET.type == 'supplementary' %}active{% endif %}">
+            <i class="fas fa-plus-circle"></i>Supplementary
+        </a>
+    </div>
+
+    <!-- Results Grid -->
+    <div id="latest-results" class="row g-4 mb-5">
+        {% for result in results %}
+        <div class="col-lg-6">
+            <div class="card result-card h-100">
+                {% if result.is_featured %}
+                <div class="featured-badge">
+                    <i class="fas fa-star me-1"></i>Featured
+                </div>
+                {% endif %}
+                <div class="result-type-badge">
+                    {{ result.get_result_type_display }}
+                </div>
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-3">{{ result.title }}</h4>
+                    <p class="card-text text-muted mb-3">{{ result.description|truncatewords:20 }}</p>
+                    
+                    <div class="date-info">
+                        <div class="date-item">
+                            <div class="date-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div>
+                                <strong>Exam Date:</strong> {{ result.exam_date|date:"d M Y" }}
+                            </div>
+                        </div>
+                        <div class="date-item">
+                            <div class="date-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <strong>Result Date:</strong> {{ result.result_date|date:"d M Y" }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2 flex-wrap mt-3">
+                        <a href="{{ result.get_absolute_url }}" class="view-result-btn">
+                            <i class="fas fa-eye"></i>View Details
+                        </a>
+                        {% if result.result_file %}
+                        <a href="{{ result.result_file.url }}" class="download-result-btn" target="_blank">
+                            <i class="fas fa-download"></i>Download
+                        </a>
+                        {% endif %}
+                        {% if result.result_link %}
+                        <a href="{{ result.result_link }}" class="download-result-btn" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>View Online
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-search fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No Results Found</h4>
+            <p class="text-muted">No examination results are currently available. Please check back later.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Instructions Section -->
+    <div id="result-instructions" class="info-section">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3">How to Check Your Results</h3>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start">
+                            <div class="date-icon me-3">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <strong>Step 1:</strong> Find your examination result from the list above
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start">
+                            <div class="date-icon me-3">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div>
+                                <strong>Step 2:</strong> Click on "View Details" to see complete information
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start">
+                            <div class="date-icon me-3">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <div>
+                                <strong>Step 3:</strong> Download the result PDF or view online
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start">
+                            <div class="date-icon me-3">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <strong>Step 4:</strong> Contact office for any queries or issues
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-headset me-2"></i>Need Help?
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

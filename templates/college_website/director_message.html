@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ director_message.message_title|default:"Director's Message" }} - {{ college_info.name|default:"Chaitanya College" }}{% endblock %}
+
+{% block meta_description %}{{ director_message.meta_description|default:"Read the inspiring message from our esteemed Director about our vision and commitment to excellence in education." }}{% endblock %}
+
+{% block banner %}
+<section class="position-relative overflow-hidden tw-bg-gradient-to-br tw-from-red-800 tw-via-red-600 tw-to-pink-600">
+    <div class="container position-relative tw-z-10 py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'college_website:home' %}" class="text-white-50">Home</a></li>
+                        <li class="breadcrumb-item"><span class="text-white-50">Leadership</span></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">Director's Message</li>
+                    </ol>
+                </nav>
+                <h1 class="display-4 fw-bold text-white mb-3">{{ director_message.message_title|default:"Director's Message" }}</h1>
+                <p class="lead text-white mb-0">{{ director_message.name }} - {{ director_message.designation }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Director's Profile -->
+            <div class="col-lg-4 mb-5">
+                <div class="card border-0 shadow-lg h-100">
+                    <div class="card-body text-center p-4">
+                        {% if director_message.profile_photo %}
+                        <img src="{{ director_message.profile_photo.url }}" 
+                             alt="{{ director_message.name }}" 
+                             class="rounded-circle mb-4" 
+                             style="width: 200px; height: 200px; object-fit: cover; border: 5px solid #dc2626;">
+                        {% else %}
+                        <div class="tw-bg-gradient-to-r tw-from-red-500 tw-to-pink-500 tw-w-48 tw-h-48 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4">
+                            <i class="fas fa-user-tie text-white fa-4x"></i>
+                        </div>
+                        {% endif %}
+                        
+                        <h3 class="card-title text-primary mb-2">{{ director_message.name }}</h3>
+                        <p class="text-muted mb-3">{{ director_message.designation }}</p>
+                        
+                        {% if director_message.qualifications %}
+                        <div class="mb-3">
+                            <h6 class="text-primary mb-2">Qualifications</h6>
+                            <p class="small text-muted">{{ director_message.qualifications }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if director_message.experience_years %}
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center justify-content-center text-success">
+                                <i class="fas fa-star me-2"></i>
+                                <span class="fw-bold">{{ director_message.experience_years }}+ Years Experience</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if director_message.show_contact_info %}
+                        <div class="mt-4">
+                            <h6 class="text-primary mb-3">Contact Information</h6>
+                            <div class="d-grid gap-2">
+                                {% if director_message.email %}
+                                <a href="mailto:{{ director_message.email }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-envelope me-2"></i>{{ director_message.email }}
+                                </a>
+                                {% endif %}
+                                {% if director_message.phone %}
+                                <a href="tel:{{ director_message.phone }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-phone me-2"></i>{{ director_message.phone }}
+                                </a>
+                                {% endif %}
+                            </div>
+                            
+                            {% if director_message.linkedin_url or director_message.twitter_url or director_message.facebook_url %}
+                            <div class="mt-3">
+                                <h6 class="text-primary mb-2">Follow</h6>
+                                <div class="d-flex justify-content-center gap-2">
+                                    {% if director_message.linkedin_url %}
+                                    <a href="{{ director_message.linkedin_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fab fa-linkedin"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if director_message.twitter_url %}
+                                    <a href="{{ director_message.twitter_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    {% endif %}
+                                    {% if director_message.facebook_url %}
+                                    <a href="{{ director_message.facebook_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fab fa-facebook"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Director's Message Content -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        {% if director_message.message_content %}
+                        <div class="message-content mb-5">
+                            <h2 class="text-primary mb-4">{{ director_message.message_title|default:"Message from Director" }}</h2>
+                            <div class="content-text">
+                                {{ director_message.message_content|safe }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if director_message.vision %}
+                        <div class="vision-content mb-5">
+                            <h3 class="text-primary mb-3">
+                                <i class="fas fa-lightbulb me-2"></i>Our Vision
+                            </h3>
+                            <div class="p-4 bg-light rounded">
+                                <p class="mb-0 fst-italic">{{ director_message.vision }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if director_message.show_achievements and director_message.achievements %}
+                        <div class="achievements-content">
+                            <h3 class="text-primary mb-3">
+                                <i class="fas fa-trophy me-2"></i>Achievements & Recognition
+                            </h3>
+                            <div class="achievements-text">
+                                {{ director_message.achievements|safe }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-5 tw-bg-gradient-to-r tw-from-gray-50 tw-to-red-50">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h3 class="text-primary mb-4">Join Our Educational Journey</h3>
+                <p class="lead text-muted mb-4">
+                    Discover the opportunities that await you at our institution and become part of our legacy of excellence.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="{% url 'college_website:programs_list' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-graduation-cap me-2"></i>Explore Programs
+                    </a>
+                    <a href="{% url 'college_website:contact' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Custom styling for director message page */
+.content-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.content-text p {
+    margin-bottom: 1.5rem;
+}
+
+.content-text blockquote {
+    border-left: 4px solid #dc2626;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #666;
+}
+
+.achievements-text ul {
+    list-style: none;
+    padding: 0;
+}
+
+.achievements-text ul li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.achievements-text ul li:before {
+    content: '🏆';
+    margin-right: 0.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body.p-5 {
+        padding: 2rem !important;
+    }
+    
+    .content-text {
+        font-size: 1rem;
+    }
+}
+</style>
+{% endblock %}

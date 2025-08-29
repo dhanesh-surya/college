@@ -1,0 +1,485 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page.title }} - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block extra_css %}
+<!-- Lightbox2 CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+{% endblock %}
+
+{% block meta_description %}{{ page.meta_description|default:"Learn more about "|add:page.title }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">{{ page.title }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="text-center mb-4">
+                <h1 class="display-4 fw-bold text-primary mb-3">{{ page.title }}</h1>
+                {% if page.subtitle %}
+                <p class="lead text-muted mb-4">{{ page.subtitle }}</p>
+                {% endif %}
+                
+                <!-- Page Meta Info -->
+                <div class="d-flex justify-content-center align-items-center text-muted small">
+                    {% if page.created_at %}
+                    <span class="me-3">
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        Published: {{ page.created_at|date:"F d, Y" }}
+                    </span>
+                    {% endif %}
+                    {% if page.updated_at and page.updated_at != page.created_at %}
+                    <span>
+                        <i class="fas fa-edit me-1"></i>
+                        Updated: {{ page.updated_at|date:"F d, Y" }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            {% if page.banner_image and page.show_banner %}
+            <div class="text-center mb-5">
+                <img src="{{ page.banner_image.url }}" 
+                     alt="{{ page.title }}" 
+                     class="img-fluid rounded shadow-lg"
+                     style="max-height: 400px; object-fit: cover;">
+            </div>
+            {% endif %}
+            
+            <!-- Main Content -->
+            <div class="content-area">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Rich Text Blocks -->
+                        {% for block in page.rich_text_blocks.all %}
+                            {% if block.is_active %}
+                            <div class="content-block mb-4">
+                                {% if block.title %}
+                                <h3 class="block-title mb-3">{{ block.title }}</h3>
+                                {% endif %}
+                                <div class="page-content">
+                                    {{ block.body|safe }}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <!-- Image Gallery Blocks -->
+                        {% for gallery_block in page.gallery_blocks.all %}
+                            {% if gallery_block.is_active %}
+                            <div class="content-block mb-5">
+                                {% if gallery_block.title %}
+                                <h3 class="block-title mb-3">{{ gallery_block.title }}</h3>
+                                {% endif %}
+                                <div class="row g-3">
+                                    {% for image in gallery_block.images.all %}
+                                    <div class="col-md-4 col-sm-6">
+                                        <div class="gallery-item">
+                                            <a href="{{ image.image.url }}" 
+                                               data-lightbox="page-gallery-{{ gallery_block.id }}"
+                                               data-title="{{ image.caption|default:page.title }}"
+                                               class="d-block">
+                                                <img src="{{ image.image.url }}" 
+                                                     alt="{{ image.caption|default:page.title }}" 
+                                                     class="img-fluid rounded shadow-sm gallery-thumbnail"
+                                                     style="cursor: pointer; height: 200px; object-fit: cover; width: 100%; transition: all 0.3s ease;">
+                                            </a>
+                                            {% if image.caption %}
+                                            <p class="text-center mt-2 small text-muted">{{ image.caption }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <!-- Video Embed Blocks -->
+                        {% for video_block in page.video_blocks.all %}
+                            {% if video_block.is_active %}
+                            <div class="content-block mb-5">
+                                {% if video_block.title %}
+                                <h3 class="block-title mb-3">{{ video_block.title }}</h3>
+                                {% endif %}
+                                <div class="ratio ratio-16x9">
+                                    {% if video_block.provider == 'youtube' %}
+                                    <iframe src="https://www.youtube.com/embed/{{ video_block.video_id }}" 
+                                            title="{{ video_block.title|default:page.title }}" 
+                                            allowfullscreen></iframe>
+                                    {% elif video_block.provider == 'vimeo' %}
+                                    <iframe src="https://player.vimeo.com/video/{{ video_block.video_id }}" 
+                                            title="{{ video_block.title|default:page.title }}" 
+                                            allowfullscreen></iframe>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <!-- Download Blocks -->
+                        {% for download_block in page.download_blocks.all %}
+                            {% if download_block.is_active %}
+                            <div class="content-block mb-5">
+                                {% if download_block.title %}
+                                <h3 class="block-title mb-4 text-primary">
+                                    <i class="fas fa-download me-2"></i>{{ download_block.title }}
+                                </h3>
+                                {% endif %}
+                                
+                                <div class="row g-3">
+                                    {% for download in download_block.files.all %}
+                                    {% if download %}
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="download-card h-100 border-0 shadow-sm rounded-3 overflow-hidden transition-all hover:shadow-lg">
+                                            <div class="card-body p-4">
+                                                <div class="d-flex align-items-start">
+                                                    <!-- File Icon -->
+                                                    <div class="file-icon me-3 flex-shrink-0">
+                                                        {% with download.file.name|slice:"-4:" as ext %}
+                                                            {% if "pdf" in ext %}
+                                                                <div class="icon-wrapper bg-danger bg-opacity-10 text-danger rounded-3 p-3">
+                                                                    <i class="fas fa-file-pdf fa-2x"></i>
+                                                                </div>
+                                                            {% elif "doc" in ext or "docx" in ext %}
+                                                                <div class="icon-wrapper bg-primary bg-opacity-10 text-primary rounded-3 p-3">
+                                                                    <i class="fas fa-file-word fa-2x"></i>
+                                                                </div>
+                                                            {% elif "xls" in ext or "xlsx" in ext %}
+                                                                <div class="icon-wrapper bg-success bg-opacity-10 text-success rounded-3 p-3">
+                                                                    <i class="fas fa-file-excel fa-2x"></i>
+                                                                </div>
+                                                            {% elif "ppt" in ext or "pptx" in ext %}
+                                                                <div class="icon-wrapper bg-warning bg-opacity-10 text-warning rounded-3 p-3">
+                                                                    <i class="fas fa-file-powerpoint fa-2x"></i>
+                                                                </div>
+                                                            {% elif "zip" in ext or "rar" in ext %}
+                                                                <div class="icon-wrapper bg-secondary bg-opacity-10 text-secondary rounded-3 p-3">
+                                                                    <i class="fas fa-file-archive fa-2x"></i>
+                                                                </div>
+                                                            {% elif "jpg" in ext or "jpeg" in ext or "png" in ext or "gif" in ext %}
+                                                                <div class="icon-wrapper bg-info bg-opacity-10 text-info rounded-3 p-3">
+                                                                    <i class="fas fa-file-image fa-2x"></i>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="icon-wrapper bg-secondary bg-opacity-10 text-secondary rounded-3 p-3">
+                                                                    <i class="fas fa-file fa-2x"></i>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endwith %}
+                                                    </div>
+                                                    
+                                                    <!-- File Info -->
+                                                    <div class="file-info flex-grow-1">
+                                                        <h5 class="card-title mb-2 fw-bold text-dark">{{ download.title }}</h5>
+                                                        {% if download.description %}
+                                                        <p class="card-text text-muted small mb-3 lh-sm">{{ download.description|truncatewords:20 }}</p>
+                                                        {% endif %}
+                                                        
+                                                        <!-- File Details -->
+                                                        <div class="file-details d-flex align-items-center justify-content-between">
+                                                            <div class="file-meta">
+                                                                <small class="text-muted">
+                                                                    {% with download.file.name|slice:"-4:" as ext %}
+                                                                        <span class="badge bg-light text-dark rounded-pill me-1">{{ ext|upper }}</span>
+                                                                    {% endwith %}
+                                                                    {% if download.file.size %}
+                                                                        {% load humanize %}
+                                                                        <span class="text-muted">{{ download.file.size|filesizeformat }}</span>
+                                                                    {% endif %}
+                                                                </small>
+                                                            </div>
+                                                            
+                                                            <!-- Download Button -->
+                                                            <a href="{{ download.file.url }}" 
+                                                               class="btn btn-primary btn-sm download-btn"
+                                                               download
+                                                               data-bs-toggle="tooltip" 
+                                                               title="Download {{ download.title }}">
+                                                                <i class="fas fa-download me-1"></i>Download
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Hover overlay -->
+                                            <div class="card-hover-overlay position-absolute top-0 start-0 w-100 h-100 bg-primary bg-opacity-5 opacity-0 transition-opacity"></div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% empty %}
+                                    <div class="col-12">
+                                        <div class="text-center text-muted py-4">
+                                            <i class="fas fa-folder-open fa-3x mb-3 opacity-50"></i>
+                                            <p class="mb-0">No files available for download at the moment.</p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <!-- Table Blocks -->
+                        {% for table_block in page.table_blocks.all %}
+                            {% if table_block.is_active %}
+                            <div class="content-block mb-4">
+                                {% if table_block.title %}
+                                <h3 class="block-title mb-3">{{ table_block.title }}</h3>
+                                {% endif %}
+                                <div class="table-responsive">
+                                    {{ table_block.html|safe }}
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <!-- If no content blocks exist -->
+                        {% if not page.rich_text_blocks.all and not page.gallery_blocks.all and not page.video_blocks.all and not page.download_blocks.all and not page.table_blocks.all %}
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-file-alt fa-3x mb-3"></i>
+                            <p class="lead">Content coming soon...</p>
+                            <p class="text-muted">This page is being prepared. Please check back later.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Actions -->
+            <div class="mt-5">
+                <div class="card border-0 bg-light">
+                    <div class="card-body text-center p-4">
+                        <h5 class="card-title mb-3">Need More Information?</h5>
+                        
+                        {% if college_info %}
+                        <div class="mb-3">
+                            {% if college_info.phone %}
+                            <a href="tel:{{ college_info.phone }}" class="btn btn-outline-primary me-2 mb-2">
+                                <i class="fas fa-phone me-1"></i>Call Us
+                            </a>
+                            {% endif %}
+                            {% if college_info.email %}
+                            <a href="mailto:{{ college_info.email }}" class="btn btn-outline-primary me-2 mb-2">
+                                <i class="fas fa-envelope me-1"></i>Email Us
+                            </a>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="social-links">
+                            <p class="text-muted mb-2">Follow us on social media:</p>
+                            {% if college_info.facebook %}
+                            <a href="{{ college_info.facebook }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            {% endif %}
+                            {% if college_info.twitter %}
+                            <a href="{{ college_info.twitter }}" class="btn btn-outline-info btn-sm me-2" target="_blank">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            {% endif %}
+                            {% if college_info.instagram %}
+                            <a href="{{ college_info.instagram }}" class="btn btn-outline-danger btn-sm me-2" target="_blank">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            {% endif %}
+                            {% if college_info.linkedin %}
+                            <a href="{{ college_info.linkedin }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox2 JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configure Lightbox2 for fullscreen gallery
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true,
+        'albumLabel': "Image %1 of %2",
+        'fadeDuration': 300,
+        'imageFadeDuration': 300,
+        'maxWidth': '95%',
+        'maxHeight': '95%',
+        'showImageNumberLabel': true,
+        'disableScrolling': true,
+        'fitImagesInViewport': true,
+        'positionFromTop': 50
+    });
+
+    // Add hover effects to gallery thumbnails
+    const galleryThumbnails = document.querySelectorAll('.gallery-thumbnail');
+    galleryThumbnails.forEach(img => {
+        img.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+            this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
+        });
+        
+        img.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+        });
+    });
+});
+</script>
+
+<!-- Custom CSS for page content -->
+<style>
+.page-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+/* Gallery thumbnail enhancements */
+.gallery-thumbnail {
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+}
+
+.gallery-thumbnail:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
+}
+
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.gallery-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 0%, rgba(0,0,0,0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: 8px;
+}
+
+.gallery-item:hover::before {
+    opacity: 1;
+}
+
+/* Lightbox customizations */
+.lb-data .lb-caption {
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    text-align: center;
+}
+
+.lb-data .lb-number {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.page-content h1, .page-content h2, .page-content h3, 
+.page-content h4, .page-content h5, .page-content h6 {
+    color: #2563eb;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.page-content h1 { font-size: 2.5rem; }
+.page-content h2 { font-size: 2rem; }
+.page-content h3 { font-size: 1.75rem; }
+.page-content h4 { font-size: 1.5rem; }
+.page-content h5 { font-size: 1.25rem; }
+.page-content h6 { font-size: 1.1rem; }
+
+.page-content p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.page-content ul, .page-content ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+.page-content li {
+    margin-bottom: 0.5rem;
+}
+
+.page-content blockquote {
+    border-left: 4px solid #2563eb;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #6b7280;
+}
+
+.page-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 1.5rem 0;
+}
+
+.page-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+}
+
+.page-content table th,
+.page-content table td {
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.page-content table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+}
+
+.page-content a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.page-content a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .page-content {
+        font-size: 1rem;
+    }
+    
+    .page-content h1 { font-size: 2rem; }
+    .page-content h2 { font-size: 1.75rem; }
+    .page-content h3 { font-size: 1.5rem; }
+}
+</style>
+{% endblock %}

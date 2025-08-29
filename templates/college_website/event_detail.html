@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ event.title }} - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:events' %}" class="text-white-50">Events</a></li>
+<li class="breadcrumb-item active text-white">{{ event.title }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Event Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-{{ event.type|default:'primary' }} me-3 px-3 py-2">
+                    {% if event.type == 'academic' %}<i class="fas fa-graduation-cap me-1"></i>Academic
+                    {% elif event.type == 'cultural' %}<i class="fas fa-theater-masks me-1"></i>Cultural
+                    {% elif event.type == 'sports' %}<i class="fas fa-running me-1"></i>Sports
+                    {% elif event.type == 'workshop' %}<i class="fas fa-tools me-1"></i>Workshop
+                    {% else %}<i class="fas fa-calendar-alt me-1"></i>{{ event.get_type_display }}
+                    {% endif %}
+                </span>
+                <span class="text-muted">
+                    <i class="fas fa-calendar me-1"></i>{{ event.date|date:"F d, Y" }}
+                    {% if event.time %}at {{ event.time|time:"g:i A" }}{% endif %}
+                </span>
+            </div>
+            <h1 class="display-5 fw-bold text-primary mb-3">{{ event.title }}</h1>
+            {% if event.venue %}
+            <p class="lead text-muted">
+                <i class="fas fa-map-marker-alt me-2"></i>{{ event.venue }}
+            </p>
+            {% endif %}
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <div class="d-flex flex-column gap-2">
+                <a href="{% url 'college_website:contact' %}" class="btn btn-primary">
+                    <i class="fas fa-calendar-plus me-2"></i>Register Interest
+                </a>
+                <a href="{% url 'college_website:events' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Events
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Event Image -->
+            {% if event.featured_image %}
+            <div class="mb-4">
+                <img src="{{ event.featured_image.url }}" class="img-fluid rounded-3 shadow-sm w-100" alt="{{ event.title }}" style="max-height: 400px; object-fit: cover;">
+            </div>
+            {% endif %}
+
+            <!-- Event Description -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-primary mb-3">
+                        <i class="fas fa-info-circle me-2"></i>About This Event
+                    </h3>
+                    <div class="card-text">
+                        {{ event.description|safe }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Details -->
+            {% if event.agenda or event.speakers or event.requirements %}
+            <div class="row">
+                {% if event.agenda %}
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <h5 class="card-title text-primary mb-3">
+                                <i class="fas fa-list me-2"></i>Agenda
+                            </h5>
+                            <div class="card-text">
+                                {{ event.agenda|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if event.speakers %}
+                <div class="col-md-6 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <h5 class="card-title text-primary mb-3">
+                                <i class="fas fa-microphone me-2"></i>Speakers
+                            </h5>
+                            <div class="card-text">
+                                {{ event.speakers|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if event.requirements %}
+                <div class="col-12 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title text-primary mb-3">
+                                <i class="fas fa-clipboard-check me-2"></i>Requirements
+                            </h5>
+                            <div class="card-text">
+                                {{ event.requirements|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Event Info -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-info me-2"></i>Event Details</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-calendar text-primary me-2"></i>Date</span>
+                            <strong>{{ event.date|date:"M d, Y" }}</strong>
+                        </div>
+                        {% if event.time %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-clock text-primary me-2"></i>Time</span>
+                            <strong>{{ event.time|time:"g:i A" }}</strong>
+                        </div>
+                        {% endif %}
+                        {% if event.venue %}
+                        <div class="list-group-item">
+                            <span><i class="fas fa-map-marker-alt text-primary me-2"></i>Venue</span>
+                            <div class="mt-1"><strong>{{ event.venue }}</strong></div>
+                        </div>
+                        {% endif %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-tag text-primary me-2"></i>Category</span>
+                            <span class="badge bg-{{ event.type|default:'primary' }}">{{ event.get_type_display }}</span>
+                        </div>
+                        {% if event.registration_fee %}
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span><i class="fas fa-rupee-sign text-primary me-2"></i>Fee</span>
+                            <strong>₹{{ event.registration_fee|floatformat:0 }}</strong>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-phone me-2"></i>Contact</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="card-text mb-3">For more information about this event, contact us:</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-success">
+                            <i class="fas fa-envelope me-2"></i>Send Message
+                        </a>
+                        <a href="tel:{{ college_info.phone|default:'+919425540666' }}" class="btn btn-outline-success">
+                            <i class="fas fa-phone me-2"></i>Call Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Share Event -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-share me-2"></i>Share Event</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-grid gap-2">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+                           class="btn btn-outline-primary btn-sm" target="_blank">
+                            <i class="fab fa-facebook me-1"></i>Share on Facebook
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ event.title }}" 
+                           class="btn btn-outline-info btn-sm" target="_blank">
+                            <i class="fab fa-twitter me-1"></i>Share on Twitter
+                        </a>
+                        <a href="https://wa.me/?text={{ event.title }} - {{ request.build_absolute_uri }}" 
+                           class="btn btn-outline-success btn-sm" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i>Share on WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Events -->
+    <div class="mt-5">
+        <h3 class="text-primary mb-4">More Events</h3>
+        <div class="d-flex gap-3 flex-wrap">
+            <a href="{% url 'college_website:events' %}?type={{ event.type }}" class="btn btn-outline-primary">
+                <i class="fas fa-list me-1"></i>More {{ event.get_type_display }} Events
+            </a>
+            <a href="{% url 'college_website:events' %}" class="btn btn-outline-primary">
+                <i class="fas fa-calendar-alt me-1"></i>All Events
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

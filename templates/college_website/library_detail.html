@@ -1,0 +1,417 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ resource.title }} - Library - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.resource-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 0;
+}
+
+.resource-type-badge {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.resource-cover-large {
+    width: 200px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.info-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.availability-card {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.availability-card.issued {
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+}
+
+.availability-card.reserved {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+.access-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.access-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    margin: 0.5rem;
+}
+
+.access-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.download-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.download-btn:hover {
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.detail-icon {
+    width: 40px;
+    height: 40px;
+    background: #667eea;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-available {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.status-issued {
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+    color: white;
+}
+
+.status-reserved {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+
+.related-resources {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:library' %}" class="text-white">Library</a></li>
+<li class="breadcrumb-item active text-white">{{ resource.title }}</li>
+{% endblock %}
+
+{% block content %}
+<!-- Resource Header -->
+<div class="resource-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="resource-type-badge">
+                    {{ resource.get_resource_type_display }}
+                </div>
+                {% if resource.is_featured %}
+                <span class="status-badge status-available me-2">
+                    <i class="fas fa-star me-1"></i>Featured Resource
+                </span>
+                {% endif %}
+                <h1 class="display-4 fw-bold mb-3 mt-2">{{ resource.title }}</h1>
+                {% if resource.author %}
+                <p class="lead mb-2">by {{ resource.author }}</p>
+                {% endif %}
+                <p class="mb-0">{{ resource.description }}</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                {% if resource.cover_image %}
+                <img src="{{ resource.cover_image.url }}" alt="{{ resource.title }}" class="resource-cover-large">
+                {% else %}
+                <div class="resource-cover-large bg-light d-flex align-items-center justify-content-center mx-auto">
+                    <i class="fas fa-book fa-6x text-muted"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Resource Details -->
+            <div class="info-card card mb-4">
+                <div class="card-body p-4">
+                    <h3 class="mb-4">Resource Details</h3>
+                    <div class="row g-3">
+                        {% if resource.author %}
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <strong>Author:</strong><br>
+                                    <span class="text-muted">{{ resource.author }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if resource.publisher %}
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div>
+                                    <strong>Publisher:</strong><br>
+                                    <span class="text-muted">{{ resource.publisher }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if resource.publication_year %}
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <div>
+                                    <strong>Publication Year:</strong><br>
+                                    <span class="text-muted">{{ resource.publication_year }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if resource.isbn %}
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-barcode"></i>
+                                </div>
+                                <div>
+                                    <strong>ISBN:</strong><br>
+                                    <span class="text-muted">{{ resource.isbn }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if resource.subject_category %}
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-tag"></i>
+                                </div>
+                                <div>
+                                    <strong>Subject Category:</strong><br>
+                                    <span class="text-muted">{{ resource.subject_category }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if resource.location %}
+                        <div class="col-md-6">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <strong>Location:</strong><br>
+                                    <span class="text-muted">{{ resource.location }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Access Options -->
+            {% if resource.digital_copy or resource.external_link %}
+            <div class="access-section mb-4">
+                <h3 class="mb-4 text-center">Access This Resource</h3>
+                <div class="text-center">
+                    {% if resource.digital_copy %}
+                    <a href="{{ resource.digital_copy.url }}" class="access-btn download-btn" target="_blank">
+                        <i class="fas fa-download"></i>
+                        Download Digital Copy
+                    </a>
+                    {% endif %}
+                    {% if resource.external_link %}
+                    <a href="{{ resource.external_link }}" class="access-btn" target="_blank">
+                        <i class="fas fa-external-link-alt"></i>
+                        Access Online
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Additional Information -->
+            <div class="info-card card">
+                <div class="card-body p-4">
+                    <h3 class="mb-3">
+                        <i class="fas fa-info-circle text-primary me-2"></i>
+                        How to Access
+                    </h3>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-id-card text-primary me-2 mt-1"></i>
+                                <div>
+                                    <strong>Physical Copy:</strong> Visit the library with your student ID
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-laptop text-success me-2 mt-1"></i>
+                                <div>
+                                    <strong>Digital Access:</strong> Use your library credentials to access online
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-clock text-warning me-2 mt-1"></i>
+                                <div>
+                                    <strong>Loan Period:</strong> 14 days for books, 7 days for journals
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <i class="fas fa-redo text-info me-2 mt-1"></i>
+                                <div>
+                                    <strong>Renewals:</strong> Up to 2 renewals if no reservations
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Availability Status -->
+            <div class="availability-card {% if resource.availability_status == 'issued' %}issued{% elif resource.availability_status == 'reserved' %}reserved{% endif %} mb-4">
+                <h4 class="mb-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Availability Status
+                </h4>
+                <div class="h2 mb-3">
+                    {% if resource.availability_status == 'available' %}
+                    <i class="fas fa-check-circle"></i>
+                    {% elif resource.availability_status == 'issued' %}
+                    <i class="fas fa-clock"></i>
+                    {% else %}
+                    <i class="fas fa-lock"></i>
+                    {% endif %}
+                </div>
+                <h5>{{ resource.get_availability_status_display }}</h5>
+                {% if resource.availability_status == 'available' %}
+                <p class="mb-0">This resource is currently available for borrowing</p>
+                {% elif resource.availability_status == 'issued' %}
+                <p class="mb-0">This resource is currently issued to another user</p>
+                {% else %}
+                <p class="mb-0">This resource is reserved and not available</p>
+                {% endif %}
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-3">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        {% if resource.availability_status == 'available' %}
+                        <a href="#" class="btn btn-success">
+                            <i class="fas fa-bookmark me-2"></i>
+                            Reserve This Resource
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-primary">
+                            <i class="fas fa-question-circle me-2"></i>
+                            Ask Librarian
+                        </a>
+                        <a href="{% url 'college_website:library' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Library
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Library Contact -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-phone me-2"></i>
+                        Library Contact
+                    </h5>
+                    <div class="mb-3">
+                        <strong>Librarian:</strong><br>
+                        <span class="text-muted">Dr. Library Staff</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Email:</strong><br>
+                        <span class="text-muted">library@college.edu</span>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Phone:</strong><br>
+                        <span class="text-muted">+91-XXXX-XXXXXX</span>
+                    </div>
+                    <div>
+                        <strong>Hours:</strong><br>
+                        <span class="text-muted">Mon-Fri: 9AM-6PM<br>Sat: 10AM-4PM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

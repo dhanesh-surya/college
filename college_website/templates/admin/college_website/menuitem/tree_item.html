@@ -1,0 +1,32 @@
+<li class="tree-item" data-item-id="{{ item.id }}">
+    <div class="tree-item-content {% if not item.is_active %}inactive{% endif %}">
+        <div class="tree-item-info">
+            <i class="tree-item-icon fas fa-{% if item.children.exists %}folder{% else %}file{% endif %}"></i>
+            <h4 class="tree-item-title">{{ item.title }}</h4>
+            {% if item.get_url %}
+                <span class="tree-item-url">{{ item.get_url }}</span>
+            {% else %}
+                <span class="tree-item-url text-muted">#</span>
+            {% endif %}
+        </div>
+        <div class="tree-item-actions">
+            <a href="{% url 'admin:college_website_menuitem_change' item.pk %}" 
+               class="btn btn-sm btn-warning" 
+               title="Edit {{ item.title }}">
+                <i class="fas fa-edit"></i>
+            </a>
+            <a href="{% url 'admin:college_website_menuitem_add' %}?parent={{ item.pk }}" 
+               class="btn btn-sm btn-success" 
+               title="Add sub-item to {{ item.title }}">
+                <i class="fas fa-plus"></i>
+            </a>
+        </div>
+    </div>
+    {% if item.children.exists %}
+    <ul class="tree-children">
+        {% for child in item.children.all %}
+            {% include "admin/college_website/menuitem/tree_item.html" with item=child level=level|add:1 %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</li>

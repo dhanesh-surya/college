@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Student Corner - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Student Corner</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">Student Corner</h1>
+        <p class="lead text-muted">Your one-stop destination for academic resources, activities, and student services</p>
+    </div>
+
+    <!-- Quick Access Cards -->
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center card-hover">
+                <div class="card-body p-4">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-book fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Academic Resources</h5>
+                    <p class="card-text text-muted">Access study materials, syllabus, and academic calendars</p>
+                    <a href="#academic" class="btn btn-primary btn-sm">Explore</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center card-hover">
+                <div class="card-body p-4">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-trophy fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Achievements</h5>
+                    <p class="card-text text-muted">Celebrate student accomplishments and success stories</p>
+                    <a href="{% url 'college_website:achievements' %}" class="btn btn-success btn-sm">View All</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center card-hover">
+                <div class="card-body p-4">
+                    <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Student Activities</h5>
+                    <p class="card-text text-muted">Join clubs, societies, and extracurricular activities</p>
+                    <a href="#activities" class="btn btn-warning btn-sm">Join Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center card-hover">
+                <div class="card-body p-4">
+                    <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-headset fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Student Support</h5>
+                    <p class="card-text text-muted">Get help with academics, counseling, and career guidance</p>
+                    <a href="#support" class="btn btn-info btn-sm">Get Help</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Academic Resources Section -->
+    <section id="academic" class="mb-5">
+        <h2 class="section-title text-primary mb-4">Academic Resources</h2>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <i class="fas fa-calendar-alt fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title">Academic Calendar</h5>
+                        <p class="card-text text-muted">Important dates, exam schedules, and academic events</p>
+                        <a href="#" class="btn btn-outline-primary btn-sm">Download</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <i class="fas fa-file-alt fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title">Syllabus & Curriculum</h5>
+                        <p class="card-text text-muted">Course outlines and detailed curriculum for all programs</p>
+                        <a href="{% url 'college_website:programs_list' %}" class="btn btn-outline-primary btn-sm">View</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <i class="fas fa-download fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title">Study Materials</h5>
+                        <p class="card-text text-muted">Lecture notes, reference books, and study guides</p>
+                        <a href="#" class="btn btn-outline-primary btn-sm">Access</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Testimonials -->
+    <section class="mb-5">
+        <h2 class="section-title text-primary mb-4">Student Voices</h2>
+        <div class="row">
+            {% for testimonial in testimonials %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4 text-center">
+                        {% if testimonial.photo %}
+                        <img src="{{ testimonial.photo.url }}" class="rounded-circle mb-3" width="80" height="80" alt="{{ testimonial.name }}">
+                        {% else %}
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-user fa-2x"></i>
+                        </div>
+                        {% endif %}
+                        <blockquote class="blockquote mb-3">
+                            <p class="mb-0">"{{ testimonial.message|truncatewords:20 }}"</p>
+                        </blockquote>
+                        <h6 class="text-primary">{{ testimonial.name }}</h6>
+                        <small class="text-muted">{{ testimonial.program }} - {{ testimonial.batch_year }}</small>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center text-muted">No testimonials available at the moment.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Student Activities Section -->
+    <section id="activities" class="bg-light rounded-3 p-5 mb-5">
+        <h2 class="section-title text-primary mb-4">Student Activities & Clubs</h2>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-theater-masks fa-3x text-primary mb-3"></i>
+                    <h5>Cultural Club</h5>
+                    <p class="text-muted">Dance, music, drama, and cultural events</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-running fa-3x text-success mb-3"></i>
+                    <h5>Sports Club</h5>
+                    <p class="text-muted">Cricket, football, athletics, and fitness</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-microscope fa-3x text-warning mb-3"></i>
+                    <h5>Science Club</h5>
+                    <p class="text-muted">Research projects and science exhibitions</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-hands-helping fa-3x text-info mb-3"></i>
+                    <h5>Social Service</h5>
+                    <p class="text-muted">Community service and social initiatives</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Support Section -->
+    <section id="support" class="mb-5">
+        <h2 class="section-title text-primary mb-4">Student Support Services</h2>
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-user-graduate fa-2x text-primary me-3"></i>
+                            <h5 class="card-title mb-0">Academic Counseling</h5>
+                        </div>
+                        <p class="card-text text-muted">Get guidance on course selection, study strategies, and academic planning.</p>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-sm">Book Session</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-briefcase fa-2x text-success me-3"></i>
+                            <h5 class="card-title mb-0">Career Guidance</h5>
+                        </div>
+                        <p class="card-text text-muted">Career counseling, placement assistance, and skill development programs.</p>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-success btn-sm">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-heart fa-2x text-danger me-3"></i>
+                            <h5 class="card-title mb-0">Mental Health Support</h5>
+                        </div>
+                        <p class="card-text text-muted">Counseling services for stress management and personal wellbeing.</p>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-danger btn-sm">Get Help</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-graduation-cap fa-2x text-info me-3"></i>
+                            <h5 class="card-title mb-0">Scholarship Information</h5>
+                        </div>
+                        <p class="card-text text-muted">Information about scholarships, financial aid, and fee concessions.</p>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-info btn-sm">Apply Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3 p-5 text-center">
+        <h3 class="text-primary mb-3">Need More Information?</h3>
+        <p class="text-muted mb-4">Our student services team is here to help you succeed in your academic journey.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-envelope me-2"></i>Contact Us
+            </a>
+            <a href="{% url 'college_website:about' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-info-circle me-2"></i>About College
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.card-hover {
+    transition: all 0.3s ease;
+}
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #dbeafe, #e0e7ff);
+}
+</style>
+{% endblock %}

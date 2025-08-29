@@ -1,0 +1,137 @@
+<!-- OPTIONAL NAVBAR ENHANCEMENTS -->
+
+<!-- 1. Add breadcrumb navigation for better user experience -->
+<nav aria-label="breadcrumb" class="bg-light py-2">
+    <div class="container">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'college_website:home' %}">Home</a></li>
+            {% if request.resolver_match.url_name != 'home' %}
+            <li class="breadcrumb-item active" aria-current="page">
+                {{ page_title|default:"Current Page" }}
+            </li>
+            {% endif %}
+        </ol>
+    </div>
+</nav>
+
+<!-- 2. Add mega menu for Academics section (optional) -->
+<li class="nav-item dropdown mega-menu">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+        <i class="fas fa-graduation-cap me-2"></i>Academics
+    </a>
+    <div class="dropdown-menu mega-menu-content p-4">
+        <div class="row">
+            <div class="col-md-3">
+                <h6 class="dropdown-header">Programs</h6>
+                <a class="dropdown-item" href="{% url 'college_website:programs_list' %}">All Programs</a>
+                <a class="dropdown-item" href="{% url 'college_website:programs_list' %}?discipline=science">Science</a>
+                <a class="dropdown-item" href="{% url 'college_website:programs_list' %}?discipline=arts">Arts</a>
+                <a class="dropdown-item" href="{% url 'college_website:programs_list' %}?discipline=commerce">Commerce</a>
+            </div>
+            <div class="col-md-3">
+                <h6 class="dropdown-header">Departments</h6>
+                <a class="dropdown-item" href="/academics/departments/arts/">Arts Department</a>
+                <a class="dropdown-item" href="/academics/departments/science/">Science Department</a>
+                <a class="dropdown-item" href="/academics/departments/commerce/">Commerce Department</a>
+            </div>
+            <div class="col-md-3">
+                <h6 class="dropdown-header">Resources</h6>
+                <a class="dropdown-item" href="/academics/library/">Library</a>
+                <a class="dropdown-item" href="/academics/academic-calendar/">Academic Calendar</a>
+                <a class="dropdown-item" href="/academics/syllabus-curriculum/">Syllabus</a>
+            </div>
+            <div class="col-md-3">
+                <h6 class="dropdown-header">Quick Links</h6>
+                <a class="dropdown-item" href="/academics/faculties/">Faculty</a>
+                <a class="dropdown-item" href="/academics/teaching-learning-resources/">Resources</a>
+                <a class="dropdown-item" href="/examinations/">Examinations</a>
+            </div>
+        </div>
+    </div>
+</li>
+
+<!-- 3. Add notification badge for announcements -->
+<li class="nav-item">
+    <a class="nav-link position-relative" href="{% url 'college_website:notices_list' %}">
+        <i class="fas fa-bell me-2"></i>Notices
+        {% if new_notices_count %}
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ new_notices_count }}
+            <span class="visually-hidden">new notices</span>
+        </span>
+        {% endif %}
+    </a>
+</li>
+
+<!-- 4. Add quick access floating button (optional) -->
+<div class="quick-access-fab d-md-none">
+    <button class="btn btn-primary rounded-circle position-fixed" style="bottom: 20px; right: 20px; z-index: 1050;" type="button" data-bs-toggle="offcanvas" data-bs-target="#quickAccessMenu">
+        <i class="fas fa-plus"></i>
+    </button>
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="quickAccessMenu">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Quick Access</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="list-group">
+            <a href="{% url 'college_website:admissions' %}" class="list-group-item list-group-item-action">
+                <i class="fas fa-door-open me-3"></i>Apply Now
+            </a>
+            <a href="{% url 'college_website:contact' %}" class="list-group-item list-group-item-action">
+                <i class="fas fa-phone me-3"></i>Contact Us
+            </a>
+            <a href="{% url 'college_website:student_corner' %}" class="list-group-item list-group-item-action">
+                <i class="fas fa-user me-3"></i>Student Portal
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Mega Menu Styling */
+.mega-menu .dropdown-menu {
+    width: 100%;
+    left: 0;
+    right: 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.mega-menu-content {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    border: none;
+}
+
+/* Quick Access FAB Animation */
+.quick-access-fab .btn {
+    width: 56px;
+    height: 56px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
+
+.quick-access-fab .btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* Improved dropdown animations */
+.dropdown-menu {
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>

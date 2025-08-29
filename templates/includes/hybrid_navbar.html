@@ -1,0 +1,624 @@
+<!-- HYBRID NAVBAR: Static Design + CMS Menu System -->
+<!-- This navbar combines your beautiful static design with dynamic CMS menus -->
+
+<!-- Desktop Navigation -->
+<nav class="navbar navbar-expand-lg tw-shadow-lg d-none d-lg-block" id="desktopNavbar">
+    <div class="container" style="padding-left: 0;">
+        <!-- Brand - No Text -->
+        <a class="navbar-brand" href="{% url 'college_website:home' %}" style="margin-right: 0.5rem; padding: 0;">
+            {% if college_info.logo %}
+                <img src="{{ college_info.logo.url }}" alt="{{ college_info.name }}" class="tw-h-8 tw-w-8 tw-object-contain">
+            {% endif %}
+        </a>
+        
+        <!-- Navigation Content -->
+        <div class="navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto" style="gap: 0.1rem;">
+                <!-- HOME (Always Static) with Institution Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
+                       href="{% url 'college_website:home' %}" role="button" data-bs-toggle="dropdown" 
+                       aria-expanded="false" id="homeDropdown">
+                        <i class="fas fa-home me-2 tw-text-sm"></i>Home
+                    </a>
+                    <ul class="dropdown-menu tw-animate-pulse">
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Institution</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:home' %}">
+                            <i class="fas fa-home me-3 tw-text-blue-500 tw-w-4"></i>Homepage
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:about' %}">
+                            <i class="fas fa-university me-3 tw-text-indigo-500 tw-w-4"></i>About Institution
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/about/history/">
+                            <i class="fas fa-history me-3 tw-text-amber-500 tw-w-4"></i>History
+                        </a></li>
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Leadership</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:principal_message' %}">
+                            <i class="fas fa-user-tie me-3 tw-text-purple-500 tw-w-4"></i>Principal's Message
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/about/governing-body/">
+                            <i class="fas fa-users-cog me-3 tw-text-teal-500 tw-w-4"></i>Governing Body
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- STATIC MENU ITEMS (Core Navigation) -->
+                <!-- About -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:about' %}" role="button" data-bs-toggle="dropdown" 
+                       aria-expanded="false" id="aboutDropdown">
+                        <i class="fas fa-info-circle me-2 tw-text-sm"></i>About
+                    </a>
+                    <ul class="dropdown-menu tw-animate-pulse">
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Institution</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:about' %}">
+                            <i class="fas fa-university me-3 tw-text-blue-500 tw-w-4"></i>Overview
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/about/history/">
+                            <i class="fas fa-history me-3 tw-text-amber-500 tw-w-4"></i>History
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/about/vision-mission/">
+                            <i class="fas fa-bullseye me-3 tw-text-green-500 tw-w-4"></i>Vision & Mission
+                        </a></li>
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Leadership</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:principal_message' %}">
+                            <i class="fas fa-user-tie me-3 tw-text-indigo-500 tw-w-4"></i>Principal's Message
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:director_message' %}">
+                            <i class="fas fa-user-graduate me-3 tw-text-purple-500 tw-w-4"></i>Director's Message
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Academics -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:programs_list' %}" role="button" data-bs-toggle="dropdown" 
+                       aria-expanded="false" id="academicsDropdown">
+                        <i class="fas fa-graduation-cap me-2 tw-text-sm"></i>Academics
+                    </a>
+                    <ul class="dropdown-menu tw-animate-pulse">
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Programs</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:programs_list' %}">
+                            <i class="fas fa-list me-3 tw-text-gray-600 tw-w-4"></i>All Programs
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:programs_list' %}?discipline=science">
+                            <i class="fas fa-flask me-3 tw-text-blue-500 tw-w-4"></i>Science
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:programs_list' %}?discipline=arts">
+                            <i class="fas fa-palette me-3 tw-text-pink-500 tw-w-4"></i>Arts
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:programs_list' %}?discipline=commerce">
+                            <i class="fas fa-chart-line me-3 tw-text-green-500 tw-w-4"></i>Commerce
+                        </a></li>
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Resources</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/academics/library/">
+                            <i class="fas fa-book-reader me-3 tw-text-indigo-500 tw-w-4"></i>Library
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/academics/calendar/">
+                            <i class="fas fa-calendar-alt me-3 tw-text-orange-500 tw-w-4"></i>Academic Calendar
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Admissions -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:admissions' %}" role="button" data-bs-toggle="dropdown" 
+                       aria-expanded="false" id="admissionsDropdown">
+                        <i class="fas fa-door-open me-2 tw-text-sm"></i>Admissions
+                    </a>
+                    <ul class="dropdown-menu tw-animate-pulse">
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Apply Now</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:admissions' %}">
+                            <i class="fas fa-clipboard-list me-3 tw-text-blue-500 tw-w-4"></i>Admission Process
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:admission_guidelines' %}">
+                            <i class="fas fa-file-alt me-3 tw-text-green-500 tw-w-4"></i>Guidelines
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:admission_eligibility' %}">
+                            <i class="fas fa-check-circle me-3 tw-text-emerald-500 tw-w-4"></i>Eligibility
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:courses_offered' %}">
+                            <i class="fas fa-book-open me-3 tw-text-indigo-500 tw-w-4"></i>Courses Offered
+                        </a></li>
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Application & Fees</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:online_application' %}">
+                            <i class="fas fa-laptop me-3 tw-text-cyan-500 tw-w-4"></i>Online Application
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:fee_structure' %}">
+                            <i class="fas fa-rupee-sign me-3 tw-text-amber-500 tw-w-4"></i>Fee Structure
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:prospectus' %}">
+                            <i class="fas fa-file-pdf me-3 tw-text-red-500 tw-w-4"></i>Prospectus
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:scholarships' %}">
+                            <i class="fas fa-hand-holding-heart me-3 tw-text-purple-500 tw-w-4"></i>Scholarships
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Examinations -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/examinations/" role="button" data-bs-toggle="dropdown" 
+                       aria-expanded="false" id="examinationsDropdown">
+                        <i class="fas fa-file-alt me-2 tw-text-sm"></i>Examinations
+                    </a>
+                    <ul class="dropdown-menu tw-animate-pulse">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/notices/">
+                            <i class="fas fa-bell me-3 tw-text-blue-500 tw-w-4"></i>Notices
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/timetable/">
+                            <i class="fas fa-calendar-alt me-3 tw-text-indigo-500 tw-w-4"></i>Timetable
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/question-papers/">
+                            <i class="fas fa-file-lines me-3 tw-text-gray-600 tw-w-4"></i>Question Papers
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/results/">
+                            <i class="fas fa-chart-bar me-3 tw-text-green-500 tw-w-4"></i>Results
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/revaluation/">
+                            <i class="fas fa-sync-alt me-3 tw-text-amber-500 tw-w-4"></i>Revaluation
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/rules/">
+                            <i class="fas fa-gavel me-3 tw-text-red-500 tw-w-4"></i>Rules
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Research -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/research/" role="button" data-bs-toggle="dropdown" 
+                       aria-expanded="false" id="researchDropdown">
+                        <i class="fas fa-microscope me-2 tw-text-sm"></i>Research
+                    </a>
+                    <ul class="dropdown-menu tw-animate-pulse">
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Research Infrastructure</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/centers/">
+                            <i class="fas fa-building me-3 tw-text-blue-500 tw-w-4"></i>Research Centers
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/innovation-incubation/">
+                            <i class="fas fa-lightbulb me-3 tw-text-yellow-500 tw-w-4"></i>Innovation & Incubation
+                        </a></li>
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Research Output</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/publications/">
+                            <i class="fas fa-book-open me-3 tw-text-green-500 tw-w-4"></i>Publications
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/patents-projects/">
+                            <i class="fas fa-certificate me-3 tw-text-purple-500 tw-w-4"></i>Patents & Projects
+                        </a></li>
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Partnerships</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/collaborations-mous/">
+                            <i class="fas fa-handshake me-3 tw-text-teal-500 tw-w-4"></i>Collaborations & MOUs
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/consultancy/">
+                            <i class="fas fa-user-cog me-3 tw-text-indigo-500 tw-w-4"></i>Consultancy
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Student Support -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:student_corner' %}" role="button" data-bs-toggle="dropdown" 
+                       aria-expanded="false" id="studentSupportDropdown">
+                        <i class="fas fa-users-cog me-2 tw-text-sm"></i>Student Support
+                    </a>
+                    <ul class="dropdown-menu tw-animate-pulse">
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Student Services</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:student_portal' %}">
+                            <i class="fas fa-user-graduate me-3 tw-text-blue-500 tw-w-4"></i>Student Portal
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:library' %}">
+                            <i class="fas fa-book-reader me-3 tw-text-green-500 tw-w-4"></i>Library
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:sports_cultural' %}">
+                            <i class="fas fa-running me-3 tw-text-orange-500 tw-w-4"></i>Sports & Cultural
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:nss_ncc_clubs' %}">
+                            <i class="fas fa-users me-3 tw-text-purple-500 tw-w-4"></i>NSS, NCC & Clubs
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:placement_cell' %}">
+                            <i class="fas fa-briefcase me-3 tw-text-indigo-500 tw-w-4"></i>Placement Cell
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:alumni' %}">
+                            <i class="fas fa-user-tie me-3 tw-text-teal-500 tw-w-4"></i>Alumni
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Events -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:events' %}" role="button" data-bs-toggle="dropdown" 
+                       aria-expanded="false" id="eventsDropdown">
+                        <i class="fas fa-calendar-alt me-2 tw-text-sm"></i>Events
+                    </a>
+                    <ul class="dropdown-menu tw-animate-pulse">
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">News & Updates</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:news_announcements' %}">
+                            <i class="fas fa-bullhorn me-3 tw-text-blue-500 tw-w-4"></i>News & Announcements
+                        </a></li>
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Events</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:academic_events' %}">
+                            <i class="fas fa-graduation-cap me-3 tw-text-green-500 tw-w-4"></i>Academic Events
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:extracurricular_events' %}">
+                            <i class="fas fa-theater-masks me-3 tw-text-purple-500 tw-w-4"></i>Extracurricular Events
+                        </a></li>
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Media & Reports</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:gallery' %}">
+                            <i class="fas fa-images me-3 tw-text-orange-500 tw-w-4"></i>Gallery
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:annual_reports' %}">
+                            <i class="fas fa-file-pdf me-3 tw-text-red-500 tw-w-4"></i>Annual Reports
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- DYNAMIC CMS MENUS -->
+                {% for menu in cms_menus %}
+                    {% if menu.top_level_items %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="{{ menu.get_url }}" role="button" data-bs-toggle="dropdown" 
+                               aria-expanded="false" id="menu{{ menu.id }}Dropdown">
+                                {% if menu.top_level_items.0.icon_class %}
+                                    <i class="{{ menu.top_level_items.0.icon_class }} me-2 tw-text-sm"></i>
+                                {% else %}
+                                    <i class="fas fa-bars me-2 tw-text-sm"></i>
+                                {% endif %}
+                                {{ menu.title }}
+                            </a>
+                            <ul class="dropdown-menu tw-animate-pulse">
+                                {% for item in menu.top_level_items %}
+                                    {% if item.active_children %}
+                                        <!-- Group header for items with children -->
+                                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">{{ item.title }}</h6></li>
+                                        {% for child in item.active_children %}
+                                            <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{{ child.get_url }}">
+                                                {% if child.icon_class %}
+                                                    <i class="{{ child.icon_class }} me-3 tw-text-blue-500 tw-w-4"></i>
+                                                {% else %}
+                                                    <i class="fas fa-chevron-right me-3 tw-text-gray-400 tw-w-4"></i>
+                                                {% endif %}
+                                                {{ child.title }}
+                                            </a></li>
+                                        {% endfor %}
+                                        {% if not forloop.last %}<li><hr class="dropdown-divider tw-border-gray-200"></li>{% endif %}
+                                    {% else %}
+                                        <!-- Direct menu item -->
+                                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{{ item.get_url }}">
+                                            {% if item.icon_class %}
+                                                <i class="{{ item.icon_class }} me-3 tw-text-blue-500 tw-w-4"></i>
+                                            {% else %}
+                                                <i class="fas fa-link me-3 tw-text-gray-400 tw-w-4"></i>
+                                            {% endif %}
+                                            {{ item.title }}
+                                        </a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% else %}
+                        <!-- Menu with no items - simple link -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ menu.get_url }}">
+                                <i class="fas fa-bars me-2 tw-text-sm"></i>{{ menu.title }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                
+                <!-- STATIC CORE ITEMS (Always present) -->
+                <!-- Gallery -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'college_website:gallery' %}">
+                        <i class="fas fa-images me-2 tw-text-sm"></i>Gallery
+                    </a>
+                </li>
+                
+                <!-- Notices (with notification badge) -->
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="{% url 'college_website:notices_list' %}">
+                        <i class="fas fa-bell me-2 tw-text-sm"></i>Notices
+                        {% if recent_notices_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                            {{ recent_notices_count }}
+                            <span class="visually-hidden">new notices</span>
+                        </span>
+                        {% endif %}
+                    </a>
+                </li>
+                
+                <!-- Contact -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'college_website:contact' %}">
+                        <i class="fas fa-phone me-2 tw-text-sm"></i>Contact
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Right side: Search -->
+            {% if navbar_info.enable_search %}
+            <form class="d-flex tw-ml-4" method="GET" action="{% url 'college_website:search' %}" role="search">
+                <div class="input-group tw-w-64">
+                    <input class="form-control tw-bg-white tw-bg-opacity-20 tw-border-white tw-border-opacity-30 tw-text-white tw-placeholder-white tw-placeholder-opacity-70 focus:tw-bg-white focus:tw-bg-opacity-30 focus:tw-border-white focus:tw-border-opacity-50" 
+                           type="search" name="q" placeholder="{{ navbar_info.search_placeholder|default:'Search...' }}" aria-label="Search">
+                    <button class="btn btn-outline-light tw-border-white tw-border-opacity-50 hover:tw-bg-white hover:tw-bg-opacity-20 tw-transition-all tw-duration-200" type="submit">
+                        <i class="fas fa-search tw-text-sm"></i>
+                    </button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow d-lg-none" id="mobileNavbar">
+    <div class="container-fluid px-3">
+        <!-- Left: Brand - No Text -->
+        <a class="navbar-brand" href="{% url 'college_website:home' %}" style="margin-right: 0.5rem; padding: 0;">
+            {% if college_info.logo %}
+                <img src="{{ college_info.logo.url }}" alt="{{ college_info.name }}" style="height: 24px;">
+            {% endif %}
+        </a>
+        
+        <!-- Right: Hamburger Toggle -->
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavbarContent" aria-controls="mobileNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Collapsible Content -->
+        <div class="collapse navbar-collapse" id="mobileNavbarContent">
+            <!-- Search Form - Mobile (right aligned) -->
+            {% if navbar_info.enable_search %}
+            <div class="mt-3 mb-3">
+                <form class="d-flex" method="GET" action="{% url 'college_website:search' %}" role="search">
+                    <div class="input-group ms-auto" style="max-width: 300px;">
+                        <input class="form-control" type="search" name="q" placeholder="{{ navbar_info.search_placeholder|default:'Search...' }}" aria-label="Search" style="background-color: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: white;">
+                        <button class="btn btn-light" type="submit">
+                            <i class="fas fa-search text-primary"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
+            
+            <!-- Navigation Links (Right Aligned) -->
+            <ul class="navbar-nav ms-auto text-end">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'college_website:home' %}" id="mobileHomeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>Home</span><i class="fas fa-home ms-3"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'college_website:home' %}">
+                            <i class="fas fa-home me-2 text-primary"></i>Homepage
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:about' %}">
+                            <i class="fas fa-university me-2 text-primary"></i>About Institution
+                        </a></li>
+                        <li><a class="dropdown-item" href="/about/history/">
+                            <i class="fas fa-history me-2 text-primary"></i>History
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:principal_message' %}">
+                            <i class="fas fa-user-tie me-2 text-secondary"></i>Principal's Message
+                        </a></li>
+                        <li><a class="dropdown-item" href="/about/governing-body/">
+                            <i class="fas fa-users-cog me-2 text-secondary"></i>Governing Body
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'college_website:about' %}">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>About</span><i class="fas fa-info-circle ms-3"></i>
+                        </span>
+                    </a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:programs_list' %}" id="mobileProgramsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>Programs</span><i class="fas fa-graduation-cap ms-3"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'college_website:programs_list' %}">
+                            <i class="fas fa-list me-2 text-primary"></i>All Programs
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/examinations/" id="mobileExaminationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>Examinations</span><i class="fas fa-file-alt ms-3"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/examinations/notices/">
+                            <i class="fas fa-bell me-2 text-primary"></i>Notices
+                        </a></li>
+                        <li><a class="dropdown-item" href="/examinations/timetable/">
+                            <i class="fas fa-calendar-alt me-2 text-primary"></i>Timetable
+                        </a></li>
+                        <li><a class="dropdown-item" href="/examinations/question-papers/">
+                            <i class="fas fa-file-lines me-2 text-primary"></i>Question Papers
+                        </a></li>
+                        <li><a class="dropdown-item" href="/examinations/results/">
+                            <i class="fas fa-chart-bar me-2 text-primary"></i>Results
+                        </a></li>
+                        <li><a class="dropdown-item" href="/examinations/revaluation/">
+                            <i class="fas fa-sync-alt me-2 text-primary"></i>Revaluation
+                        </a></li>
+                        <li><a class="dropdown-item" href="/examinations/rules/">
+                            <i class="fas fa-gavel me-2 text-primary"></i>Rules
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/research/" id="mobileResearchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>Research</span><i class="fas fa-microscope ms-3"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/research/centers/">
+                            <i class="fas fa-building me-2 text-primary"></i>Research Centers
+                        </a></li>
+                        <li><a class="dropdown-item" href="/research/publications/">
+                            <i class="fas fa-book-open me-2 text-primary"></i>Publications
+                        </a></li>
+                        <li><a class="dropdown-item" href="/research/patents-projects/">
+                            <i class="fas fa-certificate me-2 text-primary"></i>Patents & Projects
+                        </a></li>
+                        <li><a class="dropdown-item" href="/research/collaborations-mous/">
+                            <i class="fas fa-handshake me-2 text-primary"></i>Collaborations & MOUs
+                        </a></li>
+                        <li><a class="dropdown-item" href="/research/innovation-incubation/">
+                            <i class="fas fa-lightbulb me-2 text-primary"></i>Innovation & Incubation
+                        </a></li>
+                        <li><a class="dropdown-item" href="/research/consultancy/">
+                            <i class="fas fa-user-cog me-2 text-primary"></i>Consultancy
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Student Support Dropdown in Mobile -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:student_corner' %}" id="mobileStudentSupportDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>Student Support</span><i class="fas fa-users-cog ms-3"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'college_website:student_portal' %}">
+                            <i class="fas fa-user-graduate me-2 text-primary"></i>Student Portal
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:library' %}">
+                            <i class="fas fa-book-reader me-2 text-primary"></i>Library
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:sports_cultural' %}">
+                            <i class="fas fa-running me-2 text-primary"></i>Sports & Cultural
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:nss_ncc_clubs' %}">
+                            <i class="fas fa-users me-2 text-primary"></i>NSS, NCC & Clubs
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:placement_cell' %}">
+                            <i class="fas fa-briefcase me-2 text-primary"></i>Placement Cell
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:alumni' %}">
+                            <i class="fas fa-user-tie me-2 text-primary"></i>Alumni
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Events Dropdown in Mobile -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:events' %}" id="mobileEventsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>Events</span><i class="fas fa-calendar-alt ms-3"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'college_website:news_announcements' %}">
+                            <i class="fas fa-bullhorn me-2 text-primary"></i>News & Announcements
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:academic_events' %}">
+                            <i class="fas fa-graduation-cap me-2 text-primary"></i>Academic Events
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:extracurricular_events' %}">
+                            <i class="fas fa-theater-masks me-2 text-primary"></i>Extracurricular Events
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:gallery' %}">
+                            <i class="fas fa-images me-2 text-primary"></i>Gallery
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:annual_reports' %}">
+                            <i class="fas fa-file-pdf me-2 text-primary"></i>Annual Reports
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Dynamic CMS Menus for Mobile -->
+                {% for menu in cms_menus %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="{{ menu.get_url }}" id="mobile{{ menu.slug|title }}Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>{{ menu.title }}</span>
+                            {% if menu.top_level_items.0.icon_class %}
+                                <i class="{{ menu.top_level_items.0.icon_class }} ms-3"></i>
+                            {% else %}
+                                <i class="fas fa-bars ms-3"></i>
+                            {% endif %}
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        {% for item in menu.top_level_items %}
+                            <li><a class="dropdown-item" href="{{ item.get_url }}">
+                                {% if item.icon_class %}
+                                    <i class="{{ item.icon_class }} me-2 text-primary"></i>
+                                {% else %}
+                                    <i class="fas fa-link me-2 text-primary"></i>
+                                {% endif %}
+                                {{ item.title }}
+                            </a></li>
+                            {% for child in item.active_children %}
+                                <li><a class="dropdown-item ps-4" href="{{ child.get_url }}">
+                                    {% if child.icon_class %}
+                                        <i class="{{ child.icon_class }} me-2 text-secondary"></i>
+                                    {% else %}
+                                        <i class="fas fa-chevron-right me-2 text-secondary"></i>
+                                    {% endif %}
+                                    {{ child.title }}
+                                </a></li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% endfor %}
+                
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}" href="{% url 'college_website:gallery' %}">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>Gallery</span><i class="fas fa-images ms-3"></i>
+                        </span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link position-relative {% if request.resolver_match.url_name == 'notices_list' %}active{% endif %}" href="{% url 'college_website:notices_list' %}">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>Notices</span>
+                            <span class="position-relative">
+                                <i class="fas fa-bell ms-3"></i>
+                                {% if recent_notices_count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.5rem;">
+                                    {{ recent_notices_count }}
+                                </span>
+                                {% endif %}
+                            </span>
+                        </span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'college_website:contact' %}">
+                        <span class="d-flex align-items-center justify-content-end">
+                            <span>Contact</span><i class="fas fa-phone ms-3"></i>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

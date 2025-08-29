@@ -1,0 +1,462 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ alumni.name }} - Alumni - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.alumni-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 0;
+}
+
+.alumni-photo-large {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid rgba(255,255,255,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.status-badge {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.info-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.contact-card {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.contact-btn {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    margin: 0.25rem;
+}
+
+.contact-btn:hover {
+    background: white;
+    color: #28a745;
+    transform: translateY(-2px);
+}
+
+.mentor-card {
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.detail-icon {
+    width: 40px;
+    height: 40px;
+    background: #667eea;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.social-link:hover {
+    transform: translateY(-3px);
+    color: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.linkedin { background: #0077b5; }
+.email { background: #ea4335; }
+.phone { background: #28a745; }
+
+.achievements-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.achievement-item {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.achievement-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.achievement-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.journey-timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    background: #667eea;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px #667eea;
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 12px;
+    width: 2px;
+    height: calc(100% + 1rem);
+    background: #e9ecef;
+}
+
+.timeline-item:last-child::after {
+    display: none;
+}
+
+.advice-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:alumni' %}" class="text-white">Alumni</a></li>
+<li class="breadcrumb-item active text-white">{{ alumni.name }}</li>
+{% endblock %}
+
+{% block content %}
+<!-- Alumni Header -->
+<div class="alumni-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                {% if alumni.is_featured %}
+                <span class="status-badge">
+                    <i class="fas fa-star me-1"></i>Featured Alumni
+                </span>
+                {% endif %}
+                {% if alumni.willing_to_mentor %}
+                <span class="status-badge">
+                    <i class="fas fa-handshake me-1"></i>Available for Mentoring
+                </span>
+                {% endif %}
+                <h1 class="display-4 fw-bold mb-3 mt-2">{{ alumni.name }}</h1>
+                <p class="lead mb-2">{{ alumni.current_position }}</p>
+                <p class="lead mb-2">{{ alumni.current_company }}{% if alumni.location %} • {{ alumni.location }}{% endif %}</p>
+                <p class="mb-0">{{ alumni.course }} • Class of {{ alumni.graduation_year }}</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                {% if alumni.profile_photo %}
+                <img src="{{ alumni.profile_photo.url }}" alt="{{ alumni.name }}" class="alumni-photo-large">
+                {% else %}
+                <div class="alumni-photo-large bg-light d-flex align-items-center justify-content-center mx-auto">
+                    <i class="fas fa-user fa-5x text-muted"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Biography -->
+            {% if alumni.bio %}
+            <div class="info-card card mb-4">
+                <div class="card-body p-4">
+                    <h3 class="mb-3">
+                        <i class="fas fa-user text-primary me-2"></i>
+                        About {{ alumni.name }}
+                    </h3>
+                    <p class="lead">{{ alumni.bio }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Achievements -->
+            {% if alumni.achievements %}
+            <div class="achievements-section mb-4">
+                <h3 class="mb-4 text-center">
+                    <i class="fas fa-trophy text-warning me-2"></i>
+                    Achievements & Recognition
+                </h3>
+                <div class="achievement-item">
+                    <div class="d-flex align-items-start">
+                        <div class="achievement-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5>Professional Achievements</h5>
+                            <div class="content">
+                                {{ alumni.achievements|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Career Journey -->
+            {% if alumni.career_journey %}
+            <div class="info-card card mb-4">
+                <div class="card-body p-4">
+                    <h3 class="mb-4">
+                        <i class="fas fa-route text-success me-2"></i>
+                        Career Journey
+                    </h3>
+                    <div class="journey-timeline">
+                        <div class="timeline-item">
+                            <h5>Professional Path</h5>
+                            <div class="content">
+                                {{ alumni.career_journey|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Advice to Students -->
+            {% if alumni.advice_to_students %}
+            <div class="advice-card">
+                <h3 class="mb-3 text-center">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    Advice to Current Students
+                </h3>
+                <blockquote class="blockquote text-center">
+                    <div class="content">
+                        {{ alumni.advice_to_students|safe }}
+                    </div>
+                    <footer class="blockquote-footer mt-3">
+                        <cite title="Source Title">{{ alumni.name }}, {{ alumni.current_position }}</cite>
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Contact Information -->
+            {% if alumni.email or alumni.phone or alumni.linkedin_profile %}
+            <div class="contact-card mb-4">
+                <h4 class="mb-3">
+                    <i class="fas fa-address-card me-2"></i>
+                    Get in Touch
+                </h4>
+                <p class="mb-4">Connect with {{ alumni.name }} for networking, mentoring, or professional opportunities.</p>
+                
+                <div class="social-links mb-4">
+                    {% if alumni.linkedin_profile %}
+                    <a href="{{ alumni.linkedin_profile }}" class="social-link linkedin" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    {% endif %}
+                    {% if alumni.email %}
+                    <a href="mailto:{{ alumni.email }}" class="social-link email" title="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    {% endif %}
+                    {% if alumni.phone %}
+                    <a href="tel:{{ alumni.phone }}" class="social-link phone" title="Phone">
+                        <i class="fas fa-phone"></i>
+                    </a>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    {% if alumni.email %}
+                    <a href="mailto:{{ alumni.email }}" class="contact-btn">
+                        <i class="fas fa-envelope"></i>Send Email
+                    </a>
+                    {% endif %}
+                    {% if alumni.linkedin_profile %}
+                    <a href="{{ alumni.linkedin_profile }}" class="contact-btn" target="_blank">
+                        <i class="fab fa-linkedin-in"></i>LinkedIn
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Mentoring -->
+            {% if alumni.willing_to_mentor %}
+            <div class="mentor-card mb-4">
+                <h4 class="mb-3">
+                    <i class="fas fa-handshake me-2"></i>
+                    Mentoring Available
+                </h4>
+                <p class="mb-4">{{ alumni.name }} is available to mentor current students and recent graduates.</p>
+                <a href="{% url 'college_website:contact' %}" class="contact-btn">
+                    <i class="fas fa-user-plus"></i>
+                    Request Mentoring
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Professional Details -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Professional Details</h5>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div>
+                            <strong>Current Position:</strong><br>
+                            <span class="text-muted">{{ alumni.current_position }}</span>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div>
+                            <strong>Company:</strong><br>
+                            <span class="text-muted">{{ alumni.current_company }}</span>
+                        </div>
+                    </div>
+                    {% if alumni.location %}
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <strong>Location:</strong><br>
+                            <span class="text-muted">{{ alumni.location }}</span>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <strong>Course:</strong><br>
+                            <span class="text-muted">{{ alumni.course }}</span>
+                        </div>
+                    </div>
+                    <div class="detail-item mb-0">
+                        <div class="detail-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div>
+                            <strong>Graduation Year:</strong><br>
+                            <span class="text-muted">{{ alumni.graduation_year }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-3">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'college_website:alumni' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Alumni Directory
+                        </a>
+                        <a href="#" class="btn btn-outline-primary" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i>
+                            Print Profile
+                        </a>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-primary">
+                            <i class="fas fa-flag me-2"></i>
+                            Report Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

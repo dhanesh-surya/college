@@ -1,0 +1,158 @@
+<!-- NAVBAR PERFORMANCE OPTIMIZATIONS -->
+
+<!-- 1. Add preconnect links for external resources -->
+<head>
+    <!-- DNS prefetch for faster loading -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Critical CSS inlining for faster First Paint -->
+    <style>
+        /* Critical navbar CSS - inline for faster loading */
+        .navbar { 
+            background: linear-gradient(135deg, #dc2626 0%, #1e40af 100%) !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        .navbar-nav .nav-link { 
+            color: rgba(255, 255, 255, 0.95) !important; 
+        }
+    </style>
+</head>
+
+<!-- 2. Lazy load non-critical navbar scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Lazy load dropdown functionality
+    if (!window.bootstrap) {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js';
+        script.async = true;
+        document.head.appendChild(script);
+    }
+    
+    // Debounced search functionality
+    let searchTimeout;
+    const searchInput = document.querySelector('input[type="search"]');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                // Add search suggestions or validation here
+                console.log('Search query:', e.target.value);
+            }, 300);
+        });
+    }
+});
+</script>
+
+<!-- 3. Add mobile-first CSS optimizations -->
+<style>
+/* Mobile-first responsive navbar optimizations */
+@media (max-width: 991.98px) {
+    /* Reduce mobile navbar memory usage */
+    .navbar-nav .dropdown-menu {
+        position: static !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* Optimize mobile animations */
+    .navbar-nav .nav-link {
+        transition: background-color 0.2s ease !important;
+    }
+}
+
+/* Desktop optimizations */
+@media (min-width: 992px) {
+    /* GPU acceleration for smooth animations */
+    .dropdown-menu {
+        will-change: opacity, transform;
+        transform: translateZ(0);
+    }
+    
+    /* Efficient hover states */
+    .nav-link:hover {
+        transform: translateY(-1px) translateZ(0);
+    }
+}
+
+/* Reduce layout shifts */
+.navbar-brand img {
+    aspect-ratio: 1/1;
+    width: 32px;
+    height: 32px;
+}
+
+/* Optimize font loading */
+.navbar {
+    font-display: swap; /* Improve font loading performance */
+}
+</style>
+
+<!-- 4. Add accessibility improvements -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+    <!-- Skip to content link for screen readers -->
+    <a class="visually-hidden-focusable" href="#main-content">Skip to main content</a>
+    
+    <!-- Improved ARIA labels -->
+    <ul class="navbar-nav" role="menubar">
+        <li class="nav-item" role="none">
+            <a class="nav-link" href="{% url 'college_website:home' %}" role="menuitem" aria-current="{% if request.resolver_match.url_name == 'home' %}page{% else %}false{% endif %}">
+                <i class="fas fa-home me-2" aria-hidden="true"></i>Home
+            </a>
+        </li>
+        
+        <li class="nav-item dropdown" role="none">
+            <a class="nav-link dropdown-toggle" href="#" role="menuitem" data-bs-toggle="dropdown" 
+               aria-expanded="false" aria-haspopup="true" id="aboutDropdown">
+                <i class="fas fa-info-circle me-2" aria-hidden="true"></i>About
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="aboutDropdown">
+                <li role="none">
+                    <a class="dropdown-item" href="{% url 'college_website:about' %}" role="menuitem">
+                        <i class="fas fa-university me-3" aria-hidden="true"></i>Overview
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<!-- 5. Add monitoring and analytics -->
+<script>
+// Performance monitoring
+window.addEventListener('load', function() {
+    // Measure navbar loading performance
+    const navbarLoadTime = performance.getEntriesByType('navigation')[0];
+    console.log('Navbar loaded in:', navbarLoadTime.domContentLoadedEventEnd - navbarLoadTime.domContentLoadedEventStart, 'ms');
+    
+    // Track dropdown interactions
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+        toggle.addEventListener('click', function() {
+            // Analytics tracking
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'navbar_interaction', {
+                    'event_category': 'navigation',
+                    'event_label': this.textContent.trim()
+                });
+            }
+        });
+    });
+});
+</script>
+
+<!-- 6. Add service worker for navbar caching -->
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+        .then(function(registration) {
+            console.log('SW registration successful');
+        })
+        .catch(function(registrationError) {
+            console.log('SW registration failed');
+        });
+}
+</script>

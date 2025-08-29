@@ -1,0 +1,972 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ college_info.name|default:"Chaitanya Science and Arts College" }} - Welcome{% endblock %}
+
+{% block banner %}
+<!-- Compact Hero Section with Text Slider -->
+<section class="position-relative overflow-hidden tw-bg-gradient-to-br tw-from-indigo-900 tw-via-blue-800 tw-to-purple-700">
+    <!-- Animated Background Elements -->
+    <div class="tw-absolute tw-inset-0 tw-overflow-hidden tw-opacity-30">
+        <div class="tw-absolute tw-top-0 tw-right-0 tw-w-32 tw-h-32 tw-bg-white tw-rounded-full tw-opacity-10 tw-animate-pulse"></div>
+        <div class="tw-absolute tw-bottom-0 tw-left-0 tw-w-24 tw-h-24 tw-bg-yellow-300 tw-rounded-full tw-opacity-20 tw-animate-bounce"></div>
+        <div class="tw-absolute tw-top-1/2 tw-right-1/4 tw-w-2 tw-h-2 tw-bg-white tw-rounded-full tw-opacity-40 tw-animate-ping"></div>
+    </div>
+    
+    <!-- Hero Text Carousel -->
+    <div class="container position-relative tw-z-10 py-4 py-md-5">
+        <div class="row align-items-center g-4">
+            <!-- Text Content Slider -->
+            <div class="col-lg-7">
+                <div id="heroTextCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+                    <div class="carousel-inner">
+                        <!-- Slide 1: Welcome -->
+                        <div class="carousel-item active">
+                            <div class="hero-content text-white">
+                                <div class="mb-3">
+                                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
+                                        <i class="fas fa-star me-2"></i>NAAC Grade A+ Accredited
+                                    </span>
+                                </div>
+                                <h1 class="display-4 fw-bold mb-3">
+                                    Welcome to <span class="text-warning">{{ college_info.name|default:"Chaitanya College" }}</span>
+                                </h1>
+                                <p class="lead mb-4 tw-text-blue-100">
+                                    Empowering rural youth through quality education since 2001. Where knowledge meets innovation.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Slide 2: Excellence -->
+                        <div class="carousel-item">
+                            <div class="hero-content text-white">
+                                <div class="mb-3">
+                                    <span class="badge bg-success px-3 py-2 rounded-pill">
+                                        <i class="fas fa-trophy me-2"></i>Excellence in Education
+                                    </span>
+                                </div>
+                                <h1 class="display-4 fw-bold mb-3">
+                                    <span class="text-warning">25+ Years</span> of Educational Excellence
+                                </h1>
+                                <p class="lead mb-4 tw-text-blue-100">
+                                    Providing comprehensive education with modern facilities and experienced faculty.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Slide 3: Programs -->
+                        <div class="carousel-item">
+                            <div class="hero-content text-white">
+                                <div class="mb-3">
+                                    <span class="badge bg-info px-3 py-2 rounded-pill">
+                                        <i class="fas fa-graduation-cap me-2"></i>Diverse Programs
+                                    </span>
+                                </div>
+                                <h1 class="display-4 fw-bold mb-3">
+                                    <span class="text-warning">18+ Courses</span> Across Multiple Disciplines
+                                </h1>
+                                <p class="lead mb-4 tw-text-blue-100">
+                                    Science, Arts, Commerce, and Management programs designed for your success.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Slide 4: Placements -->
+                        <div class="carousel-item">
+                            <div class="hero-content text-white">
+                                <div class="mb-3">
+                                    <span class="badge bg-primary px-3 py-2 rounded-pill">
+                                        <i class="fas fa-briefcase me-2"></i>Career Success
+                                    </span>
+                                </div>
+                                <h1 class="display-4 fw-bold mb-3">
+                                    <span class="text-warning">95% Placement</span> Success Rate
+                                </h1>
+                                <p class="lead mb-4 tw-text-blue-100">
+                                    Strong industry connections ensuring excellent career opportunities for our graduates.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    <a href="{% url 'college_website:programs_list' %}" 
+                       class="btn btn-warning btn-lg px-4 py-2 fw-bold tw-transition-all tw-duration-300 hover:tw-scale-105">
+                        <i class="fas fa-graduation-cap me-2"></i>Explore Programs
+                    </a>
+                    <a href="{% url 'college_website:about' %}" 
+                       class="btn btn-outline-light btn-lg px-4 py-2 fw-bold tw-transition-all tw-duration-300 hover:tw-scale-105">
+                        <i class="fas fa-info-circle me-2"></i>Learn More
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Quick Stats & Features -->
+            <div class="col-lg-5">
+                <div class="row g-3">
+                    <!-- Quick Stats -->
+                    <div class="col-6">
+                        <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3 text-center text-white h-100">
+                            <i class="fas fa-calendar-alt fa-2x text-warning mb-2"></i>
+                            <div class="h3 fw-bold mb-1">25+</div>
+                            <small class="opacity-90">Years Experience</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3 text-center text-white h-100">
+                            <i class="fas fa-users fa-2x text-success mb-2"></i>
+                            <div class="h3 fw-bold mb-1">8000+</div>
+                            <small class="opacity-90">Students</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3 text-center text-white h-100">
+                            <i class="fas fa-book-open fa-2x text-info mb-2"></i>
+                            <div class="h3 fw-bold mb-1">18+</div>
+                            <small class="opacity-90">Courses</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3 text-center text-white h-100">
+                            <i class="fas fa-briefcase fa-2x text-primary mb-2"></i>
+                            <div class="h3 fw-bold mb-1">95%</div>
+                            <small class="opacity-90">Placement</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trust Indicators -->
+                <div class="row g-2 mt-3">
+                    <div class="col-md-4 col-6">
+                        <div class="d-flex align-items-center justify-content-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-2 p-2 text-white">
+                            <i class="fas fa-shield-alt text-success me-2"></i>
+                            <small class="fw-medium">UGC Recognized</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-6">
+                        <div class="d-flex align-items-center justify-content-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-2 p-2 text-white">
+                            <i class="fas fa-star text-warning me-2"></i>
+                            <small class="fw-medium">NAAC Grade A</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12">
+                        <div class="d-flex align-items-center justify-content-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-2 p-2 text-white">
+                            <i class="fas fa-award text-info me-2"></i>
+                            <small class="fw-medium">3 Star IIC Rating</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<!-- Image Slider/Carousel Section -->
+{% include 'partials/slider.html' %}
+
+<!-- Enhanced Stats Section -->
+<section class="py-5 tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-r tw-from-red-500 tw-to-pink-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                            <i class="fas fa-calendar-alt text-white fa-2x"></i>
+                        </div>
+                        <div class="stat-number tw-text-3xl fw-bold text-primary mb-2">{{ college_info.years_of_excellence|default:"25+" }}</div>
+                        <div class="stat-label text-muted fw-medium">Years of Excellence</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                            <i class="fas fa-book-open text-white fa-2x"></i>
+                        </div>
+                        <div class="stat-number tw-text-3xl fw-bold text-primary mb-2">{{ college_info.courses_count|default:"18+" }}</div>
+                        <div class="stat-label text-muted fw-medium">Courses Offered</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-r tw-from-green-500 tw-to-emerald-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                            <i class="fas fa-users text-white fa-2x"></i>
+                        </div>
+                        <div class="stat-number tw-text-3xl fw-bold text-primary mb-2">{{ college_info.students_count|default:"8000+" }}</div>
+                        <div class="stat-label text-muted fw-medium">Students Enrolled</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                            <i class="fas fa-chalkboard-teacher text-white fa-2x"></i>
+                        </div>
+                        <div class="stat-number tw-text-3xl fw-bold text-primary mb-2">{{ college_info.faculty_staff_count|default:"50+" }}</div>
+                        <div class="stat-label text-muted fw-medium">Faculty & Staff</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Knowledge Meets Innovation Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4">
+                <h2 class="section-title text-primary">Knowledge Meets Innovation</h2>
+                <p class="lead text-muted mb-4">
+                    At Chaitanya Science and Arts College, we believe in fostering an environment where traditional knowledge meets modern innovation. Our commitment to academic excellence and holistic development has made us a beacon of education in rural Chhattisgarh.
+                </p>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
+                            <span>NAAC Grade A Accredited</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-star text-warning me-3 fa-lg"></i>
+                            <span>IIC 3 Star Rating</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-users text-primary me-3 fa-lg"></i>
+                            <span>Experienced Faculty</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-laptop text-info me-3 fa-lg"></i>
+                            <span>Modern Infrastructure</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <img src="https://via.placeholder.com/600x400/dc2626/ffffff?text=Campus+View" alt="Campus Innovation" class="img-fluid rounded shadow">
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <button class="btn btn-primary btn-lg rounded-circle" data-bs-toggle="modal" data-bs-target="#videoModal">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Leadership Messages Section -->
+{% if director_message or principal_message %}
+<section class="py-5 tw-bg-gradient-to-r tw-from-blue-50 tw-to-indigo-100">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title text-primary">Message from Leadership</h2>
+            <p class="lead text-muted">Words of wisdom and vision from our esteemed leadership</p>
+        </div>
+        
+        <div class="row g-4">
+            {% if director_message %}
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 border-0 shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                {% if director_message.profile_photo %}
+                                <img src="{{ director_message.profile_photo.url }}" 
+                                     alt="{{ director_message.name }}" 
+                                     class="rounded-circle" 
+                                     style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #dc2626;">
+                                {% else %}
+                                <div class="tw-bg-gradient-to-r tw-from-red-500 tw-to-pink-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center">
+                                    <i class="fas fa-user-tie text-white fa-2x"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="card-title mb-1 text-primary">{{ director_message.name }}</h5>
+                                <p class="text-muted mb-0">{{ director_message.designation }}</p>
+                                {% if director_message.experience_years %}
+                                <small class="text-success">
+                                    <i class="fas fa-star me-1"></i>{{ director_message.experience_years }}+ Years Experience
+                                </small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Message Preview -->
+                        <div class="message-preview">
+                            {% if director_message.message_content %}
+                            <blockquote class="blockquote mb-3">
+                                <p class="text-dark" style="font-size: 0.95rem; line-height: 1.6;">
+                                    "{{ director_message.message_content|striptags|truncatewords:35 }}"
+                                </p>
+                            </blockquote>
+                            {% endif %}
+                            
+                            {% if director_message.vision %}
+                            <div class="vision-snippet mb-3">
+                                <h6 class="text-primary mb-2">
+                                    <i class="fas fa-lightbulb me-2"></i>Vision
+                                </h6>
+                                <p class="text-muted small mb-0" style="line-height: 1.5;">
+                                    {{ director_message.vision|truncatewords:25 }}
+                                </p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Contact Info -->
+                        {% if director_message.show_contact_info %}
+                        <div class="contact-info mt-3 pt-3 border-top">
+                            <div class="row g-2">
+                                {% if director_message.email %}
+                                <div class="col-auto">
+                                    <a href="mailto:{{ director_message.email }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-envelope me-1"></i>Email
+                                    </a>
+                                </div>
+                                {% endif %}
+                                {% if director_message.linkedin_url %}
+                                <div class="col-auto">
+                                    <a href="{{ director_message.linkedin_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fab fa-linkedin me-1"></i>LinkedIn
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Full Message Link -->
+                        <div class="mt-3">
+                            <a href="{{ director_message.get_absolute_url }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-arrow-right me-2"></i>Read Full Message
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if principal_message %}
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100 border-0 shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="flex-shrink-0">
+                                {% if principal_message.profile_photo %}
+                                <img src="{{ principal_message.profile_photo.url }}" 
+                                     alt="{{ principal_message.name }}" 
+                                     class="rounded-circle" 
+                                     style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #2563eb;">
+                                {% else %}
+                                <div class="tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center">
+                                    <i class="fas fa-user-graduate text-white fa-2x"></i>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="card-title mb-1 text-primary">{{ principal_message.name }}</h5>
+                                <p class="text-muted mb-0">{{ principal_message.designation }}</p>
+                                {% if principal_message.specialization %}
+                                <small class="text-info">
+                                    <i class="fas fa-graduation-cap me-1"></i>{{ principal_message.specialization }}
+                                </small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Message Preview -->
+                        <div class="message-preview">
+                            {% if principal_message.message_content %}
+                            <blockquote class="blockquote mb-3">
+                                <p class="text-dark" style="font-size: 0.95rem; line-height: 1.6;">
+                                    "{{ principal_message.message_content|striptags|truncatewords:35 }}"
+                                </p>
+                            </blockquote>
+                            {% endif %}
+                            
+                            {% if principal_message.educational_philosophy %}
+                            <div class="philosophy-snippet mb-3">
+                                <h6 class="text-primary mb-2">
+                                    <i class="fas fa-book-open me-2"></i>Educational Philosophy
+                                </h6>
+                                <p class="text-muted small mb-0" style="line-height: 1.5;">
+                                    {{ principal_message.educational_philosophy|truncatewords:25 }}
+                                </p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Office Hours -->
+                        {% if principal_message.show_office_hours and principal_message.office_hours %}
+                        <div class="office-hours mb-3">
+                            <div class="d-flex align-items-center text-success">
+                                <i class="fas fa-clock me-2"></i>
+                                <small><strong>Office Hours:</strong> {{ principal_message.office_hours }}</small>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Contact Info -->
+                        {% if principal_message.show_contact_info %}
+                        <div class="contact-info mt-3 pt-3 border-top">
+                            <div class="row g-2">
+                                {% if principal_message.email %}
+                                <div class="col-auto">
+                                    <a href="mailto:{{ principal_message.email }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-envelope me-1"></i>Email
+                                    </a>
+                                </div>
+                                {% endif %}
+                                {% if principal_message.linkedin_url %}
+                                <div class="col-auto">
+                                    <a href="{{ principal_message.linkedin_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fab fa-linkedin me-1"></i>LinkedIn
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Full Message Link -->
+                        <div class="mt-3">
+                            <a href="{{ principal_message.get_absolute_url }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-arrow-right me-2"></i>Read Full Message
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Single Column Layout for Mobile -->
+        <style>
+        @media (max-width: 991px) {
+            .leadership-messages .col-lg-6 {
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        /* Enhanced card styling for leadership messages */
+        .message-preview .blockquote {
+            position: relative;
+            font-style: italic;
+        }
+        
+        .message-preview .blockquote::before {
+            content: '"';
+            font-size: 2rem;
+            color: var(--bs-primary);
+            position: absolute;
+            left: -15px;
+            top: -5px;
+            font-family: serif;
+        }
+        
+        /* Gradient borders for profile photos */
+        .card .rounded-circle {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Hover effects for message cards */
+        .leadership-messages .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+        }
+        
+        /* Responsive text sizing */
+        @media (max-width: 576px) {
+            .message-preview .blockquote p {
+                font-size: 0.9rem !important;
+            }
+            
+            .card-body {
+                padding: 1rem !important;
+            }
+        }
+        </style>
+    </div>
+</section>
+{% endif %}
+
+<!-- Explore Boundless Opportunities Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title text-primary">Explore Boundless Opportunities</h2>
+            <p class="lead text-muted">Discover the diverse academic programs and opportunities that await you at our college.</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-microscope fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Science Programs</h5>
+                        <p class="card-text">Comprehensive science education with modern laboratories and research opportunities.</p>
+                        <a href="{% url 'college_website:programs_list' %}?discipline=science" class="btn btn-outline-primary">Explore Science</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-palette fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Arts Programs</h5>
+                        <p class="card-text">Liberal arts education fostering creativity, critical thinking, and cultural understanding.</p>
+                        <a href="{% url 'college_website:programs_list' %}?discipline=arts" class="btn btn-outline-primary">Explore Arts</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Commerce</h5>
+                        <p class="card-text">Business and commerce education preparing students for the corporate world.</p>
+                        <a href="{% url 'college_website:programs_list' %}?discipline=commerce" class="btn btn-outline-primary">Explore Commerce</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 card-hover border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-users-cog fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Management</h5>
+                        <p class="card-text">Leadership and management skills development for future business leaders.</p>
+                        <a href="{% url 'college_website:programs_list' %}?discipline=management" class="btn btn-outline-primary">Explore Management</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Happenings Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="section-title text-primary">Upcoming Events</h3>
+                    <a href="{% url 'college_website:events' %}" class="btn btn-outline-primary btn-sm">View All</a>
+                </div>
+                
+                {% for event in recent_events %}
+                <div class="card mb-3 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="bg-primary text-white text-center p-2 rounded">
+                                    <div class="fw-bold">{{ event.date|date:"d" }}</div>
+                                    <small>{{ event.date|date:"M" }}</small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h6 class="card-title mb-1">{{ event.title }}</h6>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>{{ event.time|default:"TBA" }}
+                                    <i class="fas fa-map-marker-alt ms-3 me-1"></i>{{ event.location }}
+                                </small>
+                                <p class="card-text mt-2 mb-0">{{ event.description|truncatewords:15|striptags }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No upcoming events at the moment.</p>
+                {% endfor %}
+            </div>
+            
+            <div class="col-lg-6 mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="section-title text-primary">Notice Board</h3>
+                    <a href="{% url 'college_website:notices_list' %}" class="btn btn-outline-primary btn-sm">View All</a>
+                </div>
+                
+                {% for notice in recent_notices %}
+                <div class="card mb-3 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="card-title mb-1">{{ notice.title }}</h6>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>{{ notice.publish_date|date:"M d, Y" }}
+                                    <span class="badge bg-secondary ms-2">{{ notice.get_category_display }}</span>
+                                </small>
+                                <p class="card-text mt-2 mb-0">{{ notice.content|truncatewords:20|striptags }}</p>
+                            </div>
+                            {% if notice.attachment %}
+                            <div class="ms-3">
+                                <a href="{{ notice.attachment.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted">No recent notices.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Student Testimonials Section -->
+{% if testimonials %}
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title text-primary">Student Feedback</h2>
+            <p class="lead text-muted">Hear what our students have to say about their experience at our college.</p>
+        </div>
+        
+        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for testimonial in testimonials %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="testimonial-card text-center">
+                                {% if testimonial.photo %}
+                                <img src="{{ testimonial.photo.url }}" alt="{{ testimonial.student_name }}" class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover;">
+                                {% else %}
+                                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </div>
+                                {% endif %}
+                                <blockquote class="blockquote mb-3">
+                                    <p>"{{ testimonial.feedback_text }}"</p>
+                                </blockquote>
+                                <div class="rating-stars mb-2">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= testimonial.rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <footer class="blockquote-footer">
+                                    <strong>{{ testimonial.student_name }}</strong>
+                                    <cite title="Program">{{ testimonial.program_studied }}</cite>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if testimonials|length > 1 %}
+            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-primary rounded-circle p-3"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-primary rounded-circle p-3"></span>
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Quick Links Section -->
+{% if quick_links %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title text-primary">Quick Links</h2>
+            <p class="lead text-muted">Access important resources and information quickly.</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            {% for link in quick_links %}
+            <div class="col-lg-2 col-md-4 col-6 mb-3">
+                <a href="{{ link.url }}" class="text-decoration-none" {% if 'http' in link.url %}target="_blank"{% endif %}>
+                    <div class="card h-100 card-hover border-0 shadow-sm text-center">
+                        <div class="card-body py-4">
+                            {% if link.icon_class %}
+                            <i class="{{ link.icon_class }} fa-2x text-primary mb-3"></i>
+                            {% else %}
+                            <i class="fas fa-link fa-2x text-primary mb-3"></i>
+                            {% endif %}
+                            <h6 class="card-title text-dark">{{ link.name }}</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Video Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">College Overview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="ratio ratio-16x9">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Enhanced Custom Styles -->
+<style>
+/* Floating Animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.tw-animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tw-animate-fade-in-up {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Enhanced Card Hover Effects */
+.card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+}
+
+/* Testimonial Stars */
+.rating-stars {
+    color: #fbbf24;
+}
+
+/* Stats Counter Animation */
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.stat-number {
+    animation: countUp 0.8s ease-out forwards;
+}
+
+/* Section Title Styling */
+.section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--bs-primary), #fbbf24);
+    border-radius: 2px;
+}
+
+/* Button Enhancements */
+.btn {
+    position: relative;
+    overflow: hidden;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* Card Hover Animation */
+.card-hover {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-hover:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .display-2 {
+        font-size: 2.5rem;
+    }
+    
+    .tw-py-24 {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* Background Animation */
+@keyframes backgroundMove {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -30px) rotate(120deg); }
+    66% { transform: translate(-20px, 20px) rotate(240deg); }
+}
+
+.tw-animate-pulse {
+    animation: backgroundMove 8s ease-in-out infinite;
+}
+
+/* Scroll Indicator */
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translate3d(0,0,0);
+    }
+    40%, 43% {
+        transform: translate3d(0,-15px,0);
+    }
+    70% {
+        transform: translate3d(0,-7px,0);
+    }
+    90% {
+        transform: translate3d(0,-3px,0);
+    }
+}
+
+.tw-animate-bounce {
+    animation: bounce 2s infinite;
+}
+</style>
+
+<!-- Enhanced JavaScript for Interactions -->
+<script>
+// Counter Animation
+function animateCounters() {
+    const counters = document.querySelectorAll('.stat-number');
+    const speed = 200;
+    
+    counters.forEach(counter => {
+        const target = +counter.innerText.replace(/\D/g, '');
+        const count = +counter.getAttribute('data-count') || 0;
+        const inc = target / speed;
+        
+        if (count < target) {
+            counter.setAttribute('data-count', Math.ceil(count + inc));
+            counter.innerText = Math.ceil(count + inc) + '+';
+            setTimeout(() => animateCounters(), 1);
+        } else {
+            counter.innerText = target + '+';
+        }
+    });
+}
+
+// Intersection Observer for Animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            
+            // Trigger counter animation for stats
+            if (entry.target.classList.contains('stats-section')) {
+                setTimeout(animateCounters, 300);
+            }
+        }
+    });
+}, observerOptions);
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Observe elements for animation
+    document.querySelectorAll('section, .card').forEach(el => {
+        observer.observe(el);
+    });
+    
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Add loading animation to cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('fade-in-up');
+    });
+});
+
+// Scroll indicator click
+document.querySelector('.tw-animate-bounce')?.addEventListener('click', () => {
+    window.scrollTo({
+        top: window.innerHeight,
+        behavior: 'smooth'
+    });
+});
+</script>
+{% endblock %}

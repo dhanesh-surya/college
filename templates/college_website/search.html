@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Results - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Search Results</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Search Header -->
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form method="GET" action="{% url 'college_website:search' %}">
+                        <div class="input-group input-group-lg">
+                            <input type="text" class="form-control" name="q" value="{{ query }}" placeholder="Search for programs, events, notices..." required>
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search me-1"></i>Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if query %}
+    <!-- Search Results Header -->
+    <div class="mb-4">
+        <h2 class="text-primary">Search Results for "{{ query }}"</h2>
+        <p class="text-muted">Found {{ total_results|default:0 }} result{{ total_results|pluralize }} matching your search</p>
+    </div>
+
+    <!-- Results Tabs -->
+    <ul class="nav nav-pills mb-4" id="searchTabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="pill" href="#all-results">
+                <i class="fas fa-th-list me-1"></i>All Results ({{ total_results|default:0 }})
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="pill" href="#programs-results">
+                <i class="fas fa-graduation-cap me-1"></i>Programs ({{ programs.count|default:0 }})
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="pill" href="#events-results">
+                <i class="fas fa-calendar-alt me-1"></i>Events ({{ events.count|default:0 }})
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="pill" href="#notices-results">
+                <i class="fas fa-bell me-1"></i>Notices ({{ notices.count|default:0 }})
+            </a>
+        </li>
+    </ul>
+
+    <!-- Search Results Content -->
+    <div class="tab-content" id="searchTabsContent">
+        <!-- All Results Tab -->
+        <div class="tab-pane fade show active" id="all-results">
+            <div class="row">
+                <!-- Programs Results -->
+                {% if programs %}
+                <div class="col-12 mb-4">
+                    <h4 class="text-primary mb-3">Programs</h4>
+                    {% for program in programs %}
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center">
+                                <div class="col-lg-8">
+                                    <div class="d-flex align-items-start">
+                                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 50px; height: 50px;">
+                                            <i class="fas fa-graduation-cap"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="card-title mb-2">{{ program.name }}</h5>
+                                            <p class="card-text text-muted mb-2">{{ program.description|striptags|truncatewords:25 }}</p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-tag me-1"></i>{{ program.get_discipline_display }}
+                                                {% if program.duration %}
+                                                <span class="ms-3"><i class="fas fa-clock me-1"></i>{{ program.duration }}</span>
+                                                {% endif %}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                                    <a href="{{ program.get_absolute_url }}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Events Results -->
+                {% if events %}
+                <div class="col-12 mb-4">
+                    <h4 class="text-success mb-3">Events</h4>
+                    {% for event in events %}
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center">
+                                <div class="col-lg-8">
+                                    <div class="d-flex align-items-start">
+                                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 50px; height: 50px;">
+                                            <i class="fas fa-calendar-alt"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="card-title mb-2">{{ event.title }}</h5>
+                                            <p class="card-text text-muted mb-2">{{ event.description|striptags|truncatewords:25 }}</p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>{{ event.date|date:"M d, Y" }}
+                                                {% if event.venue %}
+                                                <span class="ms-3"><i class="fas fa-map-marker-alt me-1"></i>{{ event.venue }}</span>
+                                                {% endif %}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                                    <a href="{{ event.get_absolute_url }}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Notices Results -->
+                {% if notices %}
+                <div class="col-12 mb-4">
+                    <h4 class="text-warning mb-3">Notices</h4>
+                    {% for notice in notices %}
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center">
+                                <div class="col-lg-8">
+                                    <div class="d-flex align-items-start">
+                                        <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 50px; height: 50px;">
+                                            <i class="fas fa-bell"></i>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex align-items-center mb-2">
+                                                <h5 class="card-title mb-0 me-2">{{ notice.title }}</h5>
+                                                {% if notice.priority == 'urgent' %}
+                                                <span class="badge bg-danger">Urgent</span>
+                                                {% elif notice.priority == 'important' %}
+                                                <span class="badge bg-warning">Important</span>
+                                                {% endif %}
+                                            </div>
+                                            <p class="card-text text-muted mb-2">{{ notice.content|striptags|truncatewords:25 }}</p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>{{ notice.published_date|date:"M d, Y" }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                                    <a href="{{ notice.get_absolute_url }}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- No Results -->
+                {% if not programs and not events and not notices %}
+                <div class="col-12">
+                    <div class="text-center py-5">
+                        <i class="fas fa-search fa-4x text-muted mb-3"></i>
+                        <h4 class="text-muted">No Results Found</h4>
+                        <p class="text-muted">Try searching with different keywords or browse our sections:</p>
+                        <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+                            <a href="{% url 'college_website:programs_list' %}" class="btn btn-outline-primary btn-sm">Programs</a>
+                            <a href="{% url 'college_website:events' %}" class="btn btn-outline-success btn-sm">Events</a>
+                            <a href="{% url 'college_website:notices_list' %}" class="btn btn-outline-warning btn-sm">Notices</a>
+                            <a href="{% url 'college_website:about' %}" class="btn btn-outline-info btn-sm">About Us</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Individual Category Tabs -->
+        <div class="tab-pane fade" id="programs-results">
+            <!-- Programs only content -->
+        </div>
+        <div class="tab-pane fade" id="events-results">
+            <!-- Events only content -->
+        </div>
+        <div class="tab-pane fade" id="notices-results">
+            <!-- Notices only content -->
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Search Suggestions -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-4x text-muted mb-4"></i>
+                <h3 class="text-muted mb-3">What are you looking for?</h3>
+                <p class="text-muted mb-4">Try searching for programs, events, notices, or any information about our college.</p>
+                
+                <!-- Popular Searches -->
+                <div class="mb-4">
+                    <h5 class="text-primary mb-3">Popular Searches:</h5>
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <a href="{% url 'college_website:search' %}?q=B.Sc" class="btn btn-outline-primary btn-sm">B.Sc Programs</a>
+                        <a href="{% url 'college_website:search' %}?q=admission" class="btn btn-outline-primary btn-sm">Admission</a>
+                        <a href="{% url 'college_website:search' %}?q=fees" class="btn btn-outline-primary btn-sm">Fees</a>
+                        <a href="{% url 'college_website:search' %}?q=sports" class="btn btn-outline-primary btn-sm">Sports</a>
+                        <a href="{% url 'college_website:search' %}?q=cultural" class="btn btn-outline-primary btn-sm">Cultural Events</a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'college_website:programs_list' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-graduation-cap d-block mb-2"></i>Programs
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'college_website:events' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-calendar-alt d-block mb-2"></i>Events
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'college_website:notices_list' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-bell d-block mb-2"></i>Notices
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-envelope d-block mb-2"></i>Contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

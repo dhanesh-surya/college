@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ admission.title }} - Admissions - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.admission-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 0;
+}
+
+.admission-type-badge {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.info-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.section-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.download-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.download-item {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.download-item:hover {
+    border-color: #667eea;
+    transform: translateY(-3px);
+}
+
+.download-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    color: white;
+}
+
+.contact-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 3rem;
+    margin-bottom: 2rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    background: #667eea;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px #667eea;
+}
+
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    width: 2px;
+    height: calc(100% + 1rem);
+    background: #e9ecef;
+}
+
+.timeline-item:last-child::after {
+    display: none;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:admissions' %}" class="text-white">Admissions</a></li>
+<li class="breadcrumb-item active text-white">{{ admission.title }}</li>
+{% endblock %}
+
+{% block content %}
+<!-- Admission Header -->
+<div class="admission-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="admission-type-badge">
+                    {{ admission.get_admission_type_display }}
+                </div>
+                <h1 class="display-4 fw-bold mb-3">{{ admission.title }}</h1>
+                <p class="lead mb-0">{{ admission.description }}</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-graduation-cap fa-6x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Eligibility Criteria -->
+            {% if admission.eligibility_criteria %}
+            <div class="info-card card mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="section-icon me-3">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 class="mb-0">Eligibility Criteria</h3>
+                    </div>
+                    <div class="content">
+                        {{ admission.eligibility_criteria|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Application Process -->
+            {% if admission.application_process %}
+            <div class="info-card card mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="section-icon me-3">
+                            <i class="fas fa-list-ol"></i>
+                        </div>
+                        <h3 class="mb-0">Application Process</h3>
+                    </div>
+                    <div class="content">
+                        {{ admission.application_process|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Required Documents -->
+            {% if admission.required_documents %}
+            <div class="info-card card mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="section-icon me-3">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3 class="mb-0">Required Documents</h3>
+                    </div>
+                    <div class="content">
+                        {{ admission.required_documents|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Fees Structure -->
+            {% if admission.fees_structure %}
+            <div class="info-card card mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="section-icon me-3">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <h3 class="mb-0">Fees Structure</h3>
+                    </div>
+                    <div class="content">
+                        {{ admission.fees_structure|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Important Dates -->
+            {% if admission.important_dates %}
+            <div class="info-card card mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="section-icon me-3">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="mb-0">Important Dates</h3>
+                    </div>
+                    <div class="content">
+                        {{ admission.important_dates|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Download Section -->
+            {% if admission.application_form or admission.brochure %}
+            <div class="download-section mb-4">
+                <h4 class="mb-4 text-center">Download Forms & Documents</h4>
+                <div class="row g-3">
+                    {% if admission.application_form %}
+                    <div class="col-12">
+                        <div class="download-item">
+                            <i class="fas fa-file-alt fa-2x text-primary mb-2"></i>
+                            <h6>Application Form</h6>
+                            <p class="text-muted small mb-3">Download and fill the admission form</p>
+                            <a href="{{ admission.application_form.url }}" class="download-btn" target="_blank">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if admission.brochure %}
+                    <div class="col-12">
+                        <div class="download-item">
+                            <i class="fas fa-book fa-2x text-info mb-2"></i>
+                            <h6>Course Brochure</h6>
+                            <p class="text-muted small mb-3">Detailed information about the course</p>
+                            <a href="{{ admission.brochure.url }}" class="download-btn" target="_blank">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Contact Information -->
+            {% if admission.contact_info %}
+            <div class="contact-card mb-4">
+                <h4 class="mb-3">
+                    <i class="fas fa-phone me-2"></i>
+                    Contact Information
+                </h4>
+                <div class="content">
+                    {{ admission.contact_info|safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-3">Need Help?</h5>
+                    <p class="text-muted mb-4">Our admission counselors are here to assist you</p>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-primary">
+                            <i class="fas fa-comments me-2"></i>
+                            Contact Admissions Office
+                        </a>
+                        <a href="{% url 'college_website:admissions' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to All Admissions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

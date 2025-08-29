@@ -1,0 +1,365 @@
+{% extends "college_website/iqac_base.html" %}
+
+{% block title %}{{ iqac_info.title|default:"IQAC" }} - {{ block.super }}{% endblock %}
+
+{% block meta_description %}{{ iqac_info.meta_description|default:"Internal Quality Assurance Cell (IQAC) - Ensuring excellence in education through quality assurance measures, accreditation, and continuous improvement." }}{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* IQAC Statistics Cards */
+.iqac-stats {
+    background: #f8fafc;
+    padding: 2rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-label {
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.875rem;
+}
+
+/* Featured Items Grid */
+.featured-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.featured-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.featured-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.featured-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.featured-card-body {
+    padding: 1.5rem;
+}
+
+.featured-card h3 {
+    color: #1e40af;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.featured-card p {
+    color: #6b7280;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.featured-card .btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+}
+
+/* Quick Access Cards */
+.quick-access-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+    display: block;
+    height: 100%;
+}
+
+.quick-access-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+}
+
+.quick-access-card .card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.quick-access-card h3 {
+    color: #1e40af;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.quick-access-card p {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .stat-card .stat-number {
+        font-size: 2rem;
+    }
+    
+    .featured-items {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-access-card .card-icon {
+        font-size: 2.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block page_title %}{{ iqac_info.title|default:"Internal Quality Assurance Cell" }}{% endblock %}
+
+{% block page_subtitle %}
+{% if iqac_info.subtitle %}
+    {{ iqac_info.subtitle }}
+{% else %}
+    Excellence in Education through Quality Assurance
+{% endif %}
+{% endblock %}
+
+{% block iqac_content %}
+<!-- Statistics Section -->
+{% if iqac_info.show_statistics %}
+<div class="iqac-stats">
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-number">{{ iqac_info.years_of_excellence|default:"10+" }}</div>
+                <div class="stat-label">Years of Excellence</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-number">{{ iqac_info.quality_initiatives|default:"50+" }}</div>
+                <div class="stat-label">Quality Initiatives</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-number">{{ iqac_info.naac_grade|default:"A++" }}</div>
+                <div class="stat-label">NAAC Grade</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-number">{{ iqac_info.quality_compliance|default:"100%" }}</div>
+                <div class="stat-label">Quality Compliance</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Main Content Section -->
+<div class="iqac-section">
+    {% if iqac_info %}
+        <h2>About IQAC</h2>
+        <div class="iqac-overview">
+            {{ iqac_info.overview|safe }}
+        </div>
+        
+        {% if iqac_info.vision %}
+        <h2>Our Vision</h2>
+        <p>{{ iqac_info.vision }}</p>
+        {% endif %}
+        
+        {% if iqac_info.mission %}
+        <h2>Our Mission</h2>
+        <p>{{ iqac_info.mission }}</p>
+        {% endif %}
+        
+        {% if iqac_info.objectives %}
+        <h2>Objectives</h2>
+        <div class="iqac-objectives">
+            {{ iqac_info.objectives|safe }}
+        </div>
+        {% endif %}
+    {% else %}
+        <h2>About Internal Quality Assurance Cell (IQAC)</h2>
+        <p>The Internal Quality Assurance Cell (IQAC) is a vital component of our institution's commitment to excellence in education. Established to ensure continuous quality enhancement and maintain high academic standards, IQAC serves as a catalyst for initiating, planning, and supervising various activities aimed at quality sustenance and enhancement.</p>
+        
+        <h2>Our Vision</h2>
+        <p>To be a center of excellence that promotes quality culture and continuous improvement in all aspects of institutional functioning.</p>
+        
+        <h2>Our Mission</h2>
+        <p>To ensure quality enhancement and sustenance measures through institutionalization of best practices, innovative teaching-learning methodologies, and continuous evaluation and improvement processes.</p>
+        
+        <h2>Key Objectives</h2>
+        <ul>
+            <li>Develop a system for conscious, consistent and catalytic action to improve the academic and administrative performance of the institution</li>
+            <li>Promote measures for institutional functioning towards quality enhancement</li>
+            <li>Channelize all efforts and measures of the institution towards promoting its holistic academic excellence</li>
+            <li>Act as a nodal agency for coordinating quality-related activities</li>
+            <li>Ensure timely, efficient and progressive performance of academic, administrative and financial tasks</li>
+        </ul>
+    {% endif %}
+</div>
+
+<!-- Featured Reports Section -->
+{% if featured_reports %}
+<div class="iqac-section">
+    <h2>Featured Reports</h2>
+    <div class="featured-items">
+        {% for report in featured_reports %}
+        <div class="featured-card">
+            {% if report.cover_image %}
+                <img src="{{ report.cover_image.url }}" alt="{{ report.title }}">
+            {% endif %}
+            <div class="featured-card-body">
+                <h3>{{ report.title }}</h3>
+                <p>{{ report.description|truncatewords:20 }}</p>
+                <p class="text-muted small">
+                    <i class="fas fa-calendar me-1"></i>{{ report.academic_year }}
+                    {% if report.file_size %}
+                        <i class="fas fa-file-pdf ms-3 me-1"></i>{{ report.file_size }}
+                    {% endif %}
+                </p>
+                <a href="{{ report.report_file.url }}" target="_blank" class="btn btn-primary btn-sm">
+                    <i class="fas fa-download me-1"></i>Download
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'college_website:iqac_reports' %}" class="btn btn-outline-primary">
+            <i class="fas fa-eye me-2"></i>View All Reports
+        </a>
+    </div>
+</div>
+{% endif %}
+
+<!-- Quality Initiatives Section -->
+{% if recent_initiatives %}
+<div class="iqac-section">
+    <h2>Recent Quality Initiatives</h2>
+    <div class="featured-items">
+        {% for initiative in recent_initiatives %}
+        <div class="featured-card">
+            <div class="featured-card-body">
+                <h3>{{ initiative.title }}</h3>
+                <p>{{ initiative.objectives|truncatewords:20 }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge bg-{{ initiative.status|yesno:'success,warning,secondary' }}">
+                        {{ initiative.get_status_display }}
+                    </span>
+                    <small class="text-muted">
+                        {% if initiative.progress_percentage %}
+                            {{ initiative.progress_percentage }}% Complete
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Quick Links Section -->
+<div class="iqac-section">
+    <h2>Quick Access</h2>
+    <div class="row g-3">
+        {% if naac_info %}
+        <div class="col-md-4">
+            <a href="{% url 'college_website:naac' %}" class="quick-access-card">
+                <i class="fas fa-award card-icon text-warning"></i>
+                <h3>NAAC Accreditation</h3>
+                <p>Grade {{ naac_info.current_grade }} ({{ naac_info.accreditation_year }})</p>
+            </a>
+        </div>
+        {% endif %}
+        
+        {% if nirf_info %}
+        <div class="col-md-4">
+            <a href="{% url 'college_website:nirf' %}" class="quick-access-card">
+                <i class="fas fa-chart-line card-icon text-success"></i>
+                <h3>NIRF Rankings</h3>
+                <p>
+                    {% if nirf_info.current_ranking %}
+                        Rank {{ nirf_info.current_ranking }} ({{ nirf_info.ranking_year }})
+                    {% else %}
+                        Participated ({{ nirf_info.ranking_year }})
+                    {% endif %}
+                </p>
+            </a>
+        </div>
+        {% endif %}
+        
+        <div class="col-md-4">
+            <a href="{% url 'college_website:iqac_feedback' %}" class="quick-access-card">
+                <i class="fas fa-comments card-icon text-info"></i>
+                <h3>Feedback System</h3>
+                <p>Share your valuable feedback with us</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Information -->
+{% if iqac_info.show_contact_info and iqac_info.coordinator_name %}
+<div class="iqac-section border-top">
+    <h2>Contact IQAC</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <p><strong>{{ iqac_info.coordinator_name }}</strong></p>
+            {% if iqac_info.coordinator_designation %}
+                <p>{{ iqac_info.coordinator_designation }}</p>
+            {% endif %}
+            
+            {% if iqac_info.office_location %}
+                <p><i class="fas fa-map-marker-alt me-2"></i>{{ iqac_info.office_location }}</p>
+            {% endif %}
+            
+            {% if iqac_info.phone %}
+                <p><i class="fas fa-phone me-2"></i>{{ iqac_info.phone }}</p>
+            {% endif %}
+            
+            {% if iqac_info.email %}
+                <p><i class="fas fa-envelope me-2"></i>{{ iqac_info.email }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,366 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Library - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.library-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0 2rem;
+}
+
+.resource-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    height: 100%;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.resource-type-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.featured-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.availability-status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-available {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-issued {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-reserved {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.resource-cover {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 1rem;
+}
+
+.search-section {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.filter-tabs {
+    background: white;
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.filter-tab {
+    background: transparent;
+    border: 2px solid #e9ecef;
+    color: #6c757d;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    margin: 0.25rem;
+}
+
+.filter-tab:hover,
+.filter-tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: white;
+}
+
+.access-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.access-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.library-stats {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #667eea;
+    display: block;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Library</li>
+{% endblock %}
+
+{% block content %}
+<!-- Library Hero Section -->
+<div class="library-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Digital Library</h1>
+                <p class="lead mb-4">Explore our comprehensive collection of books, journals, research papers, and digital resources. Access knowledge anytime, anywhere.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#search-resources" class="btn btn-light btn-lg">
+                        <i class="fas fa-search me-2"></i>Search Resources
+                    </a>
+                    <a href="#featured-resources" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-star me-2"></i>Featured Resources
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-book-open fa-8x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Search Section -->
+    <div id="search-resources" class="search-section">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3">Search Library Resources</h3>
+                <form method="GET" class="d-flex gap-3">
+                    <input type="text" name="q" class="form-control form-control-lg" 
+                           placeholder="Search by title, author, ISBN, or subject..." 
+                           value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-search fa-4x text-primary opacity-75"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs text-center">
+        <a href="?type=all" class="filter-tab {% if not request.GET.type or request.GET.type == 'all' %}active{% endif %}">
+            <i class="fas fa-list"></i>All Resources
+        </a>
+        <a href="?type=book" class="filter-tab {% if request.GET.type == 'book' %}active{% endif %}">
+            <i class="fas fa-book"></i>Books
+        </a>
+        <a href="?type=journal" class="filter-tab {% if request.GET.type == 'journal' %}active{% endif %}">
+            <i class="fas fa-newspaper"></i>Journals
+        </a>
+        <a href="?type=thesis" class="filter-tab {% if request.GET.type == 'thesis' %}active{% endif %}">
+            <i class="fas fa-graduation-cap"></i>Thesis
+        </a>
+        <a href="?type=ebook" class="filter-tab {% if request.GET.type == 'ebook' %}active{% endif %}">
+            <i class="fas fa-tablet-alt"></i>E-Books
+        </a>
+        <a href="?type=reference" class="filter-tab {% if request.GET.type == 'reference' %}active{% endif %}">
+            <i class="fas fa-bookmark"></i>Reference
+        </a>
+    </div>
+
+    <!-- Library Statistics -->
+    <div class="library-stats mb-5">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <span class="stat-number">{{ total_books|default:"5000+" }}</span>
+                    <div class="stat-label">Total Books</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <span class="stat-number">{{ digital_resources|default:"1200+" }}</span>
+                    <div class="stat-label">Digital Resources</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <span class="stat-number">{{ journals|default:"300+" }}</span>
+                    <div class="stat-label">Journals</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <span class="stat-number">{{ active_users|default:"800+" }}</span>
+                    <div class="stat-label">Active Users</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources Grid -->
+    <div id="featured-resources" class="row g-4">
+        {% for resource in resources %}
+        <div class="col-lg-6">
+            <div class="card resource-card">
+                {% if resource.is_featured %}
+                <div class="featured-badge">
+                    <i class="fas fa-star me-1"></i>Featured
+                </div>
+                {% endif %}
+                <div class="resource-type-badge">
+                    {{ resource.get_resource_type_display }}
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex">
+                        {% if resource.cover_image %}
+                        <img src="{{ resource.cover_image.url }}" alt="{{ resource.title }}" class="resource-cover">
+                        {% else %}
+                        <div class="resource-cover bg-light d-flex align-items-center justify-content-center">
+                            <i class="fas fa-book text-muted fa-2x"></i>
+                        </div>
+                        {% endif %}
+                        <div class="flex-grow-1">
+                            <h5 class="card-title mb-2">{{ resource.title }}</h5>
+                            {% if resource.author %}
+                            <p class="text-muted mb-1"><strong>Author:</strong> {{ resource.author }}</p>
+                            {% endif %}
+                            {% if resource.publication_year %}
+                            <p class="text-muted mb-1"><strong>Year:</strong> {{ resource.publication_year }}</p>
+                            {% endif %}
+                            {% if resource.subject_category %}
+                            <p class="text-muted mb-2"><strong>Subject:</strong> {{ resource.subject_category }}</p>
+                            {% endif %}
+                            <div class="availability-status status-{{ resource.availability_status|lower }}">
+                                {{ resource.get_availability_status_display }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="card-text text-muted mt-3 mb-3">{{ resource.description|truncatewords:15 }}</p>
+                    
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{{ resource.get_absolute_url }}" class="access-btn">
+                            <i class="fas fa-eye"></i>View Details
+                        </a>
+                        {% if resource.digital_copy %}
+                        <a href="{{ resource.digital_copy.url }}" class="access-btn" target="_blank">
+                            <i class="fas fa-download"></i>Download
+                        </a>
+                        {% endif %}
+                        {% if resource.external_link %}
+                        <a href="{{ resource.external_link }}" class="access-btn" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>Access Online
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-book-open fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No Resources Found</h4>
+            <p class="text-muted">No library resources match your search criteria. Try adjusting your filters or search terms.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Library Services -->
+    <div class="row mt-5">
+        <div class="col-lg-4">
+            <div class="card h-100 text-center">
+                <div class="card-body p-4">
+                    <i class="fas fa-clock fa-3x text-primary mb-3"></i>
+                    <h5>Library Hours</h5>
+                    <p class="text-muted">Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 4:00 PM</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card h-100 text-center">
+                <div class="card-body p-4">
+                    <i class="fas fa-user-graduate fa-3x text-success mb-3"></i>
+                    <h5>Research Support</h5>
+                    <p class="text-muted">Get help with research, citations, and academic writing from our librarians</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card h-100 text-center">
+                <div class="card-body p-4">
+                    <i class="fas fa-laptop fa-3x text-info mb-3"></i>
+                    <h5>Digital Access</h5>
+                    <p class="text-muted">Access e-books, journals, and databases from anywhere with your student ID</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

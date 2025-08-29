@@ -1,0 +1,263 @@
+{% extends "college_website/iqac_base.html" %}
+{% load static %}
+
+{% block page_title %}Accreditations & Certifications{% endblock %}
+{% block page_subtitle %}Institutional Quality Assurance and Recognition{% endblock %}
+
+{% block iqac_content %}
+<div class="iqac-section">
+    {% if featured_accreditations %}
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="section-title mb-4">
+                    <i class="fas fa-star text-warning me-2"></i>
+                    Featured Accreditations
+                </h2>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for accreditation in featured_accreditations %}
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card h-100 shadow-sm border-0 card-hover">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-certificate me-2"></i>
+                                {{ accreditation.accreditation_name }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            {% if accreditation.accrediting_body %}
+                                <p class="text-muted mb-2">
+                                    <strong>Accrediting Body:</strong> {{ accreditation.accrediting_body }}
+                                </p>
+                            {% endif %}
+                            
+                            {% if accreditation.accreditation_date %}
+                                <p class="text-muted mb-2">
+                                    <strong>Date:</strong> {{ accreditation.accreditation_date|date:"F d, Y" }}
+                                </p>
+                            {% endif %}
+                            
+                            {% if accreditation.validity_period %}
+                                <p class="text-muted mb-2">
+                                    <strong>Validity:</strong> {{ accreditation.validity_period }}
+                                </p>
+                            {% endif %}
+                            
+                            {% if accreditation.grade_or_score %}
+                                <div class="mb-3">
+                                    <span class="badge bg-success fs-6">
+                                        Grade: {{ accreditation.grade_or_score }}
+                                    </span>
+                                </div>
+                            {% endif %}
+                            
+                            {% if accreditation.description %}
+                                <p class="card-text">{{ accreditation.description|truncatewords:30 }}</p>
+                            {% endif %}
+                        </div>
+                        
+                        {% if accreditation.certificate_file or accreditation.report_file %}
+                            <div class="card-footer bg-light">
+                                <div class="d-flex gap-2">
+                                    {% if accreditation.certificate_file %}
+                                        <a href="{{ accreditation.certificate_file.url }}" 
+                                           class="btn btn-outline-primary btn-sm" 
+                                           target="_blank">
+                                            <i class="fas fa-file-pdf me-1"></i>
+                                            Certificate
+                                        </a>
+                                    {% endif %}
+                                    
+                                    {% if accreditation.report_file %}
+                                        <a href="{{ accreditation.report_file.url }}" 
+                                           class="btn btn-outline-secondary btn-sm" 
+                                           target="_blank">
+                                            <i class="fas fa-file-alt me-1"></i>
+                                            Report
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% if other_accreditations %}
+        <div class="row mt-5 mb-4">
+            <div class="col-12">
+                <h2 class="section-title">
+                    <i class="fas fa-award me-2"></i>
+                    Other Accreditations & Certifications
+                </h2>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for accreditation in other_accreditations %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm border-0 card-hover">
+                        <div class="card-body">
+                            <h6 class="card-title text-primary">
+                                <i class="fas fa-medal me-2"></i>
+                                {{ accreditation.accreditation_name }}
+                            </h6>
+                            
+                            {% if accreditation.accrediting_body %}
+                                <p class="text-muted small mb-2">
+                                    {{ accreditation.accrediting_body }}
+                                </p>
+                            {% endif %}
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                {% if accreditation.accreditation_date %}
+                                    <small class="text-muted">
+                                        {{ accreditation.accreditation_date|date:"Y" }}
+                                    </small>
+                                {% endif %}
+                                
+                                {% if accreditation.grade_or_score %}
+                                    <span class="badge bg-info">
+                                        {{ accreditation.grade_or_score }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            
+                            {% if accreditation.description %}
+                                <p class="card-text small mt-2">
+                                    {{ accreditation.description|truncatewords:20 }}
+                                </p>
+                            {% endif %}
+                        </div>
+                        
+                        {% if accreditation.certificate_file or accreditation.report_file %}
+                            <div class="card-footer bg-light p-2">
+                                <div class="d-flex gap-1">
+                                    {% if accreditation.certificate_file %}
+                                        <a href="{{ accreditation.certificate_file.url }}" 
+                                           class="btn btn-outline-primary btn-sm flex-fill" 
+                                           target="_blank">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </a>
+                                    {% endif %}
+                                    
+                                    {% if accreditation.report_file %}
+                                        <a href="{{ accreditation.report_file.url }}" 
+                                           class="btn btn-outline-secondary btn-sm flex-fill" 
+                                           target="_blank">
+                                            <i class="fas fa-file-alt"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    {% if not all_accreditations %}
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-certificate fa-3x text-muted"></i>
+            </div>
+            <h4 class="text-muted">No Accreditations Available</h4>
+            <p class="text-muted">
+                Accreditation information will be displayed here once available.
+            </p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Additional Information Section -->
+<div class="iqac-section bg-light">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="text-primary mb-4">
+                <i class="fas fa-info-circle me-2"></i>
+                About Institutional Accreditation
+            </h3>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">
+                                <i class="fas fa-bullseye me-2"></i>
+                                Purpose of Accreditation
+                            </h5>
+                            <p class="card-text">
+                                Accreditation ensures that our institution meets established standards 
+                                of quality in education, research, and service. It validates our 
+                                commitment to continuous improvement and excellence.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">
+                                <i class="fas fa-users me-2"></i>
+                                Benefits to Students
+                            </h5>
+                            <p class="card-text">
+                                Accredited programs ensure that students receive quality education 
+                                that is recognized by employers and other institutions, facilitating 
+                                career advancement and further education opportunities.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+.section-title {
+    color: #1e40af;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    border-radius: 2px;
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+.bg-light {
+    background-color: #f8fafc !important;
+}
+</style>
+{% endblock %}

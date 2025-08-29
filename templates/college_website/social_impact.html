@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Social Impact - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Social Impact</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">Social Impact Initiatives</h1>
+        <p class="lead text-muted">Empowering communities through education, awareness, and sustainable development</p>
+    </div>
+
+    <!-- Impact Statistics -->
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center impact-card">
+                <div class="card-body p-4">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                    <h3 class="display-6 fw-bold text-success">5000+</h3>
+                    <h5 class="card-title">Lives Impacted</h5>
+                    <p class="card-text text-muted">Through various social initiatives</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center impact-card">
+                <div class="card-body p-4">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-hand-holding-heart fa-2x"></i>
+                    </div>
+                    <h3 class="display-6 fw-bold text-primary">50+</h3>
+                    <h5 class="card-title">Projects Completed</h5>
+                    <p class="card-text text-muted">Community development programs</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center impact-card">
+                <div class="card-body p-4">
+                    <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-seedling fa-2x"></i>
+                    </div>
+                    <h3 class="display-6 fw-bold text-warning">1000+</h3>
+                    <h5 class="card-title">Trees Planted</h5>
+                    <p class="card-text text-muted">Environmental conservation efforts</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center impact-card">
+                <div class="card-body p-4">
+                    <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-graduation-cap fa-2x"></i>
+                    </div>
+                    <h3 class="display-6 fw-bold text-info">200+</h3>
+                    <h5 class="card-title">Students Trained</h5>
+                    <p class="card-text text-muted">Skill development programs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Initiatives -->
+    <div class="row">
+        {% for initiative in social_initiatives %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm initiative-card">
+                <div class="row g-0 h-100">
+                    <div class="col-md-4">
+                        {% if initiative.featured_image %}
+                        <img src="{{ initiative.featured_image.url }}" class="img-fluid h-100 object-cover rounded-start" alt="{{ initiative.title }}">
+                        {% else %}
+                        <div class="h-100 d-flex align-items-center justify-content-center bg-gradient-to-br from-green-500 to-green-700 text-white rounded-start">
+                            <i class="fas fa-hands-helping fa-3x"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body p-4 d-flex flex-column h-100">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-success mb-2">
+                                    <i class="fas fa-heart me-1"></i>Social Initiative
+                                </span>
+                                {% if initiative.date %}
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>{{ initiative.date|date:"M Y" }}
+                                </small>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title mb-3">{{ initiative.title }}</h5>
+                            <p class="card-text text-muted mb-3 flex-grow-1">
+                                {{ initiative.description|striptags|truncatewords:20 }}
+                            </p>
+                            <div class="mt-auto">
+                                <a href="{{ initiative.get_absolute_url }}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-arrow-right me-1"></i>Learn More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Default initiatives when no data -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm initiative-card">
+                <div class="row g-0 h-100">
+                    <div class="col-md-4">
+                        <div class="h-100 d-flex align-items-center justify-content-center bg-gradient-to-br from-green-500 to-green-700 text-white rounded-start">
+                            <i class="fas fa-graduation-cap fa-3x"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body p-4 d-flex flex-column h-100">
+                            <span class="badge bg-success mb-2 align-self-start">
+                                <i class="fas fa-heart me-1"></i>Education
+                            </span>
+                            <h5 class="card-title mb-3">Rural Education Program</h5>
+                            <p class="card-text text-muted mb-3 flex-grow-1">
+                                Providing quality education and digital literacy to underprivileged children in rural areas.
+                            </p>
+                            <div class="mt-auto">
+                                <a href="{% url 'college_website:contact' %}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-arrow-right me-1"></i>Learn More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm initiative-card">
+                <div class="row g-0 h-100">
+                    <div class="col-md-4">
+                        <div class="h-100 d-flex align-items-center justify-content-center bg-gradient-to-br from-blue-500 to-blue-700 text-white rounded-start">
+                            <i class="fas fa-tint fa-3x"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body p-4 d-flex flex-column h-100">
+                            <span class="badge bg-primary mb-2 align-self-start">
+                                <i class="fas fa-water me-1"></i>Environment
+                            </span>
+                            <h5 class="card-title mb-3">Clean Water Initiative</h5>
+                            <p class="card-text text-muted mb-3 flex-grow-1">
+                                Installing water purification systems and promoting water conservation in local communities.
+                            </p>
+                            <div class="mt-auto">
+                                <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-arrow-right me-1"></i>Learn More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Focus Areas -->
+    <section class="bg-light rounded-3 p-5 my-5">
+        <h2 class="section-title text-primary mb-4 text-center">Our Focus Areas</h2>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-book-open fa-3x text-primary mb-3"></i>
+                    <h5>Education & Literacy</h5>
+                    <p class="text-muted">Promoting education and digital literacy in rural communities</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-leaf fa-3x text-success mb-3"></i>
+                    <h5>Environmental Conservation</h5>
+                    <p class="text-muted">Tree plantation, waste management, and sustainability programs</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-heartbeat fa-3x text-danger mb-3"></i>
+                    <h5>Health & Wellness</h5>
+                    <p class="text-muted">Health camps, awareness programs, and medical assistance</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-tools fa-3x text-warning mb-3"></i>
+                    <h5>Skill Development</h5>
+                    <p class="text-muted">Vocational training and entrepreneurship development programs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Involved Section -->
+    <section class="mb-5">
+        <h2 class="section-title text-primary mb-4">Get Involved</h2>
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <i class="fas fa-volunteer-alt fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Volunteer</h5>
+                        <p class="card-text text-muted">Join our volunteer programs and make a direct impact in communities</p>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-primary">Join Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <i class="fas fa-donate fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Donate</h5>
+                        <p class="card-text text-muted">Support our initiatives with financial contributions or resources</p>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-success">Contribute</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card border-0 shadow-sm h-100 text-center">
+                    <div class="card-body p-4">
+                        <i class="fas fa-handshake fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Partner</h5>
+                        <p class="card-text text-muted">Collaborate with us as an organization or institution</p>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-info">Partner Up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-3 p-5 text-center">
+        <h3 class="text-primary mb-3">Together We Can Make a Difference</h3>
+        <p class="text-muted mb-4">Join us in creating positive social impact and building a better future for our communities.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-hands-helping me-2"></i>Get Involved
+            </a>
+            <a href="{% url 'college_website:about' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-info-circle me-2"></i>Learn More
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.impact-card, .initiative-card {
+    transition: all 0.3s ease;
+}
+.impact-card:hover, .initiative-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+.object-cover {
+    object-fit: cover;
+}
+.bg-gradient-to-br {
+    background: linear-gradient(135deg, var(--bs-success), var(--bs-success-dark, #198754));
+}
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #dcfce7, #dbeafe);
+}
+</style>
+{% endblock %}

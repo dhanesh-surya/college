@@ -1,0 +1,488 @@
+{% extends "college_website/iqac_base.html" %}
+{% load static %}
+
+{% block page_title %}NIRF Ranking{% endblock %}
+{% block page_subtitle %}National Institutional Ranking Framework{% endblock %}
+
+{% block iqac_content %}
+<div class="iqac-section">
+    <!-- NIRF Overview -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-trophy me-2"></i>
+                        NIRF Ranking Performance
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <div class="mb-3">
+                                <span class="badge bg-warning text-dark fs-5 px-3 py-2">
+                                    <i class="fas fa-medal me-2"></i>Rank: 85 (Overall)
+                                </span>
+                                <span class="badge bg-info fs-6 px-3 py-2 ms-2">
+                                    <i class="fas fa-calendar me-2"></i>NIRF 2023
+                                </span>
+                            </div>
+                            <p class="lead text-muted mb-3">
+                                Our institution has been consistently improving in NIRF rankings, demonstrating 
+                                excellence in teaching, research, and outreach activities.
+                            </p>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-arrow-up text-success me-2"></i>
+                                        <span>Improved by 15 positions</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-star text-warning me-2"></i>
+                                        <span>Top 100 in India</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-graduation-cap text-primary me-2"></i>
+                                        <span>Excellence in Teaching</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-handshake text-info me-2"></i>
+                                        <span>Strong Industry Connect</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="bg-warning bg-opacity-10 rounded-circle p-4 d-inline-block">
+                                <i class="fas fa-chart-line text-warning" style="font-size: 4rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NIRF Parameters Performance -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-chart-bar me-2"></i>
+                NIRF Parameters Performance
+            </h3>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-chalkboard-teacher text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Teaching, Learning & Resources</h5>
+                            <span class="badge bg-success">Score: 78.5/100</span>
+                        </div>
+                    </div>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: 78.5%"></div>
+                    </div>
+                    <p class="text-muted small mb-0">
+                        Faculty-student ratio, faculty qualifications, and financial resources
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-flask text-info" style="font-size: 2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Research & Professional Practice</h5>
+                            <span class="badge bg-info">Score: 65.2/100</span>
+                        </div>
+                    </div>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-info" style="width: 65.2%"></div>
+                    </div>
+                    <p class="text-muted small mb-0">
+                        Publications, patents, research projects, and professional practice
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-graduation-cap text-warning" style="font-size: 2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Graduation Outcomes</h5>
+                            <span class="badge bg-warning text-dark">Score: 82.3/100</span>
+                        </div>
+                    </div>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-warning" style="width: 82.3%"></div>
+                    </div>
+                    <p class="text-muted small mb-0">
+                        Graduate employment, higher studies, and entrepreneurship
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-handshake text-success" style="font-size: 2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Outreach & Inclusivity</h5>
+                            <span class="badge bg-success">Score: 71.8/100</span>
+                        </div>
+                    </div>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: 71.8%"></div>
+                    </div>
+                    <p class="text-muted small mb-0">
+                        Regional diversity, women participation, and economically disadvantaged students
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3">
+                            <i class="fas fa-eye text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1">Perception</h5>
+                            <span class="badge bg-primary">Score: 68.9/100</span>
+                        </div>
+                    </div>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-primary" style="width: 68.9%"></div>
+                    </div>
+                    <p class="text-muted small mb-0">
+                        Peer perception of academic and employer perception of graduates
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NIRF Ranking Trends -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-trending-up me-2"></i>
+                Ranking Trends (2019-2023)
+            </h3>
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="row text-center">
+                        <div class="col-lg-2 col-md-4 col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="fw-bold text-muted">2019</h4>
+                                <span class="badge bg-secondary fs-6">150+</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="fw-bold text-muted">2020</h4>
+                                <span class="badge bg-info fs-6">135</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="fw-bold text-muted">2021</h4>
+                                <span class="badge bg-warning text-dark fs-6">120</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 mb-3">
+                            <div class="p-3 bg-light rounded">
+                                <h4 class="fw-bold text-muted">2022</h4>
+                                <span class="badge bg-primary fs-6">100</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 mb-3">
+                            <div class="p-3 bg-success text-white rounded">
+                                <h4 class="fw-bold">2023</h4>
+                                <span class="badge bg-white text-success fs-6">85</span>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 mb-3">
+                            <div class="p-3 bg-warning text-dark rounded">
+                                <h4 class="fw-bold">Target</h4>
+                                <span class="badge bg-dark text-white fs-6">Top 50</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <div class="d-inline-flex align-items-center bg-success bg-opacity-10 px-3 py-2 rounded">
+                            <i class="fas fa-arrow-up text-success me-2"></i>
+                            <span class="fw-bold text-success">65 positions improved in 4 years</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NIRF Documents -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-file-alt me-2"></i>
+                NIRF Documents & Data
+            </h3>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div class="me-3">
+                            <i class="fas fa-file-excel text-success" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-2">NIRF Data Template 2023</h5>
+                            <p class="text-muted mb-3">
+                                Complete data submission for NIRF ranking 2023
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download me-1"></i>Download
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div class="me-3">
+                            <i class="fas fa-chart-pie text-info" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-2">Performance Analysis</h5>
+                            <p class="text-muted mb-3">
+                                Detailed analysis of NIRF performance metrics
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download me-1"></i>Download
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div class="me-3">
+                            <i class="fas fa-tasks text-warning" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-2">Improvement Action Plan</h5>
+                            <p class="text-muted mb-3">
+                                Strategic plan for improving NIRF ranking
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download me-1"></i>Download
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div class="me-3">
+                            <i class="fas fa-history text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-2">Historical Data</h5>
+                            <p class="text-muted mb-3">
+                                NIRF ranking data from previous years
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download me-1"></i>Download
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Achievements -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-star me-2"></i>
+                Key Achievements & Highlights
+            </h3>
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-lg-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-trophy text-warning" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Top 100 Institution</h6>
+                                    <p class="text-muted small mb-0">
+                                        Consistently ranked among top 100 institutions in India
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-arrow-up text-success" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Rapid Improvement</h6>
+                                    <p class="text-muted small mb-0">
+                                        65 positions improvement in just 4 years
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-graduation-cap text-primary" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Excellence in Teaching</h6>
+                                    <p class="text-muted small mb-0">
+                                        High scores in teaching-learning parameters
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <i class="fas fa-users text-info" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Strong Placement Record</h6>
+                                    <p class="text-muted small mb-0">
+                                        Excellent graduation outcomes and industry connect
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+.section-title {
+    color: #1e40af;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    border-radius: 2px;
+}
+
+.progress {
+    border-radius: 10px;
+    background-color: #e5e7eb;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.bg-gradient {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+}
+</style>
+{% endblock %}

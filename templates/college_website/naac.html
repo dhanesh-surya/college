@@ -1,0 +1,436 @@
+{% extends "college_website/iqac_base.html" %}
+{% load static %}
+
+{% block page_title %}NAAC Accreditation{% endblock %}
+{% block page_subtitle %}National Assessment and Accreditation Council{% endblock %}
+
+{% block iqac_content %}
+<div class="iqac-section">
+    <!-- NAAC Overview -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-university me-2"></i>
+                        NAAC Accreditation Status
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <div class="mb-3">
+                                <span class="badge bg-success fs-5 px-3 py-2">
+                                    <i class="fas fa-star me-2"></i>Grade: A++
+                                </span>
+                                <span class="badge bg-info fs-6 px-3 py-2 ms-2">
+                                    <i class="fas fa-calendar me-2"></i>Valid until 2028
+                                </span>
+                            </div>
+                            <p class="lead text-muted mb-3">
+                                Our institution has been accredited by NAAC with Grade A++, reflecting our commitment 
+                                to academic excellence and quality education.
+                            </p>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <span>Curriculum & Teaching</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <span>Research & Innovation</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <span>Infrastructure & Learning</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        <span>Student Support & Progression</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-block">
+                                <i class="fas fa-award text-primary" style="font-size: 4rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAAC Criteria Performance -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-chart-bar me-2"></i>
+                NAAC Criteria Performance
+            </h3>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-book-open text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold">Curricular Aspects</h5>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: 92%"></div>
+                    </div>
+                    <span class="badge bg-success">3.68/4.0</span>
+                    <p class="text-muted mt-2 small">
+                        Curriculum design, implementation, and academic flexibility
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-chalkboard-teacher text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold">Teaching-Learning</h5>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: 89%"></div>
+                    </div>
+                    <span class="badge bg-success">3.56/4.0</span>
+                    <p class="text-muted mt-2 small">
+                        Student enrollment, faculty profile, and learning outcomes
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-flask text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold">Research & Innovation</h5>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-info" style="width: 78%"></div>
+                    </div>
+                    <span class="badge bg-info">3.12/4.0</span>
+                    <p class="text-muted mt-2 small">
+                        Research publications, projects, and innovation ecosystem
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-building text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold">Infrastructure</h5>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: 94%"></div>
+                    </div>
+                    <span class="badge bg-success">3.76/4.0</span>
+                    <p class="text-muted mt-2 small">
+                        Physical facilities, IT infrastructure, and learning resources
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-users text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold">Student Support</h5>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: 91%"></div>
+                    </div>
+                    <span class="badge bg-success">3.64/4.0</span>
+                    <p class="text-muted mt-2 small">
+                        Student progression, support services, and alumni engagement
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="fas fa-leaf text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold">Governance</h5>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: 88%"></div>
+                    </div>
+                    <span class="badge bg-success">3.52/4.0</span>
+                    <p class="text-muted mt-2 small">
+                        Leadership, governance, and institutional practices
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAAC Documents -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-file-alt me-2"></i>
+                NAAC Documents & Reports
+            </h3>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div class="me-3">
+                            <i class="fas fa-file-pdf text-danger" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-2">Self Study Report (SSR)</h5>
+                            <p class="text-muted mb-3">
+                                Comprehensive self-assessment report prepared for NAAC accreditation
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download me-1"></i>Download
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div class="me-3">
+                            <i class="fas fa-certificate text-success" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-2">NAAC Certificate</h5>
+                            <p class="text-muted mb-3">
+                                Official accreditation certificate from NAAC
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download me-1"></i>Download
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div class="me-3">
+                            <i class="fas fa-chart-line text-info" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-2">Peer Team Report</h5>
+                            <p class="text-muted mb-3">
+                                Detailed evaluation report by NAAC peer team
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download me-1"></i>Download
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div class="me-3">
+                            <i class="fas fa-tasks text-warning" style="font-size: 2rem;"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-2">Quality Enhancement Plan</h5>
+                            <p class="text-muted mb-3">
+                                Action plan for continuous quality improvement
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-download me-1"></i>Download
+                                </a>
+                                <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>View Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAAC Timeline -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="section-title mb-4">
+                <i class="fas fa-history me-2"></i>
+                NAAC Accreditation Timeline
+            </h3>
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <h6 class="fw-bold">First Accreditation - 2015</h6>
+                                <p class="text-muted mb-0">Received Grade B+ in first NAAC assessment</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-info"></div>
+                            <div class="timeline-content">
+                                <h6 class="fw-bold">Re-accreditation - 2020</h6>
+                                <p class="text-muted mb-0">Upgraded to Grade A in second cycle</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <h6 class="fw-bold">Current Status - 2023</h6>
+                                <p class="text-muted mb-0">Achieved Grade A++ in third cycle assessment</p>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-warning"></div>
+                            <div class="timeline-content">
+                                <h6 class="fw-bold">Next Review - 2028</h6>
+                                <p class="text-muted mb-0">Scheduled for fourth cycle assessment</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+.section-title {
+    color: #1e40af;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    border-radius: 2px;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -2rem;
+    top: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px #e5e7eb;
+}
+
+.timeline-content {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+}
+
+.progress {
+    border-radius: 10px;
+    background-color: #e5e7eb;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+</style>
+{% endblock %}

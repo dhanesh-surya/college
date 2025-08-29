@@ -1,0 +1,301 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url 'admin:college_website_menuitem_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="menu-move-container">
+    <h1>{{ title }}</h1>
+    
+    <div class="selected-items-preview card">
+        <h3><i class="fas fa-list"></i> Selected Items ({{ selected_items.count }})</h3>
+        <div class="selected-items-list">
+            {% for item in selected_items %}
+            <div class="menu-item-preview">
+                <strong>{{ item.title }}</strong>
+                <span class="menu-info">
+                    <i class="fas fa-sitemap"></i> {{ item.menu.title }}
+                    {% if item.parent %}
+                        → <i class="fas fa-arrow-right"></i> {{ item.parent.title }}
+                    {% endif %}
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <form method="post" class="move-form card">
+        {% csrf_token %}
+        
+        <div class="form-section">
+            <h3><i class="fas fa-arrow-right"></i> Move Configuration</h3>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.target_menu.id_for_label }}" class="required">
+                        <i class="fas fa-sitemap"></i> Target Menu:
+                    </label>
+                    {{ form.target_menu }}
+                    {% if form.target_menu.help_text %}
+                        <p class="help-text">{{ form.target_menu.help_text }}</p>
+                    {% endif %}
+                    {% if form.target_menu.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.target_menu.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.make_submenu_of.id_for_label }}">
+                        <i class="fas fa-level-down-alt"></i> Make Submenu Of:
+                    </label>
+                    {{ form.make_submenu_of }}
+                    {% if form.make_submenu_of.help_text %}
+                        <p class="help-text">{{ form.make_submenu_of.help_text }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.starting_order.id_for_label }}">
+                        <i class="fas fa-sort-numeric-down"></i> Starting Order:
+                    </label>
+                    {{ form.starting_order }}
+                    {% if form.starting_order.help_text %}
+                        <p class="help-text">{{ form.starting_order.help_text }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group checkbox-group">
+                    {{ form.preserve_hierarchy }}
+                    <label for="{{ form.preserve_hierarchy.id_for_label }}">
+                        <i class="fas fa-project-diagram"></i> {{ form.preserve_hierarchy.label }}
+                    </label>
+                    {% if form.preserve_hierarchy.help_text %}
+                        <p class="help-text">{{ form.preserve_hierarchy.help_text }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-arrow-right"></i> Move Items
+            </button>
+            <a href="{% url 'admin:college_website_menuitem_changelist' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+.menu-move-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.selected-items-preview h3 {
+    color: #2196F3;
+    border-bottom: 2px solid #2196F3;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.menu-item-preview {
+    padding: 10px;
+    margin: 5px 0;
+    background: #f8f9fa;
+    border-left: 4px solid #2196F3;
+    border-radius: 4px;
+}
+
+.menu-item-preview strong {
+    display: block;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.menu-info {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.menu-info i {
+    margin-right: 5px;
+}
+
+.form-section h3 {
+    color: #28a745;
+    border-bottom: 2px solid #28a745;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+.form-group label i {
+    margin-right: 8px;
+    color: #6c757d;
+}
+
+.form-group select,
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.checkbox-group label {
+    margin: 0;
+    cursor: pointer;
+}
+
+.help-text {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
+
+.errorlist li {
+    color: #dc3545;
+    font-size: 12px;
+    padding: 5px;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+}
+
+.alert {
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-update submenu options when target menu changes
+    const targetMenuSelect = document.getElementById('{{ form.target_menu.id_for_label }}');
+    const submenuSelect = document.getElementById('{{ form.make_submenu_of.id_for_label }}');
+    
+    if (targetMenuSelect && submenuSelect) {
+        targetMenuSelect.addEventListener('change', function() {
+            // This would require AJAX to fetch menu items for the selected menu
+            // For now, just show a message to the user
+            if (this.value) {
+                const option = this.options[this.selectedIndex];
+                console.log('Selected menu:', option.text);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

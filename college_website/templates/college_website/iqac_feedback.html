@@ -1,0 +1,703 @@
+{% extends "college_website/iqac_base.html" %}
+
+{% block title %}IQAC Feedback - {{ block.super }}{% endblock %}
+
+{% block meta_description %}Share your feedback with IQAC. Help us improve the quality of education and institutional services through your valuable suggestions.{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+/* Feedback Form Styles */
+.feedback-form {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.stakeholder-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stakeholder-option {
+    position: relative;
+}
+
+.stakeholder-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.stakeholder-label {
+    display: block;
+    padding: 1rem;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.stakeholder-label:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+}
+
+.stakeholder-option input[type="radio"]:checked + .stakeholder-label {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: white;
+}
+
+/* Rating System */
+.rating-section {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border-left: 4px solid #3b82f6;
+}
+
+.rating-question {
+    font-weight: 600;
+    color: #1e40af;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.star-rating {
+    position: relative;
+}
+
+.star-rating input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.star-rating label {
+    display: inline-block;
+    font-size: 2rem;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.star-rating label:hover,
+.star-rating input[type="radio"]:checked ~ label,
+.star-rating input[type="radio"]:checked + label {
+    color: #f59e0b;
+}
+
+.star-rating input[type="radio"]:checked ~ label {
+    color: #d1d5db;
+}
+
+/* Reverse the order for proper star rating behavior */
+.star-rating {
+    direction: rtl;
+}
+
+.star-rating label {
+    direction: ltr;
+}
+
+.rating-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background-color: white;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Error Styles */
+.error-message {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.form-control.error {
+    border-color: #ef4444;
+}
+
+/* Success Message */
+.success-message {
+    background: linear-gradient(135deg, #d1fae5 0%, #10b981 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.success-message h3 {
+    margin-bottom: 0.5rem;
+}
+
+.success-message i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* Statistics Section */
+.feedback-stats {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.rating-breakdown {
+    margin-top: 2rem;
+}
+
+.rating-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.rating-label {
+    width: 100px;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.rating-bar {
+    flex: 1;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    margin: 0 1rem;
+    overflow: hidden;
+}
+
+.rating-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.rating-count {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    width: 40px;
+    text-align: right;
+}
+
+/* Submit Button */
+.submit-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+    color: white;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.submit-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .feedback-form {
+        padding: 1.5rem;
+    }
+    
+    .stakeholder-types {
+        grid-template-columns: 1fr;
+    }
+    
+    .rating-stars {
+        justify-content: center;
+    }
+    
+    .star-rating label {
+        font-size: 1.75rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Loading State */
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+</style>
+{% endblock %}
+
+{% block page_title %}IQAC Feedback{% endblock %}
+{% block page_subtitle %}Share Your Experience and Help Us Improve{% endblock %}
+
+{% block iqac_content %}
+{% if success %}
+<!-- Success Message -->
+<div class="success-message">
+    <i class="fas fa-check-circle"></i>
+    <h3>Thank You for Your Feedback!</h3>
+    <p>Your valuable feedback has been submitted successfully. We appreciate your time and input in helping us improve our institution's quality.</p>
+    <a href="{% url 'college_website:iqac_feedback' %}" class="btn btn-light mt-3">
+        <i class="fas fa-plus me-2"></i>Submit Another Feedback
+    </a>
+</div>
+{% else %}
+<!-- Feedback Form -->
+<div class="feedback-form">
+    <h2 class="mb-4">
+        <i class="fas fa-comments me-2"></i>Quality Feedback Form
+    </h2>
+    <p class="text-muted mb-4">Your feedback is valuable to us. Please share your experience and suggestions to help us maintain and improve the quality of our institution.</p>
+    
+    <form method="POST" class="feedback-form-inner" id="feedbackForm">
+        {% csrf_token %}
+        
+        <!-- Stakeholder Type -->
+        <div class="form-group">
+            <label class="form-label">I am a:</label>
+            <div class="stakeholder-types">
+                <div class="stakeholder-option">
+                    <input type="radio" name="stakeholder_type" value="student" id="student" required>
+                    <label for="student" class="stakeholder-label">
+                        <i class="fas fa-graduation-cap d-block mb-1"></i>Student
+                    </label>
+                </div>
+                <div class="stakeholder-option">
+                    <input type="radio" name="stakeholder_type" value="faculty" id="faculty">
+                    <label for="faculty" class="stakeholder-label">
+                        <i class="fas fa-chalkboard-teacher d-block mb-1"></i>Faculty
+                    </label>
+                </div>
+                <div class="stakeholder-option">
+                    <input type="radio" name="stakeholder_type" value="staff" id="staff">
+                    <label for="staff" class="stakeholder-label">
+                        <i class="fas fa-users d-block mb-1"></i>Staff
+                    </label>
+                </div>
+                <div class="stakeholder-option">
+                    <input type="radio" name="stakeholder_type" value="parent" id="parent">
+                    <label for="parent" class="stakeholder-label">
+                        <i class="fas fa-user-friends d-block mb-1"></i>Parent
+                    </label>
+                </div>
+                <div class="stakeholder-option">
+                    <input type="radio" name="stakeholder_type" value="alumni" id="alumni">
+                    <label for="alumni" class="stakeholder-label">
+                        <i class="fas fa-user-graduate d-block mb-1"></i>Alumni
+                    </label>
+                </div>
+                <div class="stakeholder-option">
+                    <input type="radio" name="stakeholder_type" value="employer" id="employer">
+                    <label for="employer" class="stakeholder-label">
+                        <i class="fas fa-briefcase d-block mb-1"></i>Employer
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" name="name" id="name" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" name="email" id="email" class="form-control" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="phone" class="form-label">Phone Number (Optional)</label>
+                    <input type="tel" name="phone" id="phone" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="department" class="form-label">Department/Program (Optional)</label>
+                    <input type="text" name="department" id="department" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <!-- Rating Sections -->
+        <div class="rating-section">
+            <div class="rating-question">Overall Satisfaction with the Institution</div>
+            <div class="star-rating">
+                <input type="radio" name="overall_rating" value="5" id="overall5" required>
+                <label for="overall5">★</label>
+                <input type="radio" name="overall_rating" value="4" id="overall4">
+                <label for="overall4">★</label>
+                <input type="radio" name="overall_rating" value="3" id="overall3">
+                <label for="overall3">★</label>
+                <input type="radio" name="overall_rating" value="2" id="overall2">
+                <label for="overall2">★</label>
+                <input type="radio" name="overall_rating" value="1" id="overall1">
+                <label for="overall1">★</label>
+            </div>
+            <div class="rating-labels">
+                <span>Poor</span>
+                <span>Fair</span>
+                <span>Good</span>
+                <span>Very Good</span>
+                <span>Excellent</span>
+            </div>
+        </div>
+
+        <div class="rating-section">
+            <div class="rating-question">Teaching Quality</div>
+            <div class="star-rating">
+                <input type="radio" name="teaching_rating" value="5" id="teaching5" required>
+                <label for="teaching5">★</label>
+                <input type="radio" name="teaching_rating" value="4" id="teaching4">
+                <label for="teaching4">★</label>
+                <input type="radio" name="teaching_rating" value="3" id="teaching3">
+                <label for="teaching3">★</label>
+                <input type="radio" name="teaching_rating" value="2" id="teaching2">
+                <label for="teaching2">★</label>
+                <input type="radio" name="teaching_rating" value="1" id="teaching1">
+                <label for="teaching1">★</label>
+            </div>
+        </div>
+
+        <div class="rating-section">
+            <div class="rating-question">Infrastructure and Facilities</div>
+            <div class="star-rating">
+                <input type="radio" name="infrastructure_rating" value="5" id="infra5" required>
+                <label for="infra5">★</label>
+                <input type="radio" name="infrastructure_rating" value="4" id="infra4">
+                <label for="infra4">★</label>
+                <input type="radio" name="infrastructure_rating" value="3" id="infra3">
+                <label for="infra3">★</label>
+                <input type="radio" name="infrastructure_rating" value="2" id="infra2">
+                <label for="infra2">★</label>
+                <input type="radio" name="infrastructure_rating" value="1" id="infra1">
+                <label for="infra1">★</label>
+            </div>
+        </div>
+
+        <div class="rating-section">
+            <div class="rating-question">Administrative Support</div>
+            <div class="star-rating">
+                <input type="radio" name="support_rating" value="5" id="support5" required>
+                <label for="support5">★</label>
+                <input type="radio" name="support_rating" value="4" id="support4">
+                <label for="support4">★</label>
+                <input type="radio" name="support_rating" value="3" id="support3">
+                <label for="support3">★</label>
+                <input type="radio" name="support_rating" value="2" id="support2">
+                <label for="support2">★</label>
+                <input type="radio" name="support_rating" value="1" id="support1">
+                <label for="support1">★</label>
+            </div>
+        </div>
+
+        <!-- Feedback Text -->
+        <div class="form-group">
+            <label for="suggestions" class="form-label">Suggestions for Improvement</label>
+            <textarea name="suggestions" id="suggestions" class="form-control" 
+                      placeholder="Please share your suggestions, comments, or areas where you think we can improve..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="best_practices" class="form-label">What do you like most about our institution?</label>
+            <textarea name="best_practices" id="best_practices" class="form-control" 
+                      placeholder="Tell us about the practices or aspects you appreciate most..."></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn" id="submitBtn">
+            <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+        </button>
+    </form>
+</div>
+{% endif %}
+
+<!-- Feedback Statistics -->
+{% if feedback_stats %}
+<div class="feedback-stats">
+    <h2>Feedback Summary</h2>
+    <p class="text-muted">Based on {{ feedback_stats.total_responses }} responses received</p>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ feedback_stats.average_overall_rating|floatformat:1 }}/5</div>
+            <div class="stat-label">Average Overall Rating</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ feedback_stats.total_responses }}</div>
+            <div class="stat-label">Total Responses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ feedback_stats.student_responses }}</div>
+            <div class="stat-label">Student Responses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ feedback_stats.faculty_responses }}</div>
+            <div class="stat-label">Faculty Responses</div>
+        </div>
+    </div>
+    
+    {% if feedback_stats.rating_distribution %}
+    <div class="rating-breakdown">
+        <h3>Rating Distribution</h3>
+        {% for rating, count in feedback_stats.rating_distribution %}
+        <div class="rating-item">
+            <div class="rating-label">{{ rating }} Star{{ rating|pluralize }}</div>
+            <div class="rating-bar">
+                <div class="rating-fill" style="width: {{ count|mul:100|div:feedback_stats.total_responses }}%"></div>
+            </div>
+            <div class="rating-count">{{ count }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('feedbackForm');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Form validation
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Clear previous error states
+        document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+        document.querySelectorAll('.error-message').forEach(el => el.remove());
+        
+        // Validate required fields
+        const requiredFields = ['stakeholder_type', 'name', 'email', 'overall_rating', 'teaching_rating', 'infrastructure_rating', 'support_rating'];
+        
+        requiredFields.forEach(field => {
+            const elements = document.getElementsByName(field);
+            let fieldValid = false;
+            
+            if (elements.length === 1) {
+                // Single input field
+                if (elements[0].value.trim()) {
+                    fieldValid = true;
+                }
+            } else {
+                // Radio buttons
+                for (let element of elements) {
+                    if (element.checked) {
+                        fieldValid = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (!fieldValid) {
+                isValid = false;
+                // Add error styling and message
+                if (elements.length === 1) {
+                    elements[0].classList.add('error');
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'error-message';
+                    errorMsg.textContent = 'This field is required.';
+                    elements[0].parentNode.appendChild(errorMsg);
+                }
+            }
+        });
+        
+        // Email validation
+        const email = document.getElementById('email');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email.value && !emailRegex.test(email.value)) {
+            isValid = false;
+            email.classList.add('error');
+            const errorMsg = document.createElement('div');
+            errorMsg.className = 'error-message';
+            errorMsg.textContent = 'Please enter a valid email address.';
+            email.parentNode.appendChild(errorMsg);
+        }
+        
+        if (!isValid) {
+            e.preventDefault();
+            // Scroll to first error
+            const firstError = document.querySelector('.error');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+    });
+    
+    // Real-time validation
+    document.getElementById('email').addEventListener('blur', function() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const errorMsg = this.parentNode.querySelector('.error-message');
+        
+        if (this.value && !emailRegex.test(this.value)) {
+            this.classList.add('error');
+            if (!errorMsg) {
+                const newErrorMsg = document.createElement('div');
+                newErrorMsg.className = 'error-message';
+                newErrorMsg.textContent = 'Please enter a valid email address.';
+                this.parentNode.appendChild(newErrorMsg);
+            }
+        } else {
+            this.classList.remove('error');
+            if (errorMsg) errorMsg.remove();
+        }
+    });
+    
+    // Star rating interaction feedback
+    document.querySelectorAll('.star-rating input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Optional: Add some visual feedback or update display
+        });
+    });
+});
+</script>
+{% endblock %}

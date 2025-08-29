@@ -1,0 +1,453 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Alumni - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.alumni-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0 2rem;
+}
+
+.alumni-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    height: 100%;
+}
+
+.alumni-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.featured-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.mentor-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.alumni-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin: 0 auto;
+}
+
+.graduation-year {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.social-links {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.social-link {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    transform: translateY(-2px);
+    color: white;
+}
+
+.linkedin { background: #0077b5; }
+.twitter { background: #1da1f2; }
+.email { background: #ea4335; }
+
+.filter-tabs {
+    background: white;
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.filter-tab {
+    background: transparent;
+    border: 2px solid #e9ecef;
+    color: #6c757d;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    margin: 0.25rem;
+}
+
+.filter-tab:hover,
+.filter-tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: white;
+}
+
+.stats-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #667eea;
+    display: block;
+    line-height: 1;
+}
+
+.stat-label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.connect-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.connect-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.mentor-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.mentor-btn:hover {
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+.network-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.search-section {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Alumni</li>
+{% endblock %}
+
+{% block content %}
+<!-- Alumni Hero Section -->
+<div class="alumni-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Alumni Network</h1>
+                <p class="lead mb-4">Connect with our distinguished alumni who are making their mark across various industries worldwide. Join our thriving community of successful professionals.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#alumni-directory" class="btn btn-light btn-lg">
+                        <i class="fas fa-users me-2"></i>Browse Alumni
+                    </a>
+                    <a href="#mentorship" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-handshake me-2"></i>Find Mentors
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-user-graduate fa-8x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3">Find Alumni</h3>
+                <form method="GET" class="d-flex gap-3">
+                    <input type="text" name="q" class="form-control form-control-lg" 
+                           placeholder="Search by name, company, position, or course..." 
+                           value="{{ request.GET.q }}">
+                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-search fa-4x text-primary opacity-75"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alumni Statistics -->
+    <div class="stats-section mb-5">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold mb-3">Alumni Network Stats</h2>
+            <p class="lead text-muted">Our global community continues to grow</p>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <span class="stat-number">{{ total_alumni|default:"2500" }}+</span>
+                    <div class="stat-label">Total Alumni</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <span class="stat-number">{{ countries|default:"25" }}+</span>
+                    <div class="stat-label">Countries</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <span class="stat-number">{{ mentors|default:"150" }}+</span>
+                    <div class="stat-label">Active Mentors</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <span class="stat-number">{{ industries|default:"50" }}+</span>
+                    <div class="stat-label">Industries</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs text-center">
+        <a href="?filter=all" class="filter-tab {% if not request.GET.filter or request.GET.filter == 'all' %}active{% endif %}">
+            <i class="fas fa-list"></i>All Alumni
+        </a>
+        <a href="?filter=featured" class="filter-tab {% if request.GET.filter == 'featured' %}active{% endif %}">
+            <i class="fas fa-star"></i>Featured
+        </a>
+        <a href="?filter=mentors" class="filter-tab {% if request.GET.filter == 'mentors' %}active{% endif %}">
+            <i class="fas fa-handshake"></i>Mentors
+        </a>
+        <a href="?year=2020-2024" class="filter-tab {% if request.GET.year == '2020-2024' %}active{% endif %}">
+            <i class="fas fa-calendar"></i>Recent Grads
+        </a>
+        <a href="?year=2015-2019" class="filter-tab {% if request.GET.year == '2015-2019' %}active{% endif %}">
+            <i class="fas fa-calendar-alt"></i>2015-2019
+        </a>
+        <a href="?year=2010-2014" class="filter-tab {% if request.GET.year == '2010-2014' %}active{% endif %}">
+            <i class="fas fa-history"></i>2010-2014
+        </a>
+    </div>
+
+    <!-- Alumni Directory -->
+    <div id="alumni-directory" class="row g-4 mb-5">
+        {% for alumni in alumni_profiles %}
+        <div class="col-lg-4 col-md-6">
+            <div class="card alumni-card">
+                {% if alumni.is_featured %}
+                <div class="featured-badge">
+                    <i class="fas fa-star me-1"></i>Featured
+                </div>
+                {% endif %}
+                {% if alumni.willing_to_mentor %}
+                <div class="mentor-badge">
+                    <i class="fas fa-handshake me-1"></i>Mentor
+                </div>
+                {% endif %}
+                <div class="card-body p-4 text-center">
+                    {% if alumni.profile_photo %}
+                    <img src="{{ alumni.profile_photo.url }}" alt="{{ alumni.name }}" class="alumni-photo mb-3">
+                    {% else %}
+                    <div class="alumni-photo bg-primary d-flex align-items-center justify-content-center mb-3">
+                        <i class="fas fa-user text-white fa-3x"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <h5 class="card-title mb-2">{{ alumni.name }}</h5>
+                    <div class="graduation-year mb-2">Class of {{ alumni.graduation_year }}</div>
+                    <p class="text-muted mb-1">{{ alumni.course }}</p>
+                    
+                    <div class="mb-3">
+                        <h6 class="text-primary mb-1">{{ alumni.current_position }}</h6>
+                        <p class="text-muted mb-0">{{ alumni.current_company }}{% if alumni.location %} • {{ alumni.location }}{% endif %}</p>
+                    </div>
+                    
+                    {% if alumni.bio %}
+                    <p class="card-text text-muted mb-3">{{ alumni.bio|truncatewords:15 }}</p>
+                    {% endif %}
+                    
+                    <!-- Social Links -->
+                    <div class="social-links mb-3">
+                        {% if alumni.linkedin_profile %}
+                        <a href="{{ alumni.linkedin_profile }}" class="social-link linkedin" target="_blank">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        {% endif %}
+                        {% if alumni.email %}
+                        <a href="mailto:{{ alumni.email }}" class="social-link email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        {% endif %}
+                        {% if alumni.phone %}
+                        <a href="tel:{{ alumni.phone }}" class="social-link twitter">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex gap-2 justify-content-center flex-wrap">
+                        <a href="{{ alumni.get_absolute_url }}" class="connect-btn">
+                            <i class="fas fa-eye"></i>View Profile
+                        </a>
+                        {% if alumni.willing_to_mentor %}
+                        <a href="#" class="connect-btn mentor-btn">
+                            <i class="fas fa-handshake"></i>Connect
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="fas fa-user-graduate fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No Alumni Found</h4>
+            <p class="text-muted">No alumni profiles match your current search or filters. Try adjusting your criteria.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Mentorship Program -->
+    <div id="mentorship" class="network-section">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="mb-3">Alumni Mentorship Program</h3>
+                <p class="mb-4">Connect with experienced alumni who can guide you in your career journey. Our mentors are industry leaders ready to share their knowledge and experience.</p>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-user-tie fa-2x me-3"></i>
+                            <div>
+                                <strong>Career Guidance</strong><br>
+                                <small>Get advice on career paths and industry insights</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-network-wired fa-2x me-3"></i>
+                            <div>
+                                <strong>Professional Network</strong><br>
+                                <small>Expand your connections in your field of interest</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-lightbulb fa-2x me-3"></i>
+                            <div>
+                                <strong>Skill Development</strong><br>
+                                <small>Learn about industry trends and required skills</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-handshake fa-2x me-3"></i>
+                            <div>
+                                <strong>Job Opportunities</strong><br>
+                                <small>Get referrals and insider information about openings</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <a href="{% url 'college_website:contact' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-rocket me-2"></i>Join Program
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center mt-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto">
+                <h3 class="mb-3">Stay Connected with Your Alma Mater</h3>
+                <p class="text-muted mb-4">Join our alumni network and stay updated with college news, events, and networking opportunities.</p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Update Your Profile
+                    </a>
+                    <a href="#" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-calendar me-2"></i>Alumni Events
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

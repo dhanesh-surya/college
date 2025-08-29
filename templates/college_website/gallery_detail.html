@@ -1,0 +1,929 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load gallery_extras %}
+
+{% block title %}{{ gallery.title }} - Gallery - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<!-- PhotoSwipe CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.2/dist/photoswipe.css">
+<!-- Lightbox2 CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+<style>
+.gallery-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 0 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.1);
+    z-index: 1;
+}
+
+.gallery-hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 0;
+    justify-content: center;
+}
+
+/* Responsive grid for smaller thumbnails */
+@media (max-width: 1200px) {
+    .photo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .photo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .photo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 0.25rem;
+    }
+}
+
+.photo-grid.list-view {
+    display: block;
+}
+
+.photo-grid.list-view .photo-item {
+    display: flex;
+    width: 100%;
+    height: 100px;
+    margin-bottom: 1rem;
+    align-items: center;
+    aspect-ratio: unset;
+}
+
+.photo-grid.list-view .photo-item img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.photo-grid.list-view .photo-overlay {
+    position: static;
+    background: none;
+    opacity: 1;
+    padding: 0 0 0 1rem;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    backdrop-filter: none;
+}
+
+.photo-grid.list-view .photo-info {
+    color: #333;
+    text-shadow: none;
+}
+
+.photo-grid.list-view .photo-info h6 {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.photo-grid.list-view .photo-info p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
+.photo-grid.list-view .photo-info small {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.photo-item {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    aspect-ratio: 1/1;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid rgba(0,0,0,0.05);
+    display: block;
+    text-decoration: none;
+}
+
+.photo-item:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15), 0 3px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px) scale(1.05);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: all 0.3s ease;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.1);
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    filter: contrast(1.1) brightness(1.05) saturate(1.1);
+}
+
+.photo-item picture {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.photo-item img.lazy {
+    opacity: 0;
+    filter: blur(2px);
+}
+
+.photo-item img.lazy.loaded {
+    opacity: 1;
+    filter: contrast(1.1) brightness(1.05) saturate(1.1);
+}
+
+.photo-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #6c757d;
+    font-size: 1.2rem;
+    background: rgba(255,255,255,0.9);
+    padding: 0.5rem;
+    border-radius: 50%;
+    backdrop-filter: blur(4px);
+}
+
+.photo-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.85));
+    color: white;
+    padding: 2rem 1rem 1rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(2px);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.photo-item:hover .photo-caption {
+    opacity: 1;
+}
+
+.photo-caption h6 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.photo-caption p {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    padding: 0.5rem;
+    backdrop-filter: blur(1px);
+    border-radius: 8px;
+}
+
+.photo-item:hover .photo-overlay {
+    opacity: 1;
+}
+
+.photo-info {
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+    font-weight: 500;
+}
+
+.photo-info h6 {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.photo-info p {
+    font-size: 0.65rem;
+    margin-bottom: 0.1rem;
+}
+
+.photo-info small {
+    font-size: 0.6rem;
+}
+
+.lightbox-modal .modal-dialog {
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.lightbox-modal .modal-content {
+    background: rgba(0,0,0,0.9);
+    border: none;
+}
+
+.lightbox-modal .modal-body {
+    padding: 0;
+    text-align: center;
+}
+
+.lightbox-modal img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+}
+
+.related-gallery-card {
+    transition: transform 0.3s ease;
+}
+
+.related-gallery-card:hover {
+    transform: translateY(-3px);
+}
+
+.photo-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.photo-nav:hover {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+.photo-nav.prev {
+    left: 1rem;
+}
+
+.photo-nav.next {
+    right: 1rem;
+}
+
+/* Filter Tabs */
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.filter-btn {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    color: #495057;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.filter-btn:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.filter-btn.active {
+    background: #667eea;
+    border-color: #667eea;
+    color: white;
+}
+
+/* Enhanced responsive adjustments */
+@media (max-width: 576px) {
+    .photo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .photo-item {
+        aspect-ratio: 4/3;
+    }
+    
+    .gallery-hero {
+        padding: 1.5rem 0 1rem;
+    }
+    
+    .gallery-hero h1 {
+        font-size: 1.5rem;
+    }
+    
+    .gallery-hero .lead {
+        font-size: 1rem;
+    }
+    
+    .filter-tabs {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .filter-tabs::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .filter-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .photo-caption {
+        padding: 1rem 0.75rem 0.75rem;
+    }
+    
+    .photo-caption h6 {
+        font-size: 0.8rem;
+    }
+    
+    .photo-caption p {
+        font-size: 0.7rem;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .photo-grid {
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .photo-item {
+        width: 250px;
+        height: 167px;
+    }
+    
+    .gallery-hero h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+    .photo-grid {
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .photo-item {
+        width: 250px;
+        height: 167px;
+    }
+}
+
+@media (min-width: 993px) and (max-width: 1199px) {
+    .photo-grid {
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .photo-item {
+        width: 250px;
+        height: 167px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .photo-grid {
+        justify-content: center;
+        gap: 1.25rem;
+    }
+    
+    .photo-item {
+        width: 250px;
+        height: 167px;
+    }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1600px) {
+    .photo-grid {
+        justify-content: center;
+        gap: 1.5rem;
+    }
+    
+    .photo-item {
+        width: 250px;
+        height: 167px;
+    }
+}
+
+/* Enhanced image quality and visibility */
+.photo-item img {
+    will-change: transform, filter;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.photo-item:hover img {
+    transform: scale(1.05);
+    filter: contrast(1.15) brightness(1.1) saturate(1.15);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+
+/* Image quality optimizations for different formats */
+.photo-item img[src$=".jpg"],
+.photo-item img[src$=".jpeg"] {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+}
+
+.photo-item img[src$=".png"],
+.photo-item img[src$=".webp"] {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .photo-item img {
+        image-rendering: -webkit-optimize-contrast;
+        filter: contrast(1.05) brightness(1.02) saturate(1.05);
+    }
+    
+    .photo-item:hover img {
+        filter: contrast(1.1) brightness(1.05) saturate(1.1);
+    }
+}
+
+/* Dark/light image adaptation */
+.photo-item img[data-brightness="dark"] {
+    filter: contrast(1.2) brightness(1.15) saturate(1.1);
+}
+
+.photo-item img[data-brightness="light"] {
+    filter: contrast(1.05) brightness(0.98) saturate(1.15);
+}
+
+/* Loading animation */
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+.photo-loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Enhanced accessibility */
+.photo-item:focus {
+    outline: 3px solid #667eea;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.photo-item:focus-visible {
+    outline: 3px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* Screen reader only text */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Skip link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #000;
+    color: #fff;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 9999;
+    border-radius: 4px;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+/* Print styles */
+@media print {
+    .filter-tabs, .photo-nav, .lightbox-modal {
+        display: none !important;
+    }
+    
+    .photo-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .photo-item {
+        height: auto;
+        break-inside: avoid;
+    }
+    
+    .photo-caption {
+        position: static;
+        background: none;
+        color: black;
+        opacity: 1;
+        padding: 0.5rem 0;
+    }
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:gallery' %}" class="text-white">Gallery</a></li>
+<li class="breadcrumb-item active text-white">{{ gallery.title }}</li>
+{% endblock %}
+
+{% block content %}
+<!-- Skip to main content link -->
+<a href="#photo-gallery" class="skip-link">Skip to gallery</a>
+
+<!-- Enhanced Gallery Hero Section with Bootstrap 5 + Tailwind CSS -->
+<section class="tw-py-16 tw-bg-gradient-to-br tw-from-blue-600 tw-via-purple-600 tw-to-indigo-700 tw-relative tw-overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="tw-absolute tw-inset-0 tw-opacity-10">
+        <div class="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full tw-bg-gradient-to-br tw-from-white tw-to-transparent"></div>
+    </div>
+    
+    <div class="container tw-relative tw-z-10">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="tw-mb-6">
+                    <span class="tw-inline-block tw-bg-white tw-bg-opacity-20 tw-text-white tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-semibold tw-mb-4">
+                        <i class="fas fa-camera tw-mr-2"></i>Photo Gallery
+                    </span>
+                </div>
+                <h1 class="display-4 fw-bold tw-text-white tw-mb-4">{{ gallery.title }}</h1>
+                <p class="lead tw-text-white tw-text-opacity-90 tw-mb-6 tw-max-w-2xl">{{ gallery.description|default:"Explore our photo collection" }}</p>
+                
+                <!-- Enhanced Badges -->
+                <div class="tw-flex tw-items-center tw-gap-3 tw-flex-wrap tw-mb-6">
+                    <span class="tw-inline-flex tw-items-center tw-gap-2 tw-bg-white tw-bg-opacity-20 tw-text-white tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-medium">
+                        <i class="fas fa-tag tw-text-xs"></i>
+                        {{ gallery.get_category_display }}
+                    </span>
+                    <span class="tw-inline-flex tw-items-center tw-gap-2 tw-bg-white tw-bg-opacity-20 tw-text-white tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-medium">
+                        <i class="fas fa-images tw-text-xs"></i>
+                        {{ photos.count }} photo{{ photos.count|pluralize }}
+                    </span>
+                    {% if gallery.is_featured %}
+                    <span class="tw-inline-flex tw-items-center tw-gap-2 tw-bg-yellow-400 tw-text-yellow-900 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-semibold">
+                        <i class="fas fa-star tw-text-xs"></i>
+                        Featured
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-4 tw-text-center lg:tw-text-right tw-mt-6 lg:tw-mt-0">
+                <a href="{% url 'college_website:gallery' %}?category={{ gallery.category }}" 
+                   class="tw-inline-flex tw-items-center tw-gap-3 tw-bg-white tw-text-blue-600 tw-px-6 tw-py-3 tw-rounded-xl tw-font-semibold tw-text-lg tw-transition-all tw-duration-300 hover:tw-bg-gray-100 hover:tw-scale-105 tw-shadow-lg">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Gallery
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container tw-py-8">
+    {% if photos %}
+        <!-- Enhanced Gallery Header -->
+        <div class="row tw-mb-8">
+            <div class="col-md-8">
+                <div class="tw-mb-4">
+                    <h2 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-2">Gallery Photos</h2>
+                    <p class="tw-text-gray-600">Browse through our collection of memorable moments</p>
+                </div>
+            </div>
+            <div class="col-md-4 tw-text-center md:tw-text-right">
+                <div class="tw-flex tw-items-center tw-justify-center md:tw-justify-end tw-gap-3">
+                    <span class="tw-bg-blue-100 tw-text-blue-800 tw-px-3 tw-py-1 tw-rounded-full tw-text-sm tw-font-semibold">
+                        {{ photos.count }} Photos
+                    </span>
+                    <button class="tw-bg-gray-100 tw-text-gray-600 tw-px-3 tw-py-2 tw-rounded-lg tw-transition-colors hover:tw-bg-gray-200" onclick="toggleView()">
+                        <i class="fas fa-th tw-text-sm" id="view-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Enhanced Category Filter with Tailwind CSS -->
+        <div class="tw-flex tw-gap-2 tw-flex-wrap tw-justify-center tw-bg-gray-50 tw-p-4 tw-rounded-2xl tw-mb-8 tw-shadow-sm" role="tablist" aria-label="Gallery category filters">
+            <button class="filter-btn tw-bg-blue-600 tw-text-white tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-semibold tw-transition-all tw-duration-300 hover:tw-bg-blue-700" data-filter="all" role="tab" aria-selected="true" tabindex="0">
+                <i class="fas fa-images tw-mr-2 tw-text-xs"></i>All Photos
+            </button>
+            <button class="filter-btn tw-bg-white tw-text-gray-600 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-medium tw-border tw-border-gray-200 tw-transition-all tw-duration-300 hover:tw-bg-gray-100 hover:tw-border-gray-300" data-filter="events" role="tab" aria-selected="false" tabindex="-1">
+                <i class="fas fa-calendar tw-mr-2 tw-text-xs"></i>Events
+            </button>
+            <button class="filter-btn tw-bg-white tw-text-gray-600 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-medium tw-border tw-border-gray-200 tw-transition-all tw-duration-300 hover:tw-bg-gray-100 hover:tw-border-gray-300" data-filter="activities" role="tab" aria-selected="false" tabindex="-1">
+                <i class="fas fa-running tw-mr-2 tw-text-xs"></i>Activities
+            </button>
+            <button class="filter-btn tw-bg-white tw-text-gray-600 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-medium tw-border tw-border-gray-200 tw-transition-all tw-duration-300 hover:tw-bg-gray-100 hover:tw-border-gray-300" data-filter="campus" role="tab" aria-selected="false" tabindex="-1">
+                <i class="fas fa-university tw-mr-2 tw-text-xs"></i>Campus Life
+            </button>
+        </div>
+
+        <!-- Enhanced Photo Grid with Tailwind CSS -->
+        <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-4 xl:tw-grid-cols-5 tw-gap-4" id="photo-gallery">
+            {% for photo in photos %}
+            <div class="photo-item tw-group tw-relative tw-bg-white tw-rounded-2xl tw-overflow-hidden tw-shadow-md tw-border tw-border-gray-100 tw-transition-all tw-duration-300 hover:tw-shadow-xl hover:tw-scale-105" data-category="{{ photo.category|default:'general' }}">
+                <a href="{{ photo.image.url }}" 
+                   data-lightbox="gallery-{{ gallery.slug }}" 
+                   data-title="{{ photo.title|default:'Untitled' }}{% if photo.caption %} - {{ photo.caption }}{% endif %}{% if photo.photographer %} (Photo by: {{ photo.photographer }}){% endif %}"
+                   aria-label="{{ photo.title|default:'Gallery Photo' }} - {{ gallery.title }}"
+                   class="tw-block tw-relative tw-aspect-square tw-overflow-hidden">
+                    <img src="{{ photo.image.url }}" 
+                         alt="{{ photo.title|default:'Gallery Photo' }} - {{ gallery.title }}" 
+                         class="tw-w-full tw-h-full tw-object-cover tw-transition-transform tw-duration-300 group-hover:tw-scale-110"
+                         loading="lazy">
+                    
+                    <!-- Enhanced Overlay -->
+                    <div class="tw-absolute tw-inset-0 tw-bg-gradient-to-t tw-from-black tw-via-transparent tw-to-transparent tw-opacity-0 group-hover:tw-opacity-100 tw-transition-opacity tw-duration-300">
+                        <div class="tw-absolute tw-bottom-0 tw-left-0 tw-right-0 tw-p-3">
+                            <div class="tw-text-white">
+                                <h6 class="tw-text-sm tw-font-semibold tw-mb-1 tw-line-clamp-1">{{ photo.title|default:'Untitled' }}</h6>
+                                {% if photo.caption %}
+                                <p class="tw-text-xs tw-text-gray-200 tw-mb-1 tw-line-clamp-2">{{ photo.caption }}</p>
+                                {% endif %}
+                                <div class="tw-flex tw-items-center tw-justify-between tw-text-xs tw-text-gray-300">
+                                    {% if photo.photographer %}
+                                    <span class="tw-flex tw-items-center tw-gap-1">
+                                        <i class="fas fa-camera tw-text-xs"></i>
+                                        {{ photo.photographer }}
+                                    </span>
+                                    {% endif %}
+                                    {% if photo.date_taken %}
+                                    <span class="tw-flex tw-items-center tw-gap-1">
+                                        <i class="fas fa-calendar tw-text-xs"></i>
+                                        {{ photo.date_taken|date:"M d, Y" }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- View Icon -->
+                    <div class="tw-absolute tw-top-3 tw-right-3 tw-w-8 tw-h-8 tw-bg-white tw-bg-opacity-20 tw-backdrop-blur-sm tw-rounded-full tw-flex tw-items-center tw-justify-center tw-opacity-0 group-hover:tw-opacity-100 tw-transition-opacity tw-duration-300">
+                        <i class="fas fa-expand tw-text-white tw-text-xs"></i>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Enhanced Empty State -->
+        <div class="tw-text-center tw-py-20">
+            <div class="tw-w-24 tw-h-24 tw-bg-gray-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-6">
+                <i class="fas fa-images tw-text-4xl tw-text-gray-400"></i>
+            </div>
+            <h4 class="tw-text-xl tw-font-semibold tw-text-gray-600 tw-mb-3">No photos in this gallery yet</h4>
+            <p class="tw-text-gray-500 tw-max-w-md tw-mx-auto tw-mb-6">Photos will appear here once they are added to this gallery.</p>
+            <a href="{% url 'college_website:gallery' %}" class="tw-inline-flex tw-items-center tw-gap-2 tw-bg-blue-600 tw-text-white tw-px-6 tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors hover:tw-bg-blue-700">
+                <i class="fas fa-arrow-left tw-text-sm"></i>
+                Browse Other Galleries
+            </a>
+        </div>
+    {% endif %}
+
+    {% if related_galleries %}
+    <!-- Enhanced Related Galleries Section -->
+    <section class="tw-mt-16 tw-pt-8 tw-border-t tw-border-gray-200">
+        <div class="tw-text-center tw-mb-8">
+            <h3 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-2">More from {{ gallery.get_category_display }}</h3>
+            <p class="tw-text-gray-600">Explore other galleries in this category</p>
+        </div>
+        
+        <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 xl:tw-grid-cols-4 tw-gap-6">
+            {% for related_gallery in related_galleries %}
+            <div class="tw-group tw-bg-white tw-rounded-2xl tw-shadow-md tw-border tw-border-gray-100 tw-overflow-hidden tw-transition-all tw-duration-300 hover:tw-shadow-xl hover:tw-scale-105">
+                <div class="tw-relative tw-aspect-video tw-overflow-hidden">
+                    {% if related_gallery.cover_image %}
+                    <img src="{{ related_gallery.cover_image.url }}" 
+                         alt="{{ related_gallery.title }}" 
+                         class="tw-w-full tw-h-full tw-object-cover tw-transition-transform tw-duration-300 group-hover:tw-scale-110">
+                    {% elif related_gallery.photos.first %}
+                    <img src="{{ related_gallery.photos.first.image.url }}" 
+                         alt="{{ related_gallery.title }}" 
+                         class="tw-w-full tw-h-full tw-object-cover tw-transition-transform tw-duration-300 group-hover:tw-scale-110">
+                    {% else %}
+                    <div class="tw-w-full tw-h-full tw-bg-gradient-to-br tw-from-blue-500 tw-to-purple-600 tw-flex tw-items-center tw-justify-center">
+                        <i class="fas fa-images tw-text-4xl tw-text-white tw-opacity-50"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Photo Count Badge -->
+                    <div class="tw-absolute tw-top-3 tw-left-3">
+                        <span class="tw-bg-black tw-bg-opacity-60 tw-text-white tw-px-2 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium tw-backdrop-blur-sm">
+                            <i class="fas fa-images tw-mr-1 tw-text-xs"></i>
+                            {{ related_gallery.photos.count }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="tw-p-4">
+                    <h6 class="tw-font-semibold tw-text-gray-800 tw-mb-2 tw-line-clamp-2">{{ related_gallery.title }}</h6>
+                    <p class="tw-text-sm tw-text-gray-500 tw-mb-3">
+                        {{ related_gallery.photos.count }} photo{{ related_gallery.photos.count|pluralize }}
+                    </p>
+                    <a href="{% url 'college_website:gallery_detail' related_gallery.slug %}" 
+                       class="tw-inline-flex tw-items-center tw-gap-2 tw-bg-blue-600 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors hover:tw-bg-blue-700 tw-w-full tw-justify-center">
+                        <i class="fas fa-eye tw-text-xs"></i>
+                        View Gallery
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+
+<!-- Lightbox2 JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configure Lightbox2
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true,
+        'albumLabel': "Image %1 of %2",
+        'fadeDuration': 300,
+        'imageFadeDuration': 300,
+        'maxWidth': '90%',
+        'maxHeight': '90%',
+        'showImageNumberLabel': true,
+        'disableScrolling': true
+    });
+
+    // Enhanced image loading and visibility
+    const images = document.querySelectorAll('.photo-grid img');
+    images.forEach(img => {
+        img.addEventListener('load', function() {
+            this.style.opacity = '1';
+            this.style.filter = 'none';
+        });
+        
+        img.addEventListener('error', function() {
+            this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="200"%3E%3Crect width="100%25" height="100%25" fill="%23f8f9fa"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%236c757d"%3EImage not found%3C/text%3E%3C/svg%3E';
+        });
+    });
+    
+    // Enhanced view toggle functionality with Tailwind CSS
+    window.toggleView = function() {
+        const grid = document.getElementById('photo-gallery');
+        const icon = document.getElementById('view-icon');
+        
+        if (grid.classList.contains('tw-grid')) {
+            // Switch to list view
+            grid.classList.remove('tw-grid', 'tw-grid-cols-1', 'sm:tw-grid-cols-2', 'md:tw-grid-cols-3', 'lg:tw-grid-cols-4', 'xl:tw-grid-cols-5');
+            grid.classList.add('tw-space-y-4');
+            
+            // Update photo items for list view
+            photoItems.forEach(item => {
+                item.classList.remove('tw-aspect-square');
+                item.classList.add('tw-flex', 'tw-h-32');
+                
+                const link = item.querySelector('a');
+                if (link) {
+                    link.classList.remove('tw-aspect-square');
+                    link.classList.add('tw-w-48', 'tw-flex-shrink-0');
+                }
+            });
+            
+            icon.className = 'fas fa-th tw-text-sm';
+        } else {
+            // Switch to grid view
+            grid.classList.add('tw-grid', 'tw-grid-cols-1', 'sm:tw-grid-cols-2', 'md:tw-grid-cols-3', 'lg:tw-grid-cols-4', 'xl:tw-grid-cols-5');
+            grid.classList.remove('tw-space-y-4');
+            
+            // Update photo items for grid view
+            photoItems.forEach(item => {
+                item.classList.add('tw-aspect-square');
+                item.classList.remove('tw-flex', 'tw-h-32');
+                
+                const link = item.querySelector('a');
+                if (link) {
+                    link.classList.add('tw-aspect-square');
+                    link.classList.remove('tw-w-48', 'tw-flex-shrink-0');
+                }
+            });
+            
+            icon.className = 'fas fa-list tw-text-sm';
+        }
+    };
+
+    // Enhanced category filtering with Tailwind CSS classes
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const photoItems = document.querySelectorAll('.photo-item');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            
+            // Update active button with Tailwind classes
+            filterBtns.forEach(b => {
+                b.classList.remove('tw-bg-blue-600', 'tw-text-white');
+                b.classList.add('tw-bg-white', 'tw-text-gray-600', 'tw-border', 'tw-border-gray-200');
+            });
+            this.classList.remove('tw-bg-white', 'tw-text-gray-600', 'tw-border', 'tw-border-gray-200');
+            this.classList.add('tw-bg-blue-600', 'tw-text-white');
+            
+            // Filter photos with smooth animation
+            photoItems.forEach((item) => {
+                const category = item.dataset.category || 'general';
+                
+                if (filter === 'all' || category === filter) {
+                    item.style.display = 'block';
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'scale(1)';
+                    }, 50);
+                } else {
+                    item.style.opacity = '0';
+                    item.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 300);
+                }
+            });
+        });
+    });
+
+    // Enhanced responsive layout with Tailwind CSS
+    function adjustLayout() {
+        const grid = document.getElementById('photo-gallery');
+        // Layout is now handled by Tailwind CSS responsive classes
+        // No additional JavaScript needed for responsive behavior
+    }
+
+    // Initialize layout
+    adjustLayout();
+    window.addEventListener('resize', adjustLayout);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,642 @@
+{% load static %}
+
+<!-- Image Slider/Carousel Section -->
+{% if slider_images %}
+<section id="hero-slider" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+    <!-- Carousel Indicators -->
+    <div class="carousel-indicators">
+        {% for slide in slider_images %}
+        <button 
+            type="button" 
+            data-bs-target="#hero-slider" 
+            data-bs-slide-to="{{ forloop.counter0 }}" 
+            {% if forloop.first %}class="active" aria-current="true"{% endif %}
+            aria-label="Slide {{ forloop.counter }}"
+        ></button>
+        {% endfor %}
+    </div>
+
+    <!-- Carousel Inner -->
+    <div class="carousel-inner">
+        {% for slide in slider_images %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <!-- Lazy Loading Image -->
+            {% if slide.image %}
+            <img 
+                {% if forloop.first %}
+                src="{{ slide.image.url }}" 
+                {% else %}
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 800'%3E%3C/svg%3E"
+                data-src="{{ slide.image.url }}" 
+                class="lazy-load"
+                {% endif %}
+                class="d-block w-100 carousel-image" 
+                alt="{{ slide.alt_text }}"
+                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+            >
+            {% else %}
+            <!-- Placeholder for slides without images -->
+            <div class="d-block w-100 carousel-image carousel-placeholder d-flex align-items-center justify-content-center">
+                <div class="text-center text-white">
+                    <i class="fas fa-image fa-4x mb-3 opacity-50"></i>
+                    <h3>{{ slide.title }}</h3>
+                    <p class="opacity-75">Please upload an image for this slide</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Caption Overlay -->
+            {% if slide.title or slide.caption %}
+            <div class="carousel-caption d-none d-md-block">
+                <div class="carousel-caption-content">
+                    {% if slide.title %}
+                    <h2 class="carousel-title" data-aos="fade-up" data-aos-delay="200">
+                        {{ slide.title }}
+                    </h2>
+                    {% endif %}
+                    
+                    {% if slide.caption %}
+                    <p class="carousel-description" data-aos="fade-up" data-aos-delay="400">
+                        {{ slide.caption }}
+                    </p>
+                    {% endif %}
+                    
+                    {% if slide.button_text and slide.button_url %}
+                    <div class="carousel-button-container" data-aos="fade-up" data-aos-delay="600">
+                        <a href="{{ slide.button_url }}" class="btn btn-primary carousel-btn">
+                            {{ slide.button_text }}
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Mobile Caption (Visible on small screens) -->
+            {% if slide.title or slide.caption %}
+            <div class="carousel-caption-mobile d-block d-md-none">
+                <div class="carousel-caption-content-mobile">
+                    {% if slide.title %}
+                    <h3 class="carousel-title-mobile">
+                        {{ slide.title }}
+                    </h3>
+                    {% endif %}
+                    
+                    {% if slide.caption %}
+                    <p class="carousel-description-mobile">
+                        {{ slide.caption|truncatewords:15 }}
+                    </p>
+                    {% endif %}
+                    
+                    {% if slide.button_text and slide.button_url %}
+                    <div class="carousel-button-container-mobile">
+                        <a href="{{ slide.button_url }}" class="btn btn-sm btn-primary carousel-btn-mobile">
+                            {{ slide.button_text }}
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Loading Overlay -->
+            {% if not forloop.first %}
+            <div class="slide-loading-overlay">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Carousel Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#hero-slider" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#hero-slider" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+
+    <!-- Pause/Play Control -->
+    <div class="carousel-controls-overlay">
+        <button id="carousel-pause-play" class="btn btn-outline-light btn-sm" type="button" title="Pause/Play">
+            <i class="fas fa-pause"></i>
+        </button>
+    </div>
+</section>
+
+<!-- Slider Styles -->
+<style>
+/* Hero Carousel Styles */
+.hero-carousel {
+    position: relative;
+    height: 50vh;
+    min-height: 300px;
+    max-height: 500px;
+    overflow: hidden;
+}
+
+.carousel-image {
+    height: 50vh;
+    min-height: 300px;
+    max-height: 500px;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+}
+
+/* Caption Styling */
+.carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 4rem 2rem 2rem 2rem;
+    text-align: left;
+}
+
+.carousel-caption-content {
+    max-width: 600px;
+    margin-left: 2rem;
+}
+
+.carousel-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: 1.2;
+}
+
+.carousel-description {
+    font-size: 1.25rem;
+    color: #f8f9fa;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-btn {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+.carousel-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+/* Mobile Caption Styling */
+.carousel-caption-mobile {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+    padding: 2rem 1rem 1rem 1rem;
+    text-align: center;
+}
+
+.carousel-title-mobile {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-description-mobile {
+    font-size: 0.95rem;
+    color: #f8f9fa;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-btn-mobile {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    border-radius: 20px;
+}
+
+/* Custom Indicators */
+.carousel-indicators {
+    bottom: 20px;
+    margin-bottom: 0;
+}
+
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background-color: transparent;
+    margin: 0 6px;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicators button.active {
+    background-color: #007bff;
+    border-color: #007bff;
+    transform: scale(1.2);
+}
+
+/* Custom Controls */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.carousel-control-prev {
+    left: 20px;
+}
+
+.carousel-control-next {
+    right: 20px;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background: rgba(0, 0, 0, 0.6);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Pause/Play Control */
+.carousel-controls-overlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+#carousel-pause-play {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Loading States */
+.slide-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(248, 249, 250, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-item.loaded .slide-loading-overlay {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-carousel {
+        height: 50vh;
+        min-height: 300px;
+    }
+    
+    .carousel-image {
+        height: 50vh;
+        min-height: 300px;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .carousel-control-prev {
+        left: 10px;
+    }
+    
+    .carousel-control-next {
+        right: 10px;
+    }
+    
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-carousel {
+        height: 40vh;
+        min-height: 250px;
+    }
+    
+    .carousel-image {
+        height: 40vh;
+        min-height: 250px;
+    }
+    
+    .carousel-indicators button {
+        width: 8px;
+        height: 8px;
+        margin: 0 4px;
+    }
+}
+
+/* Animation Classes */
+.carousel-item.active .carousel-caption-content,
+.carousel-item.active .carousel-caption-content-mobile {
+    animation: slideUpFade 0.8s ease-out;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Touch/Swipe Enhancement */
+.hero-carousel {
+    touch-action: pan-y;
+}
+
+/* Accessibility Improvements */
+.carousel-item img {
+    transition: transform 0.6s ease-in-out;
+}
+
+/* Loading placeholder */
+.lazy-load {
+    transition: opacity 0.3s;
+}
+
+.lazy-load[data-src] {
+    opacity: 0.5;
+}
+
+.lazy-load.loaded {
+    opacity: 1;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .carousel-caption {
+        background: rgba(0, 0, 0, 0.9);
+    }
+    
+    .carousel-indicators button {
+        border-color: #ffffff;
+    }
+}
+
+/* Carousel placeholder styles */
+.carousel-placeholder {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 400px;
+}
+
+.carousel-placeholder h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.carousel-placeholder p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.carousel-placeholder .fas {
+    opacity: 0.3;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .carousel-item {
+        transition: none;
+    }
+    
+    .carousel-item.active .carousel-caption-content,
+    .carousel-item.active .carousel-caption-content-mobile {
+        animation: none;
+    }
+}
+</style>
+
+<!-- Slider JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.getElementById('hero-slider');
+    const pausePlayBtn = document.getElementById('carousel-pause-play');
+    
+    if (carousel && pausePlayBtn) {
+        const bsCarousel = new bootstrap.Carousel(carousel, {
+            interval: 5000,
+            wrap: true,
+            touch: true
+        });
+        
+        let isPlaying = true;
+        
+        // Pause/Play functionality
+        pausePlayBtn.addEventListener('click', function() {
+            if (isPlaying) {
+                bsCarousel.pause();
+                pausePlayBtn.innerHTML = '<i class="fas fa-play"></i>';
+                pausePlayBtn.setAttribute('title', 'Play');
+                isPlaying = false;
+            } else {
+                bsCarousel.cycle();
+                pausePlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                pausePlayBtn.setAttribute('title', 'Pause');
+                isPlaying = true;
+            }
+        });
+        
+        // Lazy loading implementation
+        const lazyImages = carousel.querySelectorAll('.lazy-load');
+        
+        function loadImage(img) {
+            const src = img.getAttribute('data-src');
+            if (src) {
+                img.src = src;
+                img.removeAttribute('data-src');
+                img.classList.add('loaded');
+                
+                // Remove loading overlay when image loads
+                img.addEventListener('load', function() {
+                    const loadingOverlay = img.parentElement.querySelector('.slide-loading-overlay');
+                    if (loadingOverlay) {
+                        loadingOverlay.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingOverlay.remove();
+                        }, 300);
+                    }
+                    img.parentElement.classList.add('loaded');
+                });
+            }
+        }
+        
+        // Load images as carousel slides change
+        carousel.addEventListener('slide.bs.carousel', function(event) {
+            const activeSlide = carousel.querySelector('.carousel-item.active');
+            const nextSlide = event.relatedTarget;
+            
+            // Load next slide image
+            const nextImg = nextSlide.querySelector('.lazy-load');
+            if (nextImg) {
+                loadImage(nextImg);
+            }
+            
+            // Preload next slide after current
+            const nextIndex = event.to + 1;
+            const slides = carousel.querySelectorAll('.carousel-item');
+            const nextNextSlide = slides[nextIndex % slides.length];
+            if (nextNextSlide) {
+                const nextNextImg = nextNextSlide.querySelector('.lazy-load');
+                if (nextNextImg) {
+                    setTimeout(() => loadImage(nextNextImg), 500);
+                }
+            }
+        });
+        
+        // Load first few images immediately
+        lazyImages.forEach((img, index) => {
+            if (index < 2) {
+                loadImage(img);
+            }
+        });
+        
+        // Pause on hover (desktop only)
+        if (window.innerWidth > 768) {
+            carousel.addEventListener('mouseenter', function() {
+                if (isPlaying) bsCarousel.pause();
+            });
+            
+            carousel.addEventListener('mouseleave', function() {
+                if (isPlaying) bsCarousel.cycle();
+            });
+        }
+        
+        // Touch/Swipe support enhancement
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        carousel.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        });
+        
+        carousel.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    bsCarousel.next();
+                } else {
+                    bsCarousel.prev();
+                }
+            }
+        }
+        
+        // Keyboard navigation
+        carousel.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'ArrowLeft':
+                    event.preventDefault();
+                    bsCarousel.prev();
+                    break;
+                case 'ArrowRight':
+                    event.preventDefault();
+                    bsCarousel.next();
+                    break;
+                case ' ':
+                    event.preventDefault();
+                    pausePlayBtn.click();
+                    break;
+            }
+        });
+        
+        // Set initial focus for keyboard navigation
+        carousel.setAttribute('tabindex', '0');
+    }
+});
+
+// Intersection Observer for performance optimization
+if ('IntersectionObserver' in window) {
+    const sliderObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const carousel = entry.target;
+                // Start carousel when it becomes visible
+                const bsCarousel = bootstrap.Carousel.getInstance(carousel);
+                if (bsCarousel) {
+                    bsCarousel.cycle();
+                }
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+    
+    const sliderElement = document.getElementById('hero-slider');
+    if (sliderElement) {
+        sliderObserver.observe(sliderElement);
+    }
+}
+</script>
+
+{% else %}
+<!-- No slides available message -->
+<section class="no-slider-message bg-light py-5">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <i class="fas fa-images text-muted mb-3" style="font-size: 3rem;"></i>
+                <h3 class="text-muted">No Slider Images Available</h3>
+                <p class="text-muted">Please add some slider images from the admin panel to display the carousel.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}

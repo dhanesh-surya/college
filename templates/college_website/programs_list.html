@@ -1,0 +1,498 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Academic Programs - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Programs</li>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Modern Gradient -->
+<section class="position-relative overflow-hidden tw-bg-gradient-to-br tw-from-indigo-900 tw-via-purple-800 tw-to-pink-700 tw-py-20 tw-px-4">
+    <div class="tw-absolute tw-inset-0 tw-bg-black tw-opacity-20"></div>
+    <div class="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full">
+        <div class="tw-absolute tw-top-10 tw-left-10 tw-w-32 tw-h-32 tw-bg-white tw-rounded-full tw-opacity-10 tw-animate-pulse"></div>
+        <div class="tw-absolute tw-top-32 tw-right-20 tw-w-20 tw-h-20 tw-bg-yellow-300 tw-rounded-full tw-opacity-20 tw-animate-bounce"></div>
+        <div class="tw-absolute tw-bottom-20 tw-left-1/4 tw-w-16 tw-h-16 tw-bg-blue-400 tw-rounded-full tw-opacity-15"></div>
+    </div>
+    
+    <div class="container position-relative tw-z-10">
+        <div class="text-center text-white">
+            <div class="tw-animate-fade-in-up">
+                <h1 class="display-3 fw-bold mb-4 tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-white tw-to-blue-200">
+                    Academic Programs
+                </h1>
+                <p class="lead fs-4 mb-5 tw-text-blue-100 tw-max-w-3xl tw-mx-auto">
+                    Discover exceptional educational opportunities designed to transform your passion into expertise and launch your career
+                </p>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row g-4 mt-5">
+                <div class="col-md-4">
+                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-4 p-4 h-100">
+                        <i class="fas fa-graduation-cap fa-3x text-warning mb-3"></i>
+                        <h3 class="h4 fw-bold text-white">15+</h3>
+                        <p class="text-light mb-0">Degree Programs</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-4 p-4 h-100">
+                        <i class="fas fa-users fa-3x text-success mb-3"></i>
+                        <h3 class="h4 fw-bold text-white">5000+</h3>
+                        <p class="text-light mb-0">Active Students</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-4 p-4 h-100">
+                        <i class="fas fa-award fa-3x text-info mb-3"></i>
+                        <h3 class="h4 fw-bold text-white">95%</h3>
+                        <p class="text-light mb-0">Placement Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container py-5">
+    <!-- Enhanced Filter Section -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-lg tw-bg-gradient-to-r tw-from-white tw-to-gray-50">
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <h5 class="card-title tw-text-gray-800 fw-bold mb-2">
+                            <i class="fas fa-filter text-primary me-2"></i>Filter by Discipline
+                        </h5>
+                        <p class="text-muted small mb-0">Choose your area of interest</p>
+                    </div>
+                    
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="{% url 'college_website:programs_list' %}" 
+                           class="btn {% if not selected_discipline %}btn-primary shadow-lg tw-scale-105{% else %}btn-outline-primary{% endif %} btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-xl">
+                            <i class="fas fa-th-large me-2"></i>All Programs
+                            {% if not selected_discipline %}
+                            <span class="badge bg-light text-primary ms-2">{{ programs.count }}</span>
+                            {% endif %}
+                        </a>
+                        
+                        {% for discipline_code, discipline_name in disciplines %}
+                        <a href="{% url 'college_website:programs_list' %}?discipline={{ discipline_code }}" 
+                           class="btn {% if selected_discipline == discipline_code %}btn-primary shadow-lg tw-scale-105{% else %}btn-outline-primary{% endif %} btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-xl">
+                            {% if discipline_code == 'science' %}
+                                <i class="fas fa-flask me-2 text-success"></i>
+                            {% elif discipline_code == 'arts' %}
+                                <i class="fas fa-palette me-2 text-warning"></i>
+                            {% elif discipline_code == 'commerce' %}
+                                <i class="fas fa-chart-line me-2 text-info"></i>
+                            {% elif discipline_code == 'management' %}
+                                <i class="fas fa-users-cog me-2 text-danger"></i>
+                            {% endif %}
+                            {{ discipline_name }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Programs Grid -->
+    <div class="row g-4">
+        {% for program in programs %}
+        <div class="col-xl-4 col-lg-6 col-md-6">
+            <div class="card h-100 border-0 shadow-lg program-card tw-transition-all tw-duration-500 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
+                <!-- Modern Card Header -->
+                <div class="card-header border-0 position-relative overflow-hidden p-0">
+                    <div class="tw-bg-gradient-to-br 
+                        {% if program.discipline == 'science' %}tw-from-green-500 tw-to-emerald-600
+                        {% elif program.discipline == 'arts' %}tw-from-purple-500 tw-to-pink-600
+                        {% elif program.discipline == 'commerce' %}tw-from-blue-500 tw-to-cyan-600
+                        {% elif program.discipline == 'management' %}tw-from-red-500 tw-to-orange-600
+                        {% else %}tw-from-indigo-500 tw-to-purple-600
+                        {% endif %} text-white p-4">
+                        
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="tw-bg-white tw-bg-opacity-20 tw-backdrop-blur-sm rounded-pill px-3 py-1">
+                                {% if program.discipline == 'science' %}
+                                    <i class="fas fa-flask me-2"></i>Science
+                                {% elif program.discipline == 'arts' %}
+                                    <i class="fas fa-palette me-2"></i>Arts
+                                {% elif program.discipline == 'commerce' %}
+                                    <i class="fas fa-chart-line me-2"></i>Commerce
+                                {% elif program.discipline == 'management' %}
+                                    <i class="fas fa-users-cog me-2"></i>Management
+                                {% else %}
+                                    <i class="fas fa-graduation-cap me-2"></i>{{ program.get_discipline_display }}
+                                {% endif %}
+                            </div>
+                            
+                            {% if program.duration %}
+                            <div class="tw-bg-black tw-bg-opacity-20 rounded-pill px-3 py-1">
+                                <small class="fw-medium">
+                                    <i class="fas fa-clock me-1"></i>{{ program.duration }}
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Decorative Elements -->
+                        <div class="tw-absolute tw-top-2 tw-right-2 tw-w-16 tw-h-16 tw-bg-white tw-bg-opacity-10 tw-rounded-full tw-blur-xl"></div>
+                        <div class="tw-absolute tw-bottom-0 tw-left-0 tw-w-full tw-h-1 tw-bg-white tw-bg-opacity-30"></div>
+                    </div>
+                </div>
+                
+                <!-- Enhanced Card Body -->
+                <div class="card-body p-4 d-flex flex-column">
+                    <div class="flex-grow-1">
+                        <h5 class="card-title fw-bold text-dark mb-3 tw-text-xl">{{ program.name }}</h5>
+                        <p class="card-text text-muted tw-leading-relaxed mb-4">
+                            {{ program.description|striptags|truncatewords:25 }}
+                        </p>
+                    </div>
+                    
+                    <!-- Enhanced Action Buttons -->
+                    <div class="d-flex gap-2 mt-auto">
+                        <a href="{{ program.get_absolute_url }}" 
+                           class="btn btn-primary flex-fill rounded-pill py-2 tw-transition-all tw-duration-300 hover:tw-shadow-lg">
+                            <i class="fas fa-info-circle me-2"></i>Learn More
+                        </a>
+                        {% if program.brochure %}
+                        <a href="{{ program.brochure.url }}" 
+                           class="btn btn-outline-secondary rounded-pill py-2 px-3 tw-transition-all tw-duration-300 hover:tw-shadow-lg" 
+                           target="_blank" 
+                           title="Download Brochure">
+                            <i class="fas fa-download"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Card Footer with Additional Info -->
+                <div class="card-footer bg-light border-0 p-3">
+                    <div class="d-flex justify-content-between align-items-center text-muted small">
+                        <span><i class="fas fa-users me-1"></i>Limited Seats</span>
+                        <span class="text-success fw-medium"><i class="fas fa-certificate me-1"></i>Accredited</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <div class="tw-bg-gray-100 tw-rounded-full tw-w-24 tw-h-24 tw-mx-auto tw-flex tw-items-center tw-justify-center mb-4">
+                    <i class="fas fa-graduation-cap fa-3x text-muted"></i>
+                </div>
+                <h4 class="text-dark fw-bold mb-3">No Programs Found</h4>
+                <p class="text-muted mb-4 tw-max-w-md tw-mx-auto">
+                    We couldn't find any programs matching your selected criteria. Try browsing all programs or contact us for more information.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="{% url 'college_website:programs_list' %}" class="btn btn-primary btn-lg rounded-pill">
+                        <i class="fas fa-arrow-left me-2"></i>View All Programs
+                    </a>
+                    <a href="{% url 'college_website:contact' %}" class="btn btn-outline-primary btn-lg rounded-pill">
+                        <i class="fas fa-phone me-2"></i>Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Enhanced Pagination -->
+    {% if is_paginated %}
+    <div class="d-flex justify-content-center mt-5">
+        <nav aria-label="Programs pagination">
+            <ul class="pagination pagination-lg shadow-sm">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link rounded-pill me-2 tw-transition-all tw-duration-300 hover:tw-scale-110" 
+                       href="?{% if selected_discipline %}discipline={{ selected_discipline }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link rounded-pill mx-1 tw-scale-110 shadow-lg">{{ num }}</span>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link rounded-pill mx-1 tw-transition-all tw-duration-300 hover:tw-scale-110" 
+                       href="?{% if selected_discipline %}discipline={{ selected_discipline }}&{% endif %}page={{ num }}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link rounded-pill ms-2 tw-transition-all tw-duration-300 hover:tw-scale-110" 
+                       href="?{% if selected_discipline %}discipline={{ selected_discipline }}&{% endif %}page={{ page_obj.next_page_number }}">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+
+    <!-- Enhanced Call to Action Section -->
+    <section class="mt-5">
+        <div class="card border-0 shadow-lg overflow-hidden">
+            <div class="tw-bg-gradient-to-br tw-from-blue-600 tw-via-purple-600 tw-to-pink-600 text-white position-relative">
+                <div class="tw-absolute tw-inset-0 tw-bg-black tw-opacity-20"></div>
+                <div class="tw-absolute tw-top-0 tw-right-0 tw-w-64 tw-h-64 tw-bg-white tw-rounded-full tw-opacity-10 tw-transform tw-translate-x-32 tw--translate-y-32"></div>
+                <div class="tw-absolute tw-bottom-0 tw-left-0 tw-w-48 tw-h-48 tw-bg-yellow-400 tw-rounded-full tw-opacity-20 tw-transform tw--translate-x-24 tw-translate-y-24"></div>
+                
+                <div class="card-body text-center p-5 position-relative tw-z-10">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8 mx-auto">
+                            <h3 class="display-6 fw-bold mb-4 tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-white tw-to-blue-200">
+                                Ready to Transform Your Future?
+                            </h3>
+                            <p class="lead mb-5 tw-text-blue-100 tw-max-w-2xl tw-mx-auto">
+                                Join thousands of successful graduates who started their journey with us. 
+                                Take the first step towards your dream career today.
+                            </p>
+                            
+                            <div class="d-flex flex-wrap justify-content-center gap-4">
+                                <a href="{% url 'college_website:contact' %}" 
+                                   class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
+                                    <i class="fas fa-paper-plane me-2 text-primary"></i>
+                                    Apply Now
+                                </a>
+                                <a href="{% url 'college_website:about' %}" 
+                                   class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Learn More About Us
+                                </a>
+                            </div>
+                            
+                            <!-- Trust Indicators -->
+                            <div class="row mt-5 text-center">
+                                <div class="col-md-4">
+                                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-4 p-3">
+                                        <i class="fas fa-shield-alt fa-2x mb-2 text-warning"></i>
+                                        <h6 class="fw-bold">UGC Approved</h6>
+                                        <small class="tw-text-blue-200">Recognized University</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-4 p-3">
+                                        <i class="fas fa-star fa-2x mb-2 text-warning"></i>
+                                        <h6 class="fw-bold">A+ Accredited</h6>
+                                        <small class="tw-text-blue-200">NAAC Certified</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-4 p-3">
+                                        <i class="fas fa-handshake fa-2x mb-2 text-warning"></i>
+                                        <h6 class="fw-bold">Industry Connect</h6>
+                                        <small class="tw-text-blue-200">100+ Partners</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Enhanced Custom Styles -->
+<style>
+/* Program Cards Animation */
+.program-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.program-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.7s;
+    z-index: 1;
+}
+
+.program-card:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Card Hover Effects */
+.card-hover {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 1rem;
+}
+
+.card-hover:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15) !important;
+}
+
+/* Gradient Backgrounds */
+.bg-gradient-modern {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Animation Classes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tw-animate-fade-in-up {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Enhanced Button Styles */
+.btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-width: 2px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .program-card:hover {
+        transform: translateY(-5px) scale(1.01);
+    }
+    
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+    }
+}
+
+/* Loading Animation for Cards */
+.program-card {
+    opacity: 0;
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+.program-card:nth-child(1) { animation-delay: 0.1s; }
+.program-card:nth-child(2) { animation-delay: 0.2s; }
+.program-card:nth-child(3) { animation-delay: 0.3s; }
+.program-card:nth-child(4) { animation-delay: 0.4s; }
+.program-card:nth-child(5) { animation-delay: 0.5s; }
+.program-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced Pagination */
+.pagination .page-link {
+    border: 2px solid transparent;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--bs-primary), #1e40af);
+    border-color: var(--bs-primary);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+/* Scroll Reveal Animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
+
+<!-- Enhanced JavaScript for Interactions -->
+<script>
+// Scroll Reveal Animation
+function revealOnScroll() {
+    const reveals = document.querySelectorAll('.reveal');
+    
+    reveals.forEach((element, index) => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < windowHeight - elementVisible) {
+            element.classList.add('active');
+        }
+    });
+}
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Add reveal class to elements
+    document.querySelectorAll('.program-card, .btn, .card').forEach(el => {
+        el.classList.add('reveal');
+    });
+    
+    // Initial reveal check
+    revealOnScroll();
+});
+
+// Reveal on scroll
+window.addEventListener('scroll', revealOnScroll);
+
+// Enhanced card interactions
+document.querySelectorAll('.program-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.zIndex = '10';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.zIndex = '1';
+    });
+});
+</script>
+{% endblock %}

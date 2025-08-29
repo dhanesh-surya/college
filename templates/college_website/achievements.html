@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Achievements - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Achievements</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">Our Achievements</h1>
+        <p class="lead text-muted">Celebrating excellence in academics, sports, and extracurricular activities</p>
+    </div>
+
+    <!-- Achievement Categories -->
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center achievement-card">
+                <div class="card-body p-4">
+                    <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-trophy fa-2x"></i>
+                    </div>
+                    <h3 class="display-6 fw-bold text-warning">150+</h3>
+                    <h5 class="card-title">Awards Won</h5>
+                    <p class="card-text text-muted">Academic and extracurricular achievements</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center achievement-card">
+                <div class="card-body p-4">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-graduation-cap fa-2x"></i>
+                    </div>
+                    <h3 class="display-6 fw-bold text-success">95%</h3>
+                    <h5 class="card-title">Pass Rate</h5>
+                    <p class="card-text text-muted">Consistent academic excellence</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center achievement-card">
+                <div class="card-body p-4">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-medal fa-2x"></i>
+                    </div>
+                    <h3 class="display-6 fw-bold text-primary">25+</h3>
+                    <h5 class="card-title">Gold Medals</h5>
+                    <p class="card-text text-muted">University toppers and merit holders</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center achievement-card">
+                <div class="card-body p-4">
+                    <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-star fa-2x"></i>
+                    </div>
+                    <h3 class="display-6 fw-bold text-info">A+</h3>
+                    <h5 class="card-title">NAAC Grade</h5>
+                    <p class="card-text text-muted">Quality education recognition</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Achievements -->
+    <section class="mb-5">
+        <h2 class="section-title text-primary mb-4">Recent Achievements (2024)</h2>
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 60px; height: 60px;">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title text-warning">State Level Science Exhibition</h5>
+                                <p class="card-text text-muted">First Prize in Physics Project Competition - Chhattisgarh State Science Fair 2024</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>March 2024
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 60px; height: 60px;">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title text-success">University Topper</h5>
+                                <p class="card-text text-muted">B.Sc. Mathematics student secured 1st position in SNPU University examination</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>June 2024
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 60px; height: 60px;">
+                                <i class="fas fa-running"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title text-primary">Inter-College Sports Championship</h5>
+                                <p class="card-text text-muted">Won overall championship in district level inter-college sports meet</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>February 2024
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 60px; height: 60px;">
+                                <i class="fas fa-theater-masks"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title text-info">Cultural Excellence Award</h5>
+                                <p class="card-text text-muted">Best Cultural Performance at State Youth Festival 2024</p>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>January 2024
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academic Excellence -->
+    <section class="bg-light rounded-3 p-5 mb-5">
+        <h2 class="section-title text-primary mb-4">Academic Excellence</h2>
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                    <h4>University Toppers</h4>
+                    <p class="text-muted">25+ students secured first division in university examinations</p>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-book fa-3x text-success mb-3"></i>
+                    <h4>Research Publications</h4>
+                    <p class="text-muted">Faculty and students published 15+ research papers in reputed journals</p>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-award fa-3x text-warning mb-3"></i>
+                    <h4>Merit Scholarships</h4>
+                    <p class="text-muted">50+ students received merit-based scholarships and awards</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sports Achievements -->
+    <section class="mb-5">
+        <h2 class="section-title text-primary mb-4">Sports Achievements</h2>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-trophy me-2"></i>Cricket Team</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fas fa-medal text-warning me-2"></i>District Championship Winners 2024</li>
+                            <li class="mb-2"><i class="fas fa-medal text-silver me-2"></i>State Level Semi-Finalists 2023</li>
+                            <li class="mb-2"><i class="fas fa-star text-info me-2"></i>Best Sportsmanship Award 2024</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-running me-2"></i>Athletics</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2"><i class="fas fa-medal text-warning me-2"></i>5 Gold Medals in State Meet 2024</li>
+                            <li class="mb-2"><i class="fas fa-medal text-silver me-2"></i>8 Silver Medals in District Meet</li>
+                            <li class="mb-2"><i class="fas fa-star text-info me-2"></i>Best Athletic Team Award</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recognition & Accreditation -->
+    <section class="mb-5">
+        <h2 class="section-title text-primary mb-4">Recognition & Accreditation</h2>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm text-center h-100">
+                    <div class="card-body p-4">
+                        <i class="fas fa-certificate fa-3x text-primary mb-3"></i>
+                        <h5>NAAC Accredited</h5>
+                        <p class="text-muted">Grade A+ certification for quality education</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm text-center h-100">
+                    <div class="card-body p-4">
+                        <i class="fas fa-lightbulb fa-3x text-warning mb-3"></i>
+                        <h5>IIC Recognition</h5>
+                        <p class="text-muted">3-Star rating from Institution's Innovation Council</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm text-center h-100">
+                    <div class="card-body p-4">
+                        <i class="fas fa-globe fa-3x text-success mb-3"></i>
+                        <h5>ISO Certified</h5>
+                        <p class="text-muted">ISO 9001:2015 quality management system</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card border-0 shadow-sm text-center h-100">
+                    <div class="card-body p-4">
+                        <i class="fas fa-handshake fa-3x text-info mb-3"></i>
+                        <h5>Industry Partners</h5>
+                        <p class="text-muted">MoUs with 20+ companies for placements</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3 p-5 text-center">
+        <h3 class="text-primary mb-3">Be Part of Our Success Story</h3>
+        <p class="text-muted mb-4">Join our college and create your own achievement milestones with our support and guidance.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-paper-plane me-2"></i>Apply Now
+            </a>
+            <a href="{% url 'college_website:programs_list' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-graduation-cap me-2"></i>View Programs
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.achievement-card {
+    transition: all 0.3s ease;
+}
+.achievement-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #dbeafe, #e0e7ff);
+}
+.text-silver {
+    color: #c0c0c0;
+}
+</style>
+{% endblock %}
