@@ -2,7 +2,7 @@ import os
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from ckeditor.widgets import CKEditorWidget
+from django_ckeditor_5.widgets import CKEditor5Widget
 from .models import (
     ScrollingNotification, HeaderInfo, NavbarInfo, CollegeInfo, Program, Event, Notice, SocialInitiative, 
     StudentTestimonial, ImportantLink, ContactMessage,
@@ -972,7 +972,7 @@ class ProgramForm(forms.ModelForm):
         model = Program
         fields = '__all__'
         widgets = {
-            'description': CKEditorWidget(),
+            'description': CKEditor5Widget(),
             'brochure': forms.ClearableFileInput(attrs={'accept': '.pdf,.doc,.docx'}),
         }
 
@@ -982,7 +982,7 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = '__all__'
         widgets = {
-            'description': CKEditorWidget(),
+            'description': CKEditor5Widget(),
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
             'banner_image': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
@@ -994,7 +994,7 @@ class NoticeForm(forms.ModelForm):
         model = Notice
         fields = '__all__'
         widgets = {
-            'content': CKEditorWidget(),
+            'content': CKEditor5Widget(),
             'publish_date': forms.DateInput(attrs={'type': 'date'}),
             'attachment': forms.ClearableFileInput(),
         }
@@ -1005,7 +1005,7 @@ class SocialInitiativeForm(forms.ModelForm):
         model = SocialInitiative
         fields = '__all__'
         widgets = {
-            'description': CKEditorWidget(),
+            'description': CKEditor5Widget(),
             'cover_image': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
         }
 
@@ -1121,7 +1121,7 @@ class BlockRichTextForm(forms.ModelForm):
         model = BlockRichText
         fields = '__all__'
         widgets = {
-            'body': CKEditorWidget(),
+            'body': CKEditor5Widget(),
             'ordering': forms.NumberInput(attrs={'min': 0}),
         }
 

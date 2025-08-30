@@ -6,7 +6,7 @@ from django.urls import path, reverse
 from django.shortcuts import render
 from django import forms
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
-from ckeditor.widgets import CKEditorWidget
+from django_ckeditor_5.widgets import CKEditor5Widget
 from .forms import TopUtilityBarForm, CustomLinkForm
 from datetime import datetime, timezone, timedelta
 from .models import (
@@ -2896,7 +2896,7 @@ class IQACInfoForm(forms.ModelForm):
                 'rows': 3,
                 'placeholder': 'Brief description of IQAC'
             }),
-            'overview': CKEditorWidget(),
+            'overview': CKEditor5Widget(),
             'vision': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 3
@@ -2905,7 +2905,7 @@ class IQACInfoForm(forms.ModelForm):
                 'class': 'form-control',
                 'rows': 3
             }),
-            'objectives': CKEditorWidget(),
+            'objectives': CKEditor5Widget(),
             'coordinator_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'IQAC Coordinator Name'
@@ -2994,9 +2994,9 @@ class NAACInfoForm(forms.ModelForm):
                 'class': 'form-control',
                 'type': 'date'
             }),
-            'overview': CKEditorWidget(),
-            'useful_links': CKEditorWidget(),
-            'important_documents': CKEditorWidget(),
+            'overview': CKEditor5Widget(),
+            'useful_links': CKEditor5Widget(),
+            'important_documents': CKEditor5Widget(),
         }
 
 
@@ -3052,7 +3052,7 @@ class NIRFInfoForm(forms.ModelForm):
                 'min': '0',
                 'max': '10'
             }),
-            'overview': CKEditorWidget()
+            'overview': CKEditor5Widget()
         }
 
 
@@ -3085,10 +3085,10 @@ class QualityInitiativeForm(forms.ModelForm):
                 'min': '0',
                 'step': '0.01'
             }),
-            'objectives': CKEditorWidget(),
-            'methodology': CKEditorWidget(),
-            'outcomes': CKEditorWidget(),
-            'challenges': CKEditorWidget()
+            'objectives': CKEditor5Widget(),
+            'methodology': CKEditor5Widget(),
+            'outcomes': CKEditor5Widget(),
+            'challenges': CKEditor5Widget()
         }
 
 
