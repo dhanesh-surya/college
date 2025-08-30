@@ -3,7 +3,7 @@
 from django.db import migrations, models
 import django.db.models.deletion
 import ckeditor.fields
-import ckeditor_uploader.fields
+import django_ckeditor_5.fields
 
 
 class Migration(migrations.Migration):
@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('title', models.CharField(max_length=200)),
-                ('description', ckeditor_uploader.fields.RichTextUploadingField()),
+                ('description', django_ckeditor_5.fields.CKEditor5Field()),
                 ('date', models.DateField()),
                 ('time', models.TimeField(blank=True, null=True)),
                 ('location', models.CharField(default='College Auditorium', max_length=200)),
@@ -128,7 +128,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('title', models.CharField(max_length=200)),
-                ('content', ckeditor_uploader.fields.RichTextUploadingField()),
+                ('content', django_ckeditor_5.fields.CKEditor5Field()),
                 ('publish_date', models.DateField(auto_now_add=True)),
                 ('category', models.CharField(choices=[('exam', 'Exam'), ('admission', 'Admission'), ('policy', 'Policy'), ('general', 'General'), ('university', 'University Notices')], max_length=20)),
                 ('attachment', models.FileField(blank=True, upload_to='notices/')),
@@ -169,7 +169,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=200)),
                 ('discipline', models.CharField(choices=[('arts', 'Arts'), ('science', 'Science'), ('commerce', 'Commerce'), ('management', 'Management')], max_length=20)),
-                ('description', ckeditor_uploader.fields.RichTextUploadingField()),
+                ('description', django_ckeditor_5.fields.CKEditor5Field()),
                 ('duration', models.CharField(blank=True, max_length=50)),
                 ('brochure', models.FileField(blank=True, upload_to='programs/brochures/')),
                 ('slug', models.SlugField(blank=True, unique=True)),
@@ -186,7 +186,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=200)),
-                ('description', ckeditor_uploader.fields.RichTextUploadingField()),
+                ('description', django_ckeditor_5.fields.CKEditor5Field()),
                 ('cover_image', models.ImageField(blank=True, upload_to='social_initiatives/')),
                 ('slug', models.SlugField(blank=True, unique=True)),
                 ('is_active', models.BooleanField(default=True)),
@@ -268,7 +268,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(blank=True, max_length=200)),
                 ('ordering', models.IntegerField(default=0)),
                 ('is_active', models.BooleanField(default=True)),
-                ('body', ckeditor_uploader.fields.RichTextUploadingField()),
+                ('body', django_ckeditor_5.fields.CKEditor5Field()),
                 ('page', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rich_text_blocks', to='college_website.page')),
             ],
             options={
