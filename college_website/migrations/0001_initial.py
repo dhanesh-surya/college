@@ -2,7 +2,6 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import ckeditor.fields
 import django_ckeditor_5.fields
 
 
