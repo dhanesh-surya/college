@@ -3,8 +3,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from ckeditor.fields import RichTextField
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 from django.utils.translation import gettext_lazy as _
 from colorfield.fields import ColorField
 
@@ -702,7 +701,7 @@ class Program(TimeStampedModel):
     
     name = models.CharField(max_length=200)
     discipline = models.CharField(max_length=20, choices=DISCIPLINE_CHOICES)
-    description = RichTextUploadingField()
+    description = CKEditor5Field()
     duration = models.CharField(max_length=50, blank=True)
     brochure = models.FileField(upload_to='programs/brochures/', blank=True)
     slug = models.SlugField(unique=True, blank=True)
@@ -733,7 +732,7 @@ class Event(TimeStampedModel):
     ]
     
     title = models.CharField(max_length=200)
-    description = RichTextUploadingField()
+    description = CKEditor5Field()
     date = models.DateField()
     time = models.TimeField(blank=True, null=True)
     location = models.CharField(max_length=200, default="College Auditorium")
@@ -821,7 +820,7 @@ class Notice(TimeStampedModel):
     ]
     
     title = models.CharField(max_length=200)
-    content = RichTextUploadingField()
+    content = CKEditor5Field()
     publish_date = models.DateField(auto_now_add=True)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     attachment = models.FileField(upload_to='notices/', blank=True)
@@ -846,7 +845,7 @@ class Notice(TimeStampedModel):
 class SocialInitiative(TimeStampedModel):
     """Social initiatives and community programs"""
     name = models.CharField(max_length=200)
-    description = RichTextUploadingField()
+    description = CKEditor5Field()
     cover_image = models.ImageField(upload_to='social_initiatives/', blank=True)
     slug = models.SlugField(unique=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -1097,7 +1096,7 @@ class ContentBlock(TimeStampedModel):
 class BlockRichText(ContentBlock):
     """Rich text content block"""
     page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='rich_text_blocks')
-    body = RichTextUploadingField()
+    body = CKEditor5Field()
     
     def __str__(self):
         return f"{self.page.title} - {self.title or 'Rich Text'}"
@@ -1281,11 +1280,11 @@ class AdmissionInfo(TimeStampedModel):
     slug = models.SlugField(unique=True, blank=True)
     admission_type = models.CharField(max_length=20, choices=ADMISSION_TYPE_CHOICES)
     description = models.TextField()
-    eligibility_criteria = RichTextUploadingField()
-    application_process = RichTextUploadingField()
-    required_documents = RichTextUploadingField()
-    fees_structure = RichTextUploadingField(blank=True)
-    important_dates = RichTextUploadingField(blank=True)
+    eligibility_criteria = CKEditor5Field()
+    application_process = CKEditor5Field()
+    required_documents = CKEditor5Field()
+    fees_structure = CKEditor5Field(blank=True)
+    important_dates = CKEditor5Field(blank=True)
     contact_info = models.TextField(blank=True)
     application_form = models.FileField(upload_to='admissions/forms/', blank=True)
     brochure = models.FileField(upload_to='admissions/brochures/', blank=True)
@@ -1323,7 +1322,7 @@ class ExamResult(TimeStampedModel):
     result_type = models.CharField(max_length=20, choices=RESULT_TYPE_CHOICES)
     exam_date = models.DateField()
     result_date = models.DateField()
-    description = RichTextUploadingField(blank=True)
+    description = CKEditor5Field(blank=True)
     result_file = models.FileField(upload_to='results/', blank=True)
     result_link = models.URLField(blank=True, help_text="External result portal link")
     is_published = models.BooleanField(default=False)
@@ -1412,8 +1411,8 @@ class ELearningCourse(TimeStampedModel):
     duration_hours = models.PositiveIntegerField(help_text="Course duration in hours")
     difficulty_level = models.CharField(max_length=20, choices=DIFFICULTY_CHOICES)
     prerequisites = models.TextField(blank=True)
-    learning_outcomes = RichTextUploadingField()
-    course_content = RichTextUploadingField()
+    learning_outcomes = CKEditor5Field()
+    course_content = CKEditor5Field()
     course_materials = models.FileField(upload_to='elearning/materials/', blank=True)
     video_lectures = models.URLField(blank=True, help_text="Link to video lectures")
     assignments = models.FileField(upload_to='elearning/assignments/', blank=True)
@@ -1488,8 +1487,8 @@ class AlumniProfile(TimeStampedModel):
     phone = models.CharField(max_length=20, blank=True)
     linkedin_profile = models.URLField(blank=True)
     bio = models.TextField()
-    achievements = RichTextUploadingField(blank=True)
-    career_journey = RichTextUploadingField(blank=True)
+    achievements = CKEditor5Field(blank=True)
+    career_journey = CKEditor5Field(blank=True)
     advice_to_students = models.TextField(blank=True)
     profile_photo = models.ImageField(upload_to='alumni/photos/', blank=True)
     is_featured = models.BooleanField(default=False)
@@ -1534,14 +1533,14 @@ class DirectorMessage(TimeStampedModel):
         default="Director's Message",
         help_text="Title for the message section"
     )
-    message_content = RichTextUploadingField(
+    message_content = CKEditor5Field(
         help_text="Director's message to students and visitors"
     )
     vision = models.TextField(
         blank=True,
         help_text="Director's vision for the institution"
     )
-    achievements = RichTextUploadingField(
+    achievements = CKEditor5Field(
         blank=True,
         help_text="Notable achievements and awards"
     )
@@ -1623,14 +1622,14 @@ class PrincipalMessage(TimeStampedModel):
         default="Principal's Message",
         help_text="Title for the message section"
     )
-    message_content = RichTextUploadingField(
+    message_content = CKEditor5Field(
         help_text="Principal's message to students and visitors"
     )
     educational_philosophy = models.TextField(
         blank=True,
         help_text="Principal's educational philosophy and approach"
     )
-    achievements = RichTextUploadingField(
+    achievements = CKEditor5Field(
         blank=True,
         help_text="Notable achievements, publications, and awards"
     )
@@ -1712,7 +1711,7 @@ class IQACInfo(TimeStampedModel):
         blank=True,
         help_text="Subtitle or tagline for IQAC"
     )
-    overview = RichTextUploadingField(
+    overview = CKEditor5Field(
         help_text="Detailed overview of IQAC objectives and functions"
     )
     vision = models.TextField(
@@ -1723,7 +1722,7 @@ class IQACInfo(TimeStampedModel):
         blank=True,
         help_text="IQAC mission statement"
     )
-    objectives = RichTextUploadingField(
+    objectives = CKEditor5Field(
         blank=True,
         help_text="Key objectives of IQAC"
     )
@@ -1922,10 +1921,10 @@ class NAACInfo(TimeStampedModel):
         null=True,
         help_text="CGPA score obtained"
     )
-    overview = RichTextUploadingField(
+    overview = CKEditor5Field(
         help_text="Overview of NAAC accreditation process and achievements"
     )
-    key_highlights = RichTextUploadingField(
+    key_highlights = CKEditor5Field(
         blank=True,
         help_text="Key highlights from NAAC assessment"
     )
@@ -1979,10 +1978,10 @@ class NIRFInfo(TimeStampedModel):
         null=True,
         help_text="Overall NIRF score"
     )
-    overview = RichTextUploadingField(
+    overview = CKEditor5Field(
         help_text="Overview of NIRF participation and achievements"
     )
-    performance_metrics = RichTextUploadingField(
+    performance_metrics = CKEditor5Field(
         blank=True,
         help_text="Detailed performance metrics and scores"
     )
@@ -2043,7 +2042,7 @@ class AccreditationInfo(TimeStampedModel):
         max_length=100,
         help_text="Validity period of accreditation"
     )
-    description = RichTextUploadingField(
+    description = CKEditor5Field(
         help_text="Detailed description of the accreditation"
     )
     certificate_file = models.FileField(
@@ -2203,7 +2202,7 @@ class QualityInitiative(TimeStampedModel):
         help_text="Initiative title"
     )
     slug = models.SlugField(unique=True, blank=True)
-    description = RichTextUploadingField(
+    description = CKEditor5Field(
         help_text="Detailed description of the initiative"
     )
     objectives = models.TextField(

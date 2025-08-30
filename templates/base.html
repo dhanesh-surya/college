@@ -1309,6 +1309,19 @@
                 object-fit: contain;
             }
             
+            .header-logo {
+                max-height: 80px;
+                max-width: 80px;
+                width: auto;
+                height: auto;
+                object-fit: contain;
+            }
+            
+            .college-header {
+                padding: 1rem 0;
+                background: #ffffff;
+            }
+            
             @media (max-width: 768px) {
                 .header-college-name {
                     font-size: calc(var(--header-font-size) * 0.7);
@@ -1458,7 +1471,7 @@
         {% endif %}
         
         <!-- Main Header Section -->
-        <div class="college-header header-dynamic-styles" style="padding: var(--header-padding); background: {{ header_info.header_background_color|default:'#ffffff' }};">
+        <div class="college-header header-dynamic-styles">
             <div class="container">
                 <div class="row align-items-center 
                     {% if header_info.header_layout == 'centered' %}justify-content-center{% endif %}
@@ -1475,7 +1488,7 @@
                                 {% if header_info.left_logo_1_link %}
                                 <a href="{{ header_info.left_logo_1_link }}" {% if header_info.left_logo_1_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
                                 {% endif %}
-                                <img src="{{ header_info.left_logo_1.url }}" alt="{{ header_info.left_logo_1_alt|default:'College Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                <img src="{{ header_info.left_logo_1.url }}" alt="{{ header_info.left_logo_1_alt|default:'College Logo' }}" class="img-fluid header-logo">
                                 {% if header_info.left_logo_1_link %}
                                 </a>
                                 {% endif %}
@@ -1487,7 +1500,7 @@
                                 {% if header_info.left_logo_2_link %}
                                 <a href="{{ header_info.left_logo_2_link }}" {% if header_info.left_logo_2_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
                                 {% endif %}
-                                <img src="{{ header_info.left_logo_2.url }}" alt="{{ header_info.left_logo_2_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                <img src="{{ header_info.left_logo_2.url }}" alt="{{ header_info.left_logo_2_alt|default:'Logo' }}" class="img-fluid header-logo">
                                 {% if header_info.left_logo_2_link %}
                                 </a>
                                 {% endif %}
@@ -1499,7 +1512,7 @@
                                 {% if header_info.left_logo_3_link %}
                                 <a href="{{ header_info.left_logo_3_link }}" {% if header_info.left_logo_3_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
                                 {% endif %}
-                                <img src="{{ header_info.left_logo_3.url }}" alt="{{ header_info.left_logo_3_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                <img src="{{ header_info.left_logo_3.url }}" alt="{{ header_info.left_logo_3_alt|default:'Logo' }}" class="img-fluid header-logo">
                                 {% if header_info.left_logo_3_link %}
                                 </a>
                                 {% endif %}
@@ -1537,7 +1550,7 @@
                                 {% if header_info.right_logo_1_link %}
                                 <a href="{{ header_info.right_logo_1_link }}" {% if header_info.right_logo_1_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
                                 {% endif %}
-                                <img src="{{ header_info.right_logo_1.url }}" alt="{{ header_info.right_logo_1_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                <img src="{{ header_info.right_logo_1.url }}" alt="{{ header_info.right_logo_1_alt|default:'Logo' }}" class="img-fluid header-logo">
                                 {% if header_info.right_logo_1_link %}
                                 </a>
                                 {% endif %}
@@ -1549,7 +1562,7 @@
                                 {% if header_info.right_logo_2_link %}
                                 <a href="{{ header_info.right_logo_2_link }}" {% if header_info.right_logo_2_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
                                 {% endif %}
-                                <img src="{{ header_info.right_logo_2.url }}" alt="{{ header_info.right_logo_2_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                <img src="{{ header_info.right_logo_2.url }}" alt="{{ header_info.right_logo_2_alt|default:'Logo' }}" class="img-fluid header-logo">
                                 {% if header_info.right_logo_2_link %}
                                 </a>
                                 {% endif %}
@@ -1561,7 +1574,7 @@
                                 {% if header_info.right_logo_3_link %}
                                 <a href="{{ header_info.right_logo_3_link }}" {% if header_info.right_logo_3_link|slice:":4" == 'http' %}target="_blank" rel="noopener"{% endif %}>
                                 {% endif %}
-                                <img src="{{ header_info.right_logo_3.url }}" alt="{{ header_info.right_logo_3_alt|default:'Logo' }}" class="img-fluid" style="max-height: {{ header_info.logo_size }}px; max-width: {{ header_info.logo_size }}px;">
+                                <img src="{{ header_info.right_logo_3.url }}" alt="{{ header_info.right_logo_3_alt|default:'Logo' }}" class="img-fluid header-logo">
                                 {% if header_info.right_logo_3_link %}
                                 </a>
                                 {% endif %}
