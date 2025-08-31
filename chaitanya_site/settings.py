@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-97i6+%!^cdx7r-vtz!cnps)_7$oiq=o_r7pkl-4sf!y1_bg9%-')
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,*.onrender.com').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') + ['college-e0q6.onrender.com', '*.onrender.com']
 
 # Application definition
 INSTALLED_APPS = [
