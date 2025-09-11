@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - {{ college_info.college_name|default:"Chaitanya Science and Arts College" }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        
+        .email-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+        
+        .message {
+            margin-bottom: 30px;
+            line-height: 1.7;
+            color: #475569;
+        }
+        
+        .verification-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .verification-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+        
+        .alternative-link {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .alternative-link p {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .link-text {
+            word-break: break-all;
+            font-family: monospace;
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+            font-size: 12px;
+        }
+        
+        .footer {
+            background: #f8fafc;
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .college-info {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            color: #92400e;
+        }
+        
+        .warning strong {
+            color: #78350f;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Verify Your Email Address</h1>
+        </div>
+        
+        <div class="content">
+            <div class="greeting">
+                Hello {{ student.first_name }},
+            </div>
+            
+            <div class="message">
+                <p>Thank you for registering with {{ college_info.college_name|default:"Chaitanya Science and Arts College" }}! To complete your registration and access your student portal, please verify your email address.</p>
+                
+                <p>Your student details:</p>
+                <ul>
+                    <li><strong>Student ID:</strong> {{ student.student_id }}</li>
+                    <li><strong>Name:</strong> {{ student.get_full_name }}</li>
+                    <li><strong>Course:</strong> {{ student.get_course_display_full }}</li>
+                    <li><strong>Email:</strong> {{ student.user.email }}</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="{{ verification_url }}" class="verification-btn">
+                    Verify Email Address
+                </a>
+            </div>
+            
+            <div class="alternative-link">
+                <p><strong>Can't click the button?</strong> Copy and paste this link into your browser:</p>
+                <div class="link-text">{{ verification_url }}</div>
+            </div>
+            
+            <div class="warning">
+                <strong>Important:</strong> This verification link will expire in 24 hours. If you didn't register for an account, please ignore this email.
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated email. Please do not reply to this message.</p>
+            
+            <div class="college-info">
+                <p><strong>{{ college_info.college_name|default:"Chaitanya Science and Arts College" }}</strong></p>
+                <p>{{ college_info.address|default:"College Address" }}</p>
+                <p>Phone: {{ college_info.phone|default:"College Phone" }} | Email: {{ college_info.email|default:"info@college.edu" }}</p>
+                {% if college_info.website %}
+                    <p>Website: {{ college_info.website }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,585 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if department.meta_title %}{{ department.meta_title }}{% else %}{{ department.name }} - {{ block.super }}{% endif %}
+{% endblock %}
+
+{% block meta_description %}
+    {% if department.meta_description %}{{ department.meta_description }}{% else %}{{ department.short_description|default:department.description|truncatewords:30|striptags }}{% endif %}
+{% endblock %}
+
+{% block meta_keywords %}{{ department.meta_keywords }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Base Theme Variables */
+    :root {
+        --theme-primary: {% if department.theme_color == 'blue' %}#3b82f6{% elif department.theme_color == 'green' %}#10b981{% elif department.theme_color == 'red' %}#ef4444{% elif department.theme_color == 'purple' %}#8b5cf6{% elif department.theme_color == 'orange' %}#f97316{% elif department.theme_color == 'teal' %}#14b8a6{% elif department.theme_color == 'indigo' %}#6366f1{% elif department.theme_color == 'pink' %}#ec4899{% elif department.theme_color == 'yellow' %}#eab308{% else %}#6b7280{% endif %};
+        --theme-secondary: {% if department.theme_color == 'blue' %}#dbeafe{% elif department.theme_color == 'green' %}#d1fae5{% elif department.theme_color == 'red' %}#fecaca{% elif department.theme_color == 'purple' %}#e9d5ff{% elif department.theme_color == 'orange' %}#fed7aa{% elif department.theme_color == 'teal' %}#ccfbf1{% elif department.theme_color == 'indigo' %}#e0e7ff{% elif department.theme_color == 'pink' %}#fce7f3{% elif department.theme_color == 'yellow' %}#fef3c7{% else %}#f3f4f6{% endif %};
+    }
+
+    .hero-section {
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary) 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    .info-card {
+        border: none;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    .info-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+    }
+    .stat-box {
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary) 100%);
+        border-radius: 16px;
+        color: white;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    .stat-box:hover {
+        transform: scale(1.05);
+    }
+    .section-title {
+        position: relative;
+        padding-bottom: 1rem;
+        margin-bottom: 2.5rem;
+        font-weight: 700;
+        color: #1f2937;
+    }
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary) 100%);
+        border-radius: 2px;
+    }
+    .facility-item {
+        background: var(--theme-secondary);
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin-bottom: 0.75rem;
+        border-left: 4px solid var(--theme-primary);
+        transition: all 0.3s ease;
+    }
+    .facility-item:hover {
+        transform: translateX(8px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .achievement-badge {
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        color: #92400e;
+        padding: 0.75rem 1.25rem;
+        border-radius: 30px;
+        font-weight: 600;
+        margin: 0.5rem;
+        display: inline-block;
+        box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    }
+    .theme-text {
+        color: var(--theme-primary) !important;
+    }
+    .theme-bg {
+        background-color: var(--theme-primary) !important;
+    }
+    .theme-border {
+        border-color: var(--theme-primary) !important;
+    }
+    .btn-theme {
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary) 100%);
+        border: none;
+        color: white;
+        transition: all 0.3s ease;
+    }
+    .btn-theme:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        color: white;
+    }
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+    }
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "›";
+        color: rgba(255,255,255,0.7);
+    }
+    .breadcrumb-item a {
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+    }
+    .breadcrumb-item a:hover {
+        color: white;
+    }
+    .breadcrumb-item.active {
+        color: white;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 3rem 0;
+        }
+        .section-title {
+            font-size: 1.5rem;
+        }
+        .stat-box {
+            padding: 1.5rem 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Dynamic Theming -->
+<div class="hero-section bg-gradient-to-r {{ department.get_theme_colors.gradient }} text-white py-20 relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+    </div>
+    
+    {% if department.banner_image %}
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20" style="background-image: url('{{ department.banner_image.url }}');"></div>
+    {% endif %}
+    
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="row items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <!-- Department Logo -->
+                {% if department.department_logo %}
+                <div class="mb-6">
+                    <img src="{{ department.department_logo.url }}" alt="{{ department.name }} Logo" 
+                         class="h-20 w-20 mx-auto rounded-full bg-white p-2 shadow-lg">
+                </div>
+                {% endif %}
+                
+                <h1 class="text-5xl md:text-6xl font-bold mb-4 leading-tight">{{ department.name }}</h1>
+                
+                {% if department.tagline %}
+                <p class="text-xl md:text-2xl mb-6 font-light italic">"{{ department.tagline }}"</p>
+                {% endif %}
+                
+                {% if department.short_description %}
+                <p class="text-lg mb-8 max-w-3xl mx-auto leading-relaxed">{{ department.short_description }}</p>
+                {% endif %}
+                
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb tw-bg-transparent">
+                        <li class="breadcrumb-item"><a href="{% url 'college_website:home' %}" class="tw-text-white tw-opacity-75">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'college_website:academics' %}" class="tw-text-white tw-opacity-75">Academics</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'college_website:departments_list' %}" class="tw-text-white tw-opacity-75">Departments</a></li>
+                        <li class="breadcrumb-item active tw-text-white" aria-current="page">{{ department.short_name|default:department.name }}</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-lg-4 text-center">
+                {% if department.department_image %}
+                <img src="{{ department.department_image.url }}" alt="{{ department.name }}" class="img-fluid rounded-3 shadow-lg">
+                {% else %}
+                <div class="tw-bg-white tw-bg-opacity-20 tw-rounded-3xl tw-p-8">
+                    <i class="fas fa-building tw-text-8xl tw-opacity-50"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats -->
+<section class="tw-py-12 tw-bg-gray-50">
+    <div class="container">
+        <div class="row g-4">
+            {% if department.established_year %}
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <i class="fas fa-calendar-alt tw-text-3xl mb-3"></i>
+                    <h3 class="fw-bold">{{ department.established_year }}</h3>
+                    <p class="mb-0">Established</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if department.faculty_count %}
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <i class="fas fa-users tw-text-3xl mb-3"></i>
+                    <h3 class="fw-bold">{{ department.faculty_count }}</h3>
+                    <p class="mb-0">Faculty Members</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if department.student_count %}
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <i class="fas fa-user-graduate tw-text-3xl mb-3"></i>
+                    <h3 class="fw-bold">{{ department.student_count }}</h3>
+                    <p class="mb-0">Students</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if related_programs %}
+            <div class="col-md-3">
+                <div class="stat-box">
+                    <i class="fas fa-graduation-cap tw-text-3xl mb-3"></i>
+                    <h3 class="fw-bold">{{ related_programs.count }}</h3>
+                    <p class="mb-0">Programs</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="tw-py-12">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Main Content Column -->
+            <div class="col-lg-8">
+                <!-- About Department -->
+                {% if department.description %}
+                <div class="mb-5">
+                    <h2 class="section-title">About the Department</h2>
+                    <div class="tw-prose tw-prose-lg tw-max-w-none">
+                        {{ department.description|safe }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Head of Department -->
+                {% if department.head_of_department %}
+                <div class="mb-5">
+                    <h2 class="section-title">Department Leadership</h2>
+                    <div class="info-card p-4">
+                        <div class="row align-items-center">
+                            {% if department.hod_image %}
+                            <div class="col-md-3 text-center mb-3 mb-md-0">
+                                <img src="{{ department.hod_image.url }}" alt="{{ department.head_of_department }}" 
+                                     class="rounded-circle img-fluid" style="width: 120px; height: 120px; object-fit: cover;">
+                            </div>
+                            {% endif %}
+                            <div class="col-md-9">
+                                <h4 class="fw-bold text-primary">{{ department.head_of_department }}</h4>
+                                <p class="text-muted mb-2">Head of Department</p>
+                                {% if department.hod_qualification %}
+                                <p class="mb-2"><strong>Qualifications:</strong> {{ department.hod_qualification }}</p>
+                                {% endif %}
+                                {% if department.hod_message %}
+                                <blockquote class="blockquote mt-3">
+                                    <p class="mb-0 fst-italic">"{{ department.hod_message }}"</p>
+                                </blockquote>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Programs Offered -->
+                {% if programs_offered_list %}
+                <div class="mb-5">
+                    <h2 class="section-title">Programs Offered</h2>
+                    <div class="row g-3">
+                        {% for program in programs_offered_list %}
+                        <div class="col-md-6">
+                            <div class="facility-item">
+                                <i class="fas fa-graduation-cap text-primary me-2"></i>
+                                {{ program|title }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Research Areas -->
+                {% if research_areas_list %}
+                <div class="mb-5">
+                    <h2 class="section-title">Research Areas</h2>
+                    <div class="row g-3">
+                        {% for area in research_areas_list %}
+                        <div class="col-md-6">
+                            <div class="facility-item">
+                                <i class="fas fa-microscope text-primary me-2"></i>
+                                {{ area|title }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Laboratories -->
+                {% if laboratories_list %}
+                <div class="mb-5">
+                    <h2 class="section-title">Laboratories & Facilities</h2>
+                    <div class="row g-3">
+                        {% for lab in laboratories_list %}
+                        <div class="col-md-6">
+                            <div class="facility-item">
+                                <i class="fas fa-flask text-primary me-2"></i>
+                                {{ lab|title }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Achievements -->
+                {% if department.achievements %}
+                <div class="mb-5">
+                    <h2 class="section-title">Achievements & Recognition</h2>
+                    <div class="info-card p-4">
+                        {{ department.achievements|safe }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Faculty Members -->
+                {% if department.get_faculty_members %}
+                <div class="mb-5">
+                    <h2 class="section-title">Our Faculty</h2>
+                    <div class="row g-4">
+                        {% for faculty in department.get_faculty_members|slice:":6" %}
+                        <div class="col-md-6">
+                            <div class="info-card p-3">
+                                <div class="d-flex align-items-center">
+                                    {% if faculty.photo %}
+                                    <img src="{{ faculty.photo.url }}" alt="{{ faculty.name }}" 
+                                         class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                    {% else %}
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-3" 
+                                         style="width: 60px; height: 60px;">
+                                        <i class="fas fa-user text-muted"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <h6 class="fw-bold mb-1">{{ faculty.name }}</h6>
+                                        <p class="text-muted mb-0 small">{{ faculty.designation }}</p>
+                                        {% if faculty.highest_qualification %}
+                                        <p class="text-muted mb-0 small">{{ faculty.highest_qualification }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if department.get_faculty_members.count > 6 %}
+                    <div class="text-center mt-4">
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fas fa-users me-2"></i>View All Faculty ({{ department.get_faculty_members.count }})
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Department Events -->
+                {% if department.get_recent_events %}
+                <div class="mb-5">
+                    <h2 class="section-title">Recent Events</h2>
+                    <div class="row g-4">
+                        {% for event in department.get_recent_events %}
+                        <div class="col-md-6">
+                            <div class="info-card p-4">
+                                {% if event.featured_image %}
+                                <img src="{{ event.featured_image.url }}" alt="{{ event.title }}" 
+                                     class="img-fluid rounded mb-3" style="height: 150px; width: 100%; object-fit: cover;">
+                                {% endif %}
+                                <h6 class="fw-bold {{ department.get_theme_colors.text }}">{{ event.title }}</h6>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-calendar me-1"></i>{{ event.event_date|date:"M d, Y" }}
+                                    {% if event.venue %}
+                                    <br><i class="fas fa-map-marker-alt me-1"></i>{{ event.venue }}
+                                    {% endif %}
+                                </p>
+                                {% if event.short_description %}
+                                <p class="mb-0 small">{{ event.short_description|truncatewords:15 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Facilities -->
+                {% if facilities_list %}
+                <div class="mb-5">
+                    <h2 class="section-title">Facilities</h2>
+                    <div class="row g-3">
+                        {% for facility in facilities_list %}
+                        <div class="col-md-6">
+                            <div class="facility-item">
+                                <i class="fas fa-building text-primary me-2"></i>
+                                {{ facility|title }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Vision & Mission -->
+                {% if department.vision or department.mission %}
+                <div class="info-card p-4 mb-4">
+                    <h4 class="fw-bold {{ department.get_theme_colors.text }} mb-3">
+                        <i class="fas fa-eye me-2"></i>Vision & Mission
+                    </h4>
+                    {% if department.vision %}
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-dark">Vision</h6>
+                        <p class="text-muted mb-0">{{ department.vision }}</p>
+                    </div>
+                    {% endif %}
+                    {% if department.mission %}
+                    <div>
+                        <h6 class="fw-bold text-dark">Mission</h6>
+                        <p class="text-muted mb-0">{{ department.mission }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Contact Information -->
+                <div class="info-card p-4 mb-4">
+                    <h4 class="fw-bold text-primary mb-3">
+                        <i class="fas fa-address-card me-2"></i>Contact Information
+                    </h4>
+                    
+                    {% if department.office_location %}
+                    <div class="mb-3">
+                        <i class="fas fa-map-marker-alt text-muted me-2"></i>
+                        <strong>Office:</strong> {{ department.office_location }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if department.phone_number %}
+                    <div class="mb-3">
+                        <i class="fas fa-phone text-muted me-2"></i>
+                        <strong>Phone:</strong> 
+                        <a href="tel:{{ department.phone_number }}" class="text-decoration-none">{{ department.phone_number }}</a>
+                    </div>
+                    {% endif %}
+                    
+                    {% if department.email %}
+                    <div class="mb-3">
+                        <i class="fas fa-envelope text-muted me-2"></i>
+                        <strong>Email:</strong> 
+                        <a href="mailto:{{ department.email }}" class="text-decoration-none">{{ department.email }}</a>
+                    </div>
+                    {% endif %}
+                    
+                    {% if department.website_url %}
+                    <div class="mb-0">
+                        <i class="fas fa-globe text-muted me-2"></i>
+                        <strong>Website:</strong> 
+                        <a href="{{ department.website_url }}" target="_blank" class="text-decoration-none">
+                            Visit Website <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Related Programs -->
+                {% if related_programs %}
+                <div class="info-card p-4 mb-4">
+                    <h4 class="fw-bold text-primary mb-3">
+                        <i class="fas fa-graduation-cap me-2"></i>Related Programs
+                    </h4>
+                    {% for program in related_programs %}
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-arrow-right text-muted me-2"></i>
+                        <a href="{{ program.get_absolute_url }}" class="text-decoration-none">{{ program.name }}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Quick Actions -->
+                <div class="info-card p-4 mb-4">
+                    <h4 class="fw-bold text-primary mb-3">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h4>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'college_website:departments_list' %}?discipline={{ department.discipline }}" 
+                           class="btn btn-outline-primary">
+                            <i class="fas fa-list me-2"></i>View {{ department.get_discipline_display }} Departments
+                        </a>
+                        <a href="{% url 'college_website:programs_list' %}?discipline={{ department.discipline }}" 
+                           class="btn btn-outline-secondary">
+                            <i class="fas fa-graduation-cap me-2"></i>View {{ department.get_discipline_display }} Programs
+                        </a>
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-outline-info">
+                            <i class="fas fa-envelope me-2"></i>Contact Us
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Related Departments -->
+                {% if related_departments %}
+                <div class="info-card p-4">
+                    <h4 class="fw-bold text-primary mb-3">
+                        <i class="fas fa-building me-2"></i>Related Departments
+                    </h4>
+                    {% for dept in related_departments %}
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-arrow-right text-muted me-2"></i>
+                        <a href="{{ dept.get_absolute_url }}" class="text-decoration-none">{{ dept.name }}</a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="tw-py-12 tw-bg-gradient-to-r tw-from-blue-600 tw-to-purple-700 tw-text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Interested in {{ department.name }}?</h2>
+        <p class="lead mb-4">Get in touch with us to learn more about our programs and admission process.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'college_website:admissions' %}" class="btn btn-light btn-lg">
+                <i class="fas fa-graduation-cap me-2"></i>Admission Information
+            </a>
+            <a href="{% url 'college_website:contact' %}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-envelope me-2"></i>Contact Department
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+Email Verification - {{ college_info.college_name|default:"Chaitanya Science and Arts College" }}
+
+Hello {{ student.first_name }},
+
+Thank you for registering with {{ college_info.college_name|default:"Chaitanya Science and Arts College" }}!
+
+To complete your registration and access your student portal, please verify your email address by clicking the link below:
+
+{{ verification_url }}
+
+Your student details:
+- Student ID: {{ student.student_id }}
+- Name: {{ student.get_full_name }}
+- Course: {{ student.get_course_display_full }}
+- Email: {{ student.user.email }}
+
+IMPORTANT: This verification link will expire in 24 hours. If you didn't register for an account, please ignore this email.
+
+This is an automated email. Please do not reply to this message.
+
+---
+{{ college_info.college_name|default:"Chaitanya Science and Arts College" }}
+{{ college_info.address|default:"College Address" }}
+Phone: {{ college_info.phone|default:"College Phone" }}
+Email: {{ college_info.email|default:"info@college.edu" }}
+{% if college_info.website %}Website: {{ college_info.website }}{% endif %}

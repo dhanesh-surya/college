@@ -1,0 +1,645 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Academics - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block meta_description %}Explore our comprehensive academic programs, departments, and educational excellence at {{ college_info.name|default:"Chaitanya Science and Arts College" }}.{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Academics</li>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Modern Gradient -->
+<section class="position-relative overflow-hidden tw-bg-gradient-to-br tw-from-indigo-900 tw-via-purple-800 tw-to-pink-700 tw-py-20 tw-px-4">
+    <div class="tw-absolute tw-inset-0 tw-bg-black tw-opacity-20"></div>
+    <div class="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full">
+        <div class="tw-absolute tw-top-10 tw-left-10 tw-w-32 tw-h-32 tw-bg-white tw-rounded-full tw-opacity-10 tw-animate-pulse"></div>
+        <div class="tw-absolute tw-top-32 tw-right-20 tw-w-20 tw-h-20 tw-bg-yellow-300 tw-rounded-full tw-opacity-20 tw-animate-bounce"></div>
+        <div class="tw-absolute tw-bottom-20 tw-left-1/4 tw-w-16 tw-h-16 tw-bg-blue-400 tw-rounded-full tw-opacity-15"></div>
+    </div>
+    
+    <div class="container position-relative tw-z-10">
+        <div class="text-center text-white">
+            <div class="tw-animate-fade-in-up">
+                <h1 class="display-3 fw-bold mb-4 tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-white tw-to-blue-200">
+                    Academic Excellence
+                </h1>
+                <p class="lead fs-4 mb-5 tw-text-blue-100 tw-max-w-3xl tw-mx-auto">
+                    Discover our comprehensive range of academic programs, world-class departments, and innovative learning experiences designed to shape future leaders
+                </p>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row g-4 mt-5">
+                <div class="col-md-4">
+                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-4 p-4 h-100">
+                        <i class="fas fa-graduation-cap fa-3x text-warning mb-3"></i>
+                        <h3 class="h4 fw-bold text-white">{{ total_programs|default:"15+" }}</h3>
+                        <p class="text-light mb-0">Academic Programs</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-4 p-4 h-100">
+                        <i class="fas fa-building fa-3x text-success mb-3"></i>
+                        <h3 class="h4 fw-bold text-white">{{ total_departments|default:"8+" }}</h3>
+                        <p class="text-light mb-0">Departments</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-4 p-4 h-100">
+                        <i class="fas fa-users fa-3x text-info mb-3"></i>
+                        <h3 class="h4 fw-bold text-white">{{ total_students|default:"5000+" }}</h3>
+                        <p class="text-light mb-0">Active Students</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Navigation Section -->
+<section class="py-5 tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title text-primary mb-3">Academic Navigation</h2>
+            <p class="lead text-muted tw-max-w-3xl tw-mx-auto">Quick access to all academic resources and information</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'college_website:programs_list' %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-2xl">
+                        <div class="card-body text-center p-4">
+                            <div class="tw-bg-gradient-to-br tw-from-blue-500 tw-to-indigo-600 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                                <i class="fas fa-graduation-cap text-white fa-2x"></i>
+                            </div>
+                            <h5 class="card-title text-dark fw-bold">Academic Programs</h5>
+                            <p class="card-text text-muted small">Explore our comprehensive range of undergraduate and postgraduate programs</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'college_website:departments_list' %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-2xl">
+                        <div class="card-body text-center p-4">
+                            <div class="tw-bg-gradient-to-br tw-from-green-500 tw-to-emerald-600 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                                <i class="fas fa-building text-white fa-2x"></i>
+                            </div>
+                            <h5 class="card-title text-dark fw-bold">Departments</h5>
+                            <p class="card-text text-muted small">Discover our specialized departments and their academic offerings</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'college_website:academics_library' %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-2xl">
+                        <div class="card-body text-center p-4">
+                            <div class="tw-bg-gradient-to-br tw-from-purple-500 tw-to-pink-600 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                                <i class="fas fa-book-reader text-white fa-2x"></i>
+                            </div>
+                            <h5 class="card-title text-dark fw-bold">Library & Resources</h5>
+                            <p class="card-text text-muted small">Access our extensive library and digital learning resources</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <a href="{% url 'college_website:academic_calendar' %}" class="text-decoration-none">
+                    <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-2xl">
+                        <div class="card-body text-center p-4">
+                            <div class="tw-bg-gradient-to-br tw-from-orange-500 tw-to-red-600 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                                <i class="fas fa-calendar-alt text-white fa-2x"></i>
+                            </div>
+                            <h5 class="card-title text-dark fw-bold">Academic Calendar</h5>
+                            <p class="card-text text-muted small">Stay updated with important academic dates and events</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Programs Section -->
+{% if featured_programs %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge tw-bg-gradient-to-r tw-from-blue-500 tw-to-purple-500 text-white rounded-pill px-4 py-2 mb-3">
+                <i class="fas fa-star me-2"></i>Featured Programs
+            </span>
+            <h2 class="section-title text-primary mb-3">Our Flagship Programs</h2>
+            <p class="lead text-muted tw-max-w-3xl tw-mx-auto">Discover our most popular and highly-rated academic programs</p>
+        </div>
+        
+        <div class="row g-4">
+            {% for program in featured_programs %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-lg program-card tw-transition-all tw-duration-500 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
+                    <!-- Modern Card Header -->
+                    <div class="card-header border-0 position-relative overflow-hidden p-0">
+                        <div class="tw-bg-gradient-to-br 
+                            {% if program.discipline == 'science' %}tw-from-green-500 tw-to-emerald-600
+                            {% elif program.discipline == 'arts' %}tw-from-purple-500 tw-to-pink-600
+                            {% elif program.discipline == 'commerce' %}tw-from-blue-500 tw-to-cyan-600
+                            {% elif program.discipline == 'management' %}tw-from-red-500 tw-to-orange-600
+                            {% else %}tw-from-indigo-500 tw-to-purple-600
+                            {% endif %} text-white p-4">
+                            
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="tw-bg-white tw-bg-opacity-20 tw-backdrop-blur-sm rounded-pill px-3 py-1">
+                                    {% if program.discipline == 'science' %}
+                                        <i class="fas fa-flask me-2"></i>Science Stream
+                                    {% elif program.discipline == 'arts' %}
+                                        <i class="fas fa-palette me-2"></i>Arts Stream
+                                    {% elif program.discipline == 'commerce' %}
+                                        <i class="fas fa-chart-line me-2"></i>Commerce Stream
+                                    {% elif program.discipline == 'management' %}
+                                        <i class="fas fa-users-cog me-2"></i>Management Stream
+                                    {% else %}
+                                        <i class="fas fa-graduation-cap me-2"></i>{{ program.get_discipline_display }} Stream
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="tw-bg-yellow-400 tw-bg-opacity-90 rounded-pill px-3 py-1">
+                                    <small class="fw-bold text-dark">
+                                        <i class="fas fa-star me-1"></i>Featured
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <!-- Decorative Elements -->
+                            <div class="tw-absolute tw-top-2 tw-right-2 tw-w-16 tw-h-16 tw-bg-white tw-bg-opacity-10 tw-rounded-full tw-blur-xl"></div>
+                            <div class="tw-absolute tw-bottom-0 tw-left-0 tw-w-full tw-h-1 tw-bg-white tw-bg-opacity-30"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced Card Body -->
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="flex-grow-1">
+                            <h5 class="card-title fw-bold text-dark mb-3 tw-text-xl">{{ program.name }}</h5>
+                            <p class="card-text text-muted tw-leading-relaxed mb-4">
+                                {{ program.description|striptags|truncatewords:25 }}
+                            </p>
+                            
+                            <!-- Program Details -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-graduation-cap me-1"></i>Degree Type
+                                    </small>
+                                    <span class="badge bg-secondary">{{ program.get_degree_type_display }}</span>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-clock me-1"></i>Duration
+                                    </small>
+                                    <span class="text-dark small">{{ program.duration|default:"3 years" }}</span>
+                                </div>
+                            </div>
+                            
+                            {% if program.fees %}
+                            <div class="mb-3">
+                                <small class="text-muted d-block">
+                                    <i class="fas fa-rupee-sign me-1"></i>Annual Fees
+                                </small>
+                                <span class="text-success fw-bold">₹{{ program.fees|floatformat:0 }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Enhanced Action Buttons -->
+                        <div class="d-flex gap-2 mt-auto">
+                            <a href="{{ program.get_absolute_url }}" 
+                               class="btn btn-primary flex-fill rounded-pill py-2 tw-transition-all tw-duration-300 hover:tw-shadow-lg">
+                                <i class="fas fa-info-circle me-2"></i>Learn More
+                            </a>
+                            {% if program.brochure %}
+                            <a href="{{ program.brochure.url }}" 
+                               class="btn btn-outline-secondary rounded-pill py-2 px-3 tw-transition-all tw-duration-300 hover:tw-shadow-lg" 
+                               target="_blank" 
+                               title="Download Brochure">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{% url 'college_website:programs_list' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                <i class="fas fa-list me-2"></i>View All Programs
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Departments Overview Section -->
+{% if departments_by_discipline %}
+<section class="py-5 tw-bg-gradient-to-br tw-from-gray-50 tw-to-blue-50">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge tw-bg-gradient-to-r tw-from-green-500 tw-to-teal-500 text-white rounded-pill px-4 py-2 mb-3">
+                <i class="fas fa-building me-2"></i>Academic Departments
+            </span>
+            <h2 class="section-title text-primary mb-3">Our Academic Departments</h2>
+            <p class="lead text-muted tw-max-w-3xl tw-mx-auto">Explore our specialized departments and their unique academic offerings</p>
+        </div>
+        
+        {% for discipline, dept_list in departments_by_discipline.items %}
+        <div class="mb-5">
+            <div class="d-flex align-items-center mb-4">
+                <div class="tw-bg-gradient-to-r 
+                    {% if discipline == 'Science' %}tw-from-green-500 tw-to-emerald-600
+                    {% elif discipline == 'Arts' %}tw-from-purple-500 tw-to-pink-600
+                    {% elif discipline == 'Commerce' %}tw-from-blue-500 tw-to-cyan-600
+                    {% elif discipline == 'Management' %}tw-from-red-500 tw-to-orange-600
+                    {% else %}tw-from-indigo-500 tw-to-purple-600
+                    {% endif %} tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                    {% if discipline == 'Science' %}
+                        <i class="fas fa-flask text-white fa-lg"></i>
+                    {% elif discipline == 'Arts' %}
+                        <i class="fas fa-palette text-white fa-lg"></i>
+                    {% elif discipline == 'Commerce' %}
+                        <i class="fas fa-chart-line text-white fa-lg"></i>
+                    {% elif discipline == 'Management' %}
+                        <i class="fas fa-users-cog text-white fa-lg"></i>
+                    {% else %}
+                        <i class="fas fa-graduation-cap text-white fa-lg"></i>
+                    {% endif %}
+                </div>
+                <h3 class="h4 fw-bold text-dark mb-0">{{ discipline }} Stream</h3>
+                <span class="badge bg-secondary ms-3">{{ dept_list|length }} Department{{ dept_list|length|pluralize }}</span>
+            </div>
+            
+            <div class="row g-4">
+                {% for department in dept_list %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-2xl">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-start mb-3">
+                                {% if department.department_logo %}
+                                <img src="{{ department.department_logo.url }}" alt="{{ department.name }}" class="tw-w-12 tw-h-12 tw-rounded-lg me-3 tw-object-cover">
+                                {% else %}
+                                <div class="tw-bg-gradient-to-br 
+                                    {% if department.discipline == 'science' %}tw-from-green-500 tw-to-emerald-600
+                                    {% elif department.discipline == 'arts' %}tw-from-purple-500 tw-to-pink-600
+                                    {% elif department.discipline == 'commerce' %}tw-from-blue-500 tw-to-cyan-600
+                                    {% elif department.discipline == 'management' %}tw-from-red-500 tw-to-orange-600
+                                    {% else %}tw-from-indigo-500 tw-to-purple-600
+                                    {% endif %} tw-w-12 tw-h-12 tw-rounded-lg tw-flex tw-items-center tw-justify-center me-3">
+                                    <i class="fas fa-building text-white"></i>
+                                </div>
+                                {% endif %}
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title fw-bold text-dark mb-1">{{ department.name }}</h5>
+                                    {% if department.tagline %}
+                                    <p class="text-muted small mb-0">{{ department.tagline }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            {% if department.short_description %}
+                            <p class="card-text text-muted tw-leading-relaxed mb-4">
+                                {{ department.short_description|truncatewords:20 }}
+                            </p>
+                            {% endif %}
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex gap-2">
+                                    {% if department.head_of_department %}
+                                    <span class="badge bg-info">
+                                        <i class="fas fa-user-tie me-1"></i>{{ department.head_of_department }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <a href="{{ department.get_absolute_url }}" class="btn btn-outline-primary btn-sm rounded-pill">
+                                    <i class="fas fa-arrow-right me-1"></i>Explore
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        
+        <div class="text-center mt-5">
+            <a href="{% url 'college_website:departments_list' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                <i class="fas fa-building me-2"></i>View All Departments
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Academic Resources Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 text-white rounded-pill px-4 py-2 mb-3">
+                <i class="fas fa-tools me-2"></i>Academic Resources
+            </span>
+            <h2 class="section-title text-primary mb-3">Learning Resources & Support</h2>
+            <p class="lead text-muted tw-max-w-3xl tw-mx-auto">Access comprehensive academic resources to enhance your learning experience</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-2xl">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-br tw-from-blue-500 tw-to-indigo-600 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                            <i class="fas fa-book text-white fa-2x"></i>
+                        </div>
+                        <h5 class="card-title text-dark fw-bold">Library Resources</h5>
+                        <p class="card-text text-muted small">Access thousands of books, journals, and digital resources</p>
+                        <a href="{% url 'college_website:academics_library' %}" class="btn btn-outline-primary btn-sm rounded-pill">
+                            <i class="fas fa-arrow-right me-1"></i>Explore
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-2xl">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-br tw-from-green-500 tw-to-emerald-600 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                            <i class="fas fa-laptop text-white fa-2x"></i>
+                        </div>
+                        <h5 class="card-title text-dark fw-bold">E-Learning Platform</h5>
+                        <p class="card-text text-muted small">Interactive online courses and digital learning materials</p>
+                        <a href="{% url 'college_website:elearning' %}" class="btn btn-outline-primary btn-sm rounded-pill">
+                            <i class="fas fa-arrow-right me-1"></i>Explore
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-2xl">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-br tw-from-purple-500 tw-to-pink-600 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                            <i class="fas fa-chalkboard-teacher text-white fa-2x"></i>
+                        </div>
+                        <h5 class="card-title text-dark fw-bold">Teaching Resources</h5>
+                        <p class="card-text text-muted small">Comprehensive teaching and learning support materials</p>
+                        <a href="{% url 'college_website:teaching_learning_resources' %}" class="btn btn-outline-primary btn-sm rounded-pill">
+                            <i class="fas fa-arrow-right me-1"></i>Explore
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-2xl">
+                    <div class="card-body text-center p-4">
+                        <div class="tw-bg-gradient-to-br tw-from-orange-500 tw-to-red-600 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
+                            <i class="fas fa-file-alt text-white fa-2x"></i>
+                        </div>
+                        <h5 class="card-title text-dark fw-bold">Syllabus & Curriculum</h5>
+                        <p class="card-text text-muted small">Detailed course outlines and curriculum information</p>
+                        <a href="{% url 'college_website:syllabus_curriculum' %}" class="btn btn-outline-primary btn-sm rounded-pill">
+                            <i class="fas fa-arrow-right me-1"></i>Explore
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="py-5 tw-bg-gradient-to-br tw-from-indigo-900 tw-to-purple-900 text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="tw-animate-fade-in-up">
+                    <h2 class="display-4 fw-bold mb-4 tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-white tw-to-yellow-200">
+                        Ready to Begin Your Academic Journey?
+                    </h2>
+                    <p class="fs-5 tw-leading-relaxed mb-5 tw-text-gray-200">
+                        Join our community of learners and discover endless opportunities for academic and personal growth. 
+                        Take the first step towards your future success today.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{% url 'college_website:programs_list' %}" 
+                           class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
+                            <i class="fas fa-graduation-cap me-2 text-primary"></i>
+                            Explore Programs
+                        </a>
+                        <a href="{% url 'college_website:contact' %}" 
+                           class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                            <i class="fas fa-phone me-2"></i>
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+
+<!-- Enhanced Custom Styles -->
+<style>
+/* Section Title */
+.section-title {
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--bs-primary), #fbbf24);
+    border-radius: 2px;
+}
+
+/* Animation Classes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tw-animate-fade-in-up {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Enhanced Card Hover Effects */
+.card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+}
+
+/* Program Cards Animation */
+.program-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.program-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.7s;
+    z-index: 1;
+}
+
+.program-card:hover::before {
+    left: 100%;
+}
+
+/* Enhanced Button Styles */
+.btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-width: 2px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
+    
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+    }
+}
+
+/* Loading Animation for Cards */
+.program-card {
+    opacity: 0;
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+.program-card:nth-child(1) { animation-delay: 0.1s; }
+.program-card:nth-child(2) { animation-delay: 0.2s; }
+.program-card:nth-child(3) { animation-delay: 0.3s; }
+.program-card:nth-child(4) { animation-delay: 0.4s; }
+.program-card:nth-child(5) { animation-delay: 0.5s; }
+.program-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scroll Reveal Animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
+
+<!-- Enhanced JavaScript for Interactions -->
+<script>
+// Scroll Reveal Animation
+function revealOnScroll() {
+    const reveals = document.querySelectorAll('.reveal');
+    
+    reveals.forEach((element, index) => {
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < windowHeight - elementVisible) {
+            element.classList.add('active');
+        }
+    });
+}
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Add reveal class to elements
+    document.querySelectorAll('.program-card, .btn, .card').forEach(el => {
+        el.classList.add('reveal');
+    });
+    
+    // Initial reveal check
+    revealOnScroll();
+});
+
+// Reveal on scroll
+window.addEventListener('scroll', revealOnScroll);
+
+// Enhanced card interactions
+document.querySelectorAll('.program-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.zIndex = '10';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.zIndex = '1';
+    });
+});
+</script>
+{% endblock %}

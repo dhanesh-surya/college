@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Student Registration - {{ college_info.college_name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .registration-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+    
+    .registration-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+        max-width: 800px;
+        width: 100%;
+    }
+    
+    .registration-header {
+        background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+    }
+    
+    .registration-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+    }
+    
+    .registration-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .registration-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    
+    .registration-body {
+        padding: 3rem 2rem;
+    }
+    
+    .form-section {
+        margin-bottom: 2.5rem;
+    }
+    
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #0d6efd;
+    }
+    
+    .section-title i {
+        color: #0d6efd;
+        font-size: 1.1rem;
+    }
+    
+    .form-floating {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-floating > .form-control {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        padding: 1rem 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-floating > .form-control:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .form-select {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        padding: 1rem 0.75rem;
+    }
+    
+    .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .form-check {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+    
+    .form-check-input {
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 4px;
+        margin-left: -2rem;
+    }
+    
+    .btn-register {
+        background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3);
+    }
+    
+    .login-link {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    @media (max-width: 768px) {
+        .registration-header {
+            padding: 2rem 1.5rem;
+        }
+        
+        .registration-body {
+            padding: 2rem 1.5rem;
+        }
+        
+        .registration-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="registration-container">
+    <div class="registration-card">
+        <div class="registration-header">
+            <div class="registration-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h1 class="registration-title">Create Your Account</h1>
+            <p class="registration-subtitle">Join our vibrant academic community</p>
+        </div>
+        
+        <div class="registration-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-{% if message.tags == 'error' %}exclamation-triangle{% else %}check-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" id="registerForm">
+                {% csrf_token %}
+                
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user"></i>
+                        Personal Information
+                    </h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="firstName" name="first_name" placeholder="First Name" required>
+                                <label for="firstName">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="lastName" name="last_name" placeholder="Last Name" required>
+                                <label for="lastName">Last Name</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required>
+                        <label for="email">Email Address</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+                        <label for="phone">Phone Number</label>
+                    </div>
+                </div>
+
+                <!-- Academic Information -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-graduation-cap"></i>
+                        Academic Information
+                    </h3>
+                    
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="studentId" name="student_id" placeholder="Student ID" required>
+                        <label for="studentId">Student ID</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="course" name="course" required>
+                                    <option value="">Select Course</option>
+                                    <option value="btech-cse">B.Tech Computer Science</option>
+                                    <option value="btech-it">B.Tech Information Technology</option>
+                                    <option value="btech-ece">B.Tech Electronics & Communication</option>
+                                    <option value="btech-mech">B.Tech Mechanical Engineering</option>
+                                    <option value="btech-civil">B.Tech Civil Engineering</option>
+                                    <option value="mba">MBA</option>
+                                    <option value="mca">MCA</option>
+                                    <option value="bca">BCA</option>
+                                </select>
+                                <label for="course">Course</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="year" name="year" required>
+                                    <option value="">Select Year</option>
+                                    <option value="1">1st Year</option>
+                                    <option value="2">2nd Year</option>
+                                    <option value="3">3rd Year</option>
+                                    <option value="4">4th Year</option>
+                                </select>
+                                <label for="year">Academic Year</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Account Security
+                    </h3>
+                    
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="password" name="password1" placeholder="Password" required>
+                        <label for="password">Password</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="confirmPassword" name="password2" placeholder="Confirm Password" required>
+                        <label for="confirmPassword">Confirm Password</label>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-section">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                        <label class="form-check-label" for="terms">
+                            I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter">
+                        <label class="form-check-label" for="newsletter">
+                            Subscribe to newsletter for updates
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-register">
+                    <i class="fas fa-user-plus me-2"></i>Create My Account
+                </button>
+            </form>
+
+            <div class="login-link">
+                <p>Already have an account? <a href="{% url 'college_website:student_login' %}" class="text-primary">Sign in here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Phone number formatting
+    document.getElementById('phone').addEventListener('input', function() {
+        let value = this.value.replace(/\D/g, '');
+        if (value.length > 10) {
+            value = value.substring(0, 10);
+        }
+        this.value = value;
+    });
+    
+    // Student ID formatting
+    document.getElementById('studentId').addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+    
+    // Password confirmation
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = this.value;
+        
+        if (confirmPassword && password !== confirmPassword) {
+            this.setCustomValidity('Passwords do not match');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+</script>
+{% endblock %}

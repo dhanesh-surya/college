@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    News & Announcements — {{ college_info.name|default:"Chaitanya College" }}
+{% endblock %}
+
+{% block content %}
+<section class="py-5 tw-bg-gradient-to-br tw-from-indigo-50 tw-via-blue-50 tw-to-blue-100 min-vh-100">
+    <div class="container">
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8 text-center">
+                <h2 class="section-title text-primary mb-2">📰 News & Announcements</h2>
+                <p class="lead text-muted mb-0">Stay up to date with the latest events, updates, and official announcements from your college.</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="list-group shadow-lg">
+                    {% for notice in notices %}
+                        <a href="{{ notice.get_absolute_url }}" class="list-group-item list-group-item-action d-flex flex-column flex-md-row align-items-start align-items-md-center bg-white tw-transition-all tw-duration-300 hover:tw-scale-102 mb-2 rounded-2">
+                            <div class="me-md-3 mb-2 mb-md-0">
+                                <span class="badge bg-info text-dark px-3 py-2">{{ notice.publish_date|date:"d M Y" }}</span>
+                            </div>
+                            <div class="flex-fill">
+                                <div class="fw-bold text-primary">{{ notice.title }}</div>
+                                {% if notice.content %}
+                                    <div class="text-muted small mt-1 mb-0" style="line-height: 1.6;">
+                                        {{ notice.content|striptags|truncatewords:20 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% if notice.attachment %}
+                                <span class="ms-md-3 mt-2 mt-md-0"><i class="fas fa-paperclip text-secondary"></i></span>
+                            {% endif %}
+                            <span class="ms-md-auto text-muted small d-none d-md-inline px-2">
+                                {{ notice.category|capfirst }}
+                            </span>
+                        </a>
+                    {% empty %}
+                        <div class="list-group-item text-muted text-center py-4">
+                            No news or announcements at this time.
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

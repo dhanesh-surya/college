@@ -1,16 +1,26 @@
 import os
+import re
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordResetForm
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django_ckeditor_5.widgets import CKEditor5Widget
+from datetime import datetime
 from .models import (
     ScrollingNotification, HeaderInfo, NavbarInfo, CollegeInfo, Program, Event, Notice, SocialInitiative, 
-    StudentTestimonial, ImportantLink, ContactMessage,
+    StudentTestimonial, ImportantLink, ContactMessage, AdmissionInquiry,
     Menu, MenuItem, Page, BlockRichText, BlockImageGallery,
     BlockVideoEmbed, BlockDownloadList, BlockTableHTML, BlockForm,
     GalleryImage, DownloadFile, TopUtilityBar, CustomLink,
     IQACInfo, IQACReport, NAACInfo, NIRFInfo, AccreditationInfo, IQACFeedback, 
-    QualityInitiative, SideMenu, SideMenuItem
+    QualityInitiative, SideMenu, SideMenuItem, VisionMissionContent, CoreValue, HeroBanner,
+    ExamTimetable, ExamTimetableWeek, ExamTimetableTimeSlot, ExamTimetableExam, QuestionPaper, RevaluationInfo, ExamRulesInfo, ResearchCenterInfo,
+    PublicationInfo, Publication, PatentsProjectsInfo, Patent, ResearchProject, IndustryCollaboration,
+    ConsultancyInfo, ConsultancyService, ConsultancyExpertise, ConsultancySuccessStory,
+    Student, StudentDocument, StudentLoginLog,
+    NSSNCCClub, NSSNCCNotice, NSSNCCGallery, NSSNCCAchievement,
+    HeroCarouselSlide, HeroCarouselSettings
 )
 
 
@@ -918,6 +928,7 @@ class NavbarInfoForm(forms.ModelForm):
         model = NavbarInfo
         fields = '__all__'
         widgets = {
+            # Brand/Logo settings
             'brand_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'College Name'
@@ -934,6 +945,8 @@ class NavbarInfoForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Search...'
             }),
+            
+            # Color fields
             'navbar_background_color': forms.TextInput(attrs={
                 'type': 'color',
                 'class': 'form-control form-control-color'
@@ -950,7 +963,243 @@ class NavbarInfoForm(forms.ModelForm):
                 'type': 'color',
                 'class': 'form-control form-control-color'
             }),
+            
+            # Navbar dimensions and spacing
+            'navbar_height': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '20',
+                'max': '100',
+                'step': '1'
+            }),
+            'navbar_padding_top': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '2',
+                'step': '0.1'
+            }),
+            'navbar_padding_bottom': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '2',
+                'step': '0.1'
+            }),
+            'navbar_padding_horizontal': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '2',
+                'step': '0.1'
+            }),
+            
+            # Menu item spacing
+            'menu_item_padding_vertical': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '1',
+                'step': '0.05'
+            }),
+            'menu_item_padding_horizontal': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '1',
+                'step': '0.05'
+            }),
+            'menu_item_margin': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '0.1',
+                'step': '0.001'
+            }),
+            'menu_item_gap': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '0.1',
+                'step': '0.001'
+            }),
+            'menu_item_border_radius': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '10',
+                'step': '0.5'
+            }),
+            
+            # Font settings
+            'brand_font_size': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0.5',
+                'max': '2',
+                'step': '0.05'
+            }),
+            'menu_font_size': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0.5',
+                'max': '1.5',
+                'step': '0.05'
+            }),
+            'menu_line_height': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '1',
+                'max': '2',
+                'step': '0.1'
+            }),
+            
+            # Logo settings
+            'logo_height': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '15',
+                'max': '60',
+                'step': '1'
+            }),
+            
+            # Responsive breakpoints
+            'mobile_breakpoint': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '600',
+                'max': '1200',
+                'step': '1'
+            }),
+            'tablet_breakpoint': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '600',
+                'max': '1000',
+                'step': '1'
+            }),
+            
+            # Mobile specific settings
+            'mobile_navbar_height': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '20',
+                'max': '80',
+                'step': '1'
+            }),
+            'mobile_padding_horizontal': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '1',
+                'step': '0.05'
+            }),
+            'mobile_menu_font_size': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0.5',
+                'max': '1',
+                'step': '0.05'
+            }),
+            'mobile_brand_font_size': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0.5',
+                'max': '1.5',
+                'step': '0.05'
+            }),
+            'mobile_logo_height': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '15',
+                'max': '40',
+                'step': '1'
+            }),
+            
+            # Dropdown settings
+            'dropdown_padding': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '2',
+                'step': '0.1'
+            }),
+            'dropdown_item_padding_vertical': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '1',
+                'step': '0.05'
+            }),
+            'dropdown_item_padding_horizontal': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '2',
+                'step': '0.1'
+            }),
+            'dropdown_item_font_size': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0.5',
+                'max': '1.5',
+                'step': '0.05'
+            }),
+            'dropdown_item_margin': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '1',
+                'step': '0.05'
+            }),
+            
+            # Mega menu settings
+            'mega_menu_padding': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '2',
+                'step': '0.1'
+            }),
+            'mega_menu_columns': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '1',
+                'max': '6',
+                'step': '1'
+            }),
+            'mega_menu_width': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'auto, 100%, 800px, etc.'
+            }),
+            
+            # Animation settings
+            'transition_duration': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0.1',
+                'max': '2',
+                'step': '0.1'
+            }),
+            'hover_scale': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '1',
+                'max': '1.5',
+                'step': '0.01'
+            }),
+            
+            # Shadow and border settings
+            'box_shadow': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'CSS box-shadow value'
+            }),
+            'border_radius': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '20',
+                'step': '0.5'
+            }),
         }
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Validate responsive breakpoints
+        mobile_breakpoint = cleaned_data.get('mobile_breakpoint')
+        tablet_breakpoint = cleaned_data.get('tablet_breakpoint')
+        
+        if mobile_breakpoint and tablet_breakpoint:
+            if mobile_breakpoint <= tablet_breakpoint:
+                raise forms.ValidationError("Mobile breakpoint must be greater than tablet breakpoint.")
+        
+        # Validate mega menu columns
+        mega_menu_columns = cleaned_data.get('mega_menu_columns')
+        if mega_menu_columns and (mega_menu_columns < 1 or mega_menu_columns > 6):
+            raise forms.ValidationError("Mega menu columns must be between 1 and 6.")
+        
+        # Validate navbar height
+        navbar_height = cleaned_data.get('navbar_height')
+        mobile_navbar_height = cleaned_data.get('mobile_navbar_height')
+        
+        if navbar_height and (navbar_height < 20 or navbar_height > 100):
+            raise forms.ValidationError("Navbar height must be between 20 and 100 pixels.")
+        
+        if mobile_navbar_height and (mobile_navbar_height < 20 or mobile_navbar_height > 80):
+            raise forms.ValidationError("Mobile navbar height must be between 20 and 80 pixels.")
+        
+        return cleaned_data
 
 
 class CollegeInfoForm(forms.ModelForm):
@@ -968,12 +1217,158 @@ class CollegeInfoForm(forms.ModelForm):
 
 
 class ProgramForm(forms.ModelForm):
+    """Enhanced form for Program model with comprehensive fields and better organization"""
+    
     class Meta:
         model = Program
         fields = '__all__'
         widgets = {
+            # Basic Information
             'description': CKEditor5Widget(),
+            'curriculum': CKEditor5Widget(),
+            'eligibility': CKEditor5Widget(),
+            'admission_process': CKEditor5Widget(),
+            'career_opportunities': CKEditor5Widget(),
+            
+            # Course Syllabus
+            'first_year_subjects': CKEditor5Widget(),
+            'second_year_subjects': CKEditor5Widget(),
+            'third_year_subjects': CKEditor5Widget(),
+            'elective_options': CKEditor5Widget(),
+            
+            # CO-PO Information
+            'program_outcomes': CKEditor5Widget(),
+            'course_outcomes': CKEditor5Widget(),
+            'co_po_mapping': CKEditor5Widget(),
+            
+            # Timetable Information
+            'timetable_info': CKEditor5Widget(),
+            'weekly_schedule': CKEditor5Widget(),
+            
+            # Career Prospects
+            'teaching_careers': CKEditor5Widget(),
+            'media_journalism_careers': CKEditor5Widget(),
+            'government_careers': CKEditor5Widget(),
+            'private_sector_careers': CKEditor5Widget(),
+            'further_studies': CKEditor5Widget(),
+            'entrepreneurship': CKEditor5Widget(),
+            
+            # Course Features
+            'expert_faculty': CKEditor5Widget(),
+            'infrastructure': CKEditor5Widget(),
+            'research_opportunities': CKEditor5Widget(),
+            'industry_connect': CKEditor5Widget(),
+            'additional_benefits': CKEditor5Widget(),
+            'assessment_methods': CKEditor5Widget(),
+            'global_opportunities': CKEditor5Widget(),
+            
+            # File Uploads
             'brochure': forms.ClearableFileInput(attrs={'accept': '.pdf,.doc,.docx'}),
+            'program_image': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
+            
+            # Number Inputs
+            'established_year': forms.NumberInput(attrs={'min': '1900', 'max': '2030'}),
+            'minimum_percentage': forms.NumberInput(attrs={'min': '0', 'max': '100', 'step': '0.01'}),
+            'fees': forms.NumberInput(attrs={'min': '0', 'step': '0.01'}),
+            'total_seats': forms.NumberInput(attrs={'min': '1'}),
+            
+            # Text Inputs
+            'class_timings': forms.TextInput(attrs={'placeholder': 'e.g., 9:00 AM - 1:15 PM'}),
+            'name': forms.TextInput(attrs={'placeholder': 'e.g., Bachelor of Arts in English Literature'}),
+            'short_name': forms.TextInput(attrs={'placeholder': 'e.g., B.A. English'}),
+            'duration': forms.TextInput(attrs={'placeholder': 'e.g., 3 years'}),
+            'department': forms.TextInput(attrs={'placeholder': 'e.g., Department of Arts'}),
+            'entrance_exam': forms.TextInput(attrs={'placeholder': 'e.g., CUET, College Entrance Test'}),
+            'accreditation': forms.TextInput(attrs={'placeholder': 'e.g., UGC, AICTE'}),
+            'average_salary': forms.TextInput(attrs={'placeholder': 'e.g., ₹3-5 LPA'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Add Bootstrap classes to form fields
+        for field_name, field in self.fields.items():
+            if field.widget.attrs.get('class'):
+                field.widget.attrs['class'] += ' form-control'
+            else:
+                field.widget.attrs['class'] = 'form-control'
+            
+            # Add specific styling for different field types
+            if isinstance(field.widget, forms.TextInput):
+                field.widget.attrs['class'] += ' form-control'
+            elif isinstance(field.widget, forms.Textarea):
+                field.widget.attrs['class'] += ' form-control'
+            elif isinstance(field.widget, forms.Select):
+                field.widget.attrs['class'] += ' form-select'
+            elif isinstance(field.widget, forms.CheckboxInput):
+                field.widget.attrs['class'] += ' form-check-input'
+        
+        # Add help text and placeholders
+        self.fields['name'].help_text = 'Enter the full program name (e.g., Bachelor of Technology in Computer Science)'
+        self.fields['short_name'].help_text = 'Enter abbreviated name (e.g., B.Tech CSE)'
+        self.fields['duration'].help_text = 'Program duration (e.g., 3 years, 4 years, 2 years)'
+        self.fields['minimum_percentage'].help_text = 'Minimum percentage required for admission'
+        self.fields['fees'].help_text = 'Annual fees in INR'
+        self.fields['average_salary'].help_text = 'Expected salary range (e.g., ₹3-5 LPA)'
+    
+    def clean_minimum_percentage(self):
+        percentage = self.cleaned_data.get('minimum_percentage')
+        if percentage is not None and (percentage < 0 or percentage > 100):
+            raise forms.ValidationError('Percentage must be between 0 and 100.')
+        return percentage
+    
+    def clean_fees(self):
+        fees = self.cleaned_data.get('fees')
+        if fees is not None and fees < 0:
+            raise forms.ValidationError('Fees cannot be negative.')
+        return fees
+    
+    def clean_total_seats(self):
+        seats = self.cleaned_data.get('total_seats')
+        if seats is not None and seats < 1:
+            raise forms.ValidationError('Total seats must be at least 1.')
+        return seats
+
+
+class ProgramCreateForm(ProgramForm):
+    """Form specifically for creating new programs"""
+    
+    class Meta(ProgramForm.Meta):
+        fields = [
+            'name', 'short_name', 'discipline', 'degree_type', 'description',
+            'duration', 'total_seats', 'department', 'eligibility',
+            'minimum_percentage', 'entrance_exam', 'fees', 'program_image',
+            'is_featured', 'is_active'
+        ]
+
+
+class ProgramUpdateForm(ProgramForm):
+    """Form specifically for updating existing programs"""
+    
+    class Meta(ProgramForm.Meta):
+        fields = '__all__'
+        exclude = ['slug']  # Don't allow slug editing
+
+
+class ProgramQuickEditForm(forms.ModelForm):
+    """Quick edit form for basic program information"""
+    
+    class Meta:
+        model = Program
+        fields = [
+            'name', 'short_name', 'discipline', 'degree_type', 'duration',
+            'total_seats', 'fees', 'is_featured', 'is_active'
+        ]
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'short_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'discipline': forms.Select(attrs={'class': 'form-select'}),
+            'degree_type': forms.Select(attrs={'class': 'form-select'}),
+            'duration': forms.TextInput(attrs={'class': 'form-control'}),
+            'total_seats': forms.NumberInput(attrs={'class': 'form-control', 'min': '1'}),
+            'fees': forms.NumberInput(attrs={'class': 'form-control', 'min': '0', 'step': '0.01'}),
+            'is_featured': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
 
@@ -1068,6 +1463,313 @@ class ContactForm(forms.ModelForm):
         if email and '@' not in email:
             raise ValidationError("Please enter a valid email address.")
         return email
+
+
+class AdmissionInquiryForm(forms.ModelForm):
+    """Comprehensive admission inquiry form with Bootstrap 5 and Tailwind CSS styling"""
+    
+    class Meta:
+        model = AdmissionInquiry
+        fields = [
+            'full_name', 'email', 'phone', 'current_qualification', 'percentage_marks',
+            'inquiry_type', 'program_interest', 'specific_course', 'message',
+            'preferred_contact_method', 'newsletter_subscription'
+        ]
+        
+        widgets = {
+            'full_name': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm border-2',
+                'placeholder': 'Enter your full name',
+                'required': True,
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'Enter your complete name as it appears on your documents'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm border-2',
+                'placeholder': 'your.email@example.com',
+                'required': True,
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'We will use this email to communicate with you'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm border-2',
+                'placeholder': '+91-XXXXXXXXXX',
+                'required': True,
+                'pattern': r'^[\+]?[1-9][\d\s\-\(\)]{8,15}$',
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'Enter your contact number with country code'
+            }),
+            'current_qualification': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm border-2',
+                'placeholder': 'e.g., 12th Pass, B.A., B.Sc., M.A., etc.',
+                'required': True,
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'Your highest completed qualification'
+            }),
+            'percentage_marks': forms.NumberInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm border-2',
+                'placeholder': 'e.g., 85.5',
+                'min': '0',
+                'max': '100',
+                'step': '0.01',
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'Percentage marks in your latest qualification (optional)'
+            }),
+            'inquiry_type': forms.Select(attrs={
+                'class': 'form-select rounded-3 shadow-sm border-2',
+                'required': True,
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'Select the type of inquiry you have'
+            }),
+            'program_interest': forms.Select(attrs={
+                'class': 'form-select rounded-3 shadow-sm border-2',
+                'required': True,
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'Which program level are you interested in?'
+            }),
+            'specific_course': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm border-2',
+                'placeholder': 'e.g., B.Sc Computer Science, M.A English, etc.',
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'If you know the specific course name, please mention it'
+            }),
+            'message': forms.Textarea(attrs={
+                'class': 'form-control rounded-3 shadow-sm border-2',
+                'rows': 5,
+                'placeholder': 'Please share your specific questions, requirements, or any additional information you would like us to know...',
+                'required': True,
+                'maxlength': '1000',
+                'data-counter': 'true',
+                'data-counter-target': 'message-counter',
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'Please provide detailed information about your inquiry'
+            }),
+            'preferred_contact_method': forms.RadioSelect(attrs={
+                'class': 'form-check-input',
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'How would you prefer us to contact you?'
+            }),
+            'newsletter_subscription': forms.CheckboxInput(attrs={
+                'class': 'form-check-input rounded shadow-sm',
+                'data-bs-toggle': 'tooltip',
+                'data-bs-placement': 'top',
+                'title': 'Subscribe to receive updates about courses, events, and announcements'
+            })
+        }
+        
+        help_texts = {
+            'full_name': 'Please enter your complete name as it appears on your official documents',
+            'email': 'We will use this email address for all communication regarding your inquiry',
+            'phone': 'Include country code (e.g., +91 for India). We may call you for urgent communications',
+            'current_qualification': 'Your highest completed educational qualification',
+            'percentage_marks': 'Optional: Your percentage/CGPA in the latest qualification for eligibility assessment',
+            'inquiry_type': 'Select the category that best describes your inquiry',
+            'program_interest': 'Choose the program level you are interested in',
+            'specific_course': 'Optional: If you know the specific course name, please mention it',
+            'message': 'Please provide detailed information about your requirements, questions, or concerns',
+            'preferred_contact_method': 'How would you like us to contact you with our response?',
+            'newsletter_subscription': 'Stay updated with our latest courses, events, and important announcements'
+        }
+        
+        labels = {
+            'full_name': 'Full Name',
+            'email': 'Email Address',
+            'phone': 'Phone Number',
+            'current_qualification': 'Current Highest Qualification',
+            'percentage_marks': 'Percentage/Marks (Optional)',
+            'inquiry_type': 'Type of Inquiry',
+            'program_interest': 'Program Interest',
+            'specific_course': 'Specific Course (Optional)',
+            'message': 'Your Message/Questions',
+            'preferred_contact_method': 'Preferred Contact Method',
+            'newsletter_subscription': 'Subscribe to Newsletter'
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Add required field indicators
+        required_fields = ['full_name', 'email', 'phone', 'current_qualification', 'inquiry_type', 'program_interest', 'message']
+        for field_name in required_fields:
+            if field_name in self.fields:
+                self.fields[field_name].required = True
+                # Add visual indicator for required fields
+                if 'class' in self.fields[field_name].widget.attrs:
+                    self.fields[field_name].widget.attrs['class'] += ' required'
+                else:
+                    self.fields[field_name].widget.attrs['class'] = 'form-control required'
+        
+        # Customize choice fields
+        self.fields['inquiry_type'].choices = [
+            ('', 'Select Inquiry Type'),
+            ('general', 'General Information'),
+            ('eligibility', 'Eligibility Requirements'),
+            ('documents', 'Required Documents'),
+            ('fees', 'Fee Structure & Payment'),
+            ('application', 'Application Process'),
+            ('other', 'Other (Please specify in message)')
+        ]
+        
+        self.fields['program_interest'].choices = [
+            ('', 'Select Program Level'),
+            ('undergraduate', 'Undergraduate (Bachelor\'s Degree)'),
+            ('postgraduate', 'Postgraduate (Master\'s Degree)'),
+            ('diploma', 'Diploma Courses'),
+            ('certificate', 'Certificate Courses'),
+            ('not_decided', 'Not Decided Yet (Need Guidance)')
+        ]
+        
+        self.fields['preferred_contact_method'].choices = [
+            ('email', 'Email (Preferred)'),
+            ('phone', 'Phone Call'),
+            ('both', 'Both Email & Phone')
+        ]
+        
+        # Add custom styling classes
+        self.fields['preferred_contact_method'].widget.attrs.update({
+            'class': 'form-check-input me-2'
+        })
+        
+        # Add focus and blur effects
+        for field_name, field in self.fields.items():
+            if hasattr(field.widget, 'attrs'):
+                field.widget.attrs.update({
+                    'data-field-name': field_name,
+                    'onfocus': 'this.classList.add("border-primary", "shadow-lg")',
+                    'onblur': 'this.classList.remove("border-primary", "shadow-lg")'
+                })
+    
+    def clean_full_name(self):
+        full_name = self.cleaned_data.get('full_name')
+        if full_name:
+            full_name = full_name.strip()
+            if len(full_name) < 2:
+                raise forms.ValidationError('Name must be at least 2 characters long.')
+            # Check for numbers in name
+            if any(char.isdigit() for char in full_name):
+                raise forms.ValidationError('Name should not contain numbers.')
+            # Remove extra spaces and capitalize properly
+            full_name = ' '.join(word.capitalize() for word in full_name.split())
+        return full_name
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            email = email.strip().lower()
+            # Basic email validation
+            if '@' not in email or '.' not in email:
+                raise forms.ValidationError('Please enter a valid email address.')
+        return email
+    
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if phone:
+            phone = phone.strip()
+            # Remove spaces, hyphens, and parentheses for validation
+            phone_digits = ''.join(filter(str.isdigit, phone.replace('+', '')))
+            if len(phone_digits) < 10:
+                raise forms.ValidationError(
+                    'Phone number must have at least 10 digits. '
+                    'Example: +91-9425540666 or (555) 123-4567'
+                )
+            
+            # Basic phone validation with country code support
+            import re
+            if not re.match(r'^[\+]?[1-9][\d\s\-\(\)]{8,15}$', phone):
+                raise forms.ValidationError(
+                    'Please enter a valid phone number with country code. '
+                    'Example: +91-9425540666 or (555) 123-4567'
+                )
+        return phone
+    
+    def clean_current_qualification(self):
+        qualification = self.cleaned_data.get('current_qualification')
+        if qualification:
+            qualification = qualification.strip()
+            if len(qualification) < 2:
+                raise forms.ValidationError('Please provide a valid qualification.')
+            # Capitalize each word
+            qualification = ' '.join(word.capitalize() for word in qualification.split())
+        return qualification
+    
+    def clean_percentage_marks(self):
+        percentage = self.cleaned_data.get('percentage_marks')
+        if percentage is not None:
+            if percentage < 0 or percentage > 100:
+                raise forms.ValidationError('Percentage must be between 0 and 100.')
+            if percentage < 35:
+                raise forms.ValidationError(
+                    'Please double-check your percentage. Marks below 35% are uncommon for higher education.'
+                )
+        return percentage
+    
+    def clean_specific_course(self):
+        course = self.cleaned_data.get('specific_course')
+        if course:
+            course = course.strip()
+            # Capitalize appropriately
+            course = ' '.join(word.capitalize() for word in course.split())
+        return course
+    
+    def clean_message(self):
+        message = self.cleaned_data.get('message')
+        if message:
+            message = message.strip()
+            if len(message) < 10:
+                raise forms.ValidationError(
+                    'Please provide more detailed information (at least 10 characters).'
+                )
+            if len(message) > 1000:
+                raise forms.ValidationError(
+                    'Message is too long. Please keep it under 1000 characters.'
+                )
+        return message
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        # Cross-field validation
+        program_interest = cleaned_data.get('program_interest')
+        current_qualification = cleaned_data.get('current_qualification')
+        percentage_marks = cleaned_data.get('percentage_marks')
+        
+        # Validate program interest against current qualification
+        if program_interest and current_qualification:
+            current_qual_lower = current_qualification.lower()
+            
+            # Basic eligibility checking
+            if program_interest == 'undergraduate':
+                if any(word in current_qual_lower for word in ['b.', 'bachelor', 'degree', 'm.', 'master']):
+                    self.add_error('program_interest', 
+                        'You already have a degree. Consider postgraduate programs instead.'
+                    )
+            elif program_interest == 'postgraduate':
+                if not any(word in current_qual_lower for word in ['b.', 'bachelor', 'degree']) and '12th' in current_qual_lower:
+                    self.add_error('program_interest', 
+                        'Postgraduate programs typically require a bachelor\'s degree. '
+                        'Consider undergraduate programs first.'
+                    )
+        
+        # Validate contact preferences
+        phone = cleaned_data.get('phone')
+        preferred_contact = cleaned_data.get('preferred_contact_method')
+        
+        if preferred_contact in ['phone', 'both'] and not phone:
+            self.add_error('preferred_contact_method', 
+                'Phone number is required if you prefer phone contact.'
+            )
+        
+        return cleaned_data
 
 
 # CMS Forms
@@ -1336,6 +2038,536 @@ class EnhancedDownloadFileForm(forms.ModelForm):
 class DownloadFileForm(EnhancedDownloadFileForm):
     """Backward compatibility alias"""
     pass
+
+
+# ============================================================================
+# STUDENT PORTAL AUTHENTICATION FORMS
+# ============================================================================
+
+class StudentRegistrationForm(UserCreationForm):
+    """Enhanced student registration form with comprehensive validation and styling"""
+    
+    # Personal Information Fields
+    first_name = forms.CharField(
+        max_length=50,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': 'Enter your first name',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Enter your first name as it appears on your documents'
+        })
+    )
+    
+    last_name = forms.CharField(
+        max_length=50,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': 'Enter your last name',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Enter your last name as it appears on your documents'
+        })
+    )
+    
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': 'your.email@example.com',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'We will use this email for all communications'
+        })
+    )
+    
+    phone = forms.CharField(
+        max_length=15,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': '+91-9876543210',
+            'pattern': r'^[\+]?[1-9][\d\s\-\(\)]{8,15}$',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Enter your mobile number with country code'
+        })
+    )
+    
+    # Academic Information Fields
+    student_id = forms.CharField(
+        max_length=20,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': 'Enter your student ID',
+            'style': 'text-transform: uppercase;',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Your official student ID provided by the college'
+        })
+    )
+    
+    course = forms.ChoiceField(
+        choices=Student.COURSE_CHOICES,
+        required=True,
+        widget=forms.Select(attrs={
+            'class': 'form-select rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Select your enrolled course/program'
+        })
+    )
+    
+    year = forms.ChoiceField(
+        choices=Student.YEAR_CHOICES,
+        required=True,
+        widget=forms.Select(attrs={
+            'class': 'form-select rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Select your current academic year'
+        })
+    )
+    
+    # Terms and Newsletter
+    terms = forms.BooleanField(
+        required=True,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input tw-w-5 tw-h-5 tw-text-blue-600 tw-rounded focus:tw-ring-blue-500',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'You must agree to the terms and conditions to register'
+        })
+    )
+    
+    newsletter = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input tw-w-5 tw-h-5 tw-text-blue-600 tw-rounded focus:tw-ring-blue-500',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Subscribe to receive updates about courses, events, and announcements'
+        })
+    )
+    
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'student_id', 'course', 'year', 'phone', 'password1', 'password2', 'terms', 'newsletter')
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Customize password fields
+        self.fields['password1'].widget.attrs.update({
+            'class': 'form-control rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': 'Create a strong password',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Password must be at least 8 characters with uppercase, lowercase, and numbers'
+        })
+        
+        self.fields['password2'].widget.attrs.update({
+            'class': 'form-control rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': 'Confirm your password',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Re-enter the same password for confirmation'
+        })
+        
+        # Update labels and help text
+        self.fields['first_name'].label = 'First Name'
+        self.fields['last_name'].label = 'Last Name'
+        self.fields['email'].label = 'Email Address'
+        self.fields['phone'].label = 'Phone Number'
+        self.fields['student_id'].label = 'Student ID'
+        self.fields['course'].label = 'Course/Program'
+        self.fields['year'].label = 'Academic Year'
+        self.fields['password1'].label = 'Password'
+        self.fields['password2'].label = 'Confirm Password'
+        self.fields['terms'].label = 'I agree to the Terms of Service and Privacy Policy'
+        self.fields['newsletter'].label = 'Subscribe to newsletter for updates and announcements'
+        
+        # Add help text
+        self.fields['first_name'].help_text = 'Enter your first name as it appears on official documents'
+        self.fields['last_name'].help_text = 'Enter your last name as it appears on official documents'
+        self.fields['email'].help_text = 'We will use this email for account verification and communications'
+        self.fields['phone'].help_text = 'Enter your mobile number with country code (e.g., +91-9876543210)'
+        self.fields['student_id'].help_text = 'Your official student ID provided by the college'
+        self.fields['course'].help_text = 'Select the course/program you are enrolled in'
+        self.fields['year'].help_text = 'Select your current academic year'
+        self.fields['password1'].help_text = 'Password must be at least 8 characters long and contain uppercase, lowercase, and numbers'
+        self.fields['password2'].help_text = 'Enter the same password as above for verification'
+        self.fields['terms'].help_text = 'You must agree to our terms and conditions to create an account'
+        self.fields['newsletter'].help_text = 'Stay updated with course information, events, and important announcements'
+    
+    def clean_first_name(self):
+        """Validate first name"""
+        first_name = self.cleaned_data.get('first_name')
+        if first_name:
+            first_name = first_name.strip().title()
+            if len(first_name) < 2:
+                raise forms.ValidationError('First name must be at least 2 characters long.')
+            if not re.match(r'^[a-zA-Z\s\'\-\.]+$', first_name):
+                raise forms.ValidationError('First name can only contain letters, spaces, hyphens, apostrophes, and dots.')
+        return first_name
+    
+    def clean_last_name(self):
+        """Validate last name"""
+        last_name = self.cleaned_data.get('last_name')
+        if last_name:
+            last_name = last_name.strip().title()
+            if len(last_name) < 2:
+                raise forms.ValidationError('Last name must be at least 2 characters long.')
+            if not re.match(r'^[a-zA-Z\s\'\-\.]+$', last_name):
+                raise forms.ValidationError('Last name can only contain letters, spaces, hyphens, apostrophes, and dots.')
+        return last_name
+    
+    def clean_email(self):
+        """Validate email and check for uniqueness"""
+        email = self.cleaned_data.get('email')
+        if email:
+            email = email.lower().strip()
+            
+            # Check if email already exists
+            if User.objects.filter(email=email).exists():
+                raise forms.ValidationError(
+                    'An account with this email already exists. '
+                    'Please use a different email or try logging in.'
+                )
+            
+            # Basic email validation (additional to Django's EmailField)
+            if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+                raise forms.ValidationError('Please enter a valid email address.')
+        
+        return email
+    
+    def clean_phone(self):
+        """Validate phone number"""
+        phone = self.cleaned_data.get('phone')
+        if phone:
+            phone = phone.strip()
+            
+            # Remove spaces and special characters for validation
+            phone_digits = re.sub(r'[^\d+]', '', phone)
+            
+            # Check if it has minimum digits
+            if len(re.sub(r'[^\d]', '', phone_digits)) < 10:
+                raise forms.ValidationError(
+                    'Phone number must have at least 10 digits. '
+                    'Example: +91-9876543210 or (555) 123-4567'
+                )
+            
+            # Basic phone validation with country code support
+            if not re.match(r'^[\+]?[1-9][\d\s\-\(\)]{8,15}$', phone):
+                raise forms.ValidationError(
+                    'Please enter a valid phone number with country code. '
+                    'Example: +91-9876543210 or (555) 123-4567'
+                )
+        
+        return phone
+    
+    def clean_student_id(self):
+        """Validate student ID and check for uniqueness"""
+        student_id = self.cleaned_data.get('student_id')
+        if student_id:
+            student_id = student_id.upper().strip()
+            
+            # Check if student ID already exists
+            if Student.objects.filter(student_id=student_id).exists():
+                raise forms.ValidationError(
+                    'This Student ID is already registered. '
+                    'Please check your Student ID or contact administration.'
+                )
+            
+            # Basic format validation
+            if len(student_id) < 4:
+                raise forms.ValidationError('Student ID must be at least 4 characters long.')
+            
+            if not re.match(r'^[A-Z0-9\-]+$', student_id):
+                raise forms.ValidationError(
+                    'Student ID can only contain uppercase letters, numbers, and hyphens.'
+                )
+        
+        return student_id
+    
+    def clean_password1(self):
+        """Enhanced password validation"""
+        password1 = self.cleaned_data.get('password1')
+        if password1:
+            # Check minimum length
+            if len(password1) < 8:
+                raise forms.ValidationError('Password must be at least 8 characters long.')
+            
+            # Check for uppercase letter
+            if not re.search(r'[A-Z]', password1):
+                raise forms.ValidationError('Password must contain at least one uppercase letter.')
+            
+            # Check for lowercase letter
+            if not re.search(r'[a-z]', password1):
+                raise forms.ValidationError('Password must contain at least one lowercase letter.')
+            
+            # Check for digit
+            if not re.search(r'\d', password1):
+                raise forms.ValidationError('Password must contain at least one number.')
+            
+            # Check for common passwords
+            common_passwords = ['password', '12345678', 'qwerty123', 'admin123']
+            if password1.lower() in common_passwords:
+                raise forms.ValidationError('This password is too common. Please choose a different one.')
+        
+        return password1
+    
+    def clean(self):
+        """Cross-field validation"""
+        cleaned_data = super().clean()
+        
+        # Check password confirmation
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+        
+        if password1 and password2 and password1 != password2:
+            self.add_error('password2', 'The two password fields didn\'t match.')
+        
+        # Validate terms agreement
+        terms = cleaned_data.get('terms')
+        if not terms:
+            self.add_error('terms', 'You must agree to the Terms of Service and Privacy Policy to register.')
+        
+        return cleaned_data
+    
+    def save(self, commit=True):
+        """Create user and student profile"""
+        # Create the user
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.username = self.cleaned_data['student_id']  # Use student_id as username
+        
+        if commit:
+            user.save()
+            
+            # Create the student profile
+            student = Student.objects.create(
+                user=user,
+                student_id=self.cleaned_data['student_id'],
+                first_name=self.cleaned_data['first_name'],
+                last_name=self.cleaned_data['last_name'],
+                phone=self.cleaned_data['phone'],
+                course=self.cleaned_data['course'],
+                year=self.cleaned_data['year'],
+                newsletter_subscription=self.cleaned_data.get('newsletter', False)
+            )
+        
+        return user
+
+
+class StudentLoginForm(AuthenticationForm):
+    """Enhanced student login form with modern styling"""
+    
+    username = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control form-control-lg rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': 'Student ID or Email',
+            'autocomplete': 'username',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Enter your Student ID or registered email address'
+        })
+    )
+    
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control form-control-lg rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': 'Password',
+            'autocomplete': 'current-password',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Enter your password'
+        })
+    )
+    
+    remember_me = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input tw-w-4 tw-h-4 tw-text-blue-600 tw-rounded focus:tw-ring-blue-500',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Keep me logged in on this device'
+        })
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Update labels
+        self.fields['username'].label = 'Student ID or Email'
+        self.fields['password'].label = 'Password'
+        self.fields['remember_me'].label = 'Remember me on this device'
+        
+        # Add help text
+        self.fields['username'].help_text = 'Enter your Student ID or registered email address'
+        self.fields['password'].help_text = 'Enter your password'
+        self.fields['remember_me'].help_text = 'Check this to stay logged in for up to 30 days'
+    
+    def clean_username(self):
+        """Allow login with either student ID or email"""
+        username = self.cleaned_data.get('username')
+        if username:
+            username = username.strip()
+            
+            # If it looks like an email, find the user by email
+            if '@' in username:
+                try:
+                    user = User.objects.get(email=username.lower())
+                    username = user.username
+                except User.DoesNotExist:
+                    raise forms.ValidationError('No account found with this email address.')
+            else:
+                # Convert to uppercase for student ID
+                username = username.upper()
+        
+        return username
+
+
+class StudentPasswordResetForm(PasswordResetForm):
+    """Custom password reset form for students"""
+    
+    email = forms.EmailField(
+        max_length=254,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control form-control-lg rounded-3 shadow-sm tw-transition-all tw-duration-300 focus:tw-ring-2 focus:tw-ring-blue-500',
+            'placeholder': 'Enter your registered email address',
+            'autocomplete': 'email',
+            'data-bs-toggle': 'tooltip',
+            'data-bs-placement': 'top',
+            'title': 'Enter the email address associated with your student account'
+        })
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Update labels and help text
+        self.fields['email'].label = 'Email Address'
+        self.fields['email'].help_text = 'Enter the email address you used to register your student account'
+    
+    def clean_email(self):
+        """Validate email exists and is associated with a student"""
+        email = self.cleaned_data.get('email')
+        if email:
+            email = email.lower().strip()
+            
+            # Check if email exists
+            try:
+                user = User.objects.get(email=email)
+                # Check if user has a student profile
+                if not hasattr(user, 'student_profile'):
+                    raise forms.ValidationError(
+                        'This email is not associated with a student account. '
+                        'Please contact administration for assistance.'
+                    )
+            except User.DoesNotExist:
+                raise forms.ValidationError(
+                    'No account found with this email address. '
+                    'Please check your email or register for a new account.'
+                )
+        
+        return email
+
+
+class StudentProfileUpdateForm(forms.ModelForm):
+    """Form for updating student profile information"""
+    
+    class Meta:
+        model = Student
+        fields = [
+            'first_name', 'last_name', 'middle_name', 'phone', 'alternate_phone',
+            'date_of_birth', 'gender', 'address', 'city', 'state', 'pincode',
+            'father_name', 'mother_name', 'guardian_phone', 'guardian_email',
+            'profile_image', 'newsletter_subscription', 'sms_notifications', 
+            'email_notifications'
+        ]
+        
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': 'First Name'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': 'Last Name'
+            }),
+            'middle_name': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': 'Middle Name (Optional)'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': '+91-9876543210'
+            }),
+            'alternate_phone': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': 'Alternate Phone (Optional)'
+            }),
+            'date_of_birth': forms.DateInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'type': 'date'
+            }),
+            'gender': forms.Select(attrs={
+                'class': 'form-select rounded-3 shadow-sm'
+            }),
+            'address': forms.Textarea(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'rows': 3,
+                'placeholder': 'Complete Address'
+            }),
+            'city': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': 'City'
+            }),
+            'state': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': 'State'
+            }),
+            'pincode': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': 'PIN Code'
+            }),
+            'father_name': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': "Father's Name"
+            }),
+            'mother_name': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': "Mother's Name"
+            }),
+            'guardian_phone': forms.TextInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': "Guardian's Phone"
+            }),
+            'guardian_email': forms.EmailInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'placeholder': "Guardian's Email"
+            }),
+            'profile_image': forms.FileInput(attrs={
+                'class': 'form-control rounded-3 shadow-sm',
+                'accept': 'image/*'
+            }),
+            'newsletter_subscription': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'sms_notifications': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'email_notifications': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
 
 
 class BlockTableHTMLForm(forms.ModelForm):
@@ -2239,3 +3471,3473 @@ class SideMenuItemForm(forms.ModelForm):
                 'min': '0'
             })
         }
+
+
+class VisionMissionContentForm(forms.ModelForm):
+    """Form for managing Vision & Mission page content dynamically"""
+    
+    class Meta:
+        model = VisionMissionContent
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Vision & Mission Content Configuration Name'
+            }),
+            'hero_badge_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Our Purpose & Direction'
+            }),
+            'hero_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Vision & Mission'
+            }),
+            'hero_subtitle': CKEditor5Widget(attrs={
+                'class': 'django_ckeditor_5',
+            }, config_name='extends'),
+            'vision_statement': CKEditor5Widget(attrs={
+                'class': 'django_ckeditor_5',
+            }, config_name='extends'),
+            'vision_highlight_1': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Excellence in Education'
+            }),
+            'vision_highlight_2': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Community Impact'
+            }),
+            'vision_highlight_3': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Innovation & Research'
+            }),
+            'vision_highlight_4': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Global Perspective'
+            }),
+            'mission_statement': CKEditor5Widget(attrs={
+                'class': 'django_ckeditor_5',
+            }, config_name='extends'),
+            'mission_objective_1': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Deliver quality education accessible to all'
+            }),
+            'mission_objective_2': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Foster research and innovation culture'
+            }),
+            'mission_objective_3': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Develop socially responsible citizens'
+            }),
+            'cta_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Join Our Journey'
+            }),
+            'cta_description': CKEditor5Widget(attrs={
+                'class': 'django_ckeditor_5',
+            }, config_name='extends'),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        is_active = cleaned_data.get('is_active')
+        
+        # Ensure only one active content at a time
+        if is_active:
+            existing_active = VisionMissionContent.objects.filter(is_active=True)
+            if self.instance.pk:
+                existing_active = existing_active.exclude(pk=self.instance.pk)
+            
+            if existing_active.exists():
+                raise ValidationError("Only one Vision & Mission content configuration can be active at a time. Please deactivate the current active configuration first.")
+        
+        return cleaned_data
+
+
+class CoreValueForm(forms.ModelForm):
+    """Form for managing individual core values"""
+    
+    class Meta:
+        model = CoreValue
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Excellence'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Describe this core value and its importance to the institution...'
+            }),
+            'icon_class': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-trophy',
+                'data-toggle': 'tooltip',
+                'title': 'FontAwesome icon class (e.g., fas fa-trophy, fas fa-star)'
+            }),
+            'gradient_color': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'ordering': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class CoreValueInlineFormSet(forms.BaseInlineFormSet):
+    """Custom formset for managing core values inline with vision mission content"""
+    
+    def clean(self):
+        """Ensure at least one active core value exists"""
+        super().clean()
+        
+        if any(self.errors):
+            return
+        
+        active_values = 0
+        for form in self.forms:
+            if not form.cleaned_data.get('DELETE', False):
+                if form.cleaned_data.get('is_active', False):
+                    active_values += 1
+        
+        if active_values == 0:
+            raise ValidationError("At least one core value must be active.")
+        
+        if active_values > 6:
+            raise ValidationError("Maximum 6 core values can be active at once for optimal display.")
+
+
+# Create the inline formset
+CoreValueFormSet = forms.inlineformset_factory(
+    VisionMissionContent,
+    CoreValue,
+    form=CoreValueForm,
+    formset=CoreValueInlineFormSet,
+    extra=1,
+    can_delete=True,
+    min_num=1,
+    validate_min=True
+)
+
+
+class HeroBannerForm(forms.ModelForm):
+    """Form for editing hero banner content and styling"""
+    
+    class Meta:
+        model = HeroBanner
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter hero title...',
+                'maxlength': '200'
+            }),
+            'subtitle': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Enter hero subtitle...'
+            }),
+            'primary_button_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Get Started'
+            }),
+            'primary_button_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://example.com'
+            }),
+            'secondary_button_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Learn More'
+            }),
+            'secondary_button_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://example.com'
+            }),
+            'background_type': forms.Select(attrs={
+                'class': 'form-select',
+                'id': 'background-type-select'
+            }),
+            'gradient_start_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'gradient_end_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'gradient_direction': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'solid_background_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'background_image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'background_image_opacity': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '100',
+                'type': 'range'
+            }),
+            'background_video_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://www.youtube.com/watch?v=...'
+            }),
+            'title_font_family': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'title_font_size': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'title_font_weight': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'subtitle_font_family': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'subtitle_font_size': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'title_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'subtitle_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'primary_button_bg_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'primary_button_text_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'secondary_button_bg_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'secondary_button_text_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'secondary_button_border_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'padding_top': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'content_alignment': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'enable_animations': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'animation_duration': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0'
+            }),
+            # Two-color title support
+            'title_highlight_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 18+ Courses',
+                'maxlength': '100'
+            }),
+            'title_highlight_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            # Statistics Cards Customization
+            'show_statistics': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'stat_1_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-calendar-alt'
+            }),
+            'stat_1_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '25+'
+            }),
+            'stat_1_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Years Experience'
+            }),
+            'stat_1_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'stat_2_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-users'
+            }),
+            'stat_2_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '8000+'
+            }),
+            'stat_2_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Students'
+            }),
+            'stat_2_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'stat_3_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-book-open'
+            }),
+            'stat_3_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '18+'
+            }),
+            'stat_3_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Courses'
+            }),
+            'stat_3_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'stat_4_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-lock'
+            }),
+            'stat_4_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '95%'
+            }),
+            'stat_4_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Placement'
+            }),
+            'stat_4_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            # Accreditations Customization
+            'show_accreditations': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'accred_1_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'UGC Recognized'
+            }),
+            'accred_1_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-star'
+            }),
+            'accred_1_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'accred_2_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'NAAC Grade A'
+            }),
+            'accred_2_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-star'
+            }),
+            'accred_2_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'accred_3_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '3 Star IIC Rating'
+            }),
+            'accred_3_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-map-marker-alt'
+            }),
+            'accred_3_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            # Statistics Cards Customization
+            'show_statistics': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'stat_1_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-calendar-alt'
+            }),
+            'stat_1_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '25+'
+            }),
+            'stat_1_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Years Experience'
+            }),
+            'stat_1_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'stat_2_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-users'
+            }),
+            'stat_2_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '8000+'
+            }),
+            'stat_2_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Students'
+            }),
+            'stat_2_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'stat_3_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-book-open'
+            }),
+            'stat_3_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '18+'
+            }),
+            'stat_3_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Courses'
+            }),
+            'stat_3_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'stat_4_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-briefcase'
+            }),
+            'stat_4_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '95%'
+            }),
+            'stat_4_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Placement'
+            }),
+            'stat_4_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            # Accreditations Customization
+            'show_accreditations': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'accred_1_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'UGC Recognized'
+            }),
+            'accred_1_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-shield-alt'
+            }),
+            'accred_1_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'accred_2_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'NAAC Grade A'
+            }),
+            'accred_2_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-star'
+            }),
+            'accred_2_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'accred_3_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '3 Star IIC Rating'
+            }),
+            'accred_3_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'fas fa-map-pin'
+            }),
+            'accred_3_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add custom validation and field grouping
+        self.fields['title'].required = True
+        self.fields['background_type'].required = True
+        
+        # Add help text for better UX
+        self.fields['background_video_url'].help_text = "Enter YouTube or Vimeo video URL"
+        self.fields['background_image_opacity'].help_text = "Drag to adjust opacity (0-100%)"
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        background_type = cleaned_data.get('background_type')
+        
+        # Validate background type specific fields
+        if background_type == 'gradient':
+            if not cleaned_data.get('gradient_start_color') or not cleaned_data.get('gradient_end_color'):
+                raise forms.ValidationError("Gradient colors are required when background type is gradient.")
+        
+        elif background_type == 'solid':
+            if not cleaned_data.get('solid_background_color'):
+                raise forms.ValidationError("Solid background color is required when background type is solid.")
+        
+        elif background_type == 'image':
+            if not cleaned_data.get('background_image'):
+                raise forms.ValidationError("Background image is required when background type is image.")
+        
+        elif background_type == 'video':
+            if not cleaned_data.get('background_video_url'):
+                raise forms.ValidationError("Background video URL is required when background type is video.")
+        
+        # Validate button configurations
+        if cleaned_data.get('primary_button_text') and not cleaned_data.get('primary_button_url'):
+            raise forms.ValidationError("Primary button URL is required when primary button text is provided.")
+        
+        if cleaned_data.get('secondary_button_text') and not cleaned_data.get('secondary_button_url'):
+            raise forms.ValidationError("Secondary button URL is required when secondary button text is provided.")
+        
+        return cleaned_data
+    
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        
+        # Set default values for unused background types
+        if instance.background_type != 'gradient':
+            instance.gradient_start_color = '#1e3a8a'
+            instance.gradient_end_color = '#7c3aed'
+        
+        if instance.background_type != 'solid':
+            instance.solid_background_color = '#1e3a8a'
+        
+        if instance.background_type != 'image':
+            instance.background_image = None
+            instance.background_image_opacity = 100
+        
+        if instance.background_type != 'video':
+            instance.background_video_url = ''
+        
+        if commit:
+            instance.save()
+        return instance
+
+
+class ExamTimetableForm(forms.ModelForm):
+    """Form for managing exam timetable configuration"""
+    
+    class Meta:
+        model = ExamTimetable
+        fields = [
+            'name', 'academic_year', 'semester',
+            'header_title', 'header_subtitle',
+            'header_gradient_start', 'header_gradient_end',
+            'exam_guidelines', 'morning_session_start', 'morning_session_end',
+            'afternoon_session_start', 'afternoon_session_end', 'break_duration',
+            'is_active', 'is_featured'
+        ]
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Semester 1 2024'
+            }),
+            'academic_year': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 2024-2025'
+            }),
+            'semester': forms.Select(attrs={
+                'class': 'form-select'
+            }, choices=[
+                ('1st', '1st Semester'),
+                ('2nd', '2nd Semester'),
+                ('3rd', '3rd Semester'),
+                ('4th', '4th Semester'),
+            ]),
+            'header_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Main header title'
+            }),
+            'header_subtitle': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Header subtitle description'
+            }),
+            'header_gradient_start': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'header_gradient_end': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'exam_guidelines': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Enter exam guidelines and rules...'
+            }),
+            'morning_session_start': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time'
+            }),
+            'morning_session_end': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time'
+            }),
+            'afternoon_session_start': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time'
+            }),
+            'afternoon_session_end': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time'
+            }),
+            'break_duration': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 2 hours'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ExamTimetableWeekForm(forms.ModelForm):
+    """Form for managing exam timetable weeks"""
+    
+    class Meta:
+        model = ExamTimetableWeek
+        fields = ['week_number', 'week_title', 'is_active']
+        widgets = {
+            'week_number': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1,
+                'max': 52
+            }),
+            'week_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Custom week title (optional)'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ExamTimetableTimeSlotForm(forms.ModelForm):
+    """Form for managing exam timetable time slots"""
+    
+    class Meta:
+        model = ExamTimetableTimeSlot
+        fields = ['start_time', 'end_time', 'is_active']
+        widgets = {
+            'start_time': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time'
+            }),
+            'end_time': forms.TimeInput(attrs={
+                'class': 'form-control',
+                'type': 'time'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ExamTimetableExamForm(forms.ModelForm):
+    """Form for managing individual exam entries"""
+    
+    class Meta:
+        model = ExamTimetableExam
+        fields = [
+            'day_of_week', 'subject_name', 'room_number', 'duration', 'semester',
+            'priority', 'is_featured', 'background_color', 'border_color', 'text_color', 'is_active'
+        ]
+        widgets = {
+            'day_of_week': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'subject_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Mathematics, Physics, Chemistry'
+            }),
+            'room_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Room 101, Lab A'
+            }),
+            'duration': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 2 hours, 3 hours'
+            }),
+            'semester': forms.Select(attrs={
+                'class': 'form-select'
+            }, choices=[
+                ('1st', '1st Semester'),
+                ('2nd', '2nd Semester'),
+                ('3rd', '3rd Semester'),
+                ('4th', '4th Semester'),
+            ]),
+            'priority': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'background_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'border_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'text_color': forms.TextInput(attrs={
+                'class': 'form-control color-picker',
+                'type': 'color'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ExamTimetableBulkForm(forms.Form):
+    """Form for bulk operations on exam timetable"""
+    
+    ACTION_CHOICES = [
+        ('activate', 'Activate Selected'),
+        ('deactivate', 'Deactivate Selected'),
+        ('delete', 'Delete Selected'),
+        ('duplicate', 'Duplicate Selected'),
+    ]
+    
+    action = forms.ChoiceField(
+        choices=ACTION_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    selected_items = forms.MultipleChoiceField(
+        choices=[],
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        required=False
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # This will be populated dynamically in the view
+        self.fields['selected_items'].choices = []
+
+
+class QuestionPaperForm(forms.ModelForm):
+    """Form for creating and editing question papers"""
+    
+    class Meta:
+        model = QuestionPaper
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Mathematics - 1st Semester'
+            }),
+            'subject': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'semester': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'degree_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'academic_year': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 2024-2025'
+            }),
+            'question_paper_file': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': '.pdf'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Brief description of the question paper'
+            }),
+            'exam_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'duration': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 3 hours'
+            }),
+            'total_marks': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1,
+                'max': 1000
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_active', 'is_featured']:
+                if hasattr(field.widget, 'attrs'):
+                    field.widget.attrs.update({'class': 'form-control'})
+                elif isinstance(field.widget, forms.Select):
+                    field.widget.attrs.update({'class': 'form-select'})
+    
+    def clean_question_paper_file(self):
+        """Validate uploaded file"""
+        file = self.cleaned_data.get('question_paper_file')
+        if file:
+            # Check file extension
+            if not file.name.lower().endswith('.pdf'):
+                raise ValidationError('Only PDF files are allowed.')
+            
+            # Check file size (10MB limit)
+            if file.size > 10 * 1024 * 1024:
+                raise ValidationError('File size cannot exceed 10MB.')
+        
+        return file
+    
+    def clean_total_marks(self):
+        """Validate total marks"""
+        total_marks = self.cleaned_data.get('total_marks')
+        if total_marks is not None and total_marks <= 0:
+            raise ValidationError('Total marks must be greater than 0.')
+        return total_marks
+
+
+class QuestionPaperCreateForm(QuestionPaperForm):
+    """Form for creating new question papers"""
+    
+    class Meta(QuestionPaperForm.Meta):
+        fields = [
+            'title', 'subject', 'semester', 'degree_type', 'academic_year',
+            'question_paper_file', 'description', 'exam_date', 'duration',
+            'total_marks', 'is_active', 'is_featured'
+        ]
+
+
+class QuestionPaperUpdateForm(QuestionPaperForm):
+    """Form for updating existing question papers"""
+    
+    class Meta(QuestionPaperForm.Meta):
+        fields = '__all__'
+        exclude = ['slug']  # Don't allow direct editing of slug
+
+
+class QuestionPaperQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential question paper fields"""
+    
+    class Meta:
+        model = QuestionPaper
+        fields = ['title', 'subject', 'semester', 'academic_year', 'is_active', 'is_featured']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Mathematics - 1st Semester'
+            }),
+            'subject': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'semester': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'academic_year': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 2024-2025'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class QuestionPaperSearchForm(forms.Form):
+    """Form for searching and filtering question papers"""
+    
+    search = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Search question papers...'
+        })
+    )
+    
+    subject = forms.ChoiceField(
+        required=False,
+        choices=[('', 'All Subjects')] + QuestionPaper.SUBJECT_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        })
+    )
+    
+    semester = forms.ChoiceField(
+        required=False,
+        choices=[('', 'All Semesters')] + QuestionPaper.SEMESTER_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        })
+    )
+    
+    degree_type = forms.ChoiceField(
+        required=False,
+        choices=[('', 'All Degrees')] + QuestionPaper.DEGREE_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        })
+    )
+    
+    academic_year = forms.ChoiceField(
+        required=False,
+        choices=[('', 'All Years')],
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        })
+    )
+    
+    is_featured = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input'
+        })
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Populate academic year choices dynamically
+        years = QuestionPaper.get_available_years()
+        self.fields['academic_year'].choices = [('', 'All Years')] + [(year, year) for year in years]
+
+
+class RevaluationInfoForm(forms.ModelForm):
+    """Form for managing revaluation information"""
+    
+    class Meta:
+        model = RevaluationInfo
+        fields = '__all__'
+        widgets = {
+            # Basic Information
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Revaluation'
+            }),
+            'subtitle': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Apply for revaluation of your examination papers'
+            }),
+            
+            # Process Steps
+            'step1_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Download Form'
+            }),
+            'step1_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Step 1 description'
+            }),
+            'step2_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Fill Application'
+            }),
+            'step2_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Step 2 description'
+            }),
+            'step3_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Pay Fees'
+            }),
+            'step3_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Step 3 description'
+            }),
+            'step4_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Submit Application'
+            }),
+            'step4_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Step 4 description'
+            }),
+            
+            # Fee Information
+            'theory_paper_fee': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'practical_paper_fee': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'project_fee': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            
+            # Important Dates
+            'application_period': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 15 days from result declaration'
+            }),
+            'processing_time': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 30-45 days'
+            }),
+            'result_notification': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Via SMS/Email'
+            }),
+            
+            # Rich Text Fields
+            'eligibility_rules': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'required_documents': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            
+            # Contact Information
+            'controller_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Dr. [Name]'
+            }),
+            'controller_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'controller_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., exam@college.edu'
+            }),
+            'controller_office_hours': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 9:00 AM - 5:00 PM'
+            }),
+            'office_location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Ground Floor, Main Building'
+            }),
+            'office_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'office_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., examoffice@college.edu'
+            }),
+            'office_working_days': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Monday to Friday'
+            }),
+            
+            # File Uploads
+            'application_form_file': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': '.pdf'
+            }),
+            'guidelines_file': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': '.pdf'
+            }),
+            'fee_structure_file': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': '.pdf'
+            }),
+            
+            # Important Notice
+            'important_notice': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Important notice text'
+            }),
+            
+            # Status
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_active']:
+                if hasattr(field.widget, 'attrs'):
+                    if 'class' not in field.widget.attrs:
+                        field.widget.attrs.update({'class': 'form-control'})
+                elif isinstance(field.widget, forms.Select):
+                    field.widget.attrs.update({'class': 'form-select'})
+    
+    def clean_theory_paper_fee(self):
+        """Validate theory paper fee"""
+        fee = self.cleaned_data.get('theory_paper_fee')
+        if fee is not None and fee < 0:
+            raise ValidationError('Fee cannot be negative.')
+        return fee
+    
+    def clean_practical_paper_fee(self):
+        """Validate practical paper fee"""
+        fee = self.cleaned_data.get('practical_paper_fee')
+        if fee is not None and fee < 0:
+            raise ValidationError('Fee cannot be negative.')
+        return fee
+    
+    def clean_project_fee(self):
+        """Validate project fee"""
+        fee = self.cleaned_data.get('project_fee')
+        if fee is not None and fee < 0:
+            raise ValidationError('Fee cannot be negative.')
+        return fee
+
+
+class RevaluationInfoUpdateForm(RevaluationInfoForm):
+    """Form for updating revaluation information"""
+    
+    class Meta(RevaluationInfoForm.Meta):
+        fields = '__all__'
+        exclude = ['created_at', 'updated_at']  # Exclude timestamps
+
+
+class RevaluationInfoQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential revaluation information"""
+    
+    class Meta:
+        model = RevaluationInfo
+        fields = [
+            'title', 'subtitle', 'theory_paper_fee', 'practical_paper_fee', 
+            'project_fee', 'application_period', 'processing_time', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Revaluation'
+            }),
+            'subtitle': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Apply for revaluation of your examination papers'
+            }),
+            'theory_paper_fee': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'practical_paper_fee': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'project_fee': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'application_period': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 15 days from result declaration'
+            }),
+            'processing_time': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 30-45 days'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ExamRulesInfoForm(forms.ModelForm):
+    """Form for managing exam rules information"""
+    
+    class Meta:
+        model = ExamRulesInfo
+        fields = '__all__'
+        widgets = {
+            # Basic Information
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Examination Rules & Regulations'
+            }),
+            'subtitle': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Important guidelines and rules for all examinations'
+            }),
+            
+            # Rich Text Fields
+            'timing_rules': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'prohibited_items': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'conduct_rules': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'answer_sheet_details': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'submission_rules': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'violations_penalties': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'appeal_process': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            
+            # Special Instructions
+            'calculator_rules': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Calculator usage rules'
+            }),
+            'open_book_rules': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Open book exam rules'
+            }),
+            'time_extension_rules': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Time extension rules'
+            }),
+            
+            # Contact Information
+            'controller_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Dr. [Name]'
+            }),
+            'controller_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'controller_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., exam@college.edu'
+            }),
+            'controller_office_hours': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 9:00 AM - 5:00 PM'
+            }),
+            'office_location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Ground Floor, Main Building'
+            }),
+            'office_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'office_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., examoffice@college.edu'
+            }),
+            'office_working_days': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Monday to Friday'
+            }),
+            
+            # Important Notice
+            'important_notice': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Important notice text'
+            }),
+            
+            # Status
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_active']:
+                if hasattr(field.widget, 'attrs'):
+                    if 'class' not in field.widget.attrs:
+                        field.widget.attrs.update({'class': 'form-control'})
+                elif isinstance(field.widget, forms.Select):
+                    field.widget.attrs.update({'class': 'form-select'})
+
+
+class ExamRulesInfoUpdateForm(ExamRulesInfoForm):
+    """Form for updating exam rules information"""
+    
+    class Meta(ExamRulesInfoForm.Meta):
+        fields = '__all__'
+        exclude = ['created_at', 'updated_at']  # Exclude timestamps
+
+
+class ExamRulesInfoQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential exam rules information"""
+    
+    class Meta:
+        model = ExamRulesInfo
+        fields = [
+            'title', 'subtitle', 'controller_name', 'controller_phone', 
+            'controller_email', 'office_phone', 'office_email', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Examination Rules & Regulations'
+            }),
+            'subtitle': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Important guidelines and rules for all examinations'
+            }),
+            'controller_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Dr. [Name]'
+            }),
+            'controller_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'controller_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., exam@college.edu'
+            }),
+            'office_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'office_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., examoffice@college.edu'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ResearchCenterInfoForm(forms.ModelForm):
+    """Form for managing research center information"""
+    
+    class Meta:
+        model = ResearchCenterInfo
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Research Centers'
+            }),
+            'subtitle': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Advancing knowledge through cutting-edge research and innovation'
+            }),
+            'center1_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Center for Advanced Sciences'
+            }),
+            'center1_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Description of the first research center'
+            }),
+            'center1_areas': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'center2_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Computer Science Research Lab'
+            }),
+            'center2_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Description of the second research center'
+            }),
+            'center2_areas': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'center3_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Environmental Research Center'
+            }),
+            'center3_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Description of the third research center'
+            }),
+            'center3_areas': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'lab_infrastructure': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'research_support': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'physics_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Physics research area description'
+            }),
+            'biology_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Biology research area description'
+            }),
+            'mathematics_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Mathematics research area description'
+            }),
+            'social_sciences_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Social sciences research area description'
+            }),
+            'publications_count': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'patents_count': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'conferences_count': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'book_chapters_count': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'grants_amount': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'industry_collaborations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'international_partnerships': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'national_awards': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'student_opportunities': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'faculty_opportunities': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'director_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Dr. [Research Director Name]'
+            }),
+            'director_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'director_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., research@college.edu'
+            }),
+            'director_office_hours': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 9:00 AM - 5:00 PM'
+            }),
+            'office_location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Research Block, 2nd Floor'
+            }),
+            'office_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'office_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., research.office@college.edu'
+            }),
+            'office_working_days': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Monday to Friday'
+            }),
+            'cta_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Join Our Research Community'
+            }),
+            'cta_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Call to action description'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_active']:
+                if not hasattr(field.widget, 'attrs'):
+                    field.widget.attrs = {}
+                if 'class' not in field.widget.attrs:
+                    field.widget.attrs['class'] = 'form-control'
+    
+    def clean_grants_amount(self):
+        """Validate grants amount"""
+        grants_amount = self.cleaned_data.get('grants_amount')
+        if grants_amount is not None and grants_amount < 0:
+            raise ValidationError("Grants amount cannot be negative.")
+        return grants_amount
+    
+    def clean_publications_count(self):
+        """Validate publications count"""
+        count = self.cleaned_data.get('publications_count')
+        if count is not None and count < 0:
+            raise ValidationError("Publications count cannot be negative.")
+        return count
+    
+    def clean_patents_count(self):
+        """Validate patents count"""
+        count = self.cleaned_data.get('patents_count')
+        if count is not None and count < 0:
+            raise ValidationError("Patents count cannot be negative.")
+        return count
+
+
+class ResearchCenterInfoUpdateForm(ResearchCenterInfoForm):
+    """Update form for research center information (excludes timestamps)"""
+    
+    class Meta(ResearchCenterInfoForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class ResearchCenterInfoQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential research center information"""
+    
+    class Meta:
+        model = ResearchCenterInfo
+        fields = [
+            'title', 'subtitle', 'director_name', 'director_phone', 
+            'director_email', 'office_phone', 'office_email', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Research Centers'
+            }),
+            'subtitle': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Advancing knowledge through cutting-edge research and innovation'
+            }),
+            'director_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Dr. [Research Director Name]'
+            }),
+            'director_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'director_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., research@college.edu'
+            }),
+            'office_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., +91-XXX-XXXX-XXX'
+            }),
+            'office_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., research.office@college.edu'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class PublicationInfoForm(forms.ModelForm):
+    """Form for managing publication information"""
+    
+    class Meta:
+        model = PublicationInfo
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Research Publications'
+            }),
+            'subtitle': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Page subtitle description'
+            }),
+            'total_publications': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'book_chapters': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'total_citations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'awards_received': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'international_journals_count': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'international_citations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'national_journals_count': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'national_citations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'conference_papers_count': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'conference_citations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'best_paper_awards': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'average_impact_factor': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'international_collaborations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'research_students': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'cta_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Interested in Collaborating?'
+            }),
+            'cta_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Call to action description'
+            }),
+            'contact_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., research@college.edu'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_active']:
+                if not hasattr(field.widget, 'attrs'):
+                    field.widget.attrs = {}
+                if 'class' not in field.widget.attrs:
+                    field.widget.attrs['class'] = 'form-control'
+    
+    def clean_average_impact_factor(self):
+        """Validate impact factor"""
+        impact_factor = self.cleaned_data.get('average_impact_factor')
+        if impact_factor is not None and impact_factor < 0:
+            raise ValidationError("Impact factor cannot be negative.")
+        return impact_factor
+
+
+class PublicationInfoUpdateForm(PublicationInfoForm):
+    """Update form for publication information (excludes timestamps)"""
+    
+    class Meta(PublicationInfoForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class PublicationInfoQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential publication information"""
+    
+    class Meta:
+        model = PublicationInfo
+        fields = [
+            'title', 'subtitle', 'total_publications', 'total_citations', 
+            'contact_email', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Research Publications'
+            }),
+            'subtitle': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Page subtitle description'
+            }),
+            'total_publications': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'total_citations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'contact_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., research@college.edu'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class PublicationForm(forms.ModelForm):
+    """Form for creating and editing publications"""
+    
+    class Meta:
+        model = Publication
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Publication title'
+            }),
+            'authors': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Author names (comma separated)'
+            }),
+            'abstract': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Publication abstract'
+            }),
+            'journal_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Journal or conference name'
+            }),
+            'journal_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'department': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'publication_year': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1900,
+                'max': 2030
+            }),
+            'citations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'impact_factor': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'doi': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Digital Object Identifier'
+            }),
+            'url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Publication URL'
+            }),
+            'pdf_file': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': '.pdf'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_featured', 'is_active']:
+                if not hasattr(field.widget, 'attrs'):
+                    field.widget.attrs = {}
+                if 'class' not in field.widget.attrs:
+                    field.widget.attrs['class'] = 'form-control'
+    
+    def clean_publication_year(self):
+        """Validate publication year"""
+        year = self.cleaned_data.get('publication_year')
+        current_year = datetime.now().year
+        if year and (year < 1900 or year > current_year + 1):
+            raise ValidationError(f"Publication year must be between 1900 and {current_year + 1}.")
+        return year
+    
+    def clean_citations(self):
+        """Validate citations count"""
+        citations = self.cleaned_data.get('citations')
+        if citations is not None and citations < 0:
+            raise ValidationError("Citations count cannot be negative.")
+        return citations
+    
+    def clean_impact_factor(self):
+        """Validate impact factor"""
+        impact_factor = self.cleaned_data.get('impact_factor')
+        if impact_factor is not None and impact_factor < 0:
+            raise ValidationError("Impact factor cannot be negative.")
+        return impact_factor
+
+
+class PublicationUpdateForm(PublicationForm):
+    """Update form for publications (excludes timestamps)"""
+    
+    class Meta(PublicationForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class PublicationQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential publication fields"""
+    
+    class Meta:
+        model = Publication
+        fields = [
+            'title', 'authors', 'journal_name', 'department', 
+            'publication_year', 'citations', 'is_featured', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Publication title'
+            }),
+            'authors': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Author names (comma separated)'
+            }),
+            'journal_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Journal or conference name'
+            }),
+            'department': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'publication_year': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1900,
+                'max': 2030
+            }),
+            'citations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class PublicationSearchForm(forms.Form):
+    """Search form for publications"""
+    
+    search = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Search by title, author, or keywords...'
+        })
+    )
+    
+    department = forms.ChoiceField(
+        required=False,
+        choices=[('', 'All Departments')] + Publication.DEPARTMENT_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        })
+    )
+    
+    journal_type = forms.ChoiceField(
+        required=False,
+        choices=[('', 'All Types')] + Publication.JOURNAL_TYPE_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        })
+    )
+    
+    year = forms.IntegerField(
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Year',
+            'min': 1900,
+            'max': 2030
+        })
+    )
+    
+    sort_by = forms.ChoiceField(
+        required=False,
+        choices=[
+            ('-publication_year', 'Date (Newest)'),
+            ('publication_year', 'Date (Oldest)'),
+            ('-citations', 'Citations (High)'),
+            ('citations', 'Citations (Low)'),
+            ('title', 'Title (A-Z)'),
+            ('-title', 'Title (Z-A)'),
+        ],
+        initial='-publication_year',
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        })
+    )
+
+
+# Patents & Projects Forms
+class PatentsProjectsInfoForm(forms.ModelForm):
+    """Form for managing patents & projects information"""
+    
+    class Meta:
+        model = PatentsProjectsInfo
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Patents & Projects'
+            }),
+            'subtitle': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Page subtitle description'
+            }),
+            'total_patents': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'total_projects': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'industry_collaborations': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'research_funding': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'innovation_awards': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'international_recognition': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'active_partnerships': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'students_involved': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'cta_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Interested in Collaborating?'
+            }),
+            'cta_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Call to action description'
+            }),
+            'contact_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., research@college.edu'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_active']:
+                if not hasattr(field.widget, 'attrs'):
+                    field.widget.attrs = {}
+                if 'class' not in field.widget.attrs:
+                    field.widget.attrs['class'] = 'form-control'
+
+
+class PatentsProjectsInfoUpdateForm(PatentsProjectsInfoForm):
+    """Update form for patents & projects information (excludes timestamps)"""
+    
+    class Meta(PatentsProjectsInfoForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class PatentsProjectsInfoQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential patents & projects information"""
+    
+    class Meta:
+        model = PatentsProjectsInfo
+        fields = [
+            'title', 'subtitle', 'total_patents', 'total_projects', 
+            'contact_email', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Patents & Projects'
+            }),
+            'subtitle': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 2,
+                'placeholder': 'Page subtitle description'
+            }),
+            'total_patents': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'total_projects': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'contact_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., research@college.edu'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class PatentForm(forms.ModelForm):
+    """Form for creating and editing patents"""
+    
+    class Meta:
+        model = Patent
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Patent title'
+            }),
+            'inventors': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Inventor names (comma separated)'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Patent description'
+            }),
+            'patent_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Patent number'
+            }),
+            'status': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'department': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'filing_year': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1900,
+                'max': 2030
+            }),
+            'application_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Application number'
+            }),
+            'publication_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'grant_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'patent_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Patent URL'
+            }),
+            'pdf_file': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': '.pdf'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_featured', 'is_active']:
+                if not hasattr(field.widget, 'attrs'):
+                    field.widget.attrs = {}
+                if 'class' not in field.widget.attrs:
+                    field.widget.attrs['class'] = 'form-control'
+    
+    def clean_filing_year(self):
+        """Validate filing year"""
+        year = self.cleaned_data.get('filing_year')
+        current_year = datetime.now().year
+        if year and (year < 1900 or year > current_year + 1):
+            raise ValidationError(f"Filing year must be between 1900 and {current_year + 1}.")
+        return year
+
+
+class PatentUpdateForm(PatentForm):
+    """Update form for patents (excludes timestamps)"""
+    
+    class Meta(PatentForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class PatentQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential patent fields"""
+    
+    class Meta:
+        model = Patent
+        fields = [
+            'title', 'inventors', 'patent_number', 'department', 
+            'filing_year', 'status', 'is_featured', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Patent title'
+            }),
+            'inventors': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Inventor names (comma separated)'
+            }),
+            'patent_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Patent number'
+            }),
+            'department': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'filing_year': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1900,
+                'max': 2030
+            }),
+            'status': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ResearchProjectForm(forms.ModelForm):
+    """Form for creating and editing research projects"""
+    
+    class Meta:
+        model = ResearchProject
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Project title'
+            }),
+            'principal_investigator': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Principal investigator name'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Project description'
+            }),
+            'department': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'status': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'start_year': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1900,
+                'max': 2030
+            }),
+            'end_year': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1900,
+                'max': 2030
+            }),
+            'funding_agency': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Funding agency'
+            }),
+            'funding_amount': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'project_duration': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Project duration'
+            }),
+            'team_members': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Team members'
+            }),
+            'project_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Project URL'
+            }),
+            'report_file': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': '.pdf,.doc,.docx'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_featured', 'is_active']:
+                if not hasattr(field.widget, 'attrs'):
+                    field.widget.attrs = {}
+                if 'class' not in field.widget.attrs:
+                    field.widget.attrs['class'] = 'form-control'
+    
+    def clean_start_year(self):
+        """Validate start year"""
+        year = self.cleaned_data.get('start_year')
+        current_year = datetime.now().year
+        if year and (year < 1900 or year > current_year + 1):
+            raise ValidationError(f"Start year must be between 1900 and {current_year + 1}.")
+        return year
+    
+    def clean_end_year(self):
+        """Validate end year"""
+        end_year = self.cleaned_data.get('end_year')
+        start_year = self.cleaned_data.get('start_year')
+        current_year = datetime.now().year
+        
+        if end_year and (end_year < 1900 or end_year > current_year + 1):
+            raise ValidationError(f"End year must be between 1900 and {current_year + 1}.")
+        
+        if end_year and start_year and end_year < start_year:
+            raise ValidationError("End year cannot be before start year.")
+        
+        return end_year
+
+
+class ResearchProjectUpdateForm(ResearchProjectForm):
+    """Update form for research projects (excludes timestamps)"""
+    
+    class Meta(ResearchProjectForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class ResearchProjectQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential research project fields"""
+    
+    class Meta:
+        model = ResearchProject
+        fields = [
+            'title', 'principal_investigator', 'department', 'status',
+            'start_year', 'funding_agency', 'funding_amount', 'is_featured', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Project title'
+            }),
+            'principal_investigator': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Principal investigator name'
+            }),
+            'department': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'status': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'start_year': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1900,
+                'max': 2030
+            }),
+            'funding_agency': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Funding agency'
+            }),
+            'funding_amount': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class IndustryCollaborationForm(forms.ModelForm):
+    """Form for creating and editing industry collaborations"""
+    
+    class Meta:
+        model = IndustryCollaboration
+        fields = '__all__'
+        widgets = {
+            'company_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Company name'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Collaboration description'
+            }),
+            'collaboration_type': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Type of collaboration'
+            }),
+            'duration_years': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1
+            }),
+            'funding_amount': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'contact_person': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Contact person'
+            }),
+            'company_website': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Company website'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to all fields
+        for field_name, field in self.fields.items():
+            if field_name not in ['is_featured', 'is_active']:
+                if not hasattr(field.widget, 'attrs'):
+                    field.widget.attrs = {}
+                if 'class' not in field.widget.attrs:
+                    field.widget.attrs['class'] = 'form-control'
+
+
+class IndustryCollaborationUpdateForm(IndustryCollaborationForm):
+    """Update form for industry collaborations (excludes timestamps)"""
+    
+    class Meta(IndustryCollaborationForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class IndustryCollaborationQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential industry collaboration fields"""
+    
+    class Meta:
+        model = IndustryCollaboration
+        fields = [
+            'company_name', 'collaboration_type', 'duration_years', 
+            'funding_amount', 'is_featured', 'is_active'
+        ]
+        widgets = {
+            'company_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Company name'
+            }),
+            'collaboration_type': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Type of collaboration'
+            }),
+            'duration_years': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 1
+            }),
+            'funding_amount': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+# Consultancy Forms
+class ConsultancyInfoForm(forms.ModelForm):
+    """Form for managing consultancy information"""
+    
+    class Meta:
+        model = ConsultancyInfo
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Page title'
+            }),
+            'subtitle': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Page subtitle'
+            }),
+            'total_projects': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'industry_partners': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'revenue_generated': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'client_satisfaction': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'max': 100
+            }),
+            'cta_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Call to action title'
+            }),
+            'cta_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Call to action description'
+            }),
+            'contact_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Contact email'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def clean_client_satisfaction(self):
+        """Validate client satisfaction percentage"""
+        satisfaction = self.cleaned_data.get('client_satisfaction')
+        if satisfaction and (satisfaction < 0 or satisfaction > 100):
+            raise ValidationError("Client satisfaction must be between 0 and 100.")
+        return satisfaction
+
+
+class ConsultancyInfoUpdateForm(ConsultancyInfoForm):
+    """Update form for consultancy information (excludes timestamps)"""
+    
+    class Meta(ConsultancyInfoForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class ConsultancyInfoQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential consultancy information fields"""
+    
+    class Meta:
+        model = ConsultancyInfo
+        fields = [
+            'title', 'total_projects', 'industry_partners', 
+            'revenue_generated', 'client_satisfaction', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Page title'
+            }),
+            'total_projects': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'industry_partners': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'revenue_generated': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 0.01
+            }),
+            'client_satisfaction': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'max': 100
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ConsultancyServiceForm(forms.ModelForm):
+    """Form for managing consultancy services"""
+    
+    class Meta:
+        model = ConsultancyService
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Service title'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Service description'
+            }),
+            'service_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'features': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Service features (one per line)'
+            }),
+            'icon_class': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'FontAwesome icon class (e.g., fas fa-laptop-code)'
+            }),
+            'color_class': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add color choices
+        self.fields['color_class'].widget.choices = [
+            ('primary', 'Primary (Blue)'),
+            ('success', 'Success (Green)'),
+            ('info', 'Info (Light Blue)'),
+            ('warning', 'Warning (Orange)'),
+            ('danger', 'Danger (Red)'),
+            ('secondary', 'Secondary (Gray)'),
+        ]
+
+
+class ConsultancyServiceUpdateForm(ConsultancyServiceForm):
+    """Update form for consultancy services (excludes timestamps)"""
+    
+    class Meta(ConsultancyServiceForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class ConsultancyServiceQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential consultancy service fields"""
+    
+    class Meta:
+        model = ConsultancyService
+        fields = [
+            'title', 'service_type', 'display_order', 
+            'is_featured', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Service title'
+            }),
+            'service_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ConsultancyExpertiseForm(forms.ModelForm):
+    """Form for managing consultancy expertise areas"""
+    
+    class Meta:
+        model = ConsultancyExpertise
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Expertise area title'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Expertise description'
+            }),
+            'icon_class': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'FontAwesome icon class (e.g., fas fa-microchip)'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ConsultancyExpertiseUpdateForm(ConsultancyExpertiseForm):
+    """Update form for consultancy expertise (excludes timestamps)"""
+    
+    class Meta(ConsultancyExpertiseForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class ConsultancyExpertiseQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential consultancy expertise fields"""
+    
+    class Meta:
+        model = ConsultancyExpertise
+        fields = [
+            'title', 'display_order', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Expertise area title'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ConsultancySuccessStoryForm(forms.ModelForm):
+    """Form for managing consultancy success stories"""
+    
+    class Meta:
+        model = ConsultancySuccessStory
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Success story title'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Success story description'
+            }),
+            'category': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'metric1_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First metric label'
+            }),
+            'metric1_value': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First metric value'
+            }),
+            'metric2_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Second metric label'
+            }),
+            'metric2_value': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Second metric value'
+            }),
+            'metric3_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Third metric label'
+            }),
+            'metric3_value': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Third metric value'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class ConsultancySuccessStoryUpdateForm(ConsultancySuccessStoryForm):
+    """Update form for consultancy success stories (excludes timestamps)"""
+    
+    class Meta(ConsultancySuccessStoryForm.Meta):
+        exclude = ['created_at', 'updated_at']
+
+
+class ConsultancySuccessStoryQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential consultancy success story fields"""
+    
+    class Meta:
+        model = ConsultancySuccessStory
+        fields = [
+            'title', 'category', 'display_order', 
+            'is_featured', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Success story title'
+            }),
+            'category': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+# NSS-NCC Clubs Forms
+class NSSNCCClubForm(forms.ModelForm):
+    """Form for managing NSS-NCC Clubs"""
+    
+    class Meta:
+        model = NSSNCCClub
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter club name'
+            }),
+            'club_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'description': CKEditor5Widget(config_name='default'),
+            'short_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Brief description for cards'
+            }),
+            'coordinator_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Coordinator name'
+            }),
+            'coordinator_email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'coordinator@example.com'
+            }),
+            'coordinator_phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '+91 9876543210'
+            }),
+            'main_activities': CKEditor5Widget(config_name='default'),
+            'upcoming_events': CKEditor5Widget(config_name='default'),
+            'logo': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'cover_image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'facebook_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://facebook.com/yourpage'
+            }),
+            'instagram_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://instagram.com/yourpage'
+            }),
+            'website_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://yourwebsite.com'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def clean_coordinator_phone(self):
+        """Validate phone number format"""
+        phone = self.cleaned_data.get('coordinator_phone')
+        if phone:
+            # Remove all non-digit characters
+            phone_digits = re.sub(r'\D', '', phone)
+            if len(phone_digits) < 10:
+                raise ValidationError("Phone number must be at least 10 digits long.")
+        return phone
+
+
+class NSSNCCClubQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential club fields"""
+    
+    class Meta:
+        model = NSSNCCClub
+        fields = [
+            'name', 'club_type', 'coordinator_name', 'coordinator_email',
+            'display_order', 'is_featured', 'is_active'
+        ]
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'club_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'coordinator_name': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'coordinator_email': forms.EmailInput(attrs={
+                'class': 'form-control'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+class NSSNCCNoticeForm(forms.ModelForm):
+    """Form for managing NSS-NCC Notices"""
+    
+    class Meta:
+        model = NSSNCCNotice
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Notice title'
+            }),
+            'content': CKEditor5Widget(config_name='default'),
+            'category': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'priority': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'related_club': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'publish_date': forms.DateTimeInput(attrs={
+                'class': 'form-control',
+                'type': 'datetime-local'
+            }),
+            'expiry_date': forms.DateTimeInput(attrs={
+                'class': 'form-control',
+                'type': 'datetime-local'
+            }),
+            'attachment': forms.FileInput(attrs={
+                'class': 'form-control'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Only show active clubs in the dropdown
+        self.fields['related_club'].queryset = NSSNCCClub.objects.filter(is_active=True)
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        publish_date = cleaned_data.get('publish_date')
+        expiry_date = cleaned_data.get('expiry_date')
+        
+        if expiry_date and publish_date and expiry_date <= publish_date:
+            raise ValidationError("Expiry date must be after publish date.")
+        
+        return cleaned_data
+
+
+class NSSNCCNoticeQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential notice fields"""
+    
+    class Meta:
+        model = NSSNCCNotice
+        fields = [
+            'title', 'category', 'priority', 'related_club',
+            'is_featured', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'category': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'priority': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'related_club': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['related_club'].queryset = NSSNCCClub.objects.filter(is_active=True)
+
+
+class NSSNCCGalleryForm(forms.ModelForm):
+    """Form for managing NSS-NCC Gallery Images"""
+    
+    class Meta:
+        model = NSSNCCGallery
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Image title'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Image description'
+            }),
+            'category': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'related_club': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['related_club'].queryset = NSSNCCClub.objects.filter(is_active=True)
+
+
+class NSSNCCAchievementForm(forms.ModelForm):
+    """Form for managing NSS-NCC Achievements"""
+    
+    class Meta:
+        model = NSSNCCAchievement
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Achievement title'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Achievement description'
+            }),
+            'achievement_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'related_club': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'achieved_by': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Individual or team name'
+            }),
+            'achievement_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'organization': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Organization name'
+            }),
+            'certificate_image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['related_club'].queryset = NSSNCCClub.objects.filter(is_active=True)
+    
+    def clean_achievement_date(self):
+        """Validate achievement date"""
+        achievement_date = self.cleaned_data.get('achievement_date')
+        if achievement_date and achievement_date > datetime.now().date():
+            raise ValidationError("Achievement date cannot be in the future.")
+        return achievement_date
+
+
+class NSSNCCAchievementQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential achievement fields"""
+    
+    class Meta:
+        model = NSSNCCAchievement
+        fields = [
+            'title', 'achievement_type', 'related_club',
+            'achievement_date', 'is_featured', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'achievement_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'related_club': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'achievement_date': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['related_club'].queryset = NSSNCCClub.objects.filter(is_active=True)
+
+class HeroCarouselSlideForm(forms.ModelForm):
+    """Comprehensive form for managing hero carousel slides"""
+    
+    class Meta:
+        model = HeroCarouselSlide
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter slide title...'
+            }),
+            'subtitle': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Enter slide subtitle/description...'
+            }),
+            'slide_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0'
+            }),
+            'badge_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Welcome to Excellence'
+            }),
+            'badge_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-star'
+            }),
+            'primary_button_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Explore Programs'
+            }),
+            'primary_button_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://example.com'
+            }),
+            'primary_button_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-arrow-right'
+            }),
+            'secondary_button_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Learn More'
+            }),
+            'secondary_button_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://example.com'
+            }),
+            'secondary_button_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-info-circle'
+            }),
+            'gradient_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'show_statistics': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'stat_1_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 18+'
+            }),
+            'stat_1_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Courses'
+            }),
+            'stat_1_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-graduation-cap'
+            }),
+            'stat_2_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 5000+'
+            }),
+            'stat_2_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Students'
+            }),
+            'stat_2_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-users'
+            }),
+            'stat_3_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 150+'
+            }),
+            'stat_3_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Faculty'
+            }),
+            'stat_3_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-chalkboard-teacher'
+            }),
+            'stat_4_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 25+'
+            }),
+            'stat_4_label': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Years'
+            }),
+            'stat_4_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-award'
+            }),
+            'show_content_cards': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'content_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Why Choose Us?'
+            }),
+            'content_icon': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-university'
+            }),
+            'content_items': CKEditor5Widget(attrs={
+                'class': 'form-control'
+            }),
+            'auto_play_interval': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '1000',
+                'step': '500'
+            }),
+            'show_indicators': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'show_controls': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add help text for better user experience
+        self.fields['title'].help_text = "Main heading that appears prominently on the slide"
+        self.fields['subtitle'].help_text = "Descriptive text that appears below the title"
+        self.fields['slide_type'].help_text = "Choose the type of slide to apply appropriate styling"
+        self.fields['display_order'].help_text = "Lower numbers appear first (0 = first slide)"
+        self.fields['badge_text'].help_text = "Optional badge text that appears above the title"
+        self.fields['badge_icon'].help_text = "FontAwesome icon class (e.g., fas fa-star, fas fa-heart)"
+        self.fields['primary_button_text'].help_text = "Text for the main call-to-action button"
+        self.fields['primary_button_url'].help_text = "URL where the primary button should link"
+        self.fields['secondary_button_text'].help_text = "Text for the secondary button (optional)"
+        self.fields['secondary_button_url'].help_text = "URL where the secondary button should link"
+        self.fields['gradient_type'].help_text = "Choose a predefined gradient or create custom"
+        self.fields['show_statistics'].help_text = "Display statistics cards on the right side"
+        self.fields['auto_play_interval'].help_text = "Time in milliseconds between automatic slide changes"
+        self.fields['content_items'].help_text = "HTML content for custom slides (use CKEditor for rich formatting)"
+
+
+class HeroCarouselSlideQuickEditForm(forms.ModelForm):
+    """Quick edit form for essential hero carousel slide fields"""
+    
+    class Meta:
+        model = HeroCarouselSlide
+        fields = [
+            'title', 'subtitle', 'slide_type', 'is_active', 'display_order',
+            'badge_text', 'primary_button_text', 'primary_button_url',
+            'secondary_button_text', 'secondary_button_url', 'gradient_type'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm'
+            }),
+            'subtitle': forms.Textarea(attrs={
+                'class': 'form-control form-control-sm',
+                'rows': 2
+            }),
+            'slide_type': forms.Select(attrs={
+                'class': 'form-select form-select-sm'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'min': '0'
+            }),
+            'badge_text': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm'
+            }),
+            'primary_button_text': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm'
+            }),
+            'primary_button_url': forms.URLInput(attrs={
+                'class': 'form-control form-control-sm'
+            }),
+            'secondary_button_text': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm'
+            }),
+            'secondary_button_url': forms.URLInput(attrs={
+                'class': 'form-control form-control-sm'
+            }),
+            'gradient_type': forms.Select(attrs={
+                'class': 'form-select form-select-sm'
+            }),
+        }
+
+
+class HeroCarouselSettingsForm(forms.ModelForm):
+    """Form for managing global hero carousel settings"""
+    
+    class Meta:
+        model = HeroCarouselSettings
+        fields = '__all__'
+        widgets = {
+            'is_enabled': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'auto_play': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'default_interval': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '1000',
+                'step': '500'
+            }),
+            'show_indicators': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'show_controls': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'pause_on_hover': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'enable_keyboard': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'enable_touch': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'transition_duration': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '100',
+                'step': '50'
+            }),
+            'fade_effect': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'mobile_height': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 24rem, 70vh'
+            }),
+            'tablet_height': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 28rem, 80vh'
+            }),
+            'desktop_height': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 24rem, 100vh'
+            }),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add help text for better user experience
+        self.fields['is_enabled'].help_text = "Enable or disable the entire hero carousel"
+        self.fields['auto_play'].help_text = "Automatically advance slides"
+        self.fields['default_interval'].help_text = "Default time between slide changes (milliseconds)"
+        self.fields['show_indicators'].help_text = "Show dots at the bottom for slide navigation"
+        self.fields['show_controls'].help_text = "Show left/right arrow navigation buttons"
+        self.fields['pause_on_hover'].help_text = "Pause auto-play when user hovers over carousel"
+        self.fields['enable_keyboard'].help_text = "Allow keyboard navigation (arrow keys)"
+        self.fields['enable_touch'].help_text = "Allow touch/swipe navigation on mobile devices"
+        self.fields['transition_duration'].help_text = "Duration of slide transition animation (milliseconds)"
+        self.fields['fade_effect'].help_text = "Use fade transition instead of slide transition"
+        self.fields['mobile_height'].help_text = "Carousel height on mobile devices (CSS units)"
+        self.fields['tablet_height'].help_text = "Carousel height on tablet devices (CSS units)"
+        self.fields['desktop_height'].help_text = "Carousel height on desktop devices (CSS units)"

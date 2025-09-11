@@ -1,0 +1,422 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Exam Timetable - {{ college_info.college_name }}{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="hero-section tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-600 tw-py-12">
+    <div class="container">
+        <div class="row tw-justify-center text-center">
+            <div class="col-lg-8">
+                <h1 class="tw-text-3xl tw-font-bold tw-text-white tw-mb-3">Exam Timetable</h1>
+                <p class="tw-text-lg tw-text-blue-100 tw-mb-4">View and manage examination schedules efficiently</p>
+                <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-2">
+                    <div class="tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-px-3 tw-py-1">
+                        <i class="fas fa-calendar-alt tw-text-white tw-mr-1"></i>
+                        <span class="tw-text-white tw-text-sm tw-font-medium">Academic Calendar</span>
+                    </div>
+                    <div class="tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-px-3 tw-py-1">
+                        <i class="fas fa-clock tw-text-white tw-mr-1"></i>
+                        <span class="tw-text-white tw-text-sm tw-font-medium">Time Management</span>
+                    </div>
+                    {% if user.is_staff %}
+                        <a href="{% url 'college_website:exam_timetable_manage' %}" class="tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-px-3 tw-py-1 tw-text-white tw-text-sm tw-font-medium hover:tw-bg-opacity-30 tw-transition-all tw-duration-200">
+                            <i class="fas fa-cog tw-mr-1"></i>Manage Timetables
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions Bar -->
+<section class="quick-actions tw-py-4 tw-bg-gray-50">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-3">
+                    <button class="btn btn-primary btn-sm tw-rounded-full tw-px-4 tw-py-2" onclick="filterBySemester('all')">
+                        <i class="fas fa-list tw-mr-2"></i>All Semesters
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm tw-rounded-full tw-px-4 tw-py-2" onclick="filterBySemester('1st')">
+                        <i class="fas fa-graduation-cap tw-mr-2"></i>1st Semester
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm tw-rounded-full tw-px-4 tw-py-2" onclick="filterBySemester('2nd')">
+                        <i class="fas fa-graduation-cap tw-mr-2"></i>2nd Semester
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm tw-rounded-full tw-px-4 tw-py-2" onclick="filterBySemester('3rd')">
+                        <i class="fas fa-graduation-cap tw-mr-2"></i>3rd Semester
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm tw-rounded-full tw-px-4 tw-py-2" onclick="filterBySemester('4th')">
+                        <i class="fas fa-graduation-cap tw-mr-2"></i>4th Semester
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Timetable Section -->
+<section class="timetable-section tw-py-8">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-11">
+                <!-- Timetable Info -->
+                {% if timetable %}
+                <div class="tw-mb-6 tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-border tw-border-gray-200">
+                    <div class="tw-flex tw-flex-wrap tw-justify-between tw-items-center">
+                        <div>
+                            <h3 class="tw-text-xl tw-font-bold tw-text-gray-800 tw-mb-2">{{ timetable.header_title }}</h3>
+                            <p class="tw-text-gray-600 tw-mb-0">{{ timetable.header_subtitle }}</p>
+                        </div>
+                        <div class="tw-text-right">
+                            <div class="tw-text-sm tw-text-gray-500">{{ timetable.academic_year }}</div>
+                            <div class="badge bg-info tw-text-sm">{{ timetable.semester }} Semester</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Week View Tabs -->
+                <div class="tw-mb-6">
+                    <ul class="nav nav-tabs tw-border-b-2 tw-border-gray-200" id="weekTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active tw-px-4 tw-py-2 tw-font-medium tw-text-gray-700 tw-border-b-2 tw-border-blue-500" 
+                                    id="week1-tab" data-bs-toggle="tab" data-bs-target="#week1" type="button" role="tab">
+                                <i class="fas fa-calendar-week tw-mr-2"></i>Week 1
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tw-px-4 tw-py-2 tw-font-medium tw-text-gray-500 tw-border-b-2 tw-border-transparent" 
+                                    id="week2-tab" data-bs-toggle="tab" data-bs-target="#week2" type="button" role="tab">
+                                <i class="fas fa-calendar-week tw-mr-2"></i>Week 2
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tw-px-4 tw-py-2 tw-font-medium tw-text-gray-500 tw-border-b-2 tw-border-transparent" 
+                                    id="week3-tab" data-bs-toggle="tab" data-bs-target="#week3" type="button" role="tab">
+                                <i class="fas fa-calendar-week tw-mr-2"></i>Week 3
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link tw-px-4 tw-py-2 tw-font-medium tw-text-gray-500 tw-border-b-2 tw-border-transparent" 
+                                    id="week4-tab" data-bs-toggle="tab" data-bs-target="#week4" type="button" role="tab">
+                                <i class="fas fa-calendar-week tw-mr-2"></i>Week 4
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Timetable Content -->
+                <div class="tab-content" id="weekTabsContent">
+                    <!-- Week 1 -->
+                    <div class="tab-pane fade show active" id="week1" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover tw-border tw-border-gray-200 tw-rounded-lg tw-overflow-hidden">
+                                <thead class="tw-bg-gradient-to-r tw-from-blue-600 tw-to-indigo-600 tw-text-white">
+                                    <tr>
+                                        <th class="tw-px-4 tw-py-3 tw-font-semibold tw-text-sm">Time</th>
+                                        <th class="tw-px-4 tw-py-3 tw-font-semibold tw-text-sm">Monday</th>
+                                        <th class="tw-px-4 tw-py-3 tw-font-semibold tw-text-sm">Tuesday</th>
+                                        <th class="tw-px-4 tw-py-3 tw-font-semibold tw-text-sm">Wednesday</th>
+                                        <th class="tw-px-4 tw-py-3 tw-font-semibold tw-text-sm">Thursday</th>
+                                        <th class="tw-px-4 tw-py-3 tw-font-semibold tw-text-sm">Friday</th>
+                                        <th class="tw-px-4 tw-py-3 tw-font-semibold tw-text-sm">Saturday</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="tw-border-b tw-border-gray-100">
+                                        <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-700 tw-bg-gray-50">9:00 AM</td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-red-100 tw-border-l-4 tw-border-red-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-red-800 tw-text-sm">Mathematics</div>
+                                                <div class="tw-text-red-600 tw-text-xs">Room 101 | 2 hours</div>
+                                                <div class="tw-text-red-500 tw-text-xs">1st Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-blue-100 tw-border-l-4 tw-border-blue-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-blue-800 tw-text-sm">Physics</div>
+                                                <div class="tw-text-blue-600 tw-text-xs">Lab A | 3 hours</div>
+                                                <div class="tw-text-blue-500 tw-text-xs">2nd Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-green-100 tw-border-l-4 tw-border-green-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-green-800 tw-text-sm">Chemistry</div>
+                                                <div class="tw-text-green-600 tw-text-xs">Room 203 | 2.5 hours</div>
+                                                <div class="tw-text-green-500 tw-text-xs">1st Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-purple-100 tw-border-l-4 tw-border-purple-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-purple-800 tw-text-sm">English</div>
+                                                <div class="tw-text-purple-600 tw-text-xs">Room 105 | 2 hours</div>
+                                                <div class="tw-text-purple-500 tw-text-xs">3rd Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-orange-100 tw-border-l-4 tw-border-orange-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-orange-800 tw-text-sm">Computer Science</div>
+                                                <div class="tw-text-orange-600 tw-text-xs">Lab B | 3 hours</div>
+                                                <div class="tw-text-orange-500 tw-text-xs">4th Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3 tw-text-gray-400 tw-text-center">No Exams</td>
+                                    </tr>
+                                    <tr class="tw-border-b tw-border-gray-100">
+                                        <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-700 tw-bg-gray-50">2:00 PM</td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-indigo-100 tw-border-l-4 tw-border-indigo-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-indigo-800 tw-text-sm">Biology</div>
+                                                <div class="tw-text-indigo-600 tw-text-xs">Lab C | 2.5 hours</div>
+                                                <div class="tw-text-indigo-500 tw-text-xs">2nd Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-pink-100 tw-border-l-4 tw-border-pink-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-pink-800 tw-text-sm">Economics</div>
+                                                <div class="tw-text-pink-600 tw-text-xs">Room 201 | 2 hours</div>
+                                                <div class="tw-text-pink-500 tw-text-xs">3rd Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-teal-100 tw-border-l-4 tw-border-teal-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-teal-800 tw-text-sm">History</div>
+                                                <div class="tw-text-teal-600 tw-text-xs">Room 107 | 2 hours</div>
+                                                <div class="tw-text-teal-500 tw-text-xs">1st Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-yellow-100 tw-border-l-4 tw-border-yellow-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-yellow-800 tw-text-sm">Geography</div>
+                                                <div class="tw-text-yellow-600 tw-text-xs">Room 205 | 2 hours</div>
+                                                <div class="tw-text-yellow-500 tw-text-xs">2nd Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3">
+                                            <div class="exam-slot tw-bg-rose-100 tw-border-l-4 tw-border-rose-500 tw-p-3 tw-rounded-r-lg">
+                                                <div class="tw-font-semibold tw-text-rose-800 tw-text-sm">Literature</div>
+                                                <div class="tw-text-rose-600 tw-text-xs">Room 103 | 2.5 hours</div>
+                                                <div class="tw-text-rose-500 tw-text-xs">4th Semester</div>
+                                            </div>
+                                        </td>
+                                        <td class="tw-px-4 tw-py-3 tw-text-gray-400 tw-text-center">No Exams</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Week 2 -->
+                    <div class="tab-pane fade" id="week2" role="tabpanel">
+                        <div class="tw-text-center tw-py-12">
+                            <div class="tw-bg-gray-50 tw-rounded-xl tw-p-8">
+                                <i class="fas fa-calendar-alt fa-3x text-muted tw-mb-4"></i>
+                                <h4 class="text-muted tw-mb-3">Week 2 Schedule</h4>
+                                <p class="text-muted">Detailed schedule for Week 2 will be available soon.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Week 3 -->
+                    <div class="tab-pane fade" id="week3" role="tabpanel">
+                        <div class="tw-text-center tw-py-12">
+                            <div class="tw-bg-gray-50 tw-rounded-xl tw-p-8">
+                                <i class="fas fa-calendar-alt fa-3x text-muted tw-mb-4"></i>
+                                <h4 class="text-muted tw-mb-3">Week 3 Schedule</h4>
+                                <p class="text-muted">Detailed schedule for Week 3 will be available soon.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Week 4 -->
+                    <div class="tab-pane fade" id="week4" role="tabpanel">
+                        <div class="tw-text-center tw-py-12">
+                            <div class="tw-bg-gray-50 tw-rounded-xl tw-p-8">
+                                <i class="fas fa-calendar-alt fa-3x text-muted tw-mb-4"></i>
+                                <h4 class="text-muted tw-mb-3">Week 4 Schedule</h4>
+                                <p class="text-muted">Detailed schedule for Week 4 will be available soon.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Important Information Section -->
+<section class="info-section tw-py-8 tw-bg-gray-50">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-6 tw-border-l-4 tw-border-blue-500">
+                            <div class="tw-flex tw-items-center tw-mb-3">
+                                <i class="fas fa-info-circle tw-text-blue-500 tw-text-xl tw-mr-3"></i>
+                                <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-0">Exam Guidelines</h4>
+                            </div>
+                            <ul class="tw-text-gray-600 tw-text-sm tw-space-y-2">
+                                <li><i class="fas fa-check tw-text-green-500 tw-mr-2"></i>Arrive 30 minutes before exam time</li>
+                                <li><i class="fas fa-check tw-text-green-500 tw-mr-2"></i>Bring valid ID and admit card</li>
+                                <li><i class="fas fa-check tw-text-green-500 tw-mr-2"></i>No electronic devices allowed</li>
+                                <li><i class="fas fa-check tw-text-green-500 tw-mr-2"></i>Follow dress code guidelines</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-6 tw-border-l-4 tw-border-green-500">
+                            <div class="tw-flex tw-items-center tw-mb-3">
+                                <i class="fas fa-clock tw-text-green-500 tw-text-xl tw-mr-3"></i>
+                                <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-0">Timing Details</h4>
+                            </div>
+                            <ul class="tw-text-gray-600 tw-text-sm tw-space-y-2">
+                                <li><i class="fas fa-clock tw-text-blue-500 tw-mr-2"></i>Morning Session: 9:00 AM - 12:00 PM</li>
+                                <li><i class="fas fa-clock tw-text-blue-500 tw-mr-2"></i>Afternoon Session: 2:00 PM - 5:00 PM</li>
+                                <li><i class="fas fa-clock tw-text-blue-500 tw-mr-2"></i>Break: 12:00 PM - 2:00 PM</li>
+                                <li><i class="fas fa-clock tw-text-blue-500 tw-mr-2"></i>Duration: 2-3 hours per exam</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Links Section -->
+<section class="quick-links tw-py-8">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <h3 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-6 text-center tw-no-underline">Related Resources</h3>
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <a href="{% url 'college_website:exam_results' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-md tw-no-underline">
+                            <div class="tw-bg-green-500 tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                                <i class="fas fa-chart-line tw-text-white tw-text-lg"></i>
+                            </div>
+                            <h5 class="tw-font-semibold tw-text-gray-800 tw-mb-1 tw-text-sm tw-no-underline">Exam Results</h5>
+                            <p class="tw-text-gray-600 tw-text-xs tw-no-underline">Check results</p>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'college_website:exam_notices' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-md tw-no-underline">
+                            <div class="tw-bg-orange-500 tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                                <i class="fas fa-bullhorn tw-text-white tw-text-lg"></i>
+                            </div>
+                            <h5 class="tw-font-semibold tw-text-gray-800 tw-mb-1 tw-text-sm tw-no-underline">Exam Notices</h5>
+                            <p class="tw-text-gray-600 tw-text-xs tw-no-underline">Latest updates</p>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'college_website:question_papers' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-md tw-no-underline">
+                            <div class="tw-bg-purple-500 tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                                <i class="fas fa-file-alt tw-text-white tw-text-lg"></i>
+                            </div>
+                            <h5 class="tw-font-semibold tw-text-gray-800 tw-mb-1 tw-text-sm tw-no-underline">Question Papers</h5>
+                            <p class="tw-text-gray-600 tw-text-xs tw-no-underline">Previous papers</p>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'college_website:exam_rules' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-md tw-no-underline">
+                            <div class="tw-bg-red-500 tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                                <i class="fas fa-gavel tw-text-white tw-text-lg"></i>
+                            </div>
+                            <h5 class="tw-font-semibold tw-text-gray-800 tw-mb-1 tw-text-sm tw-no-underline">Exam Rules</h5>
+                            <p class="tw-text-gray-600 tw-text-xs tw-no-underline">Guidelines</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Support Section -->
+<section class="contact-support tw-py-8 tw-bg-gray-50">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-8 text-center">
+                <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-6">
+                    <h3 class="tw-text-xl tw-font-bold tw-text-gray-800 tw-mb-3 tw-no-underline">Need Help?</h3>
+                    <p class="tw-text-gray-600 tw-mb-4 tw-text-sm">If you have questions about the exam timetable or need assistance, our support team is here to help.</p>
+                    <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-3">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-sm tw-rounded-full tw-px-4 tw-py-2">
+                            <i class="fas fa-envelope tw-mr-2"></i>Contact Support
+                        </a>
+                        <a href="{% url 'college_website:examinations' %}" class="btn btn-outline-primary btn-sm tw-rounded-full tw-px-4 tw-py-2">
+                            <i class="fas fa-arrow-left tw-mr-2"></i>Back to Examinations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Semester filter functionality
+    window.filterBySemester = function(semester) {
+        const buttons = document.querySelectorAll('.quick-actions .btn');
+        const examSlots = document.querySelectorAll('.exam-slot');
+        
+        // Update button states
+        buttons.forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-primary');
+        });
+        
+        event.target.classList.remove('btn-outline-primary');
+        event.target.classList.add('btn-primary');
+        
+        // Filter exam slots
+        examSlots.forEach(slot => {
+            const slotText = slot.textContent.toLowerCase();
+            if (semester === 'all' || slotText.includes(semester.toLowerCase())) {
+                slot.style.display = 'block';
+                slot.style.opacity = '1';
+            } else {
+                slot.style.opacity = '0.3';
+            }
+        });
+    };
+    
+    // Tab functionality
+    const tabButtons = document.querySelectorAll('[data-bs-toggle="tab"]');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all tabs
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active', 'tw-border-blue-500', 'tw-text-gray-700');
+                btn.classList.add('tw-text-gray-500', 'tw-border-transparent');
+            });
+            
+            // Add active class to clicked tab
+            this.classList.add('active', 'tw-border-blue-500', 'tw-text-gray-700');
+            this.classList.remove('tw-text-gray-500', 'tw-border-transparent');
+        });
+    });
+    
+    // Hover effects for exam slots
+    const examSlots = document.querySelectorAll('.exam-slot');
+    examSlots.forEach(slot => {
+        slot.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.02)';
+            this.style.transition = 'transform 0.2s ease';
+        });
+        
+        slot.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+});
+</script>
+{% endblock %}

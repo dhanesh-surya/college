@@ -1,385 +1,398 @@
 {% load static %}
 
-<!-- Image Slider/Carousel Section -->
+<!-- Modern Image Slider/Carousel Section with Bootstrap 5 -->
 {% if slider_images %}
-<section id="hero-slider" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="5000">
-    <!-- Carousel Indicators -->
-    <div class="carousel-indicators">
+<section id="hero-slider" class="carousel slide modern-hero-carousel" 
+         data-bs-ride="carousel"
+         data-bs-interval="6000" 
+         data-bs-pause="hover" 
+         data-bs-keyboard="true" 
+         data-bs-touch="true"
+         data-bs-wrap="true"
+         data-bs-ride="carousel">
+         
+         <!-- Modern Progress Bar Indicator -->
+     <div class="carousel-progress-container">
+         <div class="carousel-progress-bar"></div>
+     </div>
+
+         <!-- Modern Dot Indicators -->
+     <div class="carousel-indicators modern-indicators">
         {% for slide in slider_images %}
         <button 
             type="button" 
             data-bs-target="#hero-slider" 
             data-bs-slide-to="{{ forloop.counter0 }}" 
             {% if forloop.first %}class="active" aria-current="true"{% endif %}
-            aria-label="Slide {{ forloop.counter }}"
+            aria-label="Slide {{ forloop.counter }}: {{ slide.title|default:'Image' }}"
+            class="modern-indicator"
         ></button>
         {% endfor %}
     </div>
 
-    <!-- Carousel Inner -->
-    <div class="carousel-inner">
-        {% for slide in slider_images %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <!-- Lazy Loading Image -->
-            {% if slide.image %}
-            <img 
-                {% if forloop.first %}
-                src="{{ slide.image.url }}" 
-                {% else %}
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 800'%3E%3C/svg%3E"
-                data-src="{{ slide.image.url }}" 
-                class="lazy-load"
-                {% endif %}
-                class="d-block w-100 carousel-image" 
-                alt="{{ slide.alt_text }}"
-                loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-            >
-            {% else %}
-            <!-- Placeholder for slides without images -->
-            <div class="d-block w-100 carousel-image carousel-placeholder d-flex align-items-center justify-content-center">
-                <div class="text-center text-white">
-                    <i class="fas fa-image fa-4x mb-3 opacity-50"></i>
-                    <h3>{{ slide.title }}</h3>
-                    <p class="opacity-75">Please upload an image for this slide</p>
-                </div>
-            </div>
-            {% endif %}
+         <!-- Carousel Inner with Modern Styling -->
+     <div class="carousel-inner">
+         {% for slide in slider_images %}
+         <div class="carousel-item {% if forloop.first %}active{% endif %}">
             
-            <!-- Caption Overlay -->
-            {% if slide.title or slide.caption %}
-            <div class="carousel-caption d-none d-md-block">
-                <div class="carousel-caption-content">
-                    {% if slide.title %}
-                    <h2 class="carousel-title" data-aos="fade-up" data-aos-delay="200">
-                        {{ slide.title }}
-                    </h2>
-                    {% endif %}
-                    
-                    {% if slide.caption %}
-                    <p class="carousel-description" data-aos="fade-up" data-aos-delay="400">
-                        {{ slide.caption }}
-                    </p>
-                    {% endif %}
-                    
-                    {% if slide.button_text and slide.button_url %}
-                    <div class="carousel-button-container" data-aos="fade-up" data-aos-delay="600">
-                        <a href="{{ slide.button_url }}" class="btn btn-primary carousel-btn">
-                            {{ slide.button_text }}
-                            <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
-                    </div>
-                    {% endif %}
-                </div>
+                         <!-- Image Container with Proper Aspect Ratio -->
+             <div class="image-container">
+                {% if slide.image %}
+                                 <!-- Optimized Image with Lazy Loading -->
+                 <img 
+                     {% if forloop.first %}
+                     src="{{ slide.image.url }}" 
+                     {% else %}
+                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='1920' height='1080' fill='%23f3f4f6'/%3E%3C/svg%3E"
+                     data-src="{{ slide.image.url }}" 
+                     class="lazy-load"
+                     {% endif %}
+                     class="carousel-image" 
+                     alt="{{ slide.alt_text|default:slide.title|default:'College Image' }}"
+                     loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                     fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
+                     decoding="async"
+                 >
+                {% else %}
+                                 <!-- Modern Placeholder with Gradient -->
+                 <div class="carousel-image carousel-placeholder">
+                     <div class="placeholder-content">
+                         <div class="placeholder-icon">
+                             <i class="fas fa-image"></i>
+                         </div>
+                         <h3>{{ slide.title|default:'Add Image' }}</h3>
+                         <p>Upload an image for this slide</p>
+                     </div>
+                 </div>
+                {% endif %}
+                
+                                 <!-- Gradient Overlay for Better Text Readability -->
+                 <div class="overlay-gradient"></div>
+                 
+                 <!-- Parallax Effect Layer -->
+                 <div class="parallax-layer"></div>
             </div>
-            {% endif %}
+            
+                         <!-- Enhanced Caption Overlay -->
+             {% if slide.title or slide.caption %}
+             <div class="carousel-caption modern-caption d-none d-lg-block">
+                 <div class="caption-content">
+                     <div class="caption-background">
+                         {% if slide.title %}
+                         <h2 class="carousel-title" data-animation="fade-up" data-delay="200">
+                             {{ slide.title }}
+                         </h2>
+                         {% endif %}
+                         
+                         {% if slide.caption %}
+                         <p class="carousel-description" data-animation="fade-up" data-delay="400">
+                             {{ slide.caption }}
+                         </p>
+                         {% endif %}
+                         
+                         {% if slide.button_text and slide.button_url %}
+                         <div class="button-container" data-animation="fade-up" data-delay="600">
+                             <a href="{{ slide.button_url }}" class="btn btn-primary modern-carousel-btn">
+                                 {{ slide.button_text }}
+                                 <i class="fas fa-arrow-right"></i>
+                             </a>
+                             
+                             {% if slide.secondary_button_text and slide.secondary_button_url %}
+                             <a href="{{ slide.secondary_button_url }}" class="btn btn-outline-light modern-carousel-btn-secondary">
+                                 {{ slide.secondary_button_text }}
+                                 <i class="fas fa-play"></i>
+                             </a>
+                             {% endif %}
+                         </div>
+                         {% endif %}
+                     </div>
+                 </div>
+             </div>
+             {% endif %}
 
-            <!-- Mobile Caption (Visible on small screens) -->
-            {% if slide.title or slide.caption %}
-            <div class="carousel-caption-mobile d-block d-md-none">
-                <div class="carousel-caption-content-mobile">
-                    {% if slide.title %}
-                    <h3 class="carousel-title-mobile">
-                        {{ slide.title }}
-                    </h3>
-                    {% endif %}
-                    
-                    {% if slide.caption %}
-                    <p class="carousel-description-mobile">
-                        {{ slide.caption|truncatewords:15 }}
-                    </p>
-                    {% endif %}
-                    
-                    {% if slide.button_text and slide.button_url %}
-                    <div class="carousel-button-container-mobile">
-                        <a href="{{ slide.button_url }}" class="btn btn-sm btn-primary carousel-btn-mobile">
-                            {{ slide.button_text }}
-                        </a>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-            {% endif %}
+                         <!-- Mobile & Tablet Caption -->
+             {% if slide.title or slide.caption %}
+             <div class="carousel-caption-mobile modern-caption-mobile d-block d-lg-none">
+                 <div class="mobile-caption-content">
+                     {% if slide.title %}
+                     <h3 class="carousel-title-mobile">
+                         {{ slide.title }}
+                     </h3>
+                     {% endif %}
+                     
+                     {% if slide.caption %}
+                     <p class="carousel-description-mobile">
+                         {{ slide.caption|truncatewords:20 }}
+                     </p>
+                     {% endif %}
+                     
+                     {% if slide.button_text and slide.button_url %}
+                     <div class="mobile-button-container">
+                         <a href="{{ slide.button_url }}" class="btn btn-primary mobile-carousel-btn">
+                             {{ slide.button_text }}
+                             <i class="fas fa-arrow-right"></i>
+                         </a>
+                     </div>
+                     {% endif %}
+                 </div>
+             </div>
+             {% endif %}
 
-            <!-- Loading Overlay -->
-            {% if not forloop.first %}
-            <div class="slide-loading-overlay">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-            {% endif %}
+                         <!-- Loading Skeleton for Lazy Images -->
+             {% if not forloop.first %}
+             <div class="image-loading-skeleton">
+                 <div class="skeleton-overlay"></div>
+             </div>
+             {% endif %}
         </div>
         {% endfor %}
     </div>
 
-    <!-- Carousel Controls -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#hero-slider" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#hero-slider" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
+         <!-- Modern Carousel Controls -->
+     <button class="carousel-control-prev modern-control" 
+             type="button" 
+             data-bs-target="#hero-slider" 
+             data-bs-slide="prev"
+             aria-label="Previous slide">
+         <div class="control-background">
+             <i class="fas fa-chevron-left"></i>
+         </div>
+         <span class="visually-hidden">Previous</span>
+     </button>
+     
+     <button class="carousel-control-next modern-control" 
+             type="button" 
+             data-bs-target="#hero-slider" 
+             data-bs-slide="next"
+             aria-label="Next slide">
+         <div class="control-background">
+             <i class="fas fa-chevron-right"></i>
+         </div>
+         <span class="visually-hidden">Next</span>
+     </button>
+     
+     <!-- Enhanced Navigation Buttons -->
+     <div class="carousel-navigation">
+         <button class="nav-btn prev-btn" onclick="goToPreviousSlide()" title="Previous Slide">
+             <i class="fas fa-chevron-left"></i>
+         </button>
+         <button class="nav-btn next-btn" onclick="goToNextSlide()" title="Next Slide">
+             <i class="fas fa-chevron-right"></i>
+         </button>
+     </div>
 
-    <!-- Pause/Play Control -->
-    <div class="carousel-controls-overlay">
-        <button id="carousel-pause-play" class="btn btn-outline-light btn-sm" type="button" title="Pause/Play">
-            <i class="fas fa-pause"></i>
-        </button>
-    </div>
+         <!-- Modern Play/Pause Control -->
+     <div class="carousel-controls-overlay">
+         <div class="control-group">
+             <!-- Pause/Play Button -->
+             <button id="carousel-pause-play" 
+                     class="btn control-btn" 
+                     type="button" 
+                     title="Pause/Play Slideshow"
+                     aria-label="Pause or play slideshow">
+                 <i class="fas fa-pause"></i>
+             </button>
+             
+             <!-- Fullscreen Button -->
+             <button id="carousel-fullscreen" 
+                     class="btn control-btn" 
+                     type="button" 
+                     title="Toggle Fullscreen"
+                     aria-label="Toggle fullscreen mode">
+                 <i class="fas fa-expand"></i>
+             </button>
+         </div>
+     </div>
+    
+         <!-- Slide Counter -->
+     <div class="slide-counter">
+         <div class="counter-background">
+             <span id="current-slide">1</span> / <span id="total-slides">{{ slider_images|length }}</span>
+         </div>
+     </div>
+     
+     <!-- Slide Progress Indicator -->
+     <div class="slide-progress">
+         <div class="progress-bar">
+             <div class="progress-fill" id="slide-progress-fill"></div>
+         </div>
+     </div>
 </section>
 
-<!-- Slider Styles -->
+<!-- Slider Styles with Bootstrap 5 -->
 <style>
-/* Hero Carousel Styles */
-.hero-carousel {
+/* Enhanced Modern Hero Carousel Base Styles - Perfect Full Width */
+.modern-hero-carousel {
     position: relative;
-    height: 50vh;
-    min-height: 300px;
-    max-height: 500px;
+    /* Perfect full width layout that works with any container */
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    left: 0 !important;
+    right: 0 !important;
+    /* Responsive height system with aspect ratio control */
+    height: clamp(400px, 65vh, 850px); /* Increased min/max for better presence */
+    min-height: 400px;
+    max-height: 850px;
+    overflow: hidden;
+    background-color: #1e293b; /* Slate-800 fallback background */
+    margin-bottom: 2rem;
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.15), 0 10px 15px -8px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    z-index: 1;
+}
+
+/* Inner carousel container and image sizing */
+.modern-hero-carousel .carousel-inner,
+.modern-hero-carousel .carousel-item {
+    height: 100%;
+    width: 100%;
+}
+
+/* Enhanced image handling for proper ratios and visibility */
+.modern-hero-carousel .image-container {
+    height: 100%;
+    width: 100%;
     overflow: hidden;
 }
 
 .carousel-image {
-    height: 50vh;
-    min-height: 300px;
-    max-height: 500px;
+    height: 100%;
+    width: 100%;
     object-fit: cover;
     object-position: center;
+    transition: transform 0.7s ease-in-out, opacity 0.5s ease-in-out;
+    will-change: transform, opacity;
+}
+
+.image-container {
+    height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
-/* Caption Styling */
-.carousel-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    padding: 4rem 2rem 2rem 2rem;
-    text-align: left;
+/* Subtle zoom effect for active slide image */
+.carousel-item.active .carousel-image {
+    transform: scale(1.05);
 }
 
-.carousel-caption-content {
-    max-width: 600px;
-    margin-left: 2rem;
+/* Modern Progress Bar Animation */
+.carousel-progress-container {
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    overflow: hidden;
 }
 
-.carousel-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    line-height: 1.2;
+.carousel-progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #3b82f6, #a855f7);
+    animation: progressAnimation 6s linear forwards;
+    transform-origin: left center;
 }
 
-.carousel-description {
-    font-size: 1.25rem;
-    color: #f8f9fa;
-    margin-bottom: 2rem;
-    line-height: 1.6;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+@keyframes progressAnimation {
+    0% { width: 0%; }
+    100% { width: 100%; }
 }
 
-.carousel-btn {
-    padding: 12px 30px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 30px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+/* Resetting progress animation on slide change */
+.carousel-item:not(.active) ~ .carousel-progress-bar {
+    animation-play-state: paused;
 }
 
-.carousel-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+/* Modern Dot Indicators Styling */
+.modern-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0;
+    z-index: 30;
 }
 
-/* Mobile Caption Styling */
-.carousel-caption-mobile {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
-    padding: 2rem 1rem 1rem 1rem;
-    text-align: center;
-}
-
-.carousel-title-mobile {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.carousel-description-mobile {
-    font-size: 0.95rem;
-    color: #f8f9fa;
-    margin-bottom: 1rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-}
-
-.carousel-btn-mobile {
-    padding: 8px 20px;
-    font-size: 0.9rem;
-    border-radius: 20px;
-}
-
-/* Custom Indicators */
-.carousel-indicators {
-    bottom: 20px;
-    margin-bottom: 0;
-}
-
-.carousel-indicators button {
+.modern-indicators button.modern-indicator {
     width: 12px;
     height: 12px;
     border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.5);
-    background-color: transparent;
-    margin: 0 6px;
-    transition: all 0.3s ease;
+    opacity: 0.7;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    margin: 0 5px;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
-.carousel-indicators button.active {
-    background-color: #007bff;
-    border-color: #007bff;
-    transform: scale(1.2);
-}
-
-/* Custom Controls */
-.carousel-control-prev,
-.carousel-control-next {
-    width: 60px;
-    height: 60px;
+.modern-indicators button.modern-indicator::after {
+    content: '';
+    position: absolute;
     top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.3);
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 6px;
+    height: 6px;
+    background-color: white;
     border-radius: 50%;
-    transition: all 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.carousel-control-prev {
-    left: 20px;
+.modern-indicators button.modern-indicator.active {
+    background-color: rgba(59, 130, 246, 0.8); /* Blue-500 with opacity */
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.2);
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
 }
 
-.carousel-control-next {
-    right: 20px;
+.modern-indicators button.modern-indicator.active::after {
+    transform: translate(-50%, -50%) scale(1);
 }
 
-.carousel-control-prev:hover,
-.carousel-control-next:hover {
-    background: rgba(0, 0, 0, 0.6);
-    transform: translateY(-50%) scale(1.1);
+.modern-indicators button.modern-indicator:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
 }
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-    width: 24px;
-    height: 24px;
-}
-
-/* Pause/Play Control */
-.carousel-controls-overlay {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 10;
-}
-
-#carousel-pause-play {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Loading States */
-.slide-loading-overlay {
-    position: absolute;
-    top: 0;
+/* Modern Caption Styling with Glass Effect */
+.modern-caption {
+    bottom: 0;
     left: 0;
     right: 0;
-    bottom: 0;
-    background: rgba(248, 249, 250, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 5;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-}
-
-.carousel-item.loaded .slide-loading-overlay {
+    padding: 2rem 3rem;
+    text-align: center;
+    z-index: 20;
     opacity: 0;
-    pointer-events: none;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero-carousel {
-        height: 50vh;
-        min-height: 300px;
-    }
-    
-    .carousel-image {
-        height: 50vh;
-        min-height: 300px;
-    }
-    
-    .carousel-control-prev,
-    .carousel-control-next {
-        width: 40px;
-        height: 40px;
-        background: rgba(0, 0, 0, 0.5);
-    }
-    
-    .carousel-control-prev {
-        left: 10px;
-    }
-    
-    .carousel-control-next {
-        right: 10px;
-    }
-    
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        width: 16px;
-        height: 16px;
-    }
+.carousel-item.active .modern-caption {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.3s;
 }
 
-@media (max-width: 576px) {
-    .hero-carousel {
-        height: 40vh;
-        min-height: 250px;
-    }
-    
-    .carousel-image {
-        height: 40vh;
-        min-height: 250px;
-    }
-    
-    .carousel-indicators button {
-        width: 8px;
-        height: 8px;
-        margin: 0 4px;
-    }
+/* Caption animations with staggered timing */
+.carousel-item.active [data-animation="fade-up"] {
+    animation: fadeInUp 0.8s forwards;
 }
 
-/* Animation Classes */
-.carousel-item.active .carousel-caption-content,
-.carousel-item.active .carousel-caption-content-mobile {
-    animation: slideUpFade 0.8s ease-out;
+.carousel-item.active [data-delay="200"] {
+    animation-delay: 0.2s;
 }
 
-@keyframes slideUpFade {
+.carousel-item.active [data-delay="400"] {
+    animation-delay: 0.4s;
+}
+
+.carousel-item.active [data-delay="600"] {
+    animation-delay: 0.6s;
+}
+
+@keyframes fadeInUp {
     from {
         opacity: 0;
         transform: translateY(30px);
@@ -390,188 +403,1164 @@
     }
 }
 
-/* Touch/Swipe Enhancement */
-.hero-carousel {
-    touch-action: pan-y;
+/* Modern Mobile Caption Styling */
+.modern-caption-mobile {
+    padding: 1.5rem;
+    text-align: center;
+    z-index: 20;
 }
 
-/* Accessibility Improvements */
-.carousel-item img {
-    transition: transform 0.6s ease-in-out;
+/* Modern Carousel Controls */
+.modern-control {
+    width: auto;
+    height: auto;
+    opacity: 0.8;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Loading placeholder */
+.modern-control:hover {
+    opacity: 1;
+}
+
+.modern-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+/* Slide Counter */
+.slide-counter {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 0.25rem 1rem;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.slide-counter:hover {
+    opacity: 1;
+}
+
+/* Enhanced Loading Skeleton */
+.image-loading-skeleton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    z-index: 5;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Improved Lazy Loading */
 .lazy-load {
-    transition: opacity 0.3s;
-}
-
-.lazy-load[data-src] {
-    opacity: 0.5;
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
 }
 
 .lazy-load.loaded {
     opacity: 1;
 }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    .carousel-caption {
-        background: rgba(0, 0, 0, 0.9);
+/* Parallax Effect Animation */
+.parallax-layer {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.carousel-item.active .parallax-layer {
+    animation: parallaxEffect 10s ease-in-out infinite alternate;
+}
+
+@keyframes parallaxEffect {
+    0% { transform: translateX(-5px) scale(1.05); }
+    100% { transform: translateX(5px) scale(1.05); }
+}
+
+/* Overlay Gradient Animation */
+.overlay-gradient {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
+    opacity: 0.7;
+    transition: opacity 0.5s ease;
+}
+
+.carousel-item.active .overlay-gradient {
+    opacity: 0.8;
+}
+
+/* Advanced Responsive Design */
+@media (min-width: 1400px) {
+    /* Extra large screens: taller, more spacious */
+    .modern-hero-carousel {
+        height: clamp(500px, 70vh, 900px);
+        aspect-ratio: 21/9;
     }
     
-    .carousel-indicators button {
-        border-color: #ffffff;
+    .modern-caption {
+        padding: 3rem 4rem;
+    }
+    
+    .carousel-title {
+        font-size: 4rem;
+    }
+    
+    .carousel-description {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    /* Large screens */
+    .modern-hero-carousel {
+        height: clamp(400px, 60vh, 800px);
+    }
+    
+    .carousel-title {
+        font-size: 2.25rem;
+    }
+    
+    .carousel-description {
+        font-size: 1.125rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    /* Medium screens (tablets) */
+    .modern-hero-carousel {
+        height: clamp(350px, 55vh, 700px);
+        aspect-ratio: 16/10;
+    }
+    
+    .modern-caption {
+        padding: 1.5rem 2rem;
+    }
+    
+    .control-background {
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    .modern-control {
+        top: 45% !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    /* Small screens */
+    .modern-hero-carousel {
+        height: clamp(300px, 50vh, 500px);
+        margin-bottom: 1.5rem;
+        border-radius: 0.375rem;
+    }
+    
+    .nav-btn {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .nav-btn i {
+        font-size: 1.25rem;
+    }
+    
+    .prev-btn {
+        left: 15px;
+    }
+    
+    .next-btn {
+        right: 15px;
+    }
+    
+    .modern-caption-mobile {
+        padding: 1rem;
+    }
+    
+    .control-background {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    .carousel-progress-container {
+        height: 3px;
+    }
+    
+    .modern-indicators button.modern-indicator {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .slide-counter {
+        padding: 0.2rem 0.75rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    /* Extra small screens (phones) */
+    .modern-hero-carousel {
+        height: clamp(250px, 45vh, 400px);
+        aspect-ratio: 4/3;
+        margin-bottom: 1rem;
+        border-radius: 0.25rem;
+    }
+    
+    .modern-caption-mobile .mobile-caption-content {
+        padding: 0.75rem !important;
+    }
+    
+    .carousel-title-mobile {
+        font-size: 1.25rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    .carousel-description-mobile {
+        font-size: 0.875rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .mobile-carousel-btn {
+        padding: 0.375rem 1rem !important;
+        font-size: 0.875rem !important;
+    }
+    
+    .control-background {
+        width: 35px !important;
+        height: 35px !important;
+    }
+    
+    .modern-control {
+        left: 0.5rem !important;
+        right: 0.5rem !important;
+    }
+    
+    .carousel-controls-overlay {
+        top: 0.5rem !important;
+        right: 0.5rem !important;
+    }
+    
+    .control-btn {
+        width: 30px !important;
+        height: 30px !important;
+    }
+    
+    .modern-indicators {
+        bottom: 0.5rem !important;
+    }
+    
+    .modern-indicators button.modern-indicator {
+        width: 8px;
+        height: 8px;
+        margin: 0 3px;
+    }
+    
+    .slide-counter {
+        bottom: 0.5rem !important;
+        right: 0.5rem !important;
+        padding: 0.125rem 0.5rem;
+        font-size: 0.75rem;
     }
 }
 
 /* Carousel placeholder styles */
 .carousel-placeholder {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 400px;
+    background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #7c3aed 100%);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.carousel-placeholder h3 {
-    font-size: 2rem;
-    font-weight: 600;
+.placeholder-content {
+    text-align: center;
+    color: white;
+}
+
+.placeholder-icon {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    backdrop-filter: blur(4px);
+}
+
+.placeholder-icon i {
+    font-size: 3rem;
+    opacity: 0.7;
+}
+
+.placeholder-content h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 0.025em;
     margin-bottom: 1rem;
 }
 
-.carousel-placeholder p {
-    font-size: 1.1rem;
-    margin: 0;
+.placeholder-content p {
+    font-size: 1.125rem;
+    opacity: 0.8;
 }
 
-.carousel-placeholder .fas {
-    opacity: 0.3;
+/* Progress Bar */
+.carousel-progress-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    z-index: 20;
 }
 
-/* Reduced motion support */
+.carousel-progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #3b82f6, #a855f7);
+    transition: all 1s ease-out;
+}
+
+/* Caption Styles */
+.modern-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem 3rem;
+    text-align: center;
+    z-index: 20;
+}
+
+.caption-content {
+    max-width: 64rem;
+    margin: 0 auto;
+}
+
+.caption-background {
+    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.carousel-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-description {
+    font-size: 1.25rem;
+    color: #f3f4f6;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    max-width: 48rem;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.modern-carousel-btn {
+    background: linear-gradient(to right, #2563eb, #7c3aed);
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 1.125rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modern-carousel-btn:hover {
+    background: linear-gradient(to right, #1d4ed8, #6d28d9);
+    transform: scale(1.05);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    color: white;
+    text-decoration: none;
+}
+
+.modern-carousel-btn-secondary {
+    background: transparent;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 1.125rem;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modern-carousel-btn-secondary:hover {
+    background: white;
+    color: #1f2937;
+    transform: scale(1.05);
+    text-decoration: none;
+}
+
+/* Mobile Caption */
+.modern-caption-mobile {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    text-align: center;
+    z-index: 20;
+}
+
+.mobile-caption-content {
+    backdrop-filter: blur(12px);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.carousel-title-mobile {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-description-mobile {
+    font-size: 1rem;
+    color: #f3f4f6;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.mobile-button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.mobile-carousel-btn {
+    background: linear-gradient(to right, #2563eb, #7c3aed);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mobile-carousel-btn:hover {
+    background: linear-gradient(to right, #1d4ed8, #6d28d9);
+    transform: scale(1.05);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    color: white;
+    text-decoration: none;
+}
+
+/* Enhanced Navigation Buttons */
+.carousel-navigation {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 40;
+    pointer-events: none;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: auto;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.nav-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+.nav-btn i {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.prev-btn {
+    left: 20px;
+}
+
+.next-btn {
+    right: 20px;
+}
+
+/* Controls */
+.carousel-controls-overlay {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 30;
+}
+
+.control-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.modern-control {
+    width: auto;
+    height: auto;
+    opacity: 0.8;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modern-control:hover {
+    opacity: 1;
+}
+
+.control-background {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.control-background:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.control-background i {
+    color: white;
+    font-size: 1.25rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Slide Counter */
+.slide-counter {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 30;
+}
+
+.counter-background {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 0.25rem 1rem;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.slide-counter:hover .counter-background {
+    opacity: 1;
+}
+
+/* Slide Progress Indicator */
+.slide-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    z-index: 25;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #a855f7);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 0 2px 2px 0;
+}
+
+/* Loading Skeleton */
+.image-loading-skeleton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    z-index: 5;
+}
+
+.skeleton-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(156, 163, 175, 0.3), transparent);
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Overlay and Parallax */
+.overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 60%);
+    opacity: 0.7;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.parallax-layer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(30, 58, 138, 0.2), transparent, rgba(88, 28, 135, 0.2));
+    opacity: 0.2;
+    pointer-events: none;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Fallback carousel styles */
+.carousel-item {
+    transition: opacity 0.6s ease-in-out;
+    opacity: 0;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+/* Ensure proper carousel behavior */
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.carousel-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+    position: relative;
+}
+
+/* Accessibility Improvements */
+.carousel-item:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
-    .carousel-item {
-        transition: none;
+    .modern-hero-carousel *,
+    .carousel-item.active *,
+    .carousel-item.active [data-animation],
+    .carousel-progress-bar,
+    .overlay-gradient,
+    .parallax-layer {
+        animation: none !important;
+        transition: opacity 0.1s linear !important;
+        transform: none !important;
     }
     
-    .carousel-item.active .carousel-caption-content,
-    .carousel-item.active .carousel-caption-content-mobile {
-        animation: none;
+    .image-loading-skeleton {
+        animation: none !important;
+        background: #f1f5f9 !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .modern-hero-carousel {
+        border: 2px solid black;
+    }
+    
+    .modern-caption,
+    .modern-caption-mobile {
+        background: rgba(0, 0, 0, 0.9) !important;
+        backdrop-filter: none !important;
+        border: 2px solid white !important;
+    }
+    
+    .carousel-title,
+    .carousel-title-mobile,
+    .carousel-description,
+    .carousel-description-mobile {
+        color: white !important;
+        text-shadow: none !important;
+    }
+    
+    .modern-indicators button.modern-indicator {
+        background: black !important;
+        border: 2px solid white !important;
+    }
+    
+    .modern-indicators button.modern-indicator.active {
+        background: white !important;
+    }
+    
+    .control-background,
+    .control-btn {
+        background: black !important;
+        border: 2px solid white !important;
+    }
+    
+    .overlay-gradient {
+        background: linear-gradient(to top, black 0%, transparent 80%) !important;
+        opacity: 0.9 !important;
     }
 }
 </style>
 
-<!-- Slider JavaScript -->
+<!-- Enhanced Slider JavaScript with Modern Features -->
 <script>
+// Global carousel instance for navigation functions
+let globalCarousel = null;
+
+// Navigation functions for the enhanced buttons
+function goToPreviousSlide() {
+    if (globalCarousel) {
+        globalCarousel.forcePrev();
+    }
+}
+
+function goToNextSlide() {
+    if (globalCarousel) {
+        globalCarousel.forceNext();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const carousel = document.getElementById('hero-slider');
     const pausePlayBtn = document.getElementById('carousel-pause-play');
+    const fullscreenBtn = document.getElementById('carousel-fullscreen');
+    const progressBar = carousel?.querySelector('.carousel-progress-bar');
+    const currentSlideSpan = document.getElementById('current-slide');
+    const totalSlidesSpan = document.getElementById('total-slides');
     
-    if (carousel && pausePlayBtn) {
+    if (carousel && pausePlayBtn && typeof bootstrap !== 'undefined') {
+        // Get total number of slides
+        const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+        
+        // Initialize Bootstrap Carousel with enhanced settings for perfect continuous loop
         const bsCarousel = new bootstrap.Carousel(carousel, {
-            interval: 5000,
-            wrap: true,
-            touch: true
+            interval: 6000,
+            wrap: true,  // Enable infinite loop
+            touch: true,
+            pause: 'hover', // Pause on hover
+            keyboard: true,
+            ride: 'carousel' // Start cycling immediately
         });
         
-        let isPlaying = true;
+        // Store global instance for navigation functions
+        globalCarousel = bsCarousel;
         
-        // Pause/Play functionality
+        // Ensure the carousel element has the correct data attributes
+        carousel.setAttribute('data-bs-wrap', 'true');
+        carousel.setAttribute('data-bs-interval', '6000');
+        carousel.setAttribute('data-bs-ride', 'carousel');
+        
+        // Force enable infinite loop
+        if (bsCarousel._config) {
+            bsCarousel._config.wrap = true;
+        }
+        
+        // Override Bootstrap's internal methods to ensure infinite loop
+        const originalNext = bsCarousel.next.bind(bsCarousel);
+        const originalPrev = bsCarousel.prev.bind(bsCarousel);
+        
+        bsCarousel.next = function() {
+            const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+            const currentIndex = Array.from(carousel.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
+            
+            if (currentIndex === totalSlides - 1) {
+                // If at last slide, go to first slide
+                bsCarousel.to(0);
+            } else {
+                originalNext();
+            }
+        };
+        
+        bsCarousel.prev = function() {
+            const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+            const currentIndex = Array.from(carousel.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
+            
+            if (currentIndex === 0) {
+                // If at first slide, go to last slide
+                bsCarousel.to(totalSlides - 1);
+            } else {
+                originalPrev();
+            }
+        };
+        
+        // Enhanced infinite loop with better edge case handling
+        bsCarousel.forceNext = function() {
+            const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+            const currentIndex = Array.from(carousel.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
+            const nextIndex = (currentIndex + 1) % totalSlides;
+            bsCarousel.to(nextIndex);
+        };
+        
+        bsCarousel.forcePrev = function() {
+            const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+            const currentIndex = Array.from(carousel.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
+            const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            bsCarousel.to(prevIndex);
+        };
+        
+        // Override the to method to ensure proper looping
+        const originalTo = bsCarousel.to.bind(bsCarousel);
+        bsCarousel.to = function(index) {
+            const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+            // Ensure index is within bounds
+            if (index < 0) {
+                index = totalSlides - 1;
+            } else if (index >= totalSlides) {
+                index = 0;
+            }
+            originalTo(index);
+        };
+        
+        let isPlaying = true;
+        let currentSlideIndex = 0;
+        let progressInterval;
+        let isTransitioning = false;
+        let lastTransitionTime = Date.now();
+        
+        // Update slide counter
+        function updateSlideCounter() {
+            if (currentSlideSpan) {
+                currentSlideSpan.textContent = currentSlideIndex + 1;
+            }
+        }
+        
+        // Update progress bar
+        function updateProgressBar() {
+            const progressFill = document.getElementById('slide-progress-fill');
+            if (progressFill) {
+                const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+                const progress = ((currentSlideIndex + 1) / totalSlides) * 100;
+                progressFill.style.width = progress + '%';
+            }
+        }
+        
+        // Progress bar animation
+        function startProgressBar() {
+            if (progressBar && isPlaying) {
+                progressBar.style.width = '0%';
+                progressBar.style.animation = 'none';
+                // Force reflow
+                progressBar.offsetHeight;
+                progressBar.style.animation = 'progressAnimation 6s linear forwards';
+            }
+        }
+        
+        function pauseProgressBar() {
+            if (progressBar) {
+                progressBar.style.animationPlayState = 'paused';
+            }
+        }
+        
+        function resumeProgressBar() {
+            if (progressBar) {
+                progressBar.style.animationPlayState = 'running';
+            }
+        }
+        
+        function resetProgressBar() {
+            if (progressBar) {
+                progressBar.style.width = '0%';
+                progressBar.style.animation = 'none';
+            }
+        }
+        
+        // Enhanced Pause/Play functionality
         pausePlayBtn.addEventListener('click', function() {
             if (isPlaying) {
                 bsCarousel.pause();
-                pausePlayBtn.innerHTML = '<i class="fas fa-play"></i>';
-                pausePlayBtn.setAttribute('title', 'Play');
+                pauseProgressBar();
+                pausePlayBtn.innerHTML = '<i class="fas fa-play tw-text-sm"></i>';
+                pausePlayBtn.setAttribute('title', 'Play Slideshow');
                 isPlaying = false;
             } else {
                 bsCarousel.cycle();
-                pausePlayBtn.innerHTML = '<i class="fas fa-pause"></i>';
-                pausePlayBtn.setAttribute('title', 'Pause');
+                resumeProgressBar();
+                pausePlayBtn.innerHTML = '<i class="fas fa-pause tw-text-sm"></i>';
+                pausePlayBtn.setAttribute('title', 'Pause Slideshow');
                 isPlaying = true;
             }
         });
         
-        // Lazy loading implementation
+        // Fullscreen functionality
+        if (fullscreenBtn) {
+            fullscreenBtn.addEventListener('click', function() {
+                if (!document.fullscreenElement) {
+                    carousel.requestFullscreen().then(() => {
+                        carousel.classList.add('fullscreen-mode');
+                        fullscreenBtn.innerHTML = '<i class="fas fa-compress tw-text-sm"></i>';
+                        fullscreenBtn.setAttribute('title', 'Exit Fullscreen');
+                    }).catch(err => {
+                        console.log('Fullscreen not supported:', err);
+                    });
+                } else {
+                    document.exitFullscreen().then(() => {
+                        carousel.classList.remove('fullscreen-mode');
+                        fullscreenBtn.innerHTML = '<i class="fas fa-expand tw-text-sm"></i>';
+                        fullscreenBtn.setAttribute('title', 'Toggle Fullscreen');
+                    });
+                }
+            });
+        }
+        
+        // Enhanced lazy loading implementation
         const lazyImages = carousel.querySelectorAll('.lazy-load');
         
         function loadImage(img) {
             const src = img.getAttribute('data-src');
             if (src) {
-                img.src = src;
-                img.removeAttribute('data-src');
-                img.classList.add('loaded');
-                
-                // Remove loading overlay when image loads
-                img.addEventListener('load', function() {
-                    const loadingOverlay = img.parentElement.querySelector('.slide-loading-overlay');
-                    if (loadingOverlay) {
-                        loadingOverlay.style.opacity = '0';
+                // Create a new image to preload
+                const newImg = new Image();
+                newImg.onload = function() {
+                    img.src = src;
+                    img.removeAttribute('data-src');
+                    img.classList.add('loaded');
+                    
+                    // Remove loading skeleton with fade effect
+                    const loadingSkeleton = img.closest('.carousel-item').querySelector('.image-loading-skeleton');
+                    if (loadingSkeleton) {
+                        loadingSkeleton.style.opacity = '0';
                         setTimeout(() => {
-                            loadingOverlay.remove();
+                            loadingSkeleton.remove();
                         }, 300);
                     }
-                    img.parentElement.classList.add('loaded');
-                });
+                };
+                newImg.onerror = function() {
+                    console.warn('Failed to load image:', src);
+                    img.classList.add('error');
+                    const loadingSkeleton = img.closest('.carousel-item').querySelector('.image-loading-skeleton');
+                    if (loadingSkeleton) {
+                        loadingSkeleton.innerHTML = '<div class="tw-text-center tw-text-gray-600"><i class="fas fa-exclamation-triangle tw-text-4xl tw-mb-2"></i><p>Failed to load image</p></div>';
+                        loadingSkeleton.style.background = '#f3f4f6';
+                    }
+                };
+                newImg.src = src;
             }
         }
         
-        // Load images as carousel slides change
+        // Enhanced slide change handling with perfect loop logic
         carousel.addEventListener('slide.bs.carousel', function(event) {
-            const activeSlide = carousel.querySelector('.carousel-item.active');
-            const nextSlide = event.relatedTarget;
+            isTransitioning = true;
+            currentSlideIndex = event.to;
+            updateSlideCounter();
+            resetProgressBar();
             
             // Load next slide image
-            const nextImg = nextSlide.querySelector('.lazy-load');
-            if (nextImg) {
-                loadImage(nextImg);
-            }
-            
-            // Preload next slide after current
-            const nextIndex = event.to + 1;
-            const slides = carousel.querySelectorAll('.carousel-item');
-            const nextNextSlide = slides[nextIndex % slides.length];
-            if (nextNextSlide) {
-                const nextNextImg = nextNextSlide.querySelector('.lazy-load');
-                if (nextNextImg) {
-                    setTimeout(() => loadImage(nextNextImg), 500);
+            const nextSlide = event.relatedTarget;
+            if (nextSlide) {
+                const nextImg = nextSlide.querySelector('.lazy-load');
+                if (nextImg) {
+                    loadImage(nextImg);
                 }
             }
+            
+            // Preload upcoming slides for smooth infinite loop
+            const allSlides = carousel.querySelectorAll('.carousel-item');
+            const totalSlides = allSlides.length;
+            
+            // Preload next and previous slides for infinite loop
+            const nextIndex = (event.to + 1) % totalSlides;
+            const prevIndex = (event.to - 1 + totalSlides) % totalSlides;
+            
+            [nextIndex, prevIndex].forEach(index => {
+                const slide = allSlides[index];
+                if (slide) {
+                    const img = slide.querySelector('.lazy-load');
+                    if (img) {
+                        setTimeout(() => loadImage(img), 50);
+                    }
+                }
+            });
+            
+            // Update modern indicators with smooth animation
+            const indicators = carousel.querySelectorAll('.modern-indicator');
+            indicators.forEach((indicator, index) => {
+                const isActive = index === event.to;
+                indicator.classList.toggle('active', isActive);
+                
+                if (isActive) {
+                    indicator.setAttribute('aria-current', 'true');
+                    indicator.style.transform = 'scale(1.2)';
+                } else {
+                    indicator.removeAttribute('aria-current');
+                    indicator.style.transform = 'scale(1)';
+                }
+            });
         });
         
-        // Load first few images immediately
-        lazyImages.forEach((img, index) => {
-            if (index < 2) {
-                loadImage(img);
+        carousel.addEventListener('slid.bs.carousel', function(event) {
+            isTransitioning = false;
+            lastTransitionTime = Date.now();
+            
+            // Start progress bar after slide transition completes
+            if (isPlaying) {
+                setTimeout(() => startProgressBar(), 100);
+            }
+            
+            // Ensure infinite loop continues
+            const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+            if (event.to === totalSlides - 1 && isPlaying) {
+                // If we're at the last slide, ensure the carousel continues
+                setTimeout(() => {
+                    if (bsCarousel._interval === null && isPlaying) {
+                        bsCarousel.cycle();
+                    }
+                }, 100);
             }
         });
         
-        // Pause on hover (desktop only)
-        if (window.innerWidth > 768) {
-            carousel.addEventListener('mouseenter', function() {
-                if (isPlaying) bsCarousel.pause();
-            });
-            
-            carousel.addEventListener('mouseleave', function() {
-                if (isPlaying) bsCarousel.cycle();
-            });
-        }
+        // Load first few images immediately with priority
+        lazyImages.forEach((img, index) => {
+            if (index < 3) { // Load first 3 images
+                setTimeout(() => loadImage(img), index * 100);
+            }
+        });
         
-        // Touch/Swipe support enhancement
+        // Enhanced hover behavior - Bootstrap 5 handles this automatically
+        // We just need to sync our progress bar with Bootstrap's pause/play
+        carousel.addEventListener('mouseenter', function() {
+            if (isPlaying) {
+                pauseProgressBar();
+            }
+        });
+        
+        carousel.addEventListener('mouseleave', function() {
+            if (isPlaying) {
+                resumeProgressBar();
+            }
+        });
+        
+        // Enhanced touch/swipe support with momentum
         let touchStartX = 0;
         let touchEndX = 0;
+        let touchStartTime = 0;
+        let touchEndTime = 0;
         
         carousel.addEventListener('touchstart', function(event) {
             touchStartX = event.changedTouches[0].screenX;
-        });
+            touchStartTime = Date.now();
+        }, { passive: true });
         
         carousel.addEventListener('touchend', function(event) {
             touchEndX = event.changedTouches[0].screenX;
+            touchEndTime = Date.now();
             handleSwipe();
-        });
+        }, { passive: true });
         
         function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartX - touchEndX;
+            const swipeDistance = touchStartX - touchEndX;
+            const swipeTime = touchEndTime - touchStartTime;
+            const swipeVelocity = Math.abs(swipeDistance) / swipeTime;
             
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
+            // Require minimum distance and reasonable timing
+            if (Math.abs(swipeDistance) > 50 && swipeTime < 1000 && swipeVelocity > 0.1) {
+                resetProgressBar();
+                if (swipeDistance > 0) {
                     bsCarousel.next();
                 } else {
                     bsCarousel.prev();
@@ -579,44 +1568,260 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Keyboard navigation
+        // Enhanced keyboard navigation
         carousel.addEventListener('keydown', function(event) {
+            // Only handle if carousel has focus or is fullscreen
+            if (!carousel.contains(document.activeElement) && !document.fullscreenElement) {
+                return;
+            }
+            
             switch(event.key) {
                 case 'ArrowLeft':
+                case 'ArrowUp':
                     event.preventDefault();
+                    resetProgressBar();
                     bsCarousel.prev();
                     break;
                 case 'ArrowRight':
+                case 'ArrowDown':
                     event.preventDefault();
+                    resetProgressBar();
                     bsCarousel.next();
                     break;
                 case ' ':
+                case 'Enter':
                     event.preventDefault();
                     pausePlayBtn.click();
+                    break;
+                case 'f':
+                case 'F':
+                    if (fullscreenBtn) {
+                        event.preventDefault();
+                        fullscreenBtn.click();
+                    }
+                    break;
+                case 'Escape':
+                    if (document.fullscreenElement) {
+                        event.preventDefault();
+                        document.exitFullscreen();
+                    }
                     break;
             }
         });
         
+        // Enhanced indicators functionality
+        const indicators = carousel.querySelectorAll('.modern-indicator');
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', function() {
+                resetProgressBar();
+                currentSlideIndex = index;
+                updateSlideCounter();
+                bsCarousel.to(index);
+            });
+        });
+        
         // Set initial focus for keyboard navigation
         carousel.setAttribute('tabindex', '0');
+        carousel.setAttribute('role', 'region');
+        carousel.setAttribute('aria-label', 'Image carousel');
+        
+        // Handle fullscreen changes
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement && fullscreenBtn) {
+                carousel.classList.remove('fullscreen-mode');
+                fullscreenBtn.innerHTML = '<i class="fas fa-expand tw-text-sm"></i>';
+                fullscreenBtn.setAttribute('title', 'Toggle Fullscreen');
+            }
+        });
+        
+        // Initialize
+        updateSlideCounter();
+        startProgressBar();
+        
+        // Handle visibility changes (tab switching)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (isPlaying) {
+                    bsCarousel.pause();
+                    pauseProgressBar();
+                }
+            } else {
+                if (isPlaying) {
+                    setTimeout(() => {
+                        bsCarousel.cycle();
+                        startProgressBar();
+                    }, 1000);
+                }
+            }
+        });
+        
+        // Ensure carousel is properly initialized and cycling
+        setTimeout(() => {
+            if (isPlaying && !bsCarousel._interval) {
+                bsCarousel.cycle();
+            }
+        }, 100);
+        
+        // Periodic check to ensure infinite loop continues
+        setInterval(() => {
+            if (isPlaying && bsCarousel._interval === null) {
+                bsCarousel.cycle();
+            }
+            
+            // Additional check: if we're at the last slide and not transitioning, ensure we continue
+            const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+            const currentIndex = Array.from(carousel.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
+            
+            if (currentIndex === totalSlides - 1 && !isTransitioning && isPlaying) {
+                // Force continue to next slide after a delay
+                setTimeout(() => {
+                    if (isPlaying && bsCarousel._interval === null) {
+                        bsCarousel.next();
+                    }
+                }, 6000); // Wait for the normal interval
+            }
+        }, 1000);
+        
+        // Additional loop enforcement for edge cases
+        setInterval(() => {
+            if (isPlaying) {
+                const totalSlides = carousel.querySelectorAll('.carousel-item').length;
+                const currentIndex = Array.from(carousel.querySelectorAll('.carousel-item')).findIndex(item => item.classList.contains('active'));
+                
+                // If we're stuck at the last slide for more than 7 seconds, force continue
+                if (currentIndex === totalSlides - 1 && !isTransitioning) {
+                    const timeSinceLastTransition = Date.now() - (lastTransitionTime || 0);
+                    if (timeSinceLastTransition > 7000) {
+                        console.log('Force continuing from last slide');
+                        bsCarousel.next();
+                        lastTransitionTime = Date.now();
+                    }
+                }
+            }
+        }, 2000);
+    } else if (carousel) {
+        // Fallback: Basic carousel functionality without Bootstrap
+        console.warn('Bootstrap 5 not loaded. Using basic carousel functionality.');
+        
+        const slides = carousel.querySelectorAll('.carousel-item');
+        let currentSlide = 0;
+        let interval;
+        
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            currentSlide = index;
+            
+            // Update indicators
+            const indicators = carousel.querySelectorAll('.modern-indicator');
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === index);
+            });
+            
+            // Update counter
+            if (currentSlideSpan) {
+                currentSlideSpan.textContent = index + 1;
+            }
+        }
+        
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+        
+        function prevSlide() {
+            const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(prevIndex);
+        }
+        
+        function startAutoPlay() {
+            interval = setInterval(nextSlide, 6000);
+        }
+        
+        function stopAutoPlay() {
+            if (interval) {
+                clearInterval(interval);
+                interval = null;
+            }
+        }
+        
+        // Initialize fallback carousel
+        showSlide(0);
+        startAutoPlay();
+        
+        // Ensure infinite loop continues even if interrupted
+        setInterval(() => {
+            if (!interval && slides.length > 1) {
+                startAutoPlay();
+            }
+        }, 1000);
+        
+        // Add click handlers for indicators
+        const indicators = carousel.querySelectorAll('.modern-indicator');
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                stopAutoPlay();
+                showSlide(index);
+                startAutoPlay();
+            });
+        });
+        
+        // Add navigation controls
+        const prevBtn = carousel.querySelector('.carousel-control-prev');
+        const nextBtn = carousel.querySelector('.carousel-control-next');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                stopAutoPlay();
+                const prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(prevIndex);
+                startAutoPlay();
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                stopAutoPlay();
+                nextSlide();
+                startAutoPlay();
+            });
+        }
     }
 });
 
-// Intersection Observer for performance optimization
+// Enhanced Intersection Observer for performance optimization
 if ('IntersectionObserver' in window) {
     const sliderObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
+            const carousel = entry.target;
+            let bsCarousel = null;
+            
+            // Check if Bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                bsCarousel = bootstrap.Carousel.getInstance(carousel);
+            }
+            
             if (entry.isIntersecting) {
-                const carousel = entry.target;
-                // Start carousel when it becomes visible
-                const bsCarousel = bootstrap.Carousel.getInstance(carousel);
+                // Carousel is visible
+                carousel.classList.add('in-viewport');
                 if (bsCarousel) {
-                    bsCarousel.cycle();
+                    const pausePlayBtn = carousel.querySelector('#carousel-pause-play');
+                    if (pausePlayBtn && pausePlayBtn.innerHTML.includes('pause')) {
+                        bsCarousel.cycle();
+                    }
+                }
+            } else {
+                // Carousel is not visible, pause for performance
+                carousel.classList.remove('in-viewport');
+                if (bsCarousel) {
+                    bsCarousel.pause();
                 }
             }
         });
     }, {
-        threshold: 0.1
+        threshold: 0.25, // Trigger when 25% of carousel is visible
+        rootMargin: '50px 0px' // Start observing 50px before entering viewport
     });
     
     const sliderElement = document.getElementById('hero-slider');
@@ -624,6 +1829,50 @@ if ('IntersectionObserver' in window) {
         sliderObserver.observe(sliderElement);
     }
 }
+
+// Add fullscreen styles
+const fullscreenStyles = `
+<style>
+.modern-hero-carousel.fullscreen-mode {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+}
+
+.modern-hero-carousel.fullscreen-mode .modern-caption {
+    padding: 3rem 6rem;
+}
+
+.modern-hero-carousel.fullscreen-mode .carousel-title {
+    font-size: 4rem;
+}
+
+.modern-hero-carousel.fullscreen-mode .carousel-description {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .modern-hero-carousel.fullscreen-mode .modern-caption {
+        padding: 2rem;
+    }
+    
+    .modern-hero-carousel.fullscreen-mode .carousel-title {
+        font-size: 2.5rem;
+    }
+    
+    .modern-hero-carousel.fullscreen-mode .carousel-description {
+        font-size: 1.2rem;
+    }
+}
+</style>
+`;
+
+document.head.insertAdjacentHTML('beforeend', fullscreenStyles);
 </script>
 
 {% else %}

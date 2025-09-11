@@ -1,11 +1,20 @@
 from django.urls import path, include
 from . import views
+from . import navbar_views
 
 app_name = 'college_website'
 
 urlpatterns = [
     # Homepage
     path('', views.home_view, name='home'),
+    
+    # Menu Test (for debugging)
+    path('menu-test/', views.menu_test_view, name='menu_test'),
+    
+    # Navbar Configuration
+    path('admin/navbar-config/', navbar_views.navbar_config_view, name='navbar_config'),
+    path('admin/navbar-config/reset/', navbar_views.navbar_config_reset, name='navbar_config_reset'),
+    path('admin/navbar-preview/', navbar_views.navbar_preview, name='navbar_preview'),
     
     # Home Section
     path('home/', include([
@@ -19,6 +28,8 @@ urlpatterns = [
     # About Section
     path('about/', include([
         path('', views.about_view, name='about'),
+        path('history/', views.history_view, name='history'),
+        path('vision-mission/', views.vision_mission_view, name='vision_mission'),
         path('overview/', views.about_overview_view, name='about_overview'),
         path('administration/', views.administration_view, name='administration'),
         path('organizational-structure/', views.organizational_structure_view, name='organizational_structure'),
@@ -35,12 +46,13 @@ urlpatterns = [
     path('academics/', include([
         path('', views.academics_view, name='academics'),
         path('faculties/', views.faculties_view, name='faculties'),
+        path('academic-faculties/', views.academic_faculties_view, name='academic_faculties'),
+        path('non-academic-faculties/', views.non_academic_faculties_view, name='non_academic_faculties'),
+        path('faculty/<slug:dept_slug>/<slug:slug>/', views.faculty_detail_view, name='faculty_detail'),
+        path('staff/<slug:dept_slug>/<slug:slug>/', views.staff_detail_view, name='staff_detail'),
         path('departments/', include([
-            path('', views.departments_view, name='departments'),
-            path('arts/', views.arts_department_view, name='arts_department'),
-            path('science/', views.science_department_view, name='science_department'),
-            path('commerce/', views.commerce_department_view, name='commerce_department'),
-            path('management/', views.management_department_view, name='management_department'),
+            path('', views.DepartmentListView.as_view(), name='departments_list'),
+            path('<slug:slug>/', views.DepartmentDetailView.as_view(), name='department_detail'),
         ])),
         path('programs/', include([
             path('', views.programs_view, name='programs'),
@@ -52,6 +64,8 @@ urlpatterns = [
         path('academic-calendar/', views.academic_calendar_view, name='academic_calendar'),
         path('syllabus-curriculum/', views.syllabus_curriculum_view, name='syllabus_curriculum'),
         path('teaching-learning-resources/', views.teaching_learning_resources_view, name='teaching_learning_resources'),
+        path('library/', views.LibraryListView.as_view(), name='academics_library'),
+        path('library/<slug:slug>/', views.LibraryDetailView.as_view(), name='academics_library_detail'),
     ])),
     
     # Admissions Section
@@ -73,10 +87,18 @@ urlpatterns = [
         path('notices/', views.exam_notices_view, name='exam_notices'),
         path('timetable/', views.exam_timetable_view, name='exam_timetable'),
         path('question-papers/', views.question_papers_view, name='question_papers'),
+        path('question-papers/<slug:slug>/', views.question_paper_detail_view, name='question_paper_detail'),
+        path('question-papers/<slug:slug>/download/', views.question_paper_download_view, name='question_paper_download'),
         path('results/', views.exam_results_view, name='exam_results'),
         path('results/<slug:slug>/', views.ResultDetailView.as_view(), name='result_detail'),
         path('revaluation/', views.revaluation_view, name='revaluation'),
         path('rules/', views.exam_rules_view, name='exam_rules'),
+        # Exam Timetable Management (Staff Only)
+        path('timetable/manage/', views.exam_timetable_manage, name='exam_timetable_manage'),
+        path('timetable/create/', views.exam_timetable_create, name='exam_timetable_create'),
+        path('timetable/<int:timetable_id>/edit/', views.exam_timetable_edit, name='exam_timetable_edit'),
+        path('timetable/<int:timetable_id>/weeks/', views.exam_timetable_week_manage, name='exam_timetable_week_manage'),
+        path('timetable/week/<int:week_id>/exams/', views.exam_timetable_exam_manage, name='exam_timetable_exam_manage'),
     ])),
     
     # Research Section
@@ -94,11 +116,14 @@ urlpatterns = [
     path('student-support/', include([
         path('', views.student_support_view, name='student_support'),
         path('portal/', views.student_portal_view, name='student_portal'),
+        path('register/', views.student_register_view, name='student_register'),
+        path('login/', views.student_login_view, name='student_login'),
         path('library/', views.library_view, name='library'),
         path('library/<slug:slug>/', views.LibraryDetailView.as_view(), name='library_detail'),
         path('hostel/', views.hostel_view, name='hostel'),
         path('sports-cultural/', views.sports_cultural_view, name='sports_cultural'),
         path('nss-ncc-clubs/', views.nss_ncc_clubs_view, name='nss_ncc_clubs'),
+        path('nss-ncc-notices/', views.nss_ncc_notices_view, name='nss_ncc_notices'),
         path('placement-cell/', views.placement_cell_view, name='placement_cell'),
         path('alumni/', views.alumni_view, name='alumni'),
         path('alumni/<slug:slug>/', views.AlumniDetailView.as_view(), name='alumni_detail'),
@@ -148,6 +173,33 @@ urlpatterns = [
         path('social-media/', views.social_media_view, name='social_media'),
     ])),
     
+    # Program Management URLs (must come before legacy URLs to avoid conflicts)
+    path('admin/programs/', include([
+        path('', views.program_list_view, name='program_list'),
+        path('create/', views.program_create_view, name='program_create'),
+        path('<slug:slug>/', include([
+            path('', views.program_detail_view, name='program_detail_public'),
+            path('edit/', views.program_update_view, name='program_update'),
+            path('quick-edit/', views.program_quick_edit_view, name='program_quick_edit'),
+            path('delete/', views.program_delete_view, name='program_delete'),
+            path('toggle-status/', views.program_toggle_status_view, name='program_toggle_status'),
+            path('toggle-featured/', views.program_toggle_featured_view, name='program_toggle_featured'),
+        ])),
+    ])),
+    
+    # Question Paper Management URLs
+    path('admin/question-papers/', include([
+        path('', views.question_paper_list_view, name='question_paper_list'),
+        path('create/', views.question_paper_create_view, name='question_paper_create'),
+        path('<slug:slug>/', include([
+            path('edit/', views.question_paper_update_view, name='question_paper_update'),
+            path('quick-edit/', views.question_paper_quick_edit_view, name='question_paper_quick_edit'),
+            path('delete/', views.question_paper_delete_view, name='question_paper_delete'),
+            path('toggle-status/', views.question_paper_toggle_status_view, name='question_paper_toggle_status'),
+            path('toggle-featured/', views.question_paper_toggle_featured_view, name='question_paper_toggle_featured'),
+        ])),
+    ])),
+    
     # Legacy URLs for backward compatibility
     path('programs/', views.programs_view, name='programs_list'),
     path('programs/<slug:slug>/', views.ProgramDetailView.as_view(), name='program_detail'),
@@ -164,8 +216,16 @@ urlpatterns = [
     path('e-learning/<slug:slug>/', views.ELearningDetailView.as_view(), name='elearning_detail'),
     path('placements/', views.PlacementsListView.as_view(), name='placements'),
     path('placement/', views.PlacementsListView.as_view(), name='placement'),
+    path('alumni/', views.alumni_view, name='alumni_list'),
+    path('alumni/<slug:slug>/', views.AlumniDetailView.as_view(), name='alumni_profile_detail'),
     path('leadership/director/', views.director_message_view, name='director_message'),
     path('test-navbar/', views.test_navbar_view, name='test_navbar'),
+    path('navigation-demo/', views.navigation_demo_view, name='navigation_demo'),
+    path('test-nav/', views.test_navigation_view, name='test_navigation'),
+    path('simple-nav-test/', views.simple_nav_test_view, name='simple_nav_test'),
+    
+    # Hero Banner Management
+    path('hero-banner/', views.hero_banner_management, name='hero_banner_management'),
     
     # Dynamic CMS Pages (must be last to avoid conflicts)
     path('p/<slug:slug>/', views.DynamicPageView.as_view(), name='page_detail'),

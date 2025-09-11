@@ -1,0 +1,1264 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Innovation & Incubation - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Innovation & Incubation</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">Innovation & Incubation</h1>
+        <p class="lead text-muted">Fostering entrepreneurship and innovation through cutting-edge incubation programs</p>
+    </div>
+
+    <!-- Innovation Hub Overview -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-lightbulb text-primary me-2"></i>Innovation Hub
+            </h3>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="innovation-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-rocket fa-lg"></i>
+                    </div>
+                    <h5 class="card-title text-primary">Startup Incubation</h5>
+                    <p class="card-text text-muted">Comprehensive support for early-stage startups with mentorship, funding assistance, and infrastructure.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-1">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Business Plan Development
+                        </li>
+                        <li class="mb-1">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Market Research Support
+                        </li>
+                        <li class="mb-1">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Funding Opportunities
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="innovation-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-cogs fa-lg"></i>
+                    </div>
+                    <h5 class="card-title text-primary">Technology Transfer</h5>
+                    <p class="card-text text-muted">Bridging the gap between academic research and commercial applications through technology transfer programs.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-1">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Patent Development
+                        </li>
+                        <li class="mb-1">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Licensing Support
+                        </li>
+                        <li class="mb-1">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Industry Partnerships
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="innovation-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-users fa-lg"></i>
+                    </div>
+                    <h5 class="card-title text-primary">Entrepreneurship Development</h5>
+                    <p class="card-text text-muted">Comprehensive training programs to develop entrepreneurial skills and mindset among students and faculty.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-1">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Skill Development Workshops
+                        </li>
+                        <li class="mb-1">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Mentorship Programs
+                        </li>
+                        <li class="mb-1">
+                            <i class="fas fa-check text-success me-2"></i>
+                            Networking Events
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Incubation Programs -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-graduation-cap text-primary me-2"></i>Incubation Programs
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-seedling me-2"></i>Pre-Incubation Program
+                    </h5>
+                    <p class="text-muted mb-3">Duration: 3-6 months</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Idea Validation & Market Research
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Business Model Development
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Prototype Development Support
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Basic Mentorship & Guidance
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-rocket me-2"></i>Full Incubation Program
+                    </h5>
+                    <p class="text-muted mb-3">Duration: 12-24 months</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Complete Business Development
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Access to Funding & Investors
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Infrastructure & Office Space
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Intensive Mentorship & Support
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Innovation Areas -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-brain text-primary me-2"></i>Innovation Areas
+            </h3>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="area-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-microchip fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Technology</h5>
+                    <p class="card-text text-muted">AI, IoT, blockchain, and emerging technologies.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="area-icon bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-heartbeat fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Healthcare</h5>
+                    <p class="card-text text-muted">Medical devices, telemedicine, and health tech solutions.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="area-icon bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-leaf fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Sustainability</h5>
+                    <p class="card-text text-muted">Green technology, renewable energy, and environmental solutions.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="area-icon bg-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-graduation-cap fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Education</h5>
+                    <p class="card-text text-muted">EdTech solutions, learning platforms, and educational tools.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Stories -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-trophy text-primary me-2"></i>Success Stories
+            </h3>
+        </div>
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Incubation Achievements
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Startup Statistics</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    50+ Startups Incubated
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    25+ Successful Exits
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    ₹5 Crore+ Funding Raised
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    200+ Jobs Created
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Recognition & Awards</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-award text-warning me-2"></i>
+                                    Best Incubator Award 2023
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-medal text-info me-2"></i>
+                                    Innovation Excellence Award
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-trophy text-danger me-2"></i>
+                                    Startup Ecosystem Leader
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-certificate text-secondary me-2"></i>
+                                    Government Recognition
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Services -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-hands-helping text-primary me-2"></i>Support Services
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-tools me-2"></i>Infrastructure Support
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Co-working Spaces
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Meeting Rooms & Conference Facilities
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            High-Speed Internet & IT Support
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Laboratory Access
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-user-tie me-2"></i>Mentorship & Advisory
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Industry Expert Mentors
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Business Development Guidance
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Legal & IP Support
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            Marketing & Branding Assistance
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Process -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-clipboard-list text-primary me-2"></i>Application Process
+            </h3>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="process-step bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                        <span class="fw-bold">1</span>
+                    </div>
+                    <h6 class="card-title">Submit Application</h6>
+                    <p class="card-text text-muted small">Fill out the online application form with your business idea and team details.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="process-step bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                        <span class="fw-bold">2</span>
+                    </div>
+                    <h6 class="card-title">Initial Screening</h6>
+                    <p class="card-text text-muted small">Our team reviews your application and conducts initial screening.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="process-step bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                        <span class="fw-bold">3</span>
+                    </div>
+                    <h6 class="card-title">Pitch Presentation</h6>
+                    <p class="card-text text-muted small">Present your idea to our expert panel and answer their questions.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="process-step bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                        <span class="fw-bold">4</span>
+                    </div>
+                    <h6 class="card-title">Program Selection</h6>
+                    <p class="card-text text-muted small">Get selected for pre-incubation or full incubation program.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-phone text-primary me-2"></i>Contact Information
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-user-tie me-2"></i>Incubation Manager
+                    </h5>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="fas fa-user text-primary me-2"></i>
+                            Dr. [Incubation Manager Name]
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            +91-XXX-XXXX-XXX
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope text-info me-2"></i>
+                            incubation@college.edu
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            Office Hours: 9:00 AM - 5:00 PM
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-building me-2"></i>Incubation Center
+                    </h5>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                            Innovation Block, Ground Floor
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            +91-XXX-XXXX-XXX
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope text-info me-2"></i>
+                            innovation@college.edu
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            Working Days: Monday to Friday
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Gallery Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-images text-primary me-2"></i>Innovation Gallery
+            </h3>
+            <p class="text-muted mb-4">Explore our innovation and incubation facilities, events, and success stories through our image gallery.</p>
+        </div>
+        
+        <!-- Gallery Navigation -->
+        <div class="col-12 mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="gallery-nav">
+                    <button class="btn btn-outline-primary btn-sm me-2 active" data-category="all">
+                        <i class="fas fa-th me-1"></i>All
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm me-2" data-category="facilities">
+                        <i class="fas fa-building me-1"></i>Facilities
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm me-2" data-category="events">
+                        <i class="fas fa-calendar me-1"></i>Events
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm me-2" data-category="startups">
+                        <i class="fas fa-rocket me-1"></i>Startups
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" data-category="awards">
+                        <i class="fas fa-trophy me-1"></i>Awards
+                    </button>
+                </div>
+                <div class="gallery-controls">
+                    <button class="btn btn-outline-secondary btn-sm me-2" id="scrollLeft">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm" id="scrollRight">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Container -->
+        <div class="col-12">
+            <div class="gallery-container position-relative">
+                <div class="gallery-scroll" id="galleryScroll">
+                    <div class="gallery-track d-flex" id="galleryTrack">
+                        <!-- Gallery Items -->
+                        <div class="gallery-item" data-category="facilities">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/facility1.jpg' %}" data-title="Innovation Lab" data-description="State-of-the-art innovation laboratory with modern equipment and collaborative spaces.">
+                                <img src="{% static 'media/innovation/facility1.jpg' %}" alt="Innovation Lab" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Innovation Lab</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-item" data-category="facilities">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/facility2.jpg' %}" data-title="Co-working Space" data-description="Modern co-working space designed for collaboration and creativity.">
+                                <img src="{% static 'media/innovation/facility2.jpg' %}" alt="Co-working Space" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Co-working Space</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-item" data-category="events">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/event1.jpg' %}" data-title="Startup Pitch Event" data-description="Annual startup pitch competition showcasing innovative business ideas.">
+                                <img src="{% static 'media/innovation/event1.jpg' %}" alt="Startup Pitch Event" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Startup Pitch Event</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-item" data-category="events">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/event2.jpg' %}" data-title="Innovation Workshop" data-description="Hands-on workshop on design thinking and innovation methodologies.">
+                                <img src="{% static 'media/innovation/event2.jpg' %}" alt="Innovation Workshop" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Innovation Workshop</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-item" data-category="startups">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/startup1.jpg' %}" data-title="Success Story - TechStart" data-description="TechStart, one of our incubated companies, now valued at ₹10 crores.">
+                                <img src="{% static 'media/innovation/startup1.jpg' %}" alt="Success Story - TechStart" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>TechStart Success</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-item" data-category="startups">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/startup2.jpg' %}" data-title="Innovation Demo Day" data-description="Demo day showcasing innovative products developed by our incubated startups.">
+                                <img src="{% static 'media/innovation/startup2.jpg' %}" alt="Innovation Demo Day" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Demo Day</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-item" data-category="awards">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/award1.jpg' %}" data-title="Best Incubator Award" data-description="Receiving the Best Incubator Award 2023 for outstanding contribution to startup ecosystem.">
+                                <img src="{% static 'media/innovation/award1.jpg' %}" alt="Best Incubator Award" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Best Incubator Award</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-item" data-category="awards">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/award2.jpg' %}" data-title="Innovation Excellence" data-description="Innovation Excellence Award for promoting entrepreneurship and innovation.">
+                                <img src="{% static 'media/innovation/award2.jpg' %}" alt="Innovation Excellence" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Innovation Excellence</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-item" data-category="facilities">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/facility3.jpg' %}" data-title="Meeting Rooms" data-description="Professional meeting rooms equipped with modern presentation facilities.">
+                                <img src="{% static 'media/innovation/facility3.jpg' %}" alt="Meeting Rooms" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Meeting Rooms</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gallery-item" data-category="events">
+                            <div class="gallery-thumbnail" data-bs-toggle="modal" data-bs-target="#galleryModal" data-image="{% static 'media/innovation/event3.jpg' %}" data-title="Mentorship Session" data-description="One-on-one mentorship sessions with industry experts and successful entrepreneurs.">
+                                <img src="{% static 'media/innovation/event3.jpg' %}" alt="Mentorship Session" class="img-fluid">
+                                <div class="gallery-overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>Mentorship Session</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Scroll Indicators -->
+                <div class="scroll-indicators">
+                    <div class="scroll-indicator active" data-index="0"></div>
+                    <div class="scroll-indicator" data-index="1"></div>
+                    <div class="scroll-indicator" data-index="2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="galleryModalLabel">Gallery Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" alt="" class="img-fluid rounded">
+                    <div class="mt-3">
+                        <h6 id="modalTitle" class="text-primary"></h6>
+                        <p id="modalDescription" class="text-muted"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="downloadImage">
+                        <i class="fas fa-download me-1"></i>Download
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3 p-4 border-start border-primary border-4">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-rocket fa-2x text-primary me-3"></i>
+            <div>
+                <h5 class="text-primary mb-1">Ready to Start Your Innovation Journey?</h5>
+                <p class="mb-0 text-muted">
+                    Join our incubation program and turn your innovative ideas into successful businesses. 
+                    Get access to world-class mentorship, infrastructure, and funding opportunities. 
+                    Apply now and be part of the next generation of entrepreneurs!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Bootstrap 5 + Tailwind CSS Hybrid Styling */
+.innovation-icon, .area-icon, .process-step {
+    transition: all 0.3s ease;
+}
+
+.card:hover .innovation-icon,
+.card:hover .area-icon {
+    transform: scale(1.1);
+}
+
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #eff6ff, #e0e7ff);
+}
+
+/* Card hover effects */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+
+/* Contact info styling */
+.contact-info p {
+    display: flex;
+    align-items: center;
+}
+
+/* Process step styling */
+.process-step {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Tailwind-inspired utilities */
+.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.rounded-xl {
+    border-radius: 0.75rem;
+}
+
+.bg-gradient-to-br {
+    background: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+.from-blue-500 {
+    --tw-gradient-from: #3b82f6;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(59, 130, 246, 0));
+}
+
+.to-purple-600 {
+    --tw-gradient-to: #9333ea;
+}
+
+.text-white {
+    color: #ffffff;
+}
+
+/* Animation classes */
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .5;
+    }
+}
+
+.animate-bounce {
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8,0,1,1);
+    }
+    50% {
+        transform: none;
+        animation-timing-function: cubic-bezier(0,0,0.2,1);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .innovation-icon, .area-icon {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .process-step {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .display-5 {
+        font-size: 2rem;
+    }
+}
+
+/* Custom gradient backgrounds */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* Glassmorphism effect */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Custom shadows */
+.shadow-custom {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-custom-lg {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Gallery Styles */
+.gallery-container {
+    overflow: hidden;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.gallery-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+}
+
+.gallery-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.gallery-track {
+    gap: 20px;
+    padding: 10px 0;
+    min-width: max-content;
+}
+
+.gallery-item {
+    flex: 0 0 280px;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.gallery-item:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+.gallery-thumbnail {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.gallery-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-thumbnail:hover img {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0,123,255,0.8) 0%, rgba(108,117,125,0.8) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+.gallery-thumbnail:hover .gallery-overlay {
+    opacity: 1;
+}
+
+.gallery-overlay i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    animation: pulse 2s infinite;
+}
+
+.gallery-overlay span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.gallery-nav .btn {
+    border-radius: 25px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid;
+}
+
+.gallery-nav .btn.active {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border-color: #007bff;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+}
+
+.gallery-nav .btn:not(.active):hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+    color: #007bff;
+    transform: translateY(-1px);
+}
+
+.gallery-controls .btn {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.gallery-controls .btn:hover {
+    background: #007bff;
+    color: white;
+    transform: scale(1.1);
+}
+
+.scroll-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.scroll-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #dee2e6;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.scroll-indicator.active {
+    background: #007bff;
+    transform: scale(1.2);
+}
+
+.scroll-indicator:hover {
+    background: #6c757d;
+}
+
+/* Modal Enhancements */
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border-radius: 15px 15px 0 0;
+    border: none;
+}
+
+.modal-body img {
+    max-height: 400px;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.modal-footer {
+    border: none;
+    background: #f8f9fa;
+    border-radius: 0 0 15px 15px;
+}
+
+/* Category Filter Animation */
+.gallery-item.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+.gallery-item.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .gallery-item {
+        flex: 0 0 220px;
+        height: 160px;
+    }
+    
+    .gallery-nav {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    .gallery-nav .btn {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+    
+    .gallery-controls {
+        display: none;
+    }
+    
+    .gallery-overlay span {
+        font-size: 0.8rem;
+    }
+    
+    .gallery-overlay i {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .gallery-item {
+        flex: 0 0 180px;
+        height: 140px;
+    }
+    
+    .gallery-container {
+        padding: 15px;
+    }
+    
+    .gallery-track {
+        gap: 15px;
+    }
+}
+
+/* Loading Animation */
+.gallery-item.loading {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Smooth Transitions */
+* {
+    transition: all 0.3s ease;
+}
+
+/* Custom Scrollbar for Webkit */
+.gallery-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.gallery-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.gallery-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border-radius: 3px;
+}
+
+.gallery-scroll::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gallery functionality
+    const galleryScroll = document.getElementById('galleryScroll');
+    const galleryTrack = document.getElementById('galleryTrack');
+    const scrollLeftBtn = document.getElementById('scrollLeft');
+    const scrollRightBtn = document.getElementById('scrollRight');
+    const categoryButtons = document.querySelectorAll('.gallery-nav .btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const scrollIndicators = document.querySelectorAll('.scroll-indicator');
+    
+    let currentScroll = 0;
+    const scrollAmount = 300;
+    const maxScroll = galleryTrack.scrollWidth - galleryScroll.clientWidth;
+    
+    // Scroll functionality
+    function updateScrollButtons() {
+        scrollLeftBtn.style.opacity = currentScroll <= 0 ? '0.5' : '1';
+        scrollRightBtn.style.opacity = currentScroll >= maxScroll ? '0.5' : '1';
+    }
+    
+    scrollLeftBtn.addEventListener('click', function() {
+        currentScroll = Math.max(0, currentScroll - scrollAmount);
+        galleryScroll.scrollTo({
+            left: currentScroll,
+            behavior: 'smooth'
+        });
+        updateScrollButtons();
+    });
+    
+    scrollRightBtn.addEventListener('click', function() {
+        currentScroll = Math.min(maxScroll, currentScroll + scrollAmount);
+        galleryScroll.scrollTo({
+            left: currentScroll,
+            behavior: 'smooth'
+        });
+        updateScrollButtons();
+    });
+    
+    // Category filtering
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const category = this.dataset.category;
+            
+            // Update active button
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter gallery items
+            galleryItems.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.classList.remove('hidden');
+                    item.classList.add('visible');
+                } else {
+                    item.classList.add('hidden');
+                    item.classList.remove('visible');
+                }
+            });
+        });
+    });
+    
+    // Modal functionality
+    const galleryModal = document.getElementById('galleryModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const downloadBtn = document.getElementById('downloadImage');
+    
+    document.querySelectorAll('.gallery-thumbnail').forEach(thumbnail => {
+        thumbnail.addEventListener('click', function() {
+            const imageSrc = this.dataset.image;
+            const title = this.dataset.title;
+            const description = this.dataset.description;
+            
+            modalImage.src = imageSrc;
+            modalImage.alt = title;
+            modalTitle.textContent = title;
+            modalDescription.textContent = description;
+            
+            // Download functionality
+            downloadBtn.onclick = function() {
+                const link = document.createElement('a');
+                link.href = imageSrc;
+                link.download = title.replace(/\s+/g, '_') + '.jpg';
+                link.click();
+            };
+        });
+    });
+    
+    // Scroll indicators
+    scrollIndicators.forEach(indicator => {
+        indicator.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            currentScroll = index * (galleryScroll.clientWidth);
+            galleryScroll.scrollTo({
+                left: currentScroll,
+                behavior: 'smooth'
+            });
+            updateScrollButtons();
+        });
+    });
+    
+    // Update scroll indicators based on scroll position
+    galleryScroll.addEventListener('scroll', function() {
+        currentScroll = this.scrollLeft;
+        updateScrollButtons();
+        
+        // Update indicators
+        const scrollPercentage = currentScroll / maxScroll;
+        const activeIndicator = Math.round(scrollPercentage * (scrollIndicators.length - 1));
+        
+        scrollIndicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === activeIndicator);
+        });
+    });
+    
+    // Touch/swipe support for mobile
+    let startX = 0;
+    let isScrolling = false;
+    
+    galleryScroll.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+        isScrolling = true;
+    });
+    
+    galleryScroll.addEventListener('touchmove', function(e) {
+        if (!isScrolling) return;
+        e.preventDefault();
+    });
+    
+    galleryScroll.addEventListener('touchend', function(e) {
+        if (!isScrolling) return;
+        
+        const endX = e.changedTouches[0].clientX;
+        const diffX = startX - endX;
+        
+        if (Math.abs(diffX) > 50) {
+            if (diffX > 0) {
+                // Swipe left - scroll right
+                scrollRightBtn.click();
+            } else {
+                // Swipe right - scroll left
+                scrollLeftBtn.click();
+            }
+        }
+        
+        isScrolling = false;
+    });
+    
+    // Initialize
+    updateScrollButtons();
+    
+    // Lazy loading for images
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src || img.src;
+                img.classList.remove('loading');
+                observer.unobserve(img);
+            }
+        });
+    });
+    
+    document.querySelectorAll('.gallery-thumbnail img').forEach(img => {
+        img.classList.add('loading');
+        imageObserver.observe(img);
+    });
+});
+</script>
+{% endblock %}

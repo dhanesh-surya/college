@@ -1,0 +1,407 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Bootstrap 5 Enhanced Quick Edit Form */
+.quick-edit-hero {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    color: #000;
+    padding: 2rem 0;
+}
+
+.quick-edit-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: none;
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 1px solid #dee2e6;
+    padding: 1.5rem;
+}
+
+.card-title {
+    margin: 0;
+    color: #495057;
+    font-weight: 600;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+}
+
+.btn-cancel {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+}
+
+.program-info {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.info-value {
+    color: #6c757d;
+}
+
+@media (max-width: 768px) {
+    .quick-edit-hero {
+        padding: 1.5rem 0;
+    }
+    
+    .btn-save, .btn-cancel {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Bootstrap 5 Enhanced Hero Section -->
+<div class="quick-edit-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="fas fa-edit me-3"></i>
+                    {{ title }}
+                </h1>
+                <p class="lead mb-0">Quick edit for basic program information</p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <a href="{% url 'college_website:program_list' %}" class="btn btn-dark btn-lg rounded-pill px-4">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Back to Programs
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="quick-edit-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Quick Edit: {{ program.name }}
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Program Information Display -->
+                    <div class="program-info">
+                        <h6 class="fw-bold mb-3 text-primary">Current Program Information</h6>
+                        <div class="info-item">
+                            <span class="info-label">Program ID:</span>
+                            <span class="info-value">#{{ program.id }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Created:</span>
+                            <span class="info-value">{{ program.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Last Updated:</span>
+                            <span class="info-value">{{ program.last_updated|date:"M d, Y H:i" }}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value">
+                                {% if program.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Featured:</span>
+                            <span class="info-value">
+                                {% if program.is_featured %}
+                                    <span class="badge bg-warning text-dark">Featured</span>
+                                {% else %}
+                                    <span class="badge bg-light text-dark">Regular</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Edit Form -->
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.name.id_for_label }}" class="form-label">
+                                        Program Name <span class="text-danger">*</span>
+                                    </label>
+                                    {{ form.name }}
+                                    {% if form.name.errors %}
+                                        <div class="text-danger small mt-1">{{ form.name.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.short_name.id_for_label }}" class="form-label">
+                                        Short Name
+                                    </label>
+                                    {{ form.short_name }}
+                                    {% if form.short_name.errors %}
+                                        <div class="text-danger small mt-1">{{ form.short_name.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.discipline.id_for_label }}" class="form-label">
+                                        Discipline <span class="text-danger">*</span>
+                                    </label>
+                                    {{ form.discipline }}
+                                    {% if form.discipline.errors %}
+                                        <div class="text-danger small mt-1">{{ form.discipline.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.degree_type.id_for_label }}" class="form-label">
+                                        Degree Type <span class="text-danger">*</span>
+                                    </label>
+                                    {{ form.degree_type }}
+                                    {% if form.degree_type.errors %}
+                                        <div class="text-danger small mt-1">{{ form.degree_type.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.duration.id_for_label }}" class="form-label">
+                                        Duration
+                                    </label>
+                                    {{ form.duration }}
+                                    {% if form.duration.errors %}
+                                        <div class="text-danger small mt-1">{{ form.duration.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.total_seats.id_for_label }}" class="form-label">
+                                        Total Seats
+                                    </label>
+                                    {{ form.total_seats }}
+                                    {% if form.total_seats.errors %}
+                                        <div class="text-danger small mt-1">{{ form.total_seats.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.fees.id_for_label }}" class="form-label">
+                                        Annual Fees (INR)
+                                    </label>
+                                    {{ form.fees }}
+                                    {% if form.fees.errors %}
+                                        <div class="text-danger small mt-1">{{ form.fees.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch mb-3">
+                                    {{ form.is_featured }}
+                                    <label class="form-check-label" for="{{ form.is_featured.id_for_label }}">
+                                        <i class="fas fa-star me-1"></i>
+                                        Featured Program
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch mb-3">
+                                    {{ form.is_active }}
+                                    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                        <i class="fas fa-toggle-on me-1"></i>
+                                        Active Program
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Form Actions -->
+                        <div class="text-center pt-3 border-top">
+                            <button type="submit" class="btn btn-save btn-lg me-3">
+                                <i class="fas fa-save me-2"></i>
+                                Save Changes
+                            </button>
+                            <a href="{% url 'college_website:program_list' %}" class="btn btn-cancel btn-lg">
+                                <i class="fas fa-times me-2"></i>
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Additional Actions -->
+            <div class="mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">
+                            <i class="fas fa-tools me-2"></i>
+                            Additional Actions
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <a href="{% url 'college_website:program_update' program.slug %}" 
+                                   class="btn btn-outline-primary w-100 mb-2">
+                                    <i class="fas fa-edit me-2"></i>
+                                    Full Edit
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{% url 'college_website:program_detail_public' program.slug %}" 
+                                   class="btn btn-outline-info w-100 mb-2">
+                                    <i class="fas fa-eye me-2"></i>
+                                    View Details
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="{% url 'college_website:program_delete' program.slug %}" 
+                                   class="btn btn-outline-danger w-100 mb-2"
+                                   onclick="return confirm('Are you sure you want to delete this program?')">
+                                    <i class="fas fa-trash me-2"></i>
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 Enhanced JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+    
+    // Auto-save functionality
+    let autoSaveTimeout;
+    const formInputs = document.querySelectorAll('input, select');
+    formInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                // Show auto-save indicator
+                const saveBtn = document.querySelector('.btn-save');
+                const originalText = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Auto-saving...';
+                saveBtn.disabled = true;
+                
+                // Simulate auto-save
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                    saveBtn.classList.add('btn-outline-success');
+                    setTimeout(() => {
+                        saveBtn.classList.remove('btn-outline-success');
+                    }, 2000);
+                }, 1000);
+            }, 2000);
+        });
+    });
+    
+    // Confirm delete action
+    document.querySelector('a[href*="delete"]').addEventListener('click', function(e) {
+        if (!confirm('Are you sure you want to delete this program? This action cannot be undone.')) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Exam Notices - {{ college_info.college_name }}{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="hero-section tw-bg-gradient-to-r tw-from-orange-500 tw-to-red-600 tw-py-16">
+    <div class="container">
+        <div class="row tw-justify-center text-center">
+            <div class="col-lg-8">
+                <h1 class="tw-text-4xl tw-font-bold tw-text-white tw-mb-4">Exam Notices</h1>
+                <p class="tw-text-xl tw-text-orange-100 tw-mb-6">Stay updated with important examination announcements and notifications</p>
+                <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-3">
+                    <div class="tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-px-4 tw-py-2">
+                        <i class="fas fa-bullhorn tw-text-white tw-mr-2"></i>
+                        <span class="tw-text-white tw-font-medium tw-no-underline">Important Updates</span>
+                    </div>
+                    <div class="tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-px-4 tw-py-2">
+                        <i class="fas fa-calendar-check tw-text-white tw-mr-2"></i>
+                        <span class="tw-text-white tw-font-medium tw-no-underline">Exam Schedule</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter and Search Section -->
+<section class="filter-section tw-py-8 tw-bg-gray-50">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <div class="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label tw-font-medium tw-text-gray-700">Search Notices</label>
+                            <div class="input-group">
+                                <span class="input-group-text tw-bg-gray-100 tw-border-gray-300">
+                                    <i class="fas fa-search tw-text-gray-500"></i>
+                                </span>
+                                <input type="text" class="form-control" id="noticeSearch" placeholder="Search by title or content...">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label tw-font-medium tw-text-gray-700">Sort By</label>
+                            <select class="form-select" id="sortFilter">
+                                <option value="date">Latest First</option>
+                                <option value="title">Title A-Z</option>
+                                <option value="priority">Priority</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label tw-font-medium tw-text-gray-700">Status</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="">All Notices</option>
+                                <option value="urgent">Urgent</option>
+                                <option value="important">Important</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Notices Section -->
+<section class="notices-section tw-py-12">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <div class="d-flex tw-justify-content-between tw-align-items-center tw-mb-6">
+                    <h2 class="section-title tw-text-3xl tw-font-bold tw-text-gray-800 tw-no-underline">Exam Notices</h2>
+                    <div class="tw-text-gray-600">
+                        <i class="fas fa-info-circle tw-mr-2"></i>
+                        <span id="noticesCount">{{ notices|length }} notices found</span>
+                    </div>
+                </div>
+
+                {% if notices %}
+                    <div class="row g-4" id="noticesContainer">
+                        {% for notice in notices %}
+                        <div class="col-lg-6 mb-4 notice-item" 
+                             data-title="{{ notice.title|lower }}" 
+                             data-content="{{ notice.content|striptags|lower }}"
+                             data-priority="{{ notice.priority|default:'general' }}">
+                            <div class="card h-100 border-0 shadow-sm notice-card">
+                                <div class="card-body tw-p-6">
+                                    <div class="d-flex tw-justify-content-between tw-align-items-start tw-mb-3">
+                                        <div class="tw-flex tw-items-center tw-gap-2">
+                                            {% if notice.priority == 'urgent' %}
+                                                <span class="badge bg-danger tw-px-3 tw-py-2 tw-text-sm">
+                                                    <i class="fas fa-exclamation-triangle tw-mr-2"></i>Urgent
+                                                </span>
+                                            {% elif notice.priority == 'important' %}
+                                                <span class="badge bg-warning tw-px-3 tw-py-2 tw-text-sm">
+                                                    <i class="fas fa-exclamation-circle tw-mr-2"></i>Important
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-info tw-px-3 tw-py-2 tw-text-sm">
+                                                    <i class="fas fa-info-circle tw-mr-2"></i>General
+                                                </span>
+                                            {% endif %}
+                                            
+                                            {% if notice.is_featured %}
+                                                <span class="badge bg-success tw-px-3 tw-py-2 tw-text-sm">
+                                                    <i class="fas fa-star tw-mr-2"></i>Featured
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar tw-mr-1"></i>{{ notice.created_at|date:"M d, Y" }}
+                                        </small>
+                                    </div>
+                                    
+                                    <h5 class="card-title tw-text-xl tw-font-semibold tw-text-gray-800 tw-mb-3">
+                                        {{ notice.title }}
+                                    </h5>
+                                    
+                                    {% if notice.content %}
+                                    <p class="card-text tw-text-gray-600 tw-mb-4">
+                                        {{ notice.content|striptags|truncatewords:30 }}
+                                    </p>
+                                    {% endif %}
+                                    
+                                    <div class="tw-flex tw-flex-wrap tw-gap-2 tw-mb-4">
+                                        {% if notice.category %}
+                                        <div class="tw-bg-gray-100 tw-rounded-full tw-px-3 tw-py-1 tw-text-sm tw-text-gray-700">
+                                            <i class="fas fa-tag tw-mr-1"></i>{{ notice.get_category_display }}
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if notice.author %}
+                                        <div class="tw-bg-blue-100 tw-rounded-full tw-px-3 tw-py-1 tw-text-sm tw-text-blue-700">
+                                            <i class="fas fa-user tw-mr-1"></i>{{ notice.author }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="tw-flex tw-flex-wrap tw-gap-2">
+                                        {% if notice.attachment %}
+                                        <a href="{{ notice.attachment.url }}" class="btn btn-outline-primary btn-sm tw-rounded-full tw-px-4 tw-py-2" target="_blank">
+                                            <i class="fas fa-paperclip tw-mr-2"></i>Download
+                                        </a>
+                                        {% endif %}
+                                        
+                                        <a href="{% url 'college_website:notice_detail' notice.slug %}" class="btn btn-primary btn-sm tw-rounded-full tw-px-4 tw-py-2">
+                                            <i class="fas fa-eye tw-mr-2"></i>Read More
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center tw-py-12">
+                        <div class="tw-bg-gray-50 tw-rounded-xl tw-p-8">
+                            <i class="fas fa-bullhorn fa-4x text-muted tw-mb-4"></i>
+                            <h4 class="text-muted tw-mb-3">No Exam Notices Available</h4>
+                            <p class="text-muted tw-mb-4">Currently there are no exam-related notices. Check back later for updates.</p>
+                            <div class="tw-flex tw-justify-center tw-gap-3">
+                                <a href="{% url 'college_website:examinations' %}" class="btn btn-primary tw-rounded-full tw-px-6 tw-py-2">
+                                    <i class="fas fa-arrow-left tw-mr-2"></i>Back to Examinations
+                                </a>
+                                <a href="{% url 'college_website:home' %}" class="btn btn-outline-primary tw-rounded-full tw-px-6 tw-py-2">
+                                    <i class="fas fa-home tw-mr-2"></i>Go Home
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Links Section -->
+<section class="quick-links-section tw-py-12 tw-bg-gray-50">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <h3 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-6 text-center tw-no-underline">Related Resources</h3>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <a href="{% url 'college_website:exam_results' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl tw-no-underline">
+                            <div class="tw-bg-green-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-chart-line tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-2 tw-no-underline">Exam Results</h4>
+                            <p class="tw-text-gray-600 tw-text-sm tw-no-underline">Check your examination results</p>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'college_website:exam_timetable' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl tw-no-underline">
+                            <div class="tw-bg-blue-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-calendar-alt tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-2 tw-no-underline">Exam Timetable</h4>
+                            <p class="tw-text-gray-600 tw-text-sm tw-no-underline">View examination schedules</p>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'college_website:question_papers' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl tw-no-underline">
+                            <div class="tw-bg-purple-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-file-alt tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-2 tw-no-underline">Question Papers</h4>
+                            <p class="tw-text-gray-600 tw-text-sm tw-no-underline">Access previous papers</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Support Section -->
+<section class="contact-support tw-py-12">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-8 text-center">
+                <div class="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-8">
+                    <h3 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-4 tw-no-underline">Need Help?</h3>
+                    <p class="tw-text-gray-600 tw-mb-6 tw-no-underline">If you have questions about exam notices or need assistance, our support team is here to help.</p>
+                    <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-4">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-primary tw-rounded-full tw-px-6 tw-py-3">
+                            <i class="fas fa-envelope tw-mr-2"></i>Contact Support
+                        </a>
+                        <a href="{% url 'college_website:examinations' %}" class="btn btn-outline-primary tw-rounded-full tw-px-6 tw-py-3">
+                            <i class="fas fa-arrow-left tw-mr-2"></i>Back to Examinations
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const noticeSearch = document.getElementById('noticeSearch');
+    const sortFilter = document.getElementById('sortFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const noticesContainer = document.getElementById('noticesContainer');
+    const noticesCount = document.getElementById('noticesCount');
+    const noticeItems = document.querySelectorAll('.notice-item');
+
+    function filterNotices() {
+        const searchTerm = noticeSearch.value.toLowerCase();
+        const selectedStatus = statusFilter.value;
+        const selectedSort = sortFilter.value;
+        
+        let visibleCount = 0;
+        
+        noticeItems.forEach(item => {
+            const title = item.dataset.title;
+            const content = item.dataset.content;
+            const priority = item.dataset.priority;
+            
+            const searchMatch = !searchTerm || title.includes(searchTerm) || content.includes(searchTerm);
+            const statusMatch = !selectedStatus || priority === selectedStatus;
+            
+            if (searchMatch && statusMatch) {
+                item.style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        
+        // Update notices count
+        noticesCount.textContent = `${visibleCount} notices found`;
+        
+        // Sort notices
+        if (selectedSort === 'date') {
+            sortByDate();
+        } else if (selectedSort === 'title') {
+            sortByTitle();
+        } else if (selectedSort === 'priority') {
+            sortByPriority();
+        }
+    }
+    
+    function sortByDate() {
+        const items = Array.from(noticeItems).filter(item => item.style.display !== 'none');
+        items.sort((a, b) => {
+            const dateA = new Date(a.querySelector('.text-muted').textContent);
+            const dateB = new Date(b.querySelector('.text-muted').textContent);
+            return dateB - dateA;
+        });
+        
+        items.forEach(item => noticesContainer.appendChild(item));
+    }
+    
+    function sortByTitle() {
+        const items = Array.from(noticeItems).filter(item => item.style.display !== 'none');
+        items.sort((a, b) => {
+            const titleA = a.querySelector('.card-title').textContent.toLowerCase();
+            const titleB = b.querySelector('.card-title').textContent.toLowerCase();
+            return titleA.localeCompare(titleB);
+        });
+        
+        items.forEach(item => noticesContainer.appendChild(item));
+    }
+    
+    function sortByPriority() {
+        const priorityOrder = { 'urgent': 1, 'important': 2, 'general': 3 };
+        const items = Array.from(noticeItems).filter(item => item.style.display !== 'none');
+        items.sort((a, b) => {
+            const priorityA = priorityOrder[a.dataset.priority] || 4;
+            const priorityB = priorityOrder[b.dataset.priority] || 4;
+            return priorityA - priorityB;
+        });
+        
+        items.forEach(item => noticesContainer.appendChild(item));
+    }
+    
+    // Add event listeners
+    noticeSearch.addEventListener('input', filterNotices);
+    sortFilter.addEventListener('change', filterNotices);
+    statusFilter.addEventListener('change', filterNotices);
+    
+    // Initialize filters
+    filterNotices();
+});
+</script>
+{% endblock %}

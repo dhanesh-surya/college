@@ -57,50 +57,199 @@
 </section>
 
 <div class="container py-5">
-    <!-- Enhanced Filter Section -->
+    <!-- Enhanced Advanced Filter Section -->
     <div class="row mb-5">
-        <div class="col-lg-10 mx-auto">
+        <div class="col-12">
             <div class="card border-0 shadow-lg tw-bg-gradient-to-r tw-from-white tw-to-gray-50">
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
                         <h5 class="card-title tw-text-gray-800 fw-bold mb-2">
-                            <i class="fas fa-filter text-primary me-2"></i>Filter by Discipline
+                            <i class="fas fa-filter text-primary me-2"></i>Advanced Program Filters
                         </h5>
-                        <p class="text-muted small mb-0">Choose your area of interest</p>
+                        <p class="text-muted small mb-0">Refine your search by multiple criteria</p>
                     </div>
                     
-                    <div class="d-flex flex-wrap justify-content-center gap-3">
-                        <a href="{% url 'college_website:programs_list' %}" 
-                           class="btn {% if not selected_discipline %}btn-primary shadow-lg tw-scale-105{% else %}btn-outline-primary{% endif %} btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-xl">
-                            <i class="fas fa-th-large me-2"></i>All Programs
-                            {% if not selected_discipline %}
-                            <span class="badge bg-light text-primary ms-2">{{ programs.count }}</span>
-                            {% endif %}
-                        </a>
-                        
-                        {% for discipline_code, discipline_name in disciplines %}
-                        <a href="{% url 'college_website:programs_list' %}?discipline={{ discipline_code }}" 
-                           class="btn {% if selected_discipline == discipline_code %}btn-primary shadow-lg tw-scale-105{% else %}btn-outline-primary{% endif %} btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-xl">
-                            {% if discipline_code == 'science' %}
-                                <i class="fas fa-flask me-2 text-success"></i>
-                            {% elif discipline_code == 'arts' %}
-                                <i class="fas fa-palette me-2 text-warning"></i>
-                            {% elif discipline_code == 'commerce' %}
-                                <i class="fas fa-chart-line me-2 text-info"></i>
-                            {% elif discipline_code == 'management' %}
-                                <i class="fas fa-users-cog me-2 text-danger"></i>
-                            {% endif %}
-                            {{ discipline_name }}
-                        </a>
-                        {% endfor %}
+                    <!-- Primary Filter Tabs -->
+                    <div class="mb-4">
+                        <ul class="nav nav-pills nav-fill" id="filterTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active rounded-pill px-4 py-2" id="stream-tab" data-bs-toggle="pill" data-bs-target="#stream-content" type="button" role="tab">
+                                    <i class="fas fa-stream me-2"></i>Stream Filters
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill px-4 py-2" id="degree-tab" data-bs-toggle="pill" data-bs-target="#degree-content" type="button" role="tab">
+                                    <i class="fas fa-graduation-cap me-2"></i>Degree Type
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link rounded-pill px-4 py-2" id="search-tab" data-bs-toggle="pill" data-bs-target="#search-content" type="button" role="tab">
+                                    <i class="fas fa-search me-2"></i>Search
+                                </button>
+                            </li>
+                        </ul>
                     </div>
+                    
+                    <!-- Filter Content -->
+                    <div class="tab-content" id="filterTabContent">
+                        <!-- Stream Filters -->
+                        <div class="tab-pane fade show active" id="stream-content" role="tabpanel">
+                            <div class="d-flex flex-wrap justify-content-center gap-3">
+                                <a href="{% url 'college_website:programs_list' %}" 
+                                   class="btn {% if not selected_discipline %}btn-primary shadow-lg tw-scale-105{% else %}btn-outline-primary{% endif %} btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-xl">
+                                    <i class="fas fa-th-large me-2"></i>All Streams
+                                    {% if not selected_discipline %}
+                                    <span class="badge bg-light text-primary ms-2">{{ programs.count }}</span>
+                                    {% endif %}
+                                </a>
+                                
+                                {% for discipline_code, discipline_name in disciplines %}
+                                <a href="{% url 'college_website:programs_list' %}?discipline={{ discipline_code }}" 
+                                   class="btn {% if selected_discipline == discipline_code %}btn-primary shadow-lg tw-scale-105{% else %}btn-outline-primary{% endif %} btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-xl">
+                                    {% if discipline_code == 'science' %}
+                                        <i class="fas fa-flask me-2 text-success"></i>
+                                    {% elif discipline_code == 'arts' %}
+                                        <i class="fas fa-palette me-2 text-warning"></i>
+                                    {% elif discipline_code == 'commerce' %}
+                                        <i class="fas fa-chart-line me-2 text-info"></i>
+                                    {% elif discipline_code == 'management' %}
+                                        <i class="fas fa-users-cog me-2 text-danger"></i>
+                                    {% endif %}
+                                    {{ discipline_name }} Stream
+                                    <span class="badge bg-light text-dark ms-2">
+                                        {{ programs|length|default:"0" }}
+                                    </span>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Degree Type Filters -->
+                        <div class="tab-pane fade" id="degree-content" role="tabpanel">
+                            <div class="d-flex flex-wrap justify-content-center gap-3">
+                                <a href="{% url 'college_website:programs_list' %}{% if selected_discipline %}?discipline={{ selected_discipline }}{% endif %}" 
+                                   class="btn btn-outline-secondary btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300">
+                                    <i class="fas fa-th-large me-2"></i>All Degrees
+                                </a>
+                                <a href="{% url 'college_website:programs_list' %}?degree_type=undergraduate{% if selected_discipline %}&discipline={{ selected_discipline }}{% endif %}" 
+                                   class="btn btn-outline-info btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300">
+                                    <i class="fas fa-user-graduate me-2"></i>Undergraduate
+                                </a>
+                                <a href="{% url 'college_website:programs_list' %}?degree_type=postgraduate{% if selected_discipline %}&discipline={{ selected_discipline }}{% endif %}" 
+                                   class="btn btn-outline-success btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300">
+                                    <i class="fas fa-user-tie me-2"></i>Postgraduate
+                                </a>
+                                <a href="{% url 'college_website:programs_list' %}?degree_type=diploma{% if selected_discipline %}&discipline={{ selected_discipline }}{% endif %}" 
+                                   class="btn btn-outline-warning btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300">
+                                    <i class="fas fa-certificate me-2"></i>Diploma
+                                </a>
+                                <a href="{% url 'college_website:programs_list' %}?degree_type=certificate{% if selected_discipline %}&discipline={{ selected_discipline }}{% endif %}" 
+                                   class="btn btn-outline-danger btn-lg rounded-pill px-4 py-2 tw-transition-all tw-duration-300">
+                                    <i class="fas fa-award me-2"></i>Certificate
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Search Filters -->
+                        <div class="tab-pane fade" id="search-content" role="tabpanel">
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <form method="GET" class="d-flex gap-3">
+                                        <div class="flex-grow-1">
+                                            <input type="text" name="search" class="form-control form-control-lg rounded-pill" 
+                                                   placeholder="Search programs by name, department, or keywords..." 
+                                                   value="{{ request.GET.search|default:'' }}">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-lg rounded-pill px-4">
+                                            <i class="fas fa-search me-2"></i>Search
+                                        </button>
+                                        {% if request.GET.search or request.GET.discipline or request.GET.degree_type %}
+                                        <a href="{% url 'college_website:programs_list' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+                                            <i class="fas fa-times me-2"></i>Clear
+                                        </a>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Active Filters Display -->
+                    {% if selected_discipline or request.GET.degree_type or request.GET.search %}
+                    <div class="mt-4 pt-3 border-top">
+                        <div class="d-flex flex-wrap align-items-center gap-2">
+                            <span class="text-muted small me-2">Active Filters:</span>
+                            {% if selected_discipline %}
+                            <span class="badge bg-primary rounded-pill px-3 py-2">
+                                <i class="fas fa-stream me-1"></i>{{ selected_discipline|title }} Stream
+                                <a href="{% url 'college_website:programs_list' %}{% if request.GET.degree_type %}?degree_type={{ request.GET.degree_type }}{% endif %}{% if request.GET.search %}{% if request.GET.degree_type %}&{% else %}?{% endif %}search={{ request.GET.search }}{% endif %}" 
+                                   class="text-white text-decoration-none ms-2">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                            {% endif %}
+                            {% if request.GET.degree_type %}
+                            <span class="badge bg-info rounded-pill px-3 py-2">
+                                <i class="fas fa-graduation-cap me-1"></i>{{ request.GET.degree_type|title }}
+                                <a href="{% url 'college_website:programs_list' %}{% if selected_discipline %}?discipline={{ selected_discipline }}{% endif %}{% if request.GET.search %}{% if selected_discipline %}&{% else %}?{% endif %}search={{ request.GET.search }}{% endif %}" 
+                                   class="text-white text-decoration-none ms-2">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                            {% endif %}
+                            {% if request.GET.search %}
+                            <span class="badge bg-success rounded-pill px-3 py-2">
+                                <i class="fas fa-search me-1"></i>"{{ request.GET.search }}"
+                                <a href="{% url 'college_website:programs_list' %}{% if selected_discipline %}?discipline={{ selected_discipline }}{% endif %}{% if request.GET.degree_type %}{% if selected_discipline %}&{% else %}?{% endif %}degree_type={{ request.GET.degree_type }}{% endif %}" 
+                                   class="text-white text-decoration-none ms-2">
+                                    <i class="fas fa-times"></i>
+                                </a>
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Summary -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-0">
+                        <i class="fas fa-list me-2 text-primary"></i>
+                        {% if selected_discipline %}
+                            {{ selected_discipline|title }} Stream Programs
+                        {% elif request.GET.degree_type %}
+                            {{ request.GET.degree_type|title }} Programs
+                        {% elif request.GET.search %}
+                            Search Results for "{{ request.GET.search }}"
+                        {% else %}
+                            All Academic Programs
+                        {% endif %}
+                    </h4>
+                    <p class="text-muted mb-0">
+                        Showing {{ programs.count }} program{{ programs.count|pluralize }}
+                        {% if selected_discipline %}in {{ selected_discipline|title }} stream{% endif %}
+                    </p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-primary btn-sm" id="gridViewBtn" title="Grid View">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm" id="listViewBtn" title="List View">
+                        <i class="fas fa-list"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Enhanced Programs Grid -->
-    <div class="row g-4">
+    <div class="row g-4" id="programsGrid">
         {% for program in programs %}
         <div class="col-xl-4 col-lg-6 col-md-6">
             <div class="card h-100 border-0 shadow-lg program-card tw-transition-all tw-duration-500 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
@@ -117,15 +266,15 @@
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div class="tw-bg-white tw-bg-opacity-20 tw-backdrop-blur-sm rounded-pill px-3 py-1">
                                 {% if program.discipline == 'science' %}
-                                    <i class="fas fa-flask me-2"></i>Science
+                                    <i class="fas fa-flask me-2"></i>Science Stream
                                 {% elif program.discipline == 'arts' %}
-                                    <i class="fas fa-palette me-2"></i>Arts
+                                    <i class="fas fa-palette me-2"></i>Arts Stream
                                 {% elif program.discipline == 'commerce' %}
-                                    <i class="fas fa-chart-line me-2"></i>Commerce
+                                    <i class="fas fa-chart-line me-2"></i>Commerce Stream
                                 {% elif program.discipline == 'management' %}
-                                    <i class="fas fa-users-cog me-2"></i>Management
+                                    <i class="fas fa-users-cog me-2"></i>Management Stream
                                 {% else %}
-                                    <i class="fas fa-graduation-cap me-2"></i>{{ program.get_discipline_display }}
+                                    <i class="fas fa-graduation-cap me-2"></i>{{ program.get_discipline_display }} Stream
                                 {% endif %}
                             </div>
                             
@@ -151,6 +300,31 @@
                         <p class="card-text text-muted tw-leading-relaxed mb-4">
                             {{ program.description|striptags|truncatewords:25 }}
                         </p>
+                        
+                        <!-- Program Details -->
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <small class="text-muted d-block">
+                                    <i class="fas fa-graduation-cap me-1"></i>Degree Type
+                                </small>
+                                <span class="badge bg-secondary">{{ program.get_degree_type_display }}</span>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted d-block">
+                                    <i class="fas fa-building me-1"></i>Department
+                                </small>
+                                <span class="text-dark small">{{ program.department|default:"Not specified" }}</span>
+                            </div>
+                        </div>
+                        
+                        {% if program.fees %}
+                        <div class="mb-3">
+                            <small class="text-muted d-block">
+                                <i class="fas fa-rupee-sign me-1"></i>Annual Fees
+                            </small>
+                            <span class="text-success fw-bold">₹{{ program.fees|floatformat:0 }}</span>
+                        </div>
+                        {% endif %}
                     </div>
                     
                     <!-- Enhanced Action Buttons -->
@@ -210,7 +384,7 @@
                 {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link rounded-pill me-2 tw-transition-all tw-duration-300 hover:tw-scale-110" 
-                       href="?{% if selected_discipline %}discipline={{ selected_discipline }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                       href="?{% if selected_discipline %}discipline={{ selected_discipline }}&{% endif %}{% if request.GET.degree_type %}degree_type={{ request.GET.degree_type }}&{% endif %}{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.previous_page_number }}">
                         <i class="fas fa-chevron-left"></i>
                     </a>
                 </li>
@@ -224,7 +398,7 @@
                 {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                 <li class="page-item">
                     <a class="page-link rounded-pill mx-1 tw-transition-all tw-duration-300 hover:tw-scale-110" 
-                       href="?{% if selected_discipline %}discipline={{ selected_discipline }}&{% endif %}page={{ num }}">{{ num }}</a>
+                       href="?{% if selected_discipline %}discipline={{ selected_discipline }}&{% endif %}{% if request.GET.degree_type %}degree_type={{ request.GET.degree_type }}&{% endif %}{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ num }}">{{ num }}</a>
                 </li>
                 {% endif %}
                 {% endfor %}
@@ -232,7 +406,7 @@
                 {% if page_obj.has_next %}
                 <li class="page-item">
                     <a class="page-link rounded-pill ms-2 tw-transition-all tw-duration-300 hover:tw-scale-110" 
-                       href="?{% if selected_discipline %}discipline={{ selected_discipline }}&{% endif %}page={{ page_obj.next_page_number }}">
+                       href="?{% if selected_discipline %}discipline={{ selected_discipline }}&{% endif %}{% if request.GET.degree_type %}degree_type={{ request.GET.degree_type }}&{% endif %}{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.next_page_number }}">
                         <i class="fas fa-chevron-right"></i>
                     </a>
                 </li>
@@ -373,6 +547,23 @@
     transform: translateY(-2px);
 }
 
+/* Filter Tabs Styling */
+.nav-pills .nav-link {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, var(--bs-primary), #1e40af);
+    border-color: var(--bs-primary);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.nav-pills .nav-link:hover:not(.active) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .display-3 {
@@ -386,6 +577,11 @@
     .btn-lg {
         font-size: 1rem;
         padding: 0.75rem 1.5rem;
+    }
+    
+    .nav-pills .nav-link {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
     }
 }
 
@@ -437,6 +633,19 @@
     opacity: 1;
     transform: translateY(0);
 }
+
+/* Active Filters Styling */
+.badge {
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    transform: scale(1.05);
+}
+
+.badge a:hover {
+    opacity: 0.8;
+}
 </style>
 
 <!-- Enhanced JavaScript for Interactions -->
@@ -479,6 +688,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initial reveal check
     revealOnScroll();
+    
+    // Filter tab functionality
+    const filterTabs = document.querySelectorAll('#filterTabs .nav-link');
+    
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active class from all tabs
+            filterTabs.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
+            this.classList.add('active');
+        });
+    });
 });
 
 // Reveal on scroll

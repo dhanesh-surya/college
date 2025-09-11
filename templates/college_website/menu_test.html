@@ -1,0 +1,419 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Menu Visibility Test - {{ college_info.college_name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">Menu Visibility Test</h1>
+            <p class="text-center text-muted">This page shows the current menu visibility settings</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Menu Visibility Status</h5>
+                        </div>
+                                                 <div class="card-body">
+                             <!-- Summary Section -->
+                             <div class="alert alert-info mb-3">
+                                 <div class="d-flex justify-content-between align-items-center">
+                                     <strong>Overall Status:</strong>
+                                     <span class="badge bg-primary">
+                                         {% if menu_visibility.get_visible_menu_count == menu_visibility.get_total_menu_count %}
+                                             All Menus Visible
+                                         {% else %}
+                                             {{ menu_visibility.get_visible_menu_count }}/{{ menu_visibility.get_total_menu_count }} Menus Visible
+                                         {% endif %}
+                                     </span>
+                                 </div>
+                             </div>
+                             
+                             <ul class="list-group list-group-flush">
+                                 <!-- Main Menu Sections -->
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <strong>Research Menu</strong>
+                                     <span class="badge {% if menu_visibility.show_research_menu %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_research_menu|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <strong>Placement Menu</strong>
+                                     <span class="badge {% if menu_visibility.show_placement_menu %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_placement_menu|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <strong>Alumni Menu</strong>
+                                     <span class="badge {% if menu_visibility.show_alumni_menu %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_alumni_menu|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <strong>Events Menu</strong>
+                                     <span class="badge {% if menu_visibility.show_events_menu %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_events_menu|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <strong>Student Portal</strong>
+                                     <span class="badge {% if menu_visibility.show_student_portal %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_student_portal|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 
+                                 <!-- Academics Section -->
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Academic Programs</span>
+                                     <span class="badge {% if menu_visibility.show_academics_programs %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_academics_programs|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Academic Departments</span>
+                                     <span class="badge {% if menu_visibility.show_academics_departments %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_academics_departments|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Library</span>
+                                     <span class="badge {% if menu_visibility.show_academics_library %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_academics_library|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Academic Calendar</span>
+                                     <span class="badge {% if menu_visibility.show_academics_calendar %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_academics_calendar|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 
+                                 <!-- Admissions Section -->
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Admission Process</span>
+                                     <span class="badge {% if menu_visibility.show_admissions_process %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_admissions_process|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Guidelines</span>
+                                     <span class="badge {% if menu_visibility.show_admissions_guidelines %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_admissions_guidelines|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Eligibility</span>
+                                     <span class="badge {% if menu_visibility.show_admissions_eligibility %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_admissions_eligibility|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Courses Offered</span>
+                                     <span class="badge {% if menu_visibility.show_admissions_courses %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_admissions_courses|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Online Application</span>
+                                     <span class="badge {% if menu_visibility.show_admissions_application %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_admissions_application|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Fee Structure</span>
+                                     <span class="badge {% if menu_visibility.show_admissions_fees %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_admissions_fees|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Prospectus</span>
+                                     <span class="badge {% if menu_visibility.show_admissions_prospectus %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_admissions_prospectus|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Scholarships</span>
+                                     <span class="badge {% if menu_visibility.show_admissions_scholarships %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_admissions_scholarships|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 
+                                 <!-- Exam Section Submenus -->
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Exam Notices</span>
+                                     <span class="badge {% if menu_visibility.show_exam_notices %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_exam_notices|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Exam Timetable</span>
+                                     <span class="badge {% if menu_visibility.show_exam_timetable %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_exam_timetable|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Exam Revaluation</span>
+                                     <span class="badge {% if menu_visibility.show_exam_revaluation %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_exam_revaluation|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Question Papers</span>
+                                     <span class="badge {% if menu_visibility.show_exam_question_papers %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_exam_question_papers|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Exam Results</span>
+                                     <span class="badge {% if menu_visibility.show_exam_results %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_exam_results|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Exam Rules</span>
+                                     <span class="badge {% if menu_visibility.show_exam_rules %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_exam_rules|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 
+                                 <!-- Research Submenus -->
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Research Centers</span>
+                                     <span class="badge {% if menu_visibility.show_research_centers %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_research_centers|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Innovation & Incubation</span>
+                                     <span class="badge {% if menu_visibility.show_research_innovation %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_research_innovation|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Publications</span>
+                                     <span class="badge {% if menu_visibility.show_publications %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_publications|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Patents & Projects</span>
+                                     <span class="badge {% if menu_visibility.show_patents_projects %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_patents_projects|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Collaborations & MOUs</span>
+                                     <span class="badge {% if menu_visibility.show_research_collaborations %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_research_collaborations|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Consultancy</span>
+                                     <span class="badge {% if menu_visibility.show_research_consultancy %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_research_consultancy|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 
+                                 <!-- Student Support Submenus -->
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Student Portal Main</span>
+                                     <span class="badge {% if menu_visibility.show_student_portal_main %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_student_portal_main|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Student Library</span>
+                                     <span class="badge {% if menu_visibility.show_student_library %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_student_library|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Sports & Cultural</span>
+                                     <span class="badge {% if menu_visibility.show_sports_cultural %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_sports_cultural|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• NSS & NCC</span>
+                                     <span class="badge {% if menu_visibility.show_nss_ncc %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_nss_ncc|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 
+                                 <!-- Events Section -->
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• News & Announcements</span>
+                                     <span class="badge {% if menu_visibility.show_news_announcements %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_news_announcements|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Academic Events</span>
+                                     <span class="badge {% if menu_visibility.show_academic_events %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_academic_events|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Extracurricular Events</span>
+                                     <span class="badge {% if menu_visibility.show_extracurricular_events %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_extracurricular_events|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Gallery</span>
+                                     <span class="badge {% if menu_visibility.show_gallery %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_gallery|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Annual Reports</span>
+                                     <span class="badge {% if menu_visibility.show_annual_reports %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_annual_reports|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 
+                                 <!-- Core Navigation -->
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• About Section</span>
+                                     <span class="badge {% if menu_visibility.show_about_section %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_about_section|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Contact Section</span>
+                                     <span class="badge {% if menu_visibility.show_contact_section %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_contact_section|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                                 <li class="list-group-item d-flex justify-content-between align-items-center">
+                                     <span class="ms-3">• Notices Section</span>
+                                     <span class="badge {% if menu_visibility.show_notices_section %}bg-success{% else %}bg-danger{% endif %}">
+                                         {{ menu_visibility.show_notices_section|yesno:"Visible,Hidden" }}
+                                     </span>
+                                 </li>
+                             </ul>
+                         </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                                                         <div class="d-grid gap-2">
+                                 <a href="{% url 'admin:college_website_menuvisibilitysettings_changelist' %}" class="btn btn-primary">
+                                     <i class="fas fa-cog me-2"></i>Manage Menu Visibility
+                                 </a>
+                                 <a href="{% url 'admin:college_website_menuvisibilitysettings_add' %}" class="btn btn-success">
+                                     <i class="fas fa-plus me-2"></i>Create New Settings
+                                 </a>
+                                 <a href="{% url 'college_website:home' %}" class="btn btn-outline-secondary">
+                                     <i class="fas fa-home me-2"></i>Go to Homepage
+                                 </a>
+                                 <a href="{% url 'admin:index' %}" class="btn btn-outline-info">
+                                     <i class="fas fa-tools me-2"></i>Django Admin
+                                 </a>
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5>Hidden Menus Summary</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if menu_visibility.get_visible_menu_count < menu_visibility.get_total_menu_count %}
+                                <div class="alert alert-warning">
+                                    <strong>Currently Hidden:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        <!-- Main Menu Controls -->
+                                        {% if not menu_visibility.show_research_menu %}<li>Research Menu</li>{% endif %}
+                                        {% if not menu_visibility.show_placement_menu %}<li>Placement Menu</li>{% endif %}
+                                        {% if not menu_visibility.show_alumni_menu %}<li>Alumni Menu</li>{% endif %}
+                                        {% if not menu_visibility.show_events_menu %}<li>Events Menu</li>{% endif %}
+                                        {% if not menu_visibility.show_student_portal %}<li>Student Portal</li>{% endif %}
+                                        
+                                        <!-- Academics Section -->
+                                        {% if not menu_visibility.show_academics_programs %}<li>Academic Programs</li>{% endif %}
+                                        {% if not menu_visibility.show_academics_departments %}<li>Academic Departments</li>{% endif %}
+                                        {% if not menu_visibility.show_academics_library %}<li>Library</li>{% endif %}
+                                        {% if not menu_visibility.show_academics_calendar %}<li>Academic Calendar</li>{% endif %}
+                                        
+                                        <!-- Admissions Section -->
+                                        {% if not menu_visibility.show_admissions_process %}<li>Admission Process</li>{% endif %}
+                                        {% if not menu_visibility.show_admissions_guidelines %}<li>Admission Guidelines</li>{% endif %}
+                                        {% if not menu_visibility.show_admissions_eligibility %}<li>Admission Eligibility</li>{% endif %}
+                                        {% if not menu_visibility.show_admissions_courses %}<li>Courses Offered</li>{% endif %}
+                                        {% if not menu_visibility.show_admissions_application %}<li>Online Application</li>{% endif %}
+                                        {% if not menu_visibility.show_admissions_fees %}<li>Fee Structure</li>{% endif %}
+                                        {% if not menu_visibility.show_admissions_prospectus %}<li>Prospectus</li>{% endif %}
+                                        {% if not menu_visibility.show_admissions_scholarships %}<li>Scholarships</li>{% endif %}
+                                        
+                                        <!-- Examination Section -->
+                                        {% if not menu_visibility.show_exam_notices %}<li>Exam Notices</li>{% endif %}
+                                        {% if not menu_visibility.show_exam_timetable %}<li>Exam Timetable</li>{% endif %}
+                                        {% if not menu_visibility.show_exam_revaluation %}<li>Exam Revaluation</li>{% endif %}
+                                        {% if not menu_visibility.show_exam_question_papers %}<li>Question Papers</li>{% endif %}
+                                        {% if not menu_visibility.show_exam_results %}<li>Exam Results</li>{% endif %}
+                                        {% if not menu_visibility.show_exam_rules %}<li>Exam Rules</li>{% endif %}
+                                        
+                                        <!-- Research Section -->
+                                        {% if not menu_visibility.show_research_centers %}<li>Research Centers</li>{% endif %}
+                                        {% if not menu_visibility.show_research_innovation %}<li>Innovation & Incubation</li>{% endif %}
+                                        {% if not menu_visibility.show_publications %}<li>Publications</li>{% endif %}
+                                        {% if not menu_visibility.show_patents_projects %}<li>Patents & Projects</li>{% endif %}
+                                        {% if not menu_visibility.show_research_collaborations %}<li>Collaborations & MOUs</li>{% endif %}
+                                        {% if not menu_visibility.show_research_consultancy %}<li>Consultancy</li>{% endif %}
+                                        
+                                        <!-- Student Support Section -->
+                                        {% if not menu_visibility.show_student_portal_main %}<li>Student Portal Main</li>{% endif %}
+                                        {% if not menu_visibility.show_student_library %}<li>Student Library</li>{% endif %}
+                                        {% if not menu_visibility.show_sports_cultural %}<li>Sports & Cultural</li>{% endif %}
+                                        {% if not menu_visibility.show_nss_ncc %}<li>NSS & NCC</li>{% endif %}
+                                        
+                                        <!-- Events Section -->
+                                        {% if not menu_visibility.show_news_announcements %}<li>News & Announcements</li>{% endif %}
+                                        {% if not menu_visibility.show_academic_events %}<li>Academic Events</li>{% endif %}
+                                        {% if not menu_visibility.show_extracurricular_events %}<li>Extracurricular Events</li>{% endif %}
+                                        {% if not menu_visibility.show_gallery %}<li>Gallery</li>{% endif %}
+                                        {% if not menu_visibility.show_annual_reports %}<li>Annual Reports</li>{% endif %}
+                                        
+                                        <!-- Core Navigation -->
+                                        {% if not menu_visibility.show_about_section %}<li>About Section</li>{% endif %}
+                                        {% if not menu_visibility.show_contact_section %}<li>Contact Section</li>{% endif %}
+                                        {% if not menu_visibility.show_notices_section %}<li>Notices Section</li>{% endif %}
+                                    </ul>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success">
+                                    <strong>All menus are currently visible!</strong>
+                                    <p class="mb-0 mt-2">Your navbar is showing all available menu options.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5>Instructions</h5>
+                        </div>
+                        <div class="card-body">
+                            <ol class="mb-0">
+                                <li>Go to Django Admin</li>
+                                <li>Navigate to "Menu Visibility Settings"</li>
+                                <li>Edit the settings to hide/show menus</li>
+                                <li>Refresh this page to see changes</li>
+                                <li>Check the navbar to see the effect</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

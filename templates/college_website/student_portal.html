@@ -1,0 +1,813 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Student Portal - {{ college_info.college_name }}{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+    :root {
+        --bs-primary-rgb: 99, 102, 241;
+        --bs-secondary-rgb: 107, 114, 128;
+        --bs-success-rgb: 16, 185, 129;
+        --bs-info-rgb: 59, 130, 246;
+        --bs-warning-rgb: 245, 158, 11;
+        --bs-danger-rgb: 239, 68, 68;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 800;
+        color: white;
+        text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.9);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+
+    /* Glass Cards */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .stats-number {
+        font-size: 3rem;
+        font-weight: 800;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 0.5rem;
+    }
+
+    .stats-label {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Service Cards */
+    .service-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .service-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .service-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .service-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, rgba(139, 92, 246, 0.05) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .service-card:hover::after {
+        opacity: 1;
+    }
+
+    .service-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.15), 0 10px 10px -5px rgba(139, 92, 246, 0.1);
+        border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    .service-icon {
+        width: 88px;
+        height: 88px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2.25rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        line-height: 1;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .service-icon i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        line-height: 1;
+    }
+    
+    /* Icon alignment fixes */
+    .fas, .far, .fab {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
+    }
+    
+    /* Glass card icon containers */
+    .glass-card {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Ensure proper icon sizing */
+    .fs-1 {
+        font-size: 2.5rem !important;
+    }
+    
+    .fs-2 {
+        font-size: 2rem !important;
+    }
+    
+    .fs-3 {
+        font-size: 1.75rem !important;
+    }
+    
+    .fs-4 {
+        font-size: 1.5rem !important;
+    }
+    
+    .fs-5 {
+        font-size: 1.25rem !important;
+    }
+
+    .service-card:hover .service-icon {
+        transform: scale(1.05) rotate(5deg);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .service-title {
+        font-size: 1.375rem;
+        font-weight: 700;
+        color: var(--bs-dark);
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+
+    .service-description {
+        color: #6b7280;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+    }
+
+    /* Feature Cards */
+    .feature-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 24px -4px rgba(99, 102, 241, 0.15), 0 8px 8px -4px rgba(139, 92, 246, 0.1);
+        border-color: rgba(99, 102, 241, 0.15);
+    }
+
+    /* Announcement Cards */
+    .announcement-card {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border-radius: 24px;
+        padding: 2.5rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 16px rgba(16, 185, 129, 0.2);
+    }
+
+    .announcement-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.3), 0 10px 10px -5px rgba(5, 150, 105, 0.1);
+    }
+
+    .announcement-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Buttons */
+    .btn-modern {
+        padding: 14px 32px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-transform: none;
+        letter-spacing: 0.25px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-modern:hover::before {
+        left: 100%;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Animations */
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .fade-in-up.delay-1 { animation-delay: 0.2s; }
+    .fade-in-up.delay-2 { animation-delay: 0.4s; }
+    .fade-in-up.delay-3 { animation-delay: 0.6s; }
+    .fade-in-up.delay-4 { animation-delay: 0.8s; }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    /* Ripple Effect */
+    .ripple {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ripple::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .ripple:active::after {
+        width: 300px;
+        height: 300px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.1rem;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+        }
+        
+        .service-card {
+            margin-bottom: 1.5rem;
+        }
+        
+        .glass-card {
+            margin-bottom: 1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+        }
+        
+        .service-card {
+            padding: 2rem 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section d-flex align-items-center">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="hero-content fade-in-up">
+                    <h1 class="hero-title">
+                        <i class="fas fa-graduation-cap me-3"></i>Student Portal
+                    </h1>
+                    <p class="hero-subtitle">
+                        Your gateway to academic excellence. Access all your educational resources, track your progress, and stay connected with your academic journey.
+                    </p>
+                    <div class="row g-4 fade-in-up delay-2">
+                        <div class="col-md-3 col-6">
+                            <div class="glass-card p-4 text-center">
+                                <div class="stats-number">5000+</div>
+                                <div class="stats-label">Active Students</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="glass-card p-4 text-center">
+                                <div class="stats-number">50+</div>
+                                <div class="stats-label">Courses Available</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="glass-card p-4 text-center">
+                                <div class="stats-number">95%</div>
+                                <div class="stats-label">Success Rate</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="glass-card p-4 text-center">
+                                <div class="stats-number">24/7</div>
+                                <div class="stats-label">Support Available</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="text-center fade-in-up delay-3">
+                    <div class="glass-card mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 128px; height: 128px;">
+                        <i class="fas fa-user-graduate text-primary fs-1 d-flex align-items-center justify-content-center"></i>
+                    </div>
+                    <h3 class="text-white mb-3 fw-bold">Welcome Back!</h3>
+                    <p class="text-white-50 mb-4">Access your personalized dashboard and continue your learning journey.</p>
+                    <button class="btn btn-light btn-modern ripple">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Access Services -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark mb-3 fade-in-up">Quick Access Services</h2>
+                <p class="lead text-secondary fade-in-up delay-1">Everything you need for your academic success in one place</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card service-card fade-in-up delay-1 border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h4 class="service-title mb-3">Academic Resources</h4>
+                        <p class="service-description flex-grow-1">Access course materials, assignments, and study resources to excel in your studies.</p>
+                        <button class="btn btn-outline-primary btn-modern w-100 ripple mt-auto">Explore</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card service-card fade-in-up delay-2 border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4 class="service-title mb-3">Progress Tracking</h4>
+                        <p class="service-description flex-grow-1">Monitor your academic progress, grades, and achievements in real-time.</p>
+                        <button class="btn btn-outline-success btn-modern w-100 ripple mt-auto">View Progress</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card service-card fade-in-up delay-3 border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h4 class="service-title mb-3">Schedule Management</h4>
+                        <p class="service-description flex-grow-1">Manage your class schedule, exams, and important academic deadlines.</p>
+                        <button class="btn btn-outline-info btn-modern w-100 ripple mt-auto">View Schedule</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card service-card fade-in-up delay-1 border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="service-title mb-3">Student Community</h4>
+                        <p class="service-description flex-grow-1">Connect with fellow students, join study groups, and participate in discussions.</p>
+                        <button class="btn btn-outline-warning btn-modern w-100 ripple mt-auto">Join Community</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card service-card fade-in-up delay-2 border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4 class="service-title mb-3">Support Center</h4>
+                        <p class="service-description flex-grow-1">Get help with technical issues, academic questions, and general inquiries.</p>
+                        <button class="btn btn-outline-danger btn-modern w-100 ripple mt-auto">Get Support</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="card service-card fade-in-up delay-3 border-0 h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #6b7280, #4b5563);">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <h4 class="service-title mb-3">Account Settings</h4>
+                        <p class="service-description flex-grow-1">Manage your profile, preferences, and account security settings.</p>
+                        <button class="btn btn-outline-secondary btn-modern w-100 ripple mt-auto">Manage Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark mb-3 fade-in-up">Why Choose Our Portal?</h2>
+                <p class="lead text-secondary fade-in-up delay-1">Experience the future of education with our cutting-edge features</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card feature-card fade-in-up delay-1 border-0 h-100">
+                    <div class="card-body text-center">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-3">Mobile Responsive</h5>
+                        <p class="text-secondary">Access your portal from any device, anywhere, anytime with our fully responsive design.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card feature-card fade-in-up delay-2 border-0 h-100">
+                    <div class="card-body text-center">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-3">Secure & Safe</h5>
+                        <p class="text-secondary">Your data is protected with enterprise-grade security and privacy measures.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card feature-card fade-in-up delay-3 border-0 h-100">
+                    <div class="card-body text-center">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-3">Lightning Fast</h5>
+                        <p class="text-secondary">Experience blazing fast performance with our optimized infrastructure.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card feature-card fade-in-up delay-4 border-0 h-100">
+                    <div class="card-body text-center">
+                        <div class="service-icon text-white mx-auto mb-4" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-3">User Friendly</h5>
+                        <p class="text-secondary">Intuitive interface designed with students in mind for the best user experience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Announcements Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold text-dark mb-3 fade-in-up">Latest Announcements</h2>
+                <p class="lead text-secondary fade-in-up delay-1">Stay updated with important news and updates</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="announcement-card fade-in-up delay-1">
+                    <div class="d-flex align-items-start position-relative">
+                        <div class="glass-card me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                            <i class="fas fa-bullhorn text-white d-flex align-items-center justify-content-center"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-white mb-2">New Course Registration Open</h5>
+                            <p class="text-white-50 mb-3">Registration for Spring 2024 semester is now open. Don't miss out on your preferred courses!</p>
+                            <small class="text-white-50">
+                                <i class="fas fa-clock me-1"></i>2 hours ago
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="announcement-card fade-in-up delay-2">
+                    <div class="d-flex align-items-start position-relative">
+                        <div class="glass-card me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                            <i class="fas fa-calendar-check text-white d-flex align-items-center justify-content-center"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-white mb-2">Midterm Exam Schedule</h5>
+                            <p class="text-white-50 mb-3">Midterm examinations will begin next week. Check your personalized schedule for details.</p>
+                            <small class="text-white-50">
+                                <i class="fas fa-clock me-1"></i>1 day ago
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="announcement-card fade-in-up delay-3">
+                    <div class="d-flex align-items-start position-relative">
+                        <div class="glass-card me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                            <i class="fas fa-graduation-cap text-white d-flex align-items-center justify-content-center"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-white mb-2">Scholarship Applications</h5>
+                            <p class="text-white-50 mb-3">Merit-based scholarship applications are now open. Apply before the deadline!</p>
+                            <small class="text-white-50">
+                                <i class="fas fa-clock me-1"></i>3 days ago
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="announcement-card fade-in-up delay-4">
+                    <div class="d-flex align-items-start position-relative">
+                        <div class="glass-card me-3 flex-shrink-0 d-flex align-items-center justify-content-center" style="width: 64px; height: 64px;">
+                            <i class="fas fa-users text-white d-flex align-items-center justify-content-center"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold text-white mb-2">Student Council Elections</h5>
+                            <p class="text-white-50 mb-3">Vote for your student representatives. Elections close this Friday at 5 PM.</p>
+                            <small class="text-white-50">
+                                <i class="fas fa-clock me-1"></i>5 days ago
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5" style="background: linear-gradient(135deg, #1e40af 0%, #3730a3 50%, #581c87 100%);">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="fade-in-up">
+                    <div class="glass-card mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 128px; height: 128px;">
+                        <i class="fas fa-rocket text-white fs-1 d-flex align-items-center justify-content-center"></i>
+                    </div>
+                    <h2 class="display-5 fw-bold text-white mb-3">Ready to Get Started?</h2>
+                    <p class="lead text-white-50 mb-4">Join thousands of students who are already using our portal to achieve their academic goals.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="{% url 'college_website:student_register' %}" class="btn btn-light btn-modern ripple">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </a>
+                        <a href="{% url 'college_website:student_login' %}" class="btn btn-outline-light btn-modern ripple">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </a>
+                        <button class="btn btn-outline-light btn-modern ripple">
+                            <i class="fas fa-play me-2"></i>Watch Demo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+            }
+        });
+    }, observerOptions);
+
+    // Observe all animated elements
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+        el.style.animationPlayState = 'paused';
+        observer.observe(el);
+    });
+
+    // Enhanced ripple effect for buttons
+    document.querySelectorAll('.ripple').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Add loading state to buttons
+    document.querySelectorAll('.btn-modern').forEach(button => {
+        button.addEventListener('click', function() {
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Loading...';
+            this.disabled = true;
+            
+            setTimeout(() => {
+                this.innerHTML = originalText;
+                this.disabled = false;
+            }, 2000);
+        });
+    });
+
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Add floating animation to specific elements
+    document.querySelectorAll('.service-icon').forEach(el => {
+        el.addEventListener('mouseenter', function() {
+            this.style.animation = 'float 2s ease-in-out infinite';
+        });
+        
+        el.addEventListener('mouseleave', function() {
+            this.style.animation = '';
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,500 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Placement Cell - {{ college_info.college_name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:student_support' %}">Student Support</a></li>
+<li class="breadcrumb-item active" aria-current="page">Placement Cell</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="text-center mb-5">
+                <h1 class="display-4 text-primary mb-3">Placement Cell</h1>
+                <p class="lead text-muted">Bridging the gap between education and employment</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Placement Cell -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary mb-3">
+                        <i class="fas fa-briefcase me-2"></i>About Our Placement Cell
+                    </h5>
+                    <p class="card-text text-muted">Our Placement Cell is dedicated to providing comprehensive career guidance and placement assistance to students. We work closely with leading companies and organizations to ensure our students get the best career opportunities.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Industry partnerships with top companies</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Career counseling and guidance</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Resume building and interview preparation</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Skill development programs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-chart-line fa-4x text-primary mb-3"></i>
+                    <h6 class="card-title">Placement Statistics</h6>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h4 class="text-primary">85%</h4>
+                            <small class="text-muted">Placement Rate</small>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-success">150+</h4>
+                            <small class="text-muted">Companies</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="section-title text-primary mb-4">
+                <i class="fas fa-cogs me-3"></i>Our Services
+            </h2>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-user-tie fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Career Counseling</h5>
+                    <p class="card-text text-muted">Personalized career guidance to help students make informed decisions about their future.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-circle text-info me-2"></i>Career assessment tests</li>
+                        <li><i class="fas fa-circle text-info me-2"></i>Industry insights</li>
+                        <li><i class="fas fa-circle text-info me-2"></i>Goal setting sessions</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-file-alt fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Resume Building</h5>
+                    <p class="card-text text-muted">Professional resume creation and optimization to make students stand out to employers.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-circle text-warning me-2"></i>Resume templates</li>
+                        <li><i class="fas fa-circle text-warning me-2"></i>Content optimization</li>
+                        <li><i class="fas fa-circle text-warning me-2"></i>ATS-friendly formats</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-comments fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Interview Preparation</h5>
+                    <p class="card-text text-muted">Comprehensive interview training to boost confidence and performance.</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-circle text-success me-2"></i>Mock interviews</li>
+                        <li><i class="fas fa-circle text-success me-2"></i>Technical preparation</li>
+                        <li><i class="fas fa-circle text-success me-2"></i>Soft skills training</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recruiting Companies -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="section-title text-primary mb-4">
+                <i class="fas fa-building me-3"></i>Our Recruiting Partners
+            </h2>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-laptop-code fa-3x text-primary mb-3"></i>
+                    <h6 class="card-title">Technology</h6>
+                    <p class="card-text text-muted">Leading tech companies and startups</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-chart-bar fa-3x text-success mb-3"></i>
+                    <h6 class="card-title">Finance</h6>
+                    <p class="card-text text-muted">Banking and financial services</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-industry fa-3x text-warning mb-3"></i>
+                    <h6 class="card-title">Manufacturing</h6>
+                    <p class="card-text text-muted">Industrial and production companies</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-store fa-3x text-info mb-3"></i>
+                    <h6 class="card-title">Retail</h6>
+                    <p class="card-text text-muted">E-commerce and retail chains</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Gallery Section -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="section-title text-primary mb-4">
+                <i class="fas fa-images me-3"></i>Gallery
+            </h2>
+            <p class="text-muted mb-4">Moments from our placement activities and company visits</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Placement Events Gallery -->
+        <div class="col-lg-6">
+            <h4 class="text-primary mb-3">
+                <i class="fas fa-briefcase me-2"></i>Placement Events
+            </h4>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="/media/slider/IMG_1963.jpg" class="img-fluid rounded shadow-sm" alt="Placement Event 1" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="gallery-caption">
+                            <h6 class="mb-1">Campus Recruitment Drive</h6>
+                            <small class="text-muted">Major companies visiting campus</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="/media/slider/IMG_1970.jpg" class="img-fluid rounded shadow-sm" alt="Placement Event 2" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="gallery-caption">
+                            <h6 class="mb-1">Interview Sessions</h6>
+                            <small class="text-muted">Students in placement interviews</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="/media/slider/IMG_1971.jpg" class="img-fluid rounded shadow-sm" alt="Placement Event 3" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="gallery-caption">
+                            <h6 class="mb-1">Job Fair 2024</h6>
+                            <small class="text-muted">Annual placement fair</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="/media/slider/jess-bailey-q10VITrVYUM-unsplash.jpg" class="img-fluid rounded shadow-sm" alt="Placement Event 4" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="gallery-caption">
+                            <h6 class="mb-1">Career Workshop</h6>
+                            <small class="text-muted">Professional development session</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Visits Gallery -->
+        <div class="col-lg-6">
+            <h4 class="text-primary mb-3">
+                <i class="fas fa-building me-2"></i>Company Visits
+            </h4>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="/media/slider/linus-mimietz-gvptKmonylk-unsplash.jpg" class="img-fluid rounded shadow-sm" alt="Company Visit 1" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="gallery-caption">
+                            <h6 class="mb-1">Industry Visit</h6>
+                            <small class="text-muted">Students visiting tech companies</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="/media/slider/samantha-gades-BlIhVfXbi9s-unsplash.jpg" class="img-fluid rounded shadow-sm" alt="Company Visit 2" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="gallery-caption">
+                            <h6 class="mb-1">Guest Lectures</h6>
+                            <small class="text-muted">Industry experts sharing insights</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="/media/gallery/cristina-gottardi-CSpjU6hYo_0-unsplash_1.jpg" class="img-fluid rounded shadow-sm" alt="Company Visit 3" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="gallery-caption">
+                            <h6 class="mb-1">Networking Events</h6>
+                            <small class="text-muted">Student-industry interactions</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal">
+                        <img src="/media/gallery/IMG_1963.jpg" class="img-fluid rounded shadow-sm" alt="Company Visit 4" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;">
+                        <div class="gallery-overlay">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                        <div class="gallery-caption">
+                            <h6 class="mb-1">Alumni Meet</h6>
+                            <small class="text-muted">Successful alumni sharing experiences</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body p-5 text-center">
+                    <h3 class="card-title mb-3">Ready to Start Your Career Journey?</h3>
+                    <p class="card-text mb-4">Contact our Placement Cell for career guidance and placement assistance.</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <a href="{% url 'college_website:contact' %}" class="btn btn-light btn-lg me-3">
+                                <i class="fas fa-phone me-2"></i>Contact Us
+                            </a>
+                            <a href="{% url 'college_website:student_register' %}" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Register Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gallery Modal -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-white" id="galleryModalLabel">Gallery Image</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="position-relative">
+                    <img id="modalImage" src="" class="img-fluid w-100" alt="Gallery Image" style="max-height: 80vh; object-fit: contain;">
+                    <div class="position-absolute top-0 start-0 p-3">
+                        <div class="bg-dark bg-opacity-75 text-white p-3 rounded">
+                            <h6 id="modalTitle" class="mb-1"></h6>
+                            <small id="modalCaption" class="text-light"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Close
+                </button>
+                <button type="button" class="btn btn-primary" id="downloadBtn">
+                    <i class="fas fa-download me-2"></i>Download
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .section-title { font-weight: 700; font-size: 2rem; }
+    .bg-opacity-75 { background-color: rgba(0, 0, 0, 0.75) !important; }
+    
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    .list-unstyled li { padding: 0.25rem 0; }
+    
+    .gallery-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .gallery-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .gallery-item:hover img {
+        transform: scale(1.1);
+    }
+    
+    .gallery-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.3s ease;
+        border-radius: 0.75rem;
+    }
+    
+    .gallery-overlay i {
+        font-size: 2rem;
+        color: white;
+        transform: scale(0.8);
+        transition: all 0.3s ease;
+    }
+    
+    .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+    }
+    
+    .gallery-item:hover .gallery-overlay i {
+        transform: scale(1.2);
+    }
+    
+    .gallery-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        color: white;
+        padding: 1.5rem 1rem 1rem;
+        transform: translateY(100%);
+        transition: all 0.3s ease;
+    }
+    
+    .gallery-item:hover .gallery-caption {
+        transform: translateY(0);
+    }
+    
+    .modal-content { border: none; border-radius: 1rem; overflow: hidden; }
+    
+    @media (max-width: 768px) {
+        .gallery-item { margin-bottom: 1rem; }
+        .modal-dialog { margin: 0.5rem; }
+        #modalImage { max-height: 60vh; }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const modal = document.getElementById('galleryModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalCaption = document.getElementById('modalCaption');
+    const downloadBtn = document.getElementById('downloadBtn');
+    
+    galleryItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const img = this.querySelector('img');
+            const title = this.querySelector('.gallery-caption h6').textContent;
+            const caption = this.querySelector('.gallery-caption small').textContent;
+            
+            modalImage.src = img.src;
+            modalImage.alt = img.alt;
+            modalTitle.textContent = title;
+            modalCaption.textContent = caption;
+            
+            downloadBtn.onclick = function() {
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.download = title.replace(/\s+/g, '_') + '.jpg';
+                link.click();
+            };
+            
+            const bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+        });
+    });
+    
+    // Fix modal backdrop issue
+    modal.addEventListener('hidden.bs.modal', function() {
+        // Remove any lingering backdrop
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => backdrop.remove());
+        
+        // Remove modal-open class from body
+        document.body.classList.remove('modal-open');
+        
+        // Reset body padding if it was modified
+        document.body.style.paddingRight = '';
+        
+        // Reset overflow
+        document.body.style.overflow = '';
+    });
+    
+    // Additional cleanup on modal show
+    modal.addEventListener('show.bs.modal', function() {
+        // Clean up any existing backdrops before showing new modal
+        const existingBackdrops = document.querySelectorAll('.modal-backdrop');
+        existingBackdrops.forEach(backdrop => backdrop.remove());
+    });
+    
+    // Handle ESC key to close modal
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) {
+                bsModal.hide();
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Question Papers - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Question Papers</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">Question Papers</h1>
+        <p class="lead text-muted">Access previous year question papers and practice materials</p>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="row mb-4">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="search" class="form-label fw-semibold">Search</label>
+                            <input type="text" class="form-control" id="search" name="search" 
+                                   value="{{ search_query }}" placeholder="Search question papers...">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="semester" class="form-label fw-semibold">Semester</label>
+                            <select class="form-select" id="semester" name="semester">
+                                <option value="">All Semesters</option>
+                                {% for semester in available_semesters %}
+                                <option value="{{ semester }}" {% if semester_filter == semester %}selected{% endif %}>
+                                    {{ semester|add:"st"|add:" Semester" }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="subject" class="form-label fw-semibold">Subject</label>
+                            <select class="form-select" id="subject" name="subject">
+                                <option value="">All Subjects</option>
+                                {% for subject in available_subjects %}
+                                <option value="{{ subject }}" {% if subject_filter == subject %}selected{% endif %}>
+                                    {{ subject|title|replace:"-"," " }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="year" class="form-label fw-semibold">Academic Year</label>
+                            <select class="form-select" id="year" name="year">
+                                <option value="">All Years</option>
+                                {% for year in available_years %}
+                                <option value="{{ year }}" {% if year_filter == year %}selected{% endif %}>
+                                    {{ year }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label fw-semibold">&nbsp;</label>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-1"></i>Filter
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Summary -->
+    {% if total_papers > 0 %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                Found <strong>{{ total_papers }}</strong> question paper{{ total_papers|pluralize }} 
+                {% if search_query or subject_filter or semester_filter or year_filter %}
+                matching your criteria
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Featured Question Papers -->
+    {% if featured_papers %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-3">
+                <i class="fas fa-star text-warning me-2"></i>Featured Question Papers
+            </h3>
+        </div>
+        {% for paper in featured_papers %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm question-paper-card h-100 featured-card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="question-icon bg-{{ paper.get_subject_display_color }} text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <h6 class="card-title mb-1">{{ paper.title }}</h6>
+                            <small class="text-muted">{{ paper.academic_year }}</small>
+                        </div>
+                    </div>
+                    <p class="card-text text-muted mb-3">
+                        {% if paper.description %}
+                            {{ paper.description|truncatewords:15 }}
+                        {% else %}
+                            Previous year question paper for {{ paper.get_subject_display }} {{ paper.get_semester_display }} examination.
+                        {% endif %}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-success me-2">Available</span>
+                            {% if paper.is_featured %}
+                            <span class="badge bg-warning">Featured</span>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'college_website:question_paper_download' paper.slug %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-download me-1"></i>Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- All Question Papers -->
+    <div class="row">
+        {% for paper in regular_papers %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm question-paper-card h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="question-icon bg-{{ paper.get_subject_display_color }} text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <h6 class="card-title mb-1">{{ paper.title }}</h6>
+                            <small class="text-muted">{{ paper.academic_year }}</small>
+                        </div>
+                    </div>
+                    <p class="card-text text-muted mb-3">
+                        {% if paper.description %}
+                            {{ paper.description|truncatewords:15 }}
+                        {% else %}
+                            Previous year question paper for {{ paper.get_subject_display }} {{ paper.get_semester_display }} examination.
+                        {% endif %}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-success me-2">Available</span>
+                            {% if paper.file_size %}
+                            <small class="text-muted">{{ paper.file_size }}</small>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'college_website:question_paper_download' paper.slug %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-download me-1"></i>Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-file-pdf fa-4x text-muted mb-3"></i>
+                <h4 class="text-muted">No Question Papers Found</h4>
+                <p class="text-muted">
+                    {% if search_query or subject_filter or semester_filter or year_filter %}
+                    Try adjusting your search criteria to find more question papers.
+                    {% else %}
+                    No question papers are currently available. Please check back later.
+                    {% endif %}
+                </p>
+                {% if search_query or subject_filter or semester_filter or year_filter %}
+                <a href="{% url 'college_website:question_papers' %}" class="btn btn-primary">
+                    <i class="fas fa-refresh me-1"></i>Clear Filters
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <!-- Important Notice -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3 p-4 mt-5 border-start border-primary border-4">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-info-circle fa-2x text-primary me-3"></i>
+            <div>
+                <h5 class="text-primary mb-1">Important Notice</h5>
+                <p class="mb-0 text-muted">Question papers are provided for practice purposes only. Students are advised to use these materials responsibly and in accordance with college guidelines.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.question-paper-card {
+    transition: all 0.3s ease;
+    border-radius: 15px;
+}
+
+.question-paper-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+
+.question-icon {
+    transition: all 0.3s ease;
+}
+
+.question-paper-card:hover .question-icon {
+    transform: scale(1.1);
+}
+
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #eff6ff, #e0e7ff);
+}
+
+/* Filter Section Styling */
+.form-select, .form-control {
+    border-radius: 10px;
+    border: 2px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.form-select:focus, .form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* Badge Styling */
+.badge {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* Button Styling */
+.btn-primary {
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Featured Card Styling */
+.featured-card {
+    border: 2px solid #ffc107 !important;
+    background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+}
+
+.featured-card:hover {
+    border-color: #e0a800 !important;
+    box-shadow: 0 10px 30px rgba(255, 193, 7, 0.2) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .question-paper-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,516 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Publications - {{ college_info.college_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="text-center">
+                <h1 class="display-4 fw-bold text-primary mb-3">
+                    <i class="fas fa-book-open me-3"></i>{{ publication_info.title }}
+                </h1>
+                <p class="lead text-muted mb-4">
+                    {{ publication_info.subtitle }}
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <span class="badge bg-primary fs-6 px-3 py-2">
+                        <i class="fas fa-file-alt me-2"></i>{{ publication_info.total_publications }}+ Publications
+                    </span>
+                    <span class="badge bg-success fs-6 px-3 py-2">
+                        <i class="fas fa-quote-left me-2"></i>{{ publication_info.total_citations }}+ Citations
+                    </span>
+                    <span class="badge bg-info fs-6 px-3 py-2">
+                        <i class="fas fa-globe me-2"></i>International Journals
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-file-alt text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-primary mb-1">{{ publication_info.total_publications }}+</h3>
+                            <p class="text-muted mb-0">Research Papers</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-book text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-success mb-1">{{ publication_info.book_chapters }}</h3>
+                            <p class="text-muted mb-0">Book Chapters</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-quote-left text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-info mb-1">{{ publication_info.total_citations }}+</h3>
+                            <p class="text-muted mb-0">Citations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-warning bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-trophy text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-warning mb-1">{{ publication_info.awards_received }}</h3>
+                            <p class="text-muted mb-0">Awards</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-search text-primary me-2"></i>Search Publications
+                            </label>
+                            <input type="text" class="form-control" placeholder="Search by title, author, or keywords..." id="searchInput" value="{{ search_query }}">
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-filter text-primary me-2"></i>Department
+                            </label>
+                            <select class="form-select" id="departmentFilter">
+                                <option value="">All Departments</option>
+                                {% for value, label in available_departments %}
+                                    <option value="{{ value }}" {% if department_filter == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-calendar text-primary me-2"></i>Year
+                            </label>
+                            <select class="form-select" id="yearFilter">
+                                <option value="">All Years</option>
+                                {% for year in available_years %}
+                                    <option value="{{ year }}" {% if year_filter == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-sort text-primary me-2"></i>Sort By
+                            </label>
+                            <select class="form-select" id="sortFilter">
+                                <option value="date">Date</option>
+                                <option value="title">Title</option>
+                                <option value="citations">Citations</option>
+                                <option value="author">Author</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publications Grid -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-list text-primary me-2"></i>Recent Publications
+            </h3>
+        </div>
+        
+        <!-- Publication Cards -->
+        {% for publication in recent_publications %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift publication-card" data-department="{{ publication.department }}" data-year="{{ publication.publication_year }}">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-{{ publication.get_department_display_color }}">{{ publication.get_department_display }}</span>
+                        <span class="text-muted small">{{ publication.publication_year }}</span>
+                    </div>
+                    <h5 class="card-title text-primary mb-3">
+                        <a href="{% if publication.url %}{{ publication.url }}{% else %}#{% endif %}" class="text-decoration-none" target="_blank">{{ publication.title }}</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        {{ publication.abstract|truncatewords:25 }}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="author-info">
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>{{ publication.authors|truncatewords:8 }}
+                            </small>
+                        </div>
+                        <div class="publication-stats">
+                            <span class="badge bg-success me-2">
+                                <i class="fas fa-quote-left me-1"></i>{{ publication.citations }} Citations
+                            </span>
+                            <span class="badge bg-info">
+                                <i class="fas fa-external-link-alt me-1"></i>{{ publication.journal_name|truncatewords:2 }}
+                            </span>
+                        </div>
+                    </div>
+                    {% if publication.pdf_file %}
+                    <div class="mt-3">
+                        <a href="{{ publication.pdf_file.url }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                            <i class="fas fa-download me-1"></i>Download PDF
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No Publications Found</h4>
+                <p class="text-muted">No publications match your current search criteria.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Journal Categories -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-newspaper text-primary me-2"></i>Publications by Journal Category
+            </h3>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-globe text-white fs-3"></i>
+                    </div>
+                    <h5 class="card-title text-primary">International Journals</h5>
+                    <p class="card-text text-muted">High-impact international publications in top-tier journals</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <span class="badge bg-primary">{{ publication_info.international_journals_count }} Papers</span>
+                        <span class="badge bg-success">{{ publication_info.international_citations }}+ Citations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-flag text-white fs-3"></i>
+                    </div>
+                    <h5 class="card-title text-success">National Journals</h5>
+                    <p class="card-text text-muted">Publications in reputed national and regional journals</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <span class="badge bg-success">{{ publication_info.national_journals_count }} Papers</span>
+                        <span class="badge bg-info">{{ publication_info.national_citations }}+ Citations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-book text-white fs-3"></i>
+                    </div>
+                    <h5 class="card-title text-info">Conference Proceedings</h5>
+                    <p class="card-text text-muted">Research papers presented at national and international conferences</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <span class="badge bg-info">{{ publication_info.conference_papers_count }} Papers</span>
+                        <span class="badge bg-warning">{{ publication_info.conference_citations }}+ Citations</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research Impact -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h3 class="h4 text-primary mb-3">
+                                <i class="fas fa-chart-line me-2"></i>Research Impact & Recognition
+                            </h3>
+                            <p class="text-muted mb-4">
+                                Our research publications have made significant contributions to various fields, earning recognition from the academic community and industry professionals worldwide.
+                            </p>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-award text-warning me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">Best Paper Awards</h6>
+                                            <small class="text-muted">{{ publication_info.best_paper_awards }} awards received</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-star text-warning me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">High Impact Factor</h6>
+                                            <small class="text-muted">Average IF: {{ publication_info.get_impact_factor_display }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-users text-info me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">International Collaborations</h6>
+                                            <small class="text-muted">{{ publication_info.international_collaborations }}+ countries</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-graduation-cap text-success me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">Research Students</h6>
+                                            <small class="text-muted">{{ publication_info.research_students }}+ PhD scholars</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 120px;">
+                                <i class="fas fa-trophy text-white" style="font-size: 3rem;"></i>
+                            </div>
+                            <h4 class="text-primary fw-bold">Research Excellence</h4>
+                            <p class="text-muted">Recognized for outstanding contributions to academic research</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-gradient" style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);">
+                <div class="card-body p-5 text-center text-white">
+                    <h3 class="h4 mb-3">
+                        <i class="fas fa-paper-plane me-2"></i>{{ publication_info.cta_title }}
+                    </h3>
+                    <p class="mb-4">
+                        {{ publication_info.cta_description }}
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="mailto:{{ publication_info.contact_email }}" class="btn btn-light btn-lg">
+                            <i class="fas fa-envelope me-2"></i>Contact Research Team
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-download me-2"></i>Download Publications
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Custom Styles */
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+
+.publication-card {
+    transition: all 0.3s ease;
+}
+
+.publication-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12) !important;
+}
+
+.publication-card .card-title a {
+    transition: color 0.3s ease;
+}
+
+.publication-card:hover .card-title a {
+    color: #0056b3 !important;
+}
+
+/* Filter animations */
+.publication-card.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+.publication-card.visible {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+/* Badge styles */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .lead {
+        font-size: 1rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+}
+
+/* Custom gradients */
+.bg-gradient {
+    background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-primary-dark) 100%);
+}
+
+/* Animation for statistics */
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    animation: countUp 0.6s ease-out;
+}
+
+/* Search highlight */
+.highlight {
+    background-color: #fff3cd;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.25rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const departmentFilter = document.getElementById('departmentFilter');
+    const yearFilter = document.getElementById('yearFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const publicationCards = document.querySelectorAll('.publication-card');
+    
+    function filterPublications() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedDepartment = departmentFilter.value;
+        const selectedYear = yearFilter.value;
+        
+        publicationCards.forEach(card => {
+            const title = card.querySelector('.card-title a').textContent.toLowerCase();
+            const description = card.querySelector('.card-text').textContent.toLowerCase();
+            const department = card.dataset.department;
+            const year = card.dataset.year;
+            
+            const matchesSearch = searchTerm === '' || 
+                title.includes(searchTerm) || 
+                description.includes(searchTerm);
+            
+            const matchesDepartment = selectedDepartment === '' || department === selectedDepartment;
+            const matchesYear = selectedYear === '' || year === selectedYear;
+            
+            if (matchesSearch && matchesDepartment && matchesYear) {
+                card.classList.remove('hidden');
+                card.classList.add('visible');
+            } else {
+                card.classList.add('hidden');
+                card.classList.remove('visible');
+            }
+        });
+    }
+    
+    // Event listeners
+    searchInput.addEventListener('input', filterPublications);
+    departmentFilter.addEventListener('change', filterPublications);
+    yearFilter.addEventListener('change', filterPublications);
+    sortFilter.addEventListener('change', function() {
+        // Sort functionality can be implemented here
+        console.log('Sort by:', this.value);
+    });
+    
+    // Initialize all cards as visible
+    publicationCards.forEach(card => {
+        card.classList.add('visible');
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all cards
+    document.querySelectorAll('.card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
+});
+</script>
+{% endblock %}

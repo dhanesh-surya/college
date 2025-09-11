@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Exam Rules - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Exam Rules</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">{{ exam_rules_info.title }}</h1>
+        <p class="lead text-muted">{{ exam_rules_info.subtitle }}</p>
+    </div>
+
+    <!-- General Rules -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-gavel text-primary me-2"></i>General Examination Rules
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-clock me-2"></i>Timing & Attendance
+                    </h5>
+                    <div class="timing-rules">
+                        {{ exam_rules_info.timing_rules|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-ban me-2"></i>Prohibited Items
+                    </h5>
+                    <div class="prohibited-items">
+                        {{ exam_rules_info.prohibited_items|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Examination Conduct -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-user-graduate text-primary me-2"></i>Examination Conduct
+            </h3>
+        </div>
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary mb-3">
+                        <i class="fas fa-user-graduate me-2"></i>Examination Conduct Rules
+                    </h5>
+                    <div class="conduct-rules">
+                        {{ exam_rules_info.conduct_rules|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Answer Sheet Guidelines -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-file-alt text-primary me-2"></i>Answer Sheet Guidelines
+            </h3>
+        </div>
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Important Instructions
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Answer Sheet Details</h6>
+                            <div class="answer-sheet-details">
+                                {{ exam_rules_info.answer_sheet_details|safe }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Submission Rules</h6>
+                            <div class="submission-rules">
+                                {{ exam_rules_info.submission_rules|safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disciplinary Actions -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-exclamation-triangle text-primary me-2"></i>Disciplinary Actions
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-gavel me-2"></i>Violations & Penalties
+                    </h5>
+                    <div class="violations-penalties">
+                        {{ exam_rules_info.violations_penalties|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-shield-alt me-2"></i>Appeal Process
+                    </h5>
+                    <div class="appeal-process">
+                        {{ exam_rules_info.appeal_process|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Special Instructions -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-star text-primary me-2"></i>Special Instructions
+            </h3>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="special-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-calculator fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Calculators</h5>
+                    <p class="card-text text-muted">{{ exam_rules_info.calculator_rules }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="special-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-book fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Open Book Exams</h5>
+                    <p class="card-text text-muted">{{ exam_rules_info.open_book_rules }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="special-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-clock fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Time Extensions</h5>
+                    <p class="card-text text-muted">{{ exam_rules_info.time_extension_rules }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-phone text-primary me-2"></i>Contact Information
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-user-tie me-2"></i>Examination Controller
+                    </h5>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="fas fa-user text-primary me-2"></i>
+                            {{ exam_rules_info.controller_name }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            {{ exam_rules_info.controller_phone }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope text-info me-2"></i>
+                            {{ exam_rules_info.controller_email }}
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            Office Hours: {{ exam_rules_info.controller_office_hours }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-building me-2"></i>Examination Office
+                    </h5>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                            {{ exam_rules_info.office_location }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            {{ exam_rules_info.office_phone }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope text-info me-2"></i>
+                            {{ exam_rules_info.office_email }}
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            Working Days: {{ exam_rules_info.office_working_days }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Important Notice -->
+    <div class="bg-gradient-to-r from-red-50 to-orange-50 rounded-3 p-4 border-start border-danger border-4">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-triangle fa-2x text-danger me-3"></i>
+            <div>
+                <h5 class="text-danger mb-1">Important Notice</h5>
+                <p class="mb-0 text-muted">
+                    {{ exam_rules_info.important_notice }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.rule-icon, .special-icon {
+    transition: all 0.3s ease;
+}
+
+.card:hover .rule-icon,
+.card:hover .special-icon {
+    transform: scale(1.1);
+}
+
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #fef2f2, #fed7aa);
+}
+
+/* Card hover effects */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+
+/* Contact info styling */
+.contact-info p {
+    display: flex;
+    align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .rule-icon, .special-icon {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+}
+
+/* Custom icon for silence */
+.fa-silence::before {
+    content: "🔇";
+    font-style: normal;
+}
+</style>
+{% endblock %}

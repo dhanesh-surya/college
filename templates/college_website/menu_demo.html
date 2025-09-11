@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Menu Management Demo - {{ college_info.college_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'admin/css/menu_admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Header Section -->
+<section class="hero-section tw-bg-gradient-to-r tw-from-purple-500 tw-to-indigo-600 tw-py-12">
+    <div class="container">
+        <div class="row tw-justify-center text-center">
+            <div class="col-lg-8">
+                <h1 class="tw-text-3xl tw-font-bold tw-text-white tw-mb-3">Menu Management Demo</h1>
+                <p class="tw-text-lg tw-text-purple-100 tw-mb-4">Test the enhanced checkboxes and toggle switches</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Section -->
+<section class="demo-section tw-py-8">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+                    <div class="tw-p-6 tw-border-b tw-border-gray-200">
+                        <h3 class="tw-text-xl tw-font-bold tw-text-gray-800 tw-mb-0">Enhanced Checkboxes Demo</h3>
+                    </div>
+                    
+                    <div class="tw-p-6">
+                        <h4 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-4">Basic Enhanced Checkboxes</h4>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="enhanced-checkbox admin-compact">
+                                    <input type="checkbox" id="demo1" name="demo1">
+                                    <label for="demo1">
+                                        Active Status
+                                        <span class="checkbox-status"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="enhanced-checkbox admin-compact">
+                                    <input type="checkbox" id="demo2" name="demo2" checked>
+                                    <label for="demo2">
+                                        Featured Item
+                                        <span class="checkbox-status"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="tw-my-6">
+                        
+                        <h4 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-4">Enhanced Checkboxes Demo</h4>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="enhanced-checkbox admin-compact">
+                                    <input type="checkbox" id="toggle1" name="toggle1">
+                                    <label for="toggle1">
+                                        Show Research Menu
+                                        <span class="checkbox-status"></span>
+                                        <span class="status-text">Inactive</span>
+                                    </label>
+                                </div>
+                                <div class="form-text tw-text-gray-500">Control visibility of research section</div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="enhanced-checkbox admin-compact">
+                                    <input type="checkbox" id="toggle2" name="toggle2" checked>
+                                    <label for="toggle2">
+                                        Show Events Menu
+                                        <span class="checkbox-status"></span>
+                                        <span class="status-text">Active</span>
+                                    </label>
+                                </div>
+                                <div class="form-text tw-text-gray-500">Control visibility of events section</div>
+                            </div>
+                        </div>
+                        
+                        <hr class="tw-my-6">
+                        
+                        <h4 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-4">Form Demo</h4>
+                        
+                        <form class="needs-validation" novalidate>
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label tw-font-medium tw-text-gray-700">Menu Name</label>
+                                    <input type="text" class="form-control" placeholder="Enter menu name" required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label class="form-label tw-font-medium tw-text-gray-700">Icon Class</label>
+                                    <input type="text" class="form-control" placeholder="fas fa-home">
+                                </div>
+                                
+                                <div class="col-12">
+                                                                    <div class="enhanced-checkbox admin-compact">
+                                    <input type="checkbox" id="form_active" name="form_active" checked>
+                                    <label for="form_active">
+                                        Active Menu
+                                        <span class="checkbox-status"></span>
+                                    </label>
+                                </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                                                    <div class="enhanced-checkbox admin-compact">
+                                    <input type="checkbox" id="form_featured" name="form_featured">
+                                    <label for="form_featured">
+                                        Featured Menu
+                                        <span class="checkbox-status"></span>
+                                    </label>
+                                </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary tw-rounded-full tw-px-8 tw-py-2">
+                                        <i class="fas fa-save tw-mr-2"></i>Save Menu
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'admin/js/menu_admin.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the menu admin functionality
+    if (typeof initMenuAdmin === 'function') {
+        initMenuAdmin();
+    }
+    
+    // Demo form validation
+    const form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+    
+    // Demo checkbox interactions
+    const demoCheckboxes = document.querySelectorAll('#demo1, #demo2');
+    demoCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            console.log('Checkbox changed:', this.name, this.checked);
+        });
+    });
+    
+    // Demo enhanced checkbox interactions
+    const demoEnhancedCheckboxes = document.querySelectorAll('#toggle1, #toggle2');
+    demoEnhancedCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            console.log('Enhanced checkbox changed:', this.name, this.checked);
+            // Update status text
+            const statusText = this.closest('.enhanced-checkbox').querySelector('.status-text');
+            if (statusText) {
+                statusText.textContent = this.checked ? 'Active' : 'Inactive';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

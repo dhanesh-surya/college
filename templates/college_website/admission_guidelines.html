@@ -1,0 +1,1337 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admission Guidelines - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Bootstrap 5 Enhanced Admission Guidelines Page */
+:root {
+    --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    --success-gradient: linear-gradient(135deg, #198754 0%, #157347 100%);
+    --info-gradient: linear-gradient(135deg, #0dcaf0 0%, #0aa2c0 100%);
+    --warning-gradient: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    --danger-gradient: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --shadow-heavy: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Bootstrap 5 Enhanced Hero Section - Compact */
+.guidelines-hero {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 3rem 0 2rem;
+    color: white;
+}
+
+.guidelines-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.1"><polygon points="0,100 1000,0 1000,100"/></svg>');
+    background-size: cover;
+    background-position: bottom;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-stats {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    color: #333;
+    box-shadow: var(--shadow-medium);
+    margin-top: 1.5rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 0.75rem;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Bootstrap 5 Enhanced Cards */
+.guidelines-card {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow-light);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+
+.guidelines-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+}
+
+.guidelines-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.card-header-custom {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: none;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.guidelines-type-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--primary-gradient);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-gradient);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Bootstrap 5 Enhanced Process Steps - Compact */
+.process-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.process-step {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    height: 100%;
+    transition: all 0.4s ease;
+    box-shadow: var(--shadow-light);
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.process-step:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+    border-color: rgba(13, 110, 253, 0.2);
+}
+
+.process-number {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
+
+/* Bootstrap 5 Enhanced Buttons */
+.btn-modern {
+    background: var(--primary-gradient);
+    border: none;
+    color: white;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.4);
+    color: white;
+}
+
+.btn-success-modern {
+    background: var(--success-gradient);
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+}
+
+.btn-success-modern:hover {
+    box-shadow: 0 8px 25px rgba(25, 135, 84, 0.4);
+}
+
+.btn-outline-modern {
+    background: transparent;
+    border: 2px solid rgba(13, 110, 253, 0.3);
+    color: #0d6efd;
+    box-shadow: none;
+}
+
+.btn-outline-modern:hover {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    color: white;
+}
+
+/* Bootstrap 5 Enhanced Contact Section - Compact */
+.contact-section {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.contact-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.contact-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+}
+
+/* Bootstrap 5 Enhanced Feature Icons - Compact */
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-gradient);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    margin: 0 auto 1rem;
+    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.3);
+}
+
+/* Bootstrap 5 Enhanced Responsive Design - Compact */
+@media (max-width: 768px) {
+    .guidelines-hero {
+        padding: 2rem 0 1.5rem;
+    }
+    
+    .hero-stats {
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .process-container {
+        padding: 1.5rem 1rem;
+    }
+    
+    .contact-section {
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+}
+
+/* Bootstrap 5 Enhanced Animations */
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+
+/* Bootstrap 5 Enhanced Card Hover Effects */
+.guidelines-card {
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.guidelines-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.guidelines-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.guidelines-card:hover::before {
+    transform: scaleX(1);
+}
+
+/* Bootstrap 5 Enhanced Process Step Hover Effects */
+.process-step {
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.process-step:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+}
+
+.process-step .rounded-circle {
+    transition: all 0.3s ease;
+}
+
+.process-step:hover .rounded-circle {
+    transform: scale(1.1) rotate(10deg);
+}
+
+/* Bootstrap 5 Enhanced Button Hover Effects */
+.btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* Bootstrap 5 Enhanced List Group Item Hover */
+.list-group-item {
+    transition: all 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+    transform: translateX(5px);
+}
+
+/* Bootstrap 5 Enhanced Backdrop Blur */
+.backdrop-blur {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Bootstrap 5 Enhanced Focus States */
+.btn:focus,
+.card:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Bootstrap 5 Enhanced Loading States */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Bootstrap 5 Enhanced Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .fade-in-up,
+    .guidelines-card,
+    .process-step,
+    .btn,
+    .list-group-item {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Bootstrap 5 Enhanced Text Visibility */
+.guidelines-hero {
+    color: white !important;
+}
+
+.guidelines-hero h1,
+.guidelines-hero h2,
+.guidelines-hero h3,
+.guidelines-hero h4,
+.guidelines-hero h5,
+.guidelines-hero h6 {
+    color: white !important;
+}
+
+.guidelines-hero p,
+.guidelines-hero .lead {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.hero-stats {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #333 !important;
+}
+
+.hero-stats .stat-number {
+    color: #0d6efd !important;
+    -webkit-text-fill-color: #0d6efd !important;
+    background: none !important;
+}
+
+.hero-stats .fw-bold,
+.hero-stats .fw-semibold {
+    color: #333 !important;
+}
+
+.guidelines-card {
+    color: #333 !important;
+}
+
+.guidelines-card h1,
+.guidelines-card h2,
+.guidelines-card h3,
+.guidelines-card h4,
+.guidelines-card h5,
+.guidelines-card h6 {
+    color: #333 !important;
+}
+
+.guidelines-card p,
+.guidelines-card .text-muted {
+    color: #6c757d !important;
+}
+
+.process-step {
+    color: #333 !important;
+}
+
+.process-step h5 {
+    color: #333 !important;
+}
+
+.process-step p {
+    color: #6c757d !important;
+}
+
+.contact-section {
+    color: white !important;
+}
+
+.contact-section h3,
+.contact-section h4,
+.contact-section h5,
+.contact-section h6 {
+    color: white !important;
+}
+
+.contact-section p,
+.contact-section .lead {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.bg-primary.bg-gradient {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+    color: white !important;
+    position: relative;
+    z-index: 1;
+}
+
+.bg-primary.bg-gradient * {
+    color: white !important;
+}
+
+.bg-primary.bg-gradient .card {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.bg-primary.bg-gradient .card-body {
+    color: white !important;
+}
+
+.bg-primary.bg-gradient .card h6 {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bg-primary.bg-gradient .card p {
+    color: white !important;
+    font-weight: bold !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bg-primary.bg-gradient .card small {
+    color: white !important;
+    font-weight: bold !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bg-primary.bg-gradient .bg-white.bg-opacity-50 {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+.bg-primary.bg-gradient .bg-white.bg-opacity-50 i {
+    color: #0d6efd !important;
+    font-weight: bold !important;
+}
+
+.list-group-item {
+    color: #333 !important;
+}
+
+.list-group-item span {
+    color: #333 !important;
+}
+
+.btn-primary {
+    color: white !important;
+}
+
+.btn-outline-light {
+    color: white !important;
+    border-color: white !important;
+}
+
+.btn-outline-light:hover {
+    color: #0d6efd !important;
+    background-color: white !important;
+}
+
+.badge {
+    color: white !important;
+}
+
+.badge.bg-primary {
+    color: white !important;
+}
+
+.badge.bg-success {
+    color: white !important;
+}
+
+.badge.bg-info {
+    color: white !important;
+}
+
+.badge.bg-warning {
+    color: #212529 !important;
+}
+
+.form-control,
+.form-select {
+    color: #333 !important;
+}
+
+.form-control::placeholder,
+.form-select::placeholder {
+    color: #6c757d !important;
+}
+
+.alert {
+    color: #333 !important;
+}
+
+.alert-info {
+    color: #055160 !important;
+}
+
+.alert-success {
+    color: #0f5132 !important;
+}
+
+.alert-warning {
+    color: #664d03 !important;
+}
+
+.alert-danger {
+    color: #721c24 !important;
+}
+
+.fas,
+.far,
+.fab {
+    color: inherit !important;
+}
+
+.text-success {
+    color: #198754 !important;
+}
+
+.text-primary {
+    color: #0d6efd !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}
+
+.text-info {
+    color: #0dcaf0 !important;
+}
+
+.bg-white.bg-opacity-10 {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.bg-white.bg-opacity-25 {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.card {
+    color: #333 !important;
+}
+
+.card-body {
+    color: #333 !important;
+}
+
+.card-header {
+    color: #333 !important;
+}
+
+.text-white-75 {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.display-3,
+.display-4,
+.display-5,
+.display-6 {
+    color: inherit !important;
+}
+
+.breadcrumb-item.active {
+    color: white !important;
+}
+
+* {
+    color: inherit;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:admissions' %}" class="text-white">Admissions</a></li>
+<li class="breadcrumb-item active text-white">Guidelines</li>
+{% endblock %}
+
+{% block content %}
+<!-- Bootstrap 5 Enhanced Hero Section - Compact -->
+<div class="guidelines-hero py-4">
+    <div class="container hero-content">
+        <!-- Bootstrap 5 Grid with alignment utilities -->
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-3 mb-lg-0">
+            <div class="fade-in-up">
+                    <!-- Bootstrap 5 Typography utilities -->
+                    <h1 class="display-4 fw-bold mb-3 text-white">Admission <span class="text-warning">Guidelines</span></h1>
+                    <p class="lead fs-6 mb-3 text-white-75 lh-base">Complete guide to admission procedures, requirements, and important dates for prospective students.</p>
+                    <!-- Bootstrap 5 Flexbox utilities with gap -->
+                    <div class="d-flex gap-2 flex-wrap mb-3">
+                        <a href="#important-dates" class="btn btn-light btn-md rounded-pill px-4 py-2 fw-bold shadow-lg">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            Important Dates
+                        </a>
+                        <a href="#requirements" class="btn btn-outline-light btn-md rounded-pill px-4 py-2 fw-bold shadow-lg">
+                            <i class="fas fa-list-check me-2"></i>
+                            Requirements
+                    </a>
+                </div>
+            </div>
+        </div>
+            <!-- Bootstrap 5 Grid column with text utilities -->
+            <div class="col-lg-4 text-center">
+                <div class="fade-in-up stagger-2">
+                    <div class="bg-white bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center shadow-lg" style="width: 100px; height: 100px;">
+                        <i class="fas fa-file-alt text-white" style="font-size: 3rem;"></i>
+    </div>
+    </div>
+</div>
+        </div>
+        
+        <!-- Bootstrap 5 Enhanced Hero Stats - Compact -->
+        <div class="hero-stats bg-white bg-opacity-25 border border-white border-opacity-25 rounded-3 mt-3 p-3 shadow-lg backdrop-blur fade-in-up stagger-3">
+            <!-- Bootstrap 5 Grid system with gap utilities -->
+            <div class="row g-0">
+                <div class="col-md-3 border-end border-white border-opacity-25">
+                    <!-- Bootstrap 5 Text and spacing utilities -->
+                    <div class="text-center p-3">
+                        <div class="stat-number display-6 fw-black text-primary">March</div>
+                        <div class="fw-bold text-dark fs-6">Application Opens</div>
+                    </div>
+                    </div>
+                <div class="col-md-3 border-end border-white border-opacity-25">
+                    <div class="text-center p-3">
+                        <div class="stat-number display-6 fw-black text-primary">May</div>
+                        <div class="fw-bold text-dark fs-6">Deadline</div>
+                </div>
+            </div>
+                <div class="col-md-3 border-end border-white border-opacity-25">
+                    <div class="text-center p-3">
+                        <div class="stat-number display-6 fw-black text-primary">June</div>
+                        <div class="fw-bold text-dark fs-6">Merit List</div>
+                    </div>
+                    </div>
+                <div class="col-md-3">
+                    <div class="text-center p-3">
+                        <div class="stat-number display-6 fw-black text-primary">July</div>
+                        <div class="fw-bold text-dark fs-6">Classes Begin</div>
+                </div>
+            </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            
+<!-- Bootstrap 5 Enhanced Main Content - Compact -->
+<div class="container py-4">
+    <!-- Bootstrap 5 Enhanced Important Dates Section -->
+    <section id="important-dates" class="mb-4">
+        <!-- Bootstrap 5 Typography and spacing utilities -->
+        <div class="text-center mb-4">
+            <h2 class="display-6 fw-bold mb-2 text-dark">Important Dates</h2>
+            <p class="lead text-dark fs-6 fw-semibold">Mark your calendar with these crucial admission deadlines</p>
+                    </div>
+        
+        <!-- Bootstrap 5 Grid system with gap utilities -->
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-1 guidelines-card border-start border-primary border-4">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                <i class="fas fa-calendar-plus text-white"></i>
+                    </div>
+                            <div>
+                                <h6 class="fw-bold mb-1 text-dark">Application Opens</h6>
+                                <span class="badge bg-primary bg-gradient">March 1, 2024</span>
+                </div>
+            </div>
+                        <p class="text-muted mb-0 small">Online application portal opens for all programs</p>
+                    </div>
+                    </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-2 guidelines-card border-start border-success border-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-success bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-clock text-white"></i>
+                    </div>
+                            <div>
+                                <h5 class="fw-bold mb-1 text-dark">Application Deadline</h5>
+                                <span class="badge bg-success bg-gradient">May 31, 2024</span>
+                    </div>
+                </div>
+                        <p class="text-muted mb-0">Last date to submit completed applications</p>
+            </div>
+        </div>
+        </div>
+        
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-3 guidelines-card border-start border-info border-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-info bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-file-check text-white"></i>
+                    </div>
+                            <div>
+                                <h5 class="fw-bold mb-1 text-dark">Merit List</h5>
+                                <span class="badge bg-info bg-gradient">June 15, 2024</span>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-0">First merit list publication date</p>
+                    </div>
+                </div>
+                </div>
+                
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-1 guidelines-card border-start border-warning border-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-warning bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-user-check text-white"></i>
+                        </div>
+                        <div>
+                                <h5 class="fw-bold mb-1 text-dark">Counseling Starts</h5>
+                                <span class="badge bg-warning bg-gradient">June 20, 2024</span>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-0">Admission counseling and seat allocation begins</p>
+                    </div>
+                        </div>
+                    </div>
+                    
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-2 guidelines-card border-start border-danger border-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-danger bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-graduation-cap text-white"></i>
+                        </div>
+                        <div>
+                                <h5 class="fw-bold mb-1 text-dark">Classes Begin</h5>
+                                <span class="badge bg-danger bg-gradient">July 15, 2024</span>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-0">Academic session commences for new students</p>
+                    </div>
+                        </div>
+                    </div>
+                    
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-3 guidelines-card border-start border-secondary border-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-secondary bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-door-open text-white"></i>
+                        </div>
+                        <div>
+                                <h5 class="fw-bold mb-1 text-dark">Late Admission</h5>
+                                <span class="badge bg-secondary bg-gradient">July 31, 2024</span>
+                        </div>
+                    </div>
+                        <p class="text-muted mb-0">Last date for late admissions (if seats available)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 Enhanced Requirements Section -->
+    <section id="requirements" class="mb-4">
+        <!-- Bootstrap 5 Typography and spacing utilities -->
+        <div class="text-center mb-4">
+            <h2 class="display-6 fw-bold mb-2 text-dark">Admission Requirements</h2>
+            <p class="lead text-dark fs-6 fw-semibold">Essential documents and eligibility criteria for admission</p>
+        </div>
+        
+        <!-- Bootstrap 5 Grid system with gap utilities -->
+        <div class="row g-3">
+            <!-- Bootstrap 5 Card component with enhanced styling -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-1 guidelines-card">
+                    <!-- Bootstrap 5 Card header with custom styling -->
+                    <div class="card-header bg-gradient border-0 p-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <div class="d-flex align-items-center">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-primary bg-gradient rounded-3 d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-folder-open text-white"></i>
+                        </div>
+                        <div>
+                                <h5 class="fw-bold mb-1 text-dark">Required Documents</h5>
+                        </div>
+                    </div>
+                        </div>
+                    <!-- Bootstrap 5 Card body with list styling -->
+                    <div class="card-body p-3">
+                        <!-- Bootstrap 5 List group component -->
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item border-0 px-0 py-2 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                        <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Academic Certificates</h6>
+                                    <p class="text-muted mb-0 small">10th and 12th mark sheets and certificates</p>
+                        </div>
+                    </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Identity Proof</h6>
+                                    <p class="text-muted mb-0 small">Aadhar Card, Passport, or Driving License</p>
+                </div>
+            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Photographs</h6>
+                                    <p class="text-muted mb-0 small">Recent passport-size photographs (6 copies)</p>
+                    </div>
+                </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Category Certificate</h6>
+                                    <p class="text-muted mb-0 small">SC/ST/OBC certificate (if applicable)</p>
+                        </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                        <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Migration Certificate</h6>
+                                    <p class="text-muted mb-0 small">For students from other boards/universities</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+                    
+            <!-- Bootstrap 5 Card component with enhanced styling -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-2 guidelines-card">
+                    <!-- Bootstrap 5 Card header with custom styling -->
+                    <div class="card-header bg-gradient border-0 p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <div class="d-flex align-items-center">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-info bg-gradient rounded-3 d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-graduation-cap text-white fa-lg"></i>
+                        </div>
+                        <div>
+                                <h4 class="fw-bold mb-2 text-dark">Eligibility Criteria</h4>
+                        </div>
+                    </div>
+                        </div>
+                    <!-- Bootstrap 5 Card body with list styling -->
+                    <div class="card-body p-4">
+                        <!-- Bootstrap 5 List group component -->
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-star text-primary me-3 fa-lg mt-1"></i>
+                        <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Minimum Percentage</h6>
+                                    <p class="text-muted mb-0 small">50% aggregate in qualifying examination (45% for reserved categories)</p>
+                        </div>
+                    </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-star text-primary me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Age Limit</h6>
+                                    <p class="text-muted mb-0 small">As per university norms (generally 17-25 years)</p>
+                        </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-star text-primary me-3 fa-lg mt-1"></i>
+                        <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Subject Requirements</h6>
+                                    <p class="text-muted mb-0 small">Specific subjects as per course requirements</p>
+                        </div>
+                    </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-star text-primary me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Entrance Exam</h6>
+                                    <p class="text-muted mb-0 small">Valid scores if required for specific programs</p>
+                        </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-star text-primary me-3 fa-lg mt-1"></i>
+                        <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Medical Fitness</h6>
+                                    <p class="text-muted mb-0 small">Medical certificate for certain courses</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 Enhanced Application Process Section -->
+    <section class="mb-4">
+        <!-- Bootstrap 5 Typography and spacing utilities -->
+        <div class="text-center mb-4">
+            <h2 class="display-6 fw-bold mb-2 text-dark">Application Process</h2>
+            <p class="lead text-dark fs-6 fw-semibold">Step-by-step guide to complete your admission application</p>
+        </div>
+        
+        <!-- Bootstrap 5 Enhanced Process Container -->
+        <div class="process-container bg-gradient rounded-3 p-4 shadow-lg">
+            <!-- Bootstrap 5 Grid system with gap utilities -->
+            <div class="row g-3">
+                <div class="col-md-6 col-lg-3">
+                    <!-- Bootstrap 5 Process Step -->
+                    <div class="process-step fade-in-up stagger-1">
+                        <!-- Bootstrap 5 Process Number -->
+                        <div class="process-number rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 bg-primary bg-gradient text-white fw-bold fs-4" style="width: 50px; height: 50px;">
+                        1
+                    </div>
+                        <h6 class="fw-bold mb-2 text-dark">Online Registration</h6>
+                        <p class="text-muted mb-0 small">Create your account on the admission portal and fill basic information</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <!-- Bootstrap 5 Process Step -->
+                    <div class="process-step fade-in-up stagger-2">
+                        <!-- Bootstrap 5 Process Number -->
+                        <div class="process-number rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 bg-success bg-gradient text-white fw-bold fs-3" style="width: 70px; height: 70px;">
+                        2
+                    </div>
+                        <h5 class="fw-bold mb-2 text-dark">Fill Application Form</h5>
+                        <p class="text-muted mb-0 small">Complete the detailed application form with academic and personal details</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <!-- Bootstrap 5 Process Step -->
+                    <div class="process-step fade-in-up stagger-3">
+                        <!-- Bootstrap 5 Process Number -->
+                        <div class="process-number rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 bg-info bg-gradient text-white fw-bold fs-3" style="width: 70px; height: 70px;">
+                        3
+                    </div>
+                        <h5 class="fw-bold mb-2 text-dark">Upload Documents</h5>
+                        <p class="text-muted mb-0 small">Upload scanned copies of all required documents in specified format</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <!-- Bootstrap 5 Process Step -->
+                    <div class="process-step fade-in-up stagger-4">
+                        <!-- Bootstrap 5 Process Number -->
+                        <div class="process-number rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 bg-warning bg-gradient text-white fw-bold fs-3" style="width: 70px; height: 70px;">
+                        4
+                    </div>
+                        <h5 class="fw-bold mb-2 text-dark">Submit & Pay Fee</h5>
+                        <p class="text-muted mb-0 small">Review application, pay application fee, and submit for processing</p>
+                        </div>
+                    </div>
+                </div>
+            
+            <!-- Bootstrap 5 Button component -->
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">
+                    <i class="fas fa-rocket me-2"></i>
+                    Start Application
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 Enhanced Fee Structure Section -->
+    <section class="mb-4">
+        <!-- Bootstrap 5 Typography and spacing utilities -->
+        <div class="text-center mb-4">
+            <h2 class="display-6 fw-bold mb-2 text-dark">Fee Structure</h2>
+            <p class="lead text-dark fs-6 fw-semibold">Transparent fee structure for all programs</p>
+        </div>
+        
+        <!-- Bootstrap 5 Grid system with gap utilities -->
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-1 guidelines-card bg-primary bg-gradient text-white">
+                    <div class="card-body p-3 text-center">
+                        <!-- Bootstrap 5 Icon container -->
+                        <div class="feature-icon bg-white bg-opacity-25 rounded-3 d-flex align-items-center justify-content-center mx-auto mb-2" style="width: 60px; height: 60px;">
+                            <i class="fas fa-graduation-cap text-white fa-lg"></i>
+                        </div>
+                        <h6 class="fw-bold mb-2 text-white">Bachelor's Programs</h6>
+                        <div class="display-6 fw-bold mb-2 text-white">₹25,000</div>
+                        <p class="text-white-75 mb-0 small">Per Year</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-2 guidelines-card bg-info bg-gradient text-white">
+                    <div class="card-body p-4 text-center">
+                        <!-- Bootstrap 5 Icon container -->
+                        <div class="feature-icon bg-white bg-opacity-25 rounded-3 d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-user-graduate text-white fa-2x"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-white">Master's Programs</h5>
+                        <div class="display-4 fw-bold mb-2 text-white">₹30,000</div>
+                        <p class="text-white-75 mb-0">Per Year</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-3 guidelines-card bg-success bg-gradient text-white">
+                    <div class="card-body p-4 text-center">
+                        <!-- Bootstrap 5 Icon container -->
+                        <div class="feature-icon bg-white bg-opacity-25 rounded-3 d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas fa-certificate text-white fa-2x"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2 text-white">Diploma Programs</h5>
+                        <div class="display-4 fw-bold mb-2 text-white">₹15,000</div>
+                        <p class="text-white-75 mb-0">Per Year</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bootstrap 5 Alert component -->
+        <div class="mt-4">
+            <div class="alert alert-warning border-0 shadow-sm fade-in-up stagger-4" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-info-circle text-warning fs-4 me-3"></i>
+                <div>
+                        <h5 class="alert-heading fw-bold text-warning mb-2">Additional Information</h5>
+                        <p class="mb-0">Fee structure may vary for specialized programs. Scholarships available for meritorious and economically disadvantaged students.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 Enhanced Contact Section -->
+    <section class="bg-primary bg-gradient rounded-3 p-4 my-4 shadow-lg text-white">
+        <!-- Bootstrap 5 Grid with alignment utilities -->
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-3 mb-lg-0">
+                <!-- Bootstrap 5 Typography utilities with high contrast -->
+                <h3 class="display-6 fw-bold mb-3 text-white">Need Help with Admissions?</h3>
+                <p class="lead mb-3 text-white lh-base fw-semibold">Our dedicated admission counselors are here to assist you with the application process and answer all your questions.</p>
+                
+                <!-- Bootstrap 5 Grid for contact cards -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <!-- Bootstrap 5 Card with solid background for maximum visibility -->
+                        <div class="card border-0 bg-white bg-opacity-25 h-100 shadow">
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center">
+                                    <!-- Bootstrap 5 Icon container with solid background -->
+                                    <div class="bg-white bg-opacity-50 rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 50px; height: 50px;">
+                                        <i class="fas fa-phone text-primary fw-bold"></i>
+                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1 text-white">Call Us</h6>
+                                        <p class="mb-0 text-white fw-bold fs-6">+91-9425540666</p>
+                </div>
+            </div>
+                    </div>
+                </div>
+            </div>
+                    <div class="col-md-6">
+                        <!-- Bootstrap 5 Card with solid background for maximum visibility -->
+                        <div class="card border-0 bg-white bg-opacity-25 h-100 shadow">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center">
+                                    <!-- Bootstrap 5 Icon container with solid background -->
+                                    <div class="bg-white bg-opacity-50 rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 60px; height: 60px;">
+                                        <i class="fas fa-envelope text-primary fa-lg fw-bold"></i>
+                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1 text-white">Email Us</h6>
+                                        <p class="mb-0 text-white fw-bold fs-6">chaitanyapamgarh@gmail.com</p>
+                </div>
+            </div>
+        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bootstrap 5 Grid column with text utilities -->
+            <div class="col-lg-4 text-center">
+                <!-- Bootstrap 5 Button component -->
+                <a href="{% url 'college_website:contact' %}" class="btn btn-light btn-md rounded-pill px-4 py-2 fw-bold shadow-lg mb-2">
+                    <i class="fas fa-comments me-2"></i>
+                    Contact Admissions
+                </a>
+                <div class="mt-2">
+                    <small class="text-white fw-bold fs-6">Available Monday - Saturday, 9 AM - 5 PM</small>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Bootstrap 5 Enhanced JavaScript for animations -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Bootstrap 5 Enhanced smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Bootstrap 5 Enhanced Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Bootstrap 5 Enhanced fade-in-up animations
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.8s ease-out';
+        observer.observe(el);
+    });
+    
+    // Bootstrap 5 Enhanced card hover effects
+    document.querySelectorAll('.guidelines-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+    
+    // Bootstrap 5 Enhanced process step hover effects
+    document.querySelectorAll('.process-step').forEach(step => {
+        step.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        step.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+    
+    // Bootstrap 5 Enhanced button ripple effect
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+});
+</script>
+
+<!-- Bootstrap 5 Enhanced CSS for ripple effect -->
+<style>
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+</style>
+{% endblock %}

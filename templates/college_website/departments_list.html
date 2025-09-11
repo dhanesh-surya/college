@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Departments - {{ block.super }}{% endblock %}
+
+{% block meta_description %}
+Explore our academic departments across Science, Arts, Commerce, and Management disciplines. Learn about faculty, programs, and facilities.
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .department-card {
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .department-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .discipline-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+    }
+    .stats-item {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        color: white;
+    }
+    .filter-btn {
+        border-radius: 25px;
+        padding: 0.5rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+    .filter-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: transparent;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="tw-bg-gradient-to-r tw-from-blue-600 tw-to-purple-700 tw-text-white tw-py-16">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Academic Departments</h1>
+                <p class="lead mb-4">
+                    Discover our diverse range of academic departments offering quality education across multiple disciplines.
+                </p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb tw-bg-transparent">
+                        <li class="breadcrumb-item"><a href="{% url 'college_website:home' %}" class="tw-text-white tw-opacity-75">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'college_website:academics' %}" class="tw-text-white tw-opacity-75">Academics</a></li>
+                        <li class="breadcrumb-item active tw-text-white" aria-current="page">Departments</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-building tw-text-6xl tw-opacity-30"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="tw-py-12 tw-bg-gray-50">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stats-item text-center p-4">
+                    <i class="fas fa-building tw-text-3xl mb-3"></i>
+                    <h3 class="fw-bold">{{ total_departments }}</h3>
+                    <p class="mb-0">Total Departments</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-item text-center p-4">
+                    <i class="fas fa-flask tw-text-3xl mb-3"></i>
+                    <h3 class="fw-bold">{{ science_count }}</h3>
+                    <p class="mb-0">Science Departments</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-item text-center p-4">
+                    <i class="fas fa-palette tw-text-3xl mb-3"></i>
+                    <h3 class="fw-bold">{{ arts_count }}</h3>
+                    <p class="mb-0">Arts Departments</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-item text-center p-4">
+                    <i class="fas fa-chart-line tw-text-3xl mb-3"></i>
+                    <h3 class="fw-bold">{{ commerce_count }}</h3>
+                    <p class="mb-0">Commerce Departments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="tw-py-8 tw-bg-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center mb-4">
+                    <h3 class="mb-3">Filter by Discipline</h3>
+                    <div class="btn-group flex-wrap" role="group">
+                        <a href="{% url 'college_website:departments_list' %}" 
+                           class="btn filter-btn {% if not current_discipline %}active{% endif %}">
+                            All Departments
+                        </a>
+                        {% for value, label in discipline_choices %}
+                        <a href="{% url 'college_website:departments_list' %}?discipline={{ value }}" 
+                           class="btn filter-btn {% if current_discipline == value %}active{% endif %}">
+                            {{ label }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Departments Grid -->
+<section class="tw-py-12">
+    <div class="container">
+        {% if departments %}
+        <div class="row g-4">
+            {% for department in departments %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card department-card h-100">
+                    {% if department.department_image %}
+                    <img src="{{ department.department_image.url }}" class="card-img-top" alt="{{ department.name }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="tw-bg-gradient-to-r tw-from-blue-400 tw-to-purple-500 tw-h-48 tw-flex tw-items-center tw-justify-center">
+                        <i class="fas fa-building tw-text-white tw-text-4xl"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title fw-bold">{{ department.name }}</h5>
+                            <span class="discipline-badge bg-primary text-white">{{ department.get_discipline_display }}</span>
+                        </div>
+                        
+                        {% if department.short_description %}
+                        <p class="card-text text-muted">{{ department.short_description|truncatewords:20 }}</p>
+                        {% endif %}
+                        
+                        <div class="row g-2 mb-3">
+                            {% if department.head_of_department %}
+                            <div class="col-12">
+                                <small class="text-muted">
+                                    <i class="fas fa-user-tie me-1"></i>
+                                    HOD: {{ department.head_of_department }}
+                                </small>
+                            </div>
+                            {% endif %}
+                            
+                            {% if department.established_year %}
+                            <div class="col-6">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    Est. {{ department.established_year }}
+                                </small>
+                            </div>
+                            {% endif %}
+                            
+                            {% if department.faculty_count %}
+                            <div class="col-6">
+                                <small class="text-muted">
+                                    <i class="fas fa-users me-1"></i>
+                                    {{ department.faculty_count }} Faculty
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <a href="{{ department.get_absolute_url }}" class="btn btn-primary w-100">
+                                Learn More <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <nav aria-label="Departments pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if current_discipline %}&discipline={{ current_discipline }}{% endif %}">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_discipline %}&discipline={{ current_discipline }}{% endif %}">Previous</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if current_discipline %}&discipline={{ current_discipline }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_discipline %}&discipline={{ current_discipline }}{% endif %}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if current_discipline %}&discipline={{ current_discipline }}{% endif %}">Last</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="tw-py-16">
+                    <i class="fas fa-search tw-text-6xl tw-text-gray-400 mb-4"></i>
+                    <h3 class="tw-text-gray-600">No Departments Found</h3>
+                    <p class="tw-text-gray-500">
+                        {% if current_discipline %}
+                        No departments found for {{ current_discipline|title }} discipline.
+                        {% else %}
+                        No departments are currently available.
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'college_website:departments_list' %}" class="btn btn-primary">View All Departments</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Featured Departments Section -->
+{% if featured_departments and not current_discipline %}
+<section class="tw-py-12 tw-bg-gray-50">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Featured Departments</h2>
+            <p class="lead tw-text-gray-600">Highlighting our most distinguished academic departments</p>
+        </div>
+        
+        <div class="row g-4">
+            {% for department in featured_departments %}
+            <div class="col-lg-4">
+                <div class="card department-card h-100 border-primary">
+                    <div class="card-body text-center">
+                        <div class="tw-bg-gradient-to-r tw-from-yellow-400 tw-to-orange-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                            <i class="fas fa-star tw-text-white tw-text-xl"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">{{ department.name }}</h5>
+                        <span class="discipline-badge bg-warning text-dark mb-3 d-inline-block">{{ department.get_discipline_display }}</span>
+                        {% if department.short_description %}
+                        <p class="card-text">{{ department.short_description|truncatewords:15 }}</p>
+                        {% endif %}
+                        <a href="{{ department.get_absolute_url }}" class="btn btn-outline-primary">Explore Department</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

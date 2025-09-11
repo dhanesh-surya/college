@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.contrib import messages
@@ -7,18 +8,23 @@ from django.views.generic import ListView, DetailView
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 from .models import (
     CollegeInfo, Program, Event, Notice, SocialInitiative,
     StudentTestimonial, ImportantLink, ContactMessage, Page,
     Menu, MenuItem, BlockRichText, BlockImageGallery, BlockVideoEmbed,
     BlockDownloadList, BlockTableHTML, BlockForm, Gallery, GalleryPhoto,
-    AdmissionInfo, ExamResult, LibraryResource, ELearningCourse, 
+    AdmissionInfo, ExamResult, LibraryResource, ELearningCourse, QuestionPaper,
     PlacementRecord, AlumniProfile, DirectorMessage, PrincipalMessage,
     IQACInfo, IQACReport, NAACInfo, NIRFInfo, AccreditationInfo, 
-    IQACFeedback, QualityInitiative, SideMenu, SideMenuItem
+    IQACFeedback, QualityInitiative, SideMenu, SideMenuItem, Department,
+    HeroBanner, ExamTimetable, ExamTimetableWeek, ExamTimetableExam, RevaluationInfo, ExamRulesInfo, ResearchCenterInfo,
+    PublicationInfo, Publication, PatentsProjectsInfo, Patent, ResearchProject, IndustryCollaboration,
+    ConsultancyInfo, ConsultancyService, ConsultancyExpertise, ConsultancySuccessStory,
+    HeroCarouselSlide, HeroCarouselSettings
 )
-from .forms import ContactForm, SearchForm
+from .forms import ContactForm, SearchForm, ExamTimetableBulkForm, ExamTimetableWeekForm, ExamTimetableExamForm, ProgramForm, ProgramCreateForm, ProgramUpdateForm, ProgramQuickEditForm, ExamTimetableForm
 
 
 def get_college_info():
@@ -40,16 +46,35 @@ def get_side_menus_for_request(request):
 
 def home_view(request):
     """Homepage view"""
+    from .models import SliderImage
+    
     college_info = get_college_info()
     recent_notices = Notice.objects.filter(is_active=True)[:5]
     recent_events = Event.objects.filter(is_active=True)[:5]
     testimonials = StudentTestimonial.objects.filter(is_active=True)[:6]
     quick_links = ImportantLink.objects.filter(is_active=True, type='quick')[:6]
-    
+
     # Get director's and principal's messages for homepage display
     director_message = DirectorMessage.objects.filter(is_active=True, show_on_homepage=True).first()
     principal_message = PrincipalMessage.objects.filter(is_active=True, show_on_homepage=True).first()
+
+    # Get active hero banner
+    active_hero_banner = HeroBanner.objects.filter(is_active=True).first()
     
+    # Get slider images
+    slider_images = SliderImage.objects.filter(is_active=True).order_by('ordering')
+
+    # Get hero carousel data
+    hero_carousel_settings = HeroCarouselSettings.get_settings()
+    hero_carousel_slides = HeroCarouselSlide.objects.filter(
+        is_active=True
+    ).order_by('display_order', 'created_at')
+
+    # News & Announcements - Only "general" announcements
+    recent_announcements = Notice.objects.filter(
+        is_active=True, category="general"
+    ).order_by("-publish_date")[:5]
+
     context = {
         'college_info': college_info,
         'recent_notices': recent_notices,
@@ -58,8 +83,22 @@ def home_view(request):
         'quick_links': quick_links,
         'director_message': director_message,
         'principal_message': principal_message,
+        'recent_announcements': recent_announcements,
+        'active_hero_banner': active_hero_banner,
+        'slider_images': slider_images,
+        'hero_carousel_settings': hero_carousel_settings,
+        'hero_carousel_slides': hero_carousel_slides,
     }
     return render(request, 'college_website/home.html', context)
+
+
+def menu_test_view(request):
+    """Menu visibility test view for debugging"""
+    college_info = get_college_info()
+    context = {
+        'college_info': college_info,
+    }
+    return render(request, 'college_website/menu_test.html', context)
 
 
 def about_view(request):
@@ -71,6 +110,28 @@ def about_view(request):
     return render(request, 'college_website/about.html', context)
 
 
+def vision_mission_view(request):
+    """Vision & Mission page view"""
+    from .models import VisionMissionContent
+    
+    college_info = get_college_info()
+    
+    # Get active vision mission content
+    vision_mission_content = VisionMissionContent.objects.filter(is_active=True).first()
+    
+    # Get active core values if content exists
+    core_values = []
+    if vision_mission_content:
+        core_values = vision_mission_content.core_values.filter(is_active=True).order_by('ordering')
+    
+    context = {
+        'college_info': college_info,
+        'vision_mission_content': vision_mission_content,
+        'core_values': core_values,
+    }
+    return render(request, 'college_website/vision_mission.html', context)
+
+
 class ProgramsListView(ListView):
     """Programs listing view"""
     model = Program
@@ -80,15 +141,36 @@ class ProgramsListView(ListView):
     
     def get_queryset(self):
         queryset = Program.objects.filter(is_active=True)
+        
+        # Filter by discipline (stream)
         discipline = self.request.GET.get('discipline')
         if discipline:
             queryset = queryset.filter(discipline=discipline)
+        
+        # Filter by degree type
+        degree_type = self.request.GET.get('degree_type')
+        if degree_type:
+            queryset = queryset.filter(degree_type=degree_type)
+        
+        # Search functionality
+        search_query = self.request.GET.get('search')
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(description__icontains=search_query) |
+                Q(department__icontains=search_query) |
+                Q(short_name__icontains=search_query)
+            )
+        
         return queryset.order_by('discipline', 'name')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['disciplines'] = Program.DISCIPLINE_CHOICES
         context['selected_discipline'] = self.request.GET.get('discipline', '')
+        context['degree_types'] = Program.DEGREE_TYPE_CHOICES
+        context['selected_degree_type'] = self.request.GET.get('degree_type', '')
+        context['search_query'] = self.request.GET.get('search', '')
         return context
 
 
@@ -217,8 +299,32 @@ def about_institution_view(request):
 
 def history_view(request):
     """College History view"""
+    from .models import HistoryContent
+    
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    history_content = HistoryContent.objects.filter(is_active=True).first()
+    
+    timeline_events = []
+    milestones = []
+    gallery_images = []
+    gallery_categories = []
+    
+    if history_content:
+        timeline_events = history_content.timeline_events.filter(is_active=True).order_by('ordering', 'year')
+        milestones = history_content.milestones.filter(is_active=True).order_by('ordering', 'title')
+        gallery_images = history_content.gallery_images.filter(is_active=True).order_by('category', 'ordering', '-year_taken')
+        
+        # Get unique categories for filtering
+        gallery_categories = gallery_images.values_list('category', flat=True).distinct()
+    
+    context = {
+        'college_info': college_info,
+        'history_content': history_content,
+        'timeline_events': timeline_events,
+        'milestones': milestones,
+        'gallery_images': gallery_images,
+        'gallery_categories': gallery_categories,
+    }
     return render(request, 'college_website/history.html', context)
 
 def governing_body_view(request):
@@ -278,12 +384,46 @@ def code_of_conduct_policy_view(request):
 
 # Academics Section Views
 def academics_view(request):
-    """Academics main view"""
+    """Academics main view with comprehensive data"""
     college_info = get_college_info()
-    programs = Program.objects.filter(is_active=True)
+    
+    # Get all active programs grouped by discipline
+    programs = Program.objects.filter(is_active=True).order_by('discipline', 'name')
+    programs_by_discipline = {}
+    for program in programs:
+        discipline = program.get_discipline_display()
+        if discipline not in programs_by_discipline:
+            programs_by_discipline[discipline] = []
+        programs_by_discipline[discipline].append(program)
+    
+    # Get all active departments
+    departments = Department.objects.filter(is_active=True).order_by('discipline', 'name')
+    departments_by_discipline = {}
+    for dept in departments:
+        discipline = dept.get_discipline_display()
+        if discipline not in departments_by_discipline:
+            departments_by_discipline[discipline] = []
+        departments_by_discipline[discipline].append(dept)
+    
+    # Get featured programs
+    featured_programs = Program.objects.filter(is_active=True, is_featured=True)[:6]
+    
+    # Get statistics
+    total_programs = programs.count()
+    total_departments = departments.count()
+    total_students = 5000  # This could be dynamic from a model
+    
     context = {
         'college_info': college_info,
         'programs': programs,
+        'programs_by_discipline': programs_by_discipline,
+        'departments': departments,
+        'departments_by_discipline': departments_by_discipline,
+        'featured_programs': featured_programs,
+        'total_programs': total_programs,
+        'total_departments': total_departments,
+        'total_students': total_students,
+        'disciplines': Program.DISCIPLINE_CHOICES,
     }
     return render(request, 'college_website/academics.html', context)
 
@@ -292,6 +432,116 @@ def faculties_view(request):
     college_info = get_college_info()
     context = {'college_info': college_info}
     return render(request, 'college_website/faculties.html', context)
+
+def academic_faculties_view(request):
+    """Academic Faculties view"""
+    from .models import Faculty, Department
+    
+    college_info = get_college_info()
+    
+    # Get all active faculty members grouped by department
+    faculty_by_department = {}
+    departments = Department.objects.filter(is_active=True).prefetch_related('faculty_members')
+    
+    for dept in departments:
+        faculty_members = dept.faculty_members.filter(
+            is_active=True, 
+            show_on_website=True
+        ).order_by('designation_order', 'name')
+        
+        if faculty_members.exists():
+            faculty_by_department[dept] = faculty_members
+    
+    context = {
+        'college_info': college_info,
+        'faculty_by_department': faculty_by_department,
+    }
+    return render(request, 'college_website/academic_faculties.html', context)
+
+def non_academic_faculties_view(request):
+    """Non-Academic Faculties view"""
+    from .models import NonAcademicStaff, Department
+    
+    college_info = get_college_info()
+    
+    # Get all active non-academic staff grouped by department
+    staff_by_department = {}
+    departments = Department.objects.filter(is_active=True).prefetch_related('non_academic_staff')
+    
+    for dept in departments:
+        staff_members = dept.non_academic_staff.filter(
+            is_active=True, 
+            show_on_website=True
+        ).order_by('designation_order', 'name')
+        
+        if staff_members.exists():
+            staff_by_department[dept] = staff_members
+    
+    context = {
+        'college_info': college_info,
+        'staff_by_department': staff_by_department,
+    }
+    return render(request, 'college_website/non_academic_faculties.html', context)
+
+def faculty_detail_view(request, dept_slug, slug):
+    """Individual faculty member detail view"""
+    from .models import Faculty, Department
+    from django.shortcuts import get_object_or_404
+    
+    college_info = get_college_info()
+    
+    # Get the faculty member
+    faculty = get_object_or_404(
+        Faculty.objects.select_related('department'),
+        slug=slug,
+        department__slug=dept_slug,
+        is_active=True,
+        show_on_website=True
+    )
+    
+    # Get other faculty members from the same department
+    related_faculty = Faculty.objects.filter(
+        department=faculty.department,
+        is_active=True,
+        show_on_website=True
+    ).exclude(id=faculty.id).order_by('designation_order', 'name')[:3]
+    
+    context = {
+        'college_info': college_info,
+        'faculty': faculty,
+        'related_faculty': related_faculty,
+    }
+    return render(request, 'college_website/faculty_detail.html', context)
+
+def staff_detail_view(request, dept_slug, slug):
+    """Individual non-academic staff member detail view"""
+    from .models import NonAcademicStaff, Department
+    from django.shortcuts import get_object_or_404
+    
+    college_info = get_college_info()
+    
+    # Get the staff member
+    staff = get_object_or_404(
+        NonAcademicStaff.objects.select_related('department'),
+        slug=slug,
+        department__slug=dept_slug,
+        is_active=True,
+        show_on_website=True
+    )
+    
+    # Get other staff members from the same department
+    related_staff = NonAcademicStaff.objects.filter(
+        department=staff.department,
+        is_active=True,
+        show_on_website=True
+    ).exclude(id=staff.id).order_by('designation_order', 'name')[:3]
+    
+    context = {
+        'college_info': college_info,
+        'staff': staff,
+        'related_staff': related_staff,
+    }
+    return render(request, 'college_website/staff_detail.html', context)
 
 def departments_view(request):
     """Departments main view"""
@@ -348,14 +598,50 @@ def management_department_view(request):
     return render(request, 'college_website/department_detail.html', context)
 
 def programs_view(request):
-    """Programs main view"""
+    """Programs main view with enhanced filtering"""
     college_info = get_college_info()
     programs = Program.objects.filter(is_active=True)
+    
+    # Filter by discipline (stream)
+    discipline = request.GET.get('discipline')
+    if discipline:
+        programs = programs.filter(discipline=discipline)
+    
+    # Filter by degree type
+    degree_type = request.GET.get('degree_type')
+    if degree_type:
+        programs = programs.filter(degree_type=degree_type)
+    
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        programs = programs.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(department__icontains=search_query) |
+            Q(short_name__icontains=search_query)
+        )
+    
+    # Order programs
+    programs = programs.order_by('discipline', 'name')
+    
+    # Pagination
+    paginator = Paginator(programs, 12)  # Show 12 programs per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     context = {
         'college_info': college_info,
-        'programs': programs,
+        'programs': page_obj,
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+        'disciplines': Program.DISCIPLINE_CHOICES,
+        'selected_discipline': request.GET.get('discipline', ''),
+        'degree_types': Program.DEGREE_TYPE_CHOICES,
+        'selected_degree_type': request.GET.get('degree_type', ''),
+        'search_query': request.GET.get('search', ''),
     }
-    return render(request, 'college_website/programs.html', context)
+    return render(request, 'college_website/programs_list.html', context)
 
 def ug_programs_view(request):
     """Undergraduate Programs view"""
@@ -444,12 +730,27 @@ def admission_eligibility_view(request):
     return render(request, 'college_website/admission_eligibility.html', context)
 
 def courses_offered_view(request):
-    """Courses Offered view"""
+    """Courses Offered view with dynamic program data"""
     college_info = get_college_info()
-    programs = Program.objects.filter(is_active=True)
+    
+    # Get all active programs
+    programs = Program.objects.filter(is_active=True).order_by('discipline', 'degree_type', 'name')
+    
+    # Separate undergraduate and postgraduate programs
+    ug_programs = programs.filter(degree_type='undergraduate')
+    pg_programs = programs.filter(degree_type='postgraduate')
+    
+    # Get unique departments
+    departments = programs.values_list('department', flat=True).distinct().exclude(department__isnull=True).exclude(department='')
+    
     context = {
         'college_info': college_info,
         'programs': programs,
+        'ug_programs': ug_programs,
+        'pg_programs': pg_programs,
+        'total_programs': programs.count(),
+        'total_departments': len(departments),
+        'departments': departments,
     }
     return render(request, 'college_website/courses_offered.html', context)
 
@@ -501,13 +802,76 @@ def exam_notices_view(request):
 def exam_timetable_view(request):
     """Exam Timetable view"""
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get active timetable (featured first, then most recent)
+    active_timetable = ExamTimetable.objects.filter(is_active=True).order_by('-is_featured', '-created_at').first()
+    
+    if active_timetable:
+        weeks = active_timetable.get_active_weeks()
+        context = {
+            'college_info': college_info,
+            'timetable': active_timetable,
+            'weeks': weeks,
+        }
+    else:
+        context = {
+            'college_info': college_info,
+            'timetable': None,
+            'weeks': [],
+        }
+    
     return render(request, 'college_website/exam_timetable.html', context)
 
 def question_papers_view(request):
-    """Question Papers view"""
+    """Question Papers view with dynamic data"""
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get all active question papers
+    question_papers = QuestionPaper.objects.filter(is_active=True).order_by('-academic_year', 'semester', 'subject')
+    
+    # Get filter parameters
+    subject_filter = request.GET.get('subject', '')
+    semester_filter = request.GET.get('semester', '')
+    year_filter = request.GET.get('year', '')
+    search_query = request.GET.get('search', '')
+    
+    # Apply filters
+    if subject_filter:
+        question_papers = question_papers.filter(subject=subject_filter)
+    if semester_filter:
+        question_papers = question_papers.filter(semester=semester_filter)
+    if year_filter:
+        question_papers = question_papers.filter(academic_year__icontains=year_filter)
+    if search_query:
+        question_papers = question_papers.filter(
+            Q(title__icontains=search_query) |
+            Q(subject__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
+    
+    # Get available filter options
+    available_subjects = QuestionPaper.get_available_subjects()
+    available_semesters = QuestionPaper.get_available_semesters()
+    available_years = QuestionPaper.get_available_years()
+    
+    # Separate featured and regular question papers
+    featured_papers = question_papers.filter(is_featured=True)
+    regular_papers = question_papers.filter(is_featured=False)
+    
+    context = {
+        'college_info': college_info,
+        'question_papers': question_papers,
+        'featured_papers': featured_papers,
+        'regular_papers': regular_papers,
+        'available_subjects': available_subjects,
+        'available_semesters': available_semesters,
+        'available_years': available_years,
+        'total_papers': question_papers.count(),
+        'subject_filter': subject_filter,
+        'semester_filter': semester_filter,
+        'year_filter': year_filter,
+        'search_query': search_query,
+    }
     return render(request, 'college_website/question_papers.html', context)
 
 def exam_results_view(request):
@@ -521,15 +885,45 @@ def exam_results_view(request):
     return render(request, 'college_website/exam_results.html', context)
 
 def revaluation_view(request):
-    """Revaluation view"""
+    """Revaluation view with dynamic content"""
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get active revaluation information
+    revaluation_info = RevaluationInfo.objects.filter(is_active=True).first()
+    
+    # If no active revaluation info exists, create default one
+    if not revaluation_info:
+        revaluation_info = RevaluationInfo.objects.create(
+            title="Revaluation",
+            subtitle="Apply for revaluation of your examination papers",
+            is_active=True
+        )
+    
+    context = {
+        'college_info': college_info,
+        'revaluation_info': revaluation_info,
+    }
     return render(request, 'college_website/revaluation.html', context)
 
 def exam_rules_view(request):
-    """Exam Rules view"""
+    """Exam Rules view with dynamic content"""
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get active exam rules information
+    exam_rules_info = ExamRulesInfo.objects.filter(is_active=True).first()
+    
+    # If no active exam rules info exists, create default one
+    if not exam_rules_info:
+        exam_rules_info = ExamRulesInfo.objects.create(
+            title="Examination Rules & Regulations",
+            subtitle="Important guidelines and rules for all examinations",
+            is_active=True
+        )
+    
+    context = {
+        'college_info': college_info,
+        'exam_rules_info': exam_rules_info,
+    }
     return render(request, 'college_website/exam_rules.html', context)
 
 # Research Section Views
@@ -540,21 +934,202 @@ def research_view(request):
     return render(request, 'college_website/research.html', context)
 
 def research_centers_view(request):
-    """Research Centers view"""
+    """Research Centers view with dynamic content"""
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get active research center information
+    research_center_info = ResearchCenterInfo.objects.filter(is_active=True).first()
+    
+    # If no active research center info exists, create default one
+    if not research_center_info:
+        research_center_info = ResearchCenterInfo.objects.create(
+            title="Research Centers",
+            subtitle="Advancing knowledge through cutting-edge research and innovation",
+            is_active=True
+        )
+    
+    context = {
+        'college_info': college_info,
+        'research_center_info': research_center_info,
+    }
     return render(request, 'college_website/research_centers.html', context)
 
 def publications_view(request):
-    """Publications view"""
+    """Publications view with dynamic content"""
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get active publication information
+    publication_info = PublicationInfo.objects.filter(is_active=True).first()
+    
+    # If no active publication info exists, create default one
+    if not publication_info:
+        publication_info = PublicationInfo.objects.create(
+            title="Research Publications",
+            subtitle="Explore our extensive collection of research publications, academic papers, and scholarly works that contribute to the advancement of knowledge across various disciplines.",
+            is_active=True
+        )
+    
+    # Get publications with search and filter functionality
+    publications = Publication.objects.filter(is_active=True)
+    
+    # Search functionality
+    search_query = request.GET.get('search', '')
+    if search_query:
+        publications = publications.filter(
+            Q(title__icontains=search_query) |
+            Q(authors__icontains=search_query) |
+            Q(abstract__icontains=search_query) |
+            Q(journal_name__icontains=search_query)
+        )
+    
+    # Filter by department
+    department_filter = request.GET.get('department', '')
+    if department_filter:
+        publications = publications.filter(department=department_filter)
+    
+    # Filter by journal type
+    journal_type_filter = request.GET.get('journal_type', '')
+    if journal_type_filter:
+        publications = publications.filter(journal_type=journal_type_filter)
+    
+    # Filter by year
+    year_filter = request.GET.get('year', '')
+    if year_filter:
+        publications = publications.filter(publication_year=year_filter)
+    
+    # Sort publications
+    sort_by = request.GET.get('sort_by', '-publication_year')
+    publications = publications.order_by(sort_by)
+    
+    # Get featured publications
+    featured_publications = publications.filter(is_featured=True)[:3]
+    
+    # Get recent publications (excluding featured)
+    recent_publications = publications.exclude(is_featured=True)[:6]
+    
+    # Get available filter options
+    available_departments = Publication.DEPARTMENT_CHOICES
+    available_journal_types = Publication.JOURNAL_TYPE_CHOICES
+    available_years = sorted(Publication.objects.filter(is_active=True).values_list('publication_year', flat=True).distinct(), reverse=True)
+    
+    context = {
+        'college_info': college_info,
+        'publication_info': publication_info,
+        'publications': publications,
+        'featured_publications': featured_publications,
+        'recent_publications': recent_publications,
+        'available_departments': available_departments,
+        'available_journal_types': available_journal_types,
+        'available_years': available_years,
+        'search_query': search_query,
+        'department_filter': department_filter,
+        'journal_type_filter': journal_type_filter,
+        'year_filter': year_filter,
+        'sort_by': sort_by,
+    }
     return render(request, 'college_website/publications.html', context)
 
 def patents_projects_view(request):
-    """Patents & Projects view"""
+    """Patents & Projects view with dynamic content"""
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get active patents & projects information
+    patents_projects_info = PatentsProjectsInfo.objects.filter(is_active=True).first()
+    
+    # If no active info exists, create default one
+    if not patents_projects_info:
+        patents_projects_info = PatentsProjectsInfo.objects.create(
+            title="Patents & Projects",
+            subtitle="Explore our innovative research projects and intellectual property achievements that drive technological advancement and contribute to society.",
+            is_active=True
+        )
+    
+    # Get patents with search and filter functionality
+    patents = Patent.objects.filter(is_active=True)
+    
+    # Search functionality
+    search_query = request.GET.get('search', '')
+    if search_query:
+        patents = patents.filter(
+            Q(title__icontains=search_query) |
+            Q(inventors__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(patent_number__icontains=search_query)
+        )
+    
+    # Filter by category (patent/project)
+    category_filter = request.GET.get('category', '')
+    if category_filter == 'patent':
+        patents = patents
+    elif category_filter == 'project':
+        patents = Patent.objects.none()  # Will be handled by projects
+    
+    # Filter by year
+    year_filter = request.GET.get('year', '')
+    if year_filter:
+        patents = patents.filter(filing_year=year_filter)
+    
+    # Sort patents
+    sort_by = request.GET.get('sort_by', 'date-desc')
+    if sort_by == 'date-desc':
+        patents = patents.order_by('-filing_year')
+    elif sort_by == 'date-asc':
+        patents = patents.order_by('filing_year')
+    elif sort_by == 'title':
+        patents = patents.order_by('title')
+    elif sort_by == 'title-desc':
+        patents = patents.order_by('-title')
+    
+    # Get research projects
+    projects = ResearchProject.objects.filter(is_active=True)
+    if search_query:
+        projects = projects.filter(
+            Q(title__icontains=search_query) |
+            Q(principal_investigator__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(funding_agency__icontains=search_query)
+        )
+    
+    if year_filter:
+        projects = projects.filter(start_year=year_filter)
+    
+    # Get industry collaborations
+    collaborations = IndustryCollaboration.objects.filter(is_active=True)
+    
+    # Get featured items
+    featured_patents = patents.filter(is_featured=True)[:2]
+    featured_projects = projects.filter(is_featured=True)[:2]
+    featured_collaborations = collaborations.filter(is_featured=True)[:3]
+    
+    # Get recent items (excluding featured)
+    recent_patents = patents.exclude(is_featured=True)[:2]
+    recent_projects = projects.exclude(is_featured=True)[:2]
+    
+    # Get available filter options
+    available_years = sorted(
+        list(set(
+            list(Patent.objects.filter(is_active=True).values_list('filing_year', flat=True)) +
+            list(ResearchProject.objects.filter(is_active=True).values_list('start_year', flat=True))
+        )), reverse=True
+    )
+    
+    context = {
+        'college_info': college_info,
+        'patents_projects_info': patents_projects_info,
+        'patents': patents,
+        'projects': projects,
+        'collaborations': collaborations,
+        'featured_patents': featured_patents,
+        'featured_projects': featured_projects,
+        'featured_collaborations': featured_collaborations,
+        'recent_patents': recent_patents,
+        'recent_projects': recent_projects,
+        'available_years': available_years,
+        'search_query': search_query,
+        'category_filter': category_filter,
+        'year_filter': year_filter,
+        'sort_by': sort_by,
+    }
     return render(request, 'college_website/patents_projects.html', context)
 
 def collaborations_mous_view(request):
@@ -570,9 +1145,36 @@ def innovation_incubation_view(request):
     return render(request, 'college_website/innovation_incubation.html', context)
 
 def consultancy_view(request):
-    """Consultancy view"""
+    """Consultancy view with dynamic content"""
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get active consultancy information
+    consultancy_info = ConsultancyInfo.objects.filter(is_active=True).first()
+    
+    # If no active info exists, create default one
+    if not consultancy_info:
+        consultancy_info = ConsultancyInfo.objects.create(
+            title="Consultancy Services",
+            subtitle="Leveraging our academic expertise and research capabilities to provide innovative solutions for industry challenges. Our consultancy services bridge the gap between academia and industry.",
+            is_active=True
+        )
+    
+    # Get consultancy services
+    services = ConsultancyService.objects.filter(is_active=True).order_by('display_order', 'title')
+    
+    # Get consultancy expertise areas
+    expertise_areas = ConsultancyExpertise.objects.filter(is_active=True).order_by('display_order', 'title')
+    
+    # Get success stories
+    success_stories = ConsultancySuccessStory.objects.filter(is_active=True).order_by('display_order', 'title')
+    
+    context = {
+        'college_info': college_info,
+        'consultancy_info': consultancy_info,
+        'services': services,
+        'expertise_areas': expertise_areas,
+        'success_stories': success_stories,
+    }
     return render(request, 'college_website/consultancy.html', context)
 
 # Student Support Section Views
@@ -588,6 +1190,60 @@ def student_portal_view(request):
     context = {'college_info': college_info}
     return render(request, 'college_website/student_portal.html', context)
 
+def student_register_view(request):
+    """Student registration view"""
+    college_info = get_college_info()
+    
+    if request.method == 'POST':
+        # Handle form submission
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        student_id = request.POST.get('student_id')
+        course = request.POST.get('course')
+        year = request.POST.get('year')
+        phone = request.POST.get('phone')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        terms = request.POST.get('terms')
+        newsletter = request.POST.get('newsletter')
+        
+        # Basic validation
+        if password1 != password2:
+            messages.error(request, 'Passwords do not match!')
+        elif not terms:
+            messages.error(request, 'Please accept the Terms of Service and Privacy Policy.')
+        else:
+            # Here you would typically create a user account
+            # For now, we'll just show a success message
+            messages.success(request, f'Account created successfully for {first_name} {last_name}! Please check your email for verification.')
+            return redirect('college_website:student_portal')
+    
+    context = {'college_info': college_info}
+    return render(request, 'college_website/student_register.html', context)
+
+def student_login_view(request):
+    """Student login view"""
+    college_info = get_college_info()
+    
+    if request.method == 'POST':
+        # Handle form submission
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        remember = request.POST.get('remember')
+        
+        # Basic validation
+        if not username or not password:
+            messages.error(request, 'Please fill in all required fields.')
+        else:
+            # Here you would typically authenticate the user
+            # For now, we'll just show a success message
+            messages.success(request, f'Welcome back, {username}!')
+            return redirect('college_website:student_portal')
+    
+    context = {'college_info': college_info}
+    return render(request, 'college_website/student_login.html', context)
+
 def library_view(request):
     """Library view"""
     college_info = get_college_info()
@@ -597,6 +1253,163 @@ def library_view(request):
         'library_resources': library_resources,
     }
     return render(request, 'college_website/library.html', context)
+
+
+# Exam Timetable Management Views
+@login_required
+def exam_timetable_manage(request):
+    """Staff view for managing exam timetables"""
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Staff privileges required.")
+        return redirect('college_website:exam_timetable')
+    
+    college_info = get_college_info()
+    timetables = ExamTimetable.objects.all().order_by('-academic_year', 'semester')
+    
+    if request.method == 'POST':
+        bulk_form = ExamTimetableBulkForm(request.POST)
+        if bulk_form.is_valid():
+            action = bulk_form.cleaned_data['action']
+            selected_items = bulk_form.cleaned_data['selected_items']
+            
+            if action == 'activate':
+                ExamTimetable.objects.filter(id__in=selected_items).update(is_active=True)
+                messages.success(request, f"{len(selected_items)} timetable(s) activated.")
+            elif action == 'deactivate':
+                ExamTimetable.objects.filter(id__in=selected_items).update(is_active=False)
+                messages.success(request, f"{len(selected_items)} timetable(s) deactivated.")
+            elif action == 'delete':
+                ExamTimetable.objects.filter(id__in=selected_items).delete()
+                messages.success(request, f"{len(selected_items)} timetable(s) deleted.")
+            
+            return redirect('college_website:exam_timetable_manage')
+    else:
+        bulk_form = ExamTimetableBulkForm()
+        # Populate choices for bulk form
+        bulk_form.fields['selected_items'].choices = [(t.id, t.name) for t in timetables]
+    
+    context = {
+        'college_info': college_info,
+        'timetables': timetables,
+        'bulk_form': bulk_form,
+    }
+    return render(request, 'college_website/exam_timetable_manage.html', context)
+
+
+@login_required
+def exam_timetable_create(request):
+    """Staff view for creating new exam timetables"""
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Staff privileges required.")
+        return redirect('college_website:exam_timetable')
+    
+    college_info = get_college_info()
+    
+    if request.method == 'POST':
+        form = ExamTimetableForm(request.POST)
+        if form.is_valid():
+            timetable = form.save()
+            messages.success(request, f"Timetable '{timetable.name}' created successfully!")
+            return redirect('college_website:exam_timetable_edit', timetable_id=timetable.id)
+    else:
+        form = ExamTimetableForm()
+    
+    context = {
+        'college_info': college_info,
+        'form': form,
+        'action': 'Create',
+    }
+    return render(request, 'college_website/exam_timetable_form.html', context)
+
+
+@login_required
+def exam_timetable_edit(request, timetable_id):
+    """Staff view for editing exam timetables"""
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Staff privileges required.")
+        return redirect('college_website:exam_timetable')
+    
+    college_info = get_college_info()
+    timetable = get_object_or_404(ExamTimetable, id=timetable_id)
+    
+    if request.method == 'POST':
+        form = ExamTimetableForm(request.POST, instance=timetable)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Timetable '{timetable.name}' updated successfully!")
+            return redirect('college_website:exam_timetable_edit', timetable_id=timetable.id)
+    else:
+        form = ExamTimetableForm(instance=timetable)
+    
+    context = {
+        'college_info': college_info,
+        'form': form,
+        'timetable': timetable,
+        'action': 'Edit',
+    }
+    return render(request, 'college_website/exam_timetable_form.html', context)
+
+
+@login_required
+def exam_timetable_week_manage(request, timetable_id):
+    """Staff view for managing weeks in a timetable"""
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Staff privileges required.")
+        return redirect('college_website:exam_timetable')
+    
+    college_info = get_college_info()
+    timetable = get_object_or_404(ExamTimetable, id=timetable_id)
+    weeks = timetable.weeks.all().order_by('week_number')
+    
+    if request.method == 'POST':
+        week_form = ExamTimetableWeekForm(request.POST)
+        if week_form.is_valid():
+            week = week_form.save(commit=False)
+            week.timetable = timetable
+            week.save()
+            messages.success(request, f"Week {week.week_number} added successfully!")
+            return redirect('college_website:exam_timetable_week_manage', timetable_id=timetable_id)
+    else:
+        week_form = ExamTimetableWeekForm()
+    
+    context = {
+        'college_info': college_info,
+        'timetable': timetable,
+        'weeks': weeks,
+        'week_form': week_form,
+    }
+    return render(request, 'college_website/exam_timetable_week_manage.html', context)
+
+
+@login_required
+def exam_timetable_exam_manage(request, week_id):
+    """Staff view for managing exams in a week"""
+    if not request.user.is_staff:
+        messages.error(request, "Access denied. Staff privileges required.")
+        return redirect('college_website:exam_timetable')
+    
+    college_info = get_college_info()
+    week = get_object_or_404(ExamTimetableWeek, id=week_id)
+    time_slots = week.time_slots.all().order_by('start_time')
+    
+    if request.method == 'POST':
+        exam_form = ExamTimetableExamForm(request.POST)
+        if exam_form.is_valid():
+            exam = exam_form.save(commit=False)
+            exam.time_slot = exam_form.cleaned_data['time_slot']
+            exam.save()
+            messages.success(request, f"Exam '{exam.subject_name}' added successfully!")
+            return redirect('college_website:exam_timetable_exam_manage', week_id=week_id)
+    else:
+        exam_form = ExamTimetableExamForm()
+    
+    context = {
+        'college_info': college_info,
+        'week': week,
+        'time_slots': time_slots,
+        'exam_form': exam_form,
+    }
+    return render(request, 'college_website/exam_timetable_exam_manage.html', context)
 
 def hostel_view(request):
     """Hostel view"""
@@ -615,10 +1428,93 @@ def sports_cultural_view(request):
     return render(request, 'college_website/sports_cultural.html', context)
 
 def nss_ncc_clubs_view(request):
-    """NSS, NCC & Clubs view"""
+    """NSS, NCC & Clubs view with dynamic content"""
+    from .models import NSSNCCClub, NSSNCCNotice, NSSNCCGallery, NSSNCCAchievement
+    from django.utils import timezone
+    
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get active clubs
+    clubs = NSSNCCClub.objects.filter(is_active=True).order_by('display_order', 'name')
+    
+    # Get featured clubs (before slicing)
+    featured_clubs = clubs.filter(is_featured=True)[:3]
+    
+    # Get recent notices (not expired) - get featured notices before slicing
+    notices_base = NSSNCCNotice.objects.filter(
+        is_active=True,
+        publish_date__lte=timezone.now()
+    ).exclude(
+        expiry_date__lt=timezone.now()
+    ).order_by('-publish_date', '-created_at')
+    
+    # Get featured notices (before slicing)
+    featured_notices = notices_base.filter(is_featured=True)[:5]
+    
+    # Get recent notices (after getting featured)
+    notices = notices_base[:10]
+    
+    # Get gallery images
+    gallery_images = NSSNCCGallery.objects.filter(is_active=True).order_by('display_order', '-created_at')[:12]
+    
+    # Get recent achievements
+    achievements = NSSNCCAchievement.objects.filter(is_active=True).order_by('-achievement_date', 'display_order')[:6]
+    
+    context = {
+        'college_info': college_info,
+        'clubs': clubs,
+        'notices': notices,
+        'gallery_images': gallery_images,
+        'achievements': achievements,
+        'featured_clubs': featured_clubs,
+        'featured_notices': featured_notices,
+    }
     return render(request, 'college_website/nss_ncc_clubs.html', context)
+
+
+def nss_ncc_notices_view(request):
+    """View all NSS-NCC notices"""
+    from .models import NSSNCCNotice, NSSNCCClub
+    from django.utils import timezone
+    from django.core.paginator import Paginator
+    
+    college_info = get_college_info()
+    
+    # Get all active notices (not expired)
+    notices = NSSNCCNotice.objects.filter(
+        is_active=True,
+        publish_date__lte=timezone.now()
+    ).exclude(
+        expiry_date__lt=timezone.now()
+    ).order_by('-publish_date', '-created_at')
+    
+    # Get all active clubs for filtering
+    clubs = NSSNCCClub.objects.filter(is_active=True).order_by('name')
+    
+    # Filter by club if specified
+    club_filter = request.GET.get('club')
+    if club_filter:
+        notices = notices.filter(related_club_id=club_filter)
+    
+    # Filter by category if specified
+    category_filter = request.GET.get('category')
+    if category_filter:
+        notices = notices.filter(category=category_filter)
+    
+    # Paginate results
+    paginator = Paginator(notices, 10)  # Show 10 notices per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'college_info': college_info,
+        'notices': page_obj,
+        'clubs': clubs,
+        'club_filter': club_filter,
+        'category_filter': category_filter,
+        'notice_categories': NSSNCCNotice.CATEGORY_CHOICES,
+    }
+    return render(request, 'college_website/nss_ncc_notices.html', context)
 
 def placement_cell_view(request):
     """Placement Cell view"""
@@ -631,12 +1527,69 @@ def placement_cell_view(request):
     return render(request, 'college_website/placement_cell.html', context)
 
 def alumni_view(request):
-    """Alumni view"""
+    """Enhanced Alumni view with search and filtering"""
+    from django.db.models import Q
+    
     college_info = get_college_info()
-    featured_alumni = AlumniProfile.objects.filter(is_featured=True, is_published=True)
+    
+    # Get all published alumni
+    alumni_list = AlumniProfile.objects.filter(is_published=True)
+    
+    # Search functionality
+    search_query = request.GET.get('q', '')
+    if search_query:
+        alumni_list = alumni_list.filter(
+            Q(name__icontains=search_query) |
+            Q(current_company__icontains=search_query) |
+            Q(current_position__icontains=search_query) |
+            Q(course__icontains=search_query) |
+            Q(bio__icontains=search_query)
+        )
+    
+    # Filter functionality
+    filter_type = request.GET.get('filter', '')
+    if filter_type == 'featured':
+        alumni_list = alumni_list.filter(is_featured=True)
+    elif filter_type == 'mentors':
+        alumni_list = alumni_list.filter(willing_to_mentor=True)
+    
+    # Year-based filtering
+    year_filter = request.GET.get('year', '')
+    if year_filter:
+        if year_filter == '2020-2024':
+            alumni_list = alumni_list.filter(graduation_year__gte=2020, graduation_year__lte=2024)
+        elif year_filter == '2015-2019':
+            alumni_list = alumni_list.filter(graduation_year__gte=2015, graduation_year__lte=2019)
+        elif year_filter == '2010-2014':
+            alumni_list = alumni_list.filter(graduation_year__gte=2010, graduation_year__lte=2014)
+        elif year_filter == '2005-2009':
+            alumni_list = alumni_list.filter(graduation_year__gte=2005, graduation_year__lte=2009)
+    
+    # Order alumni
+    alumni_list = alumni_list.order_by('-is_featured', '-graduation_year', 'name')
+    
+    # Generate graduation years for form
+    from datetime import datetime
+    current_year = datetime.now().year
+    graduation_years = [str(year) for year in range(current_year, current_year - 50, -1)]
+    
+    # Statistics
+    total_alumni = AlumniProfile.objects.filter(is_published=True).count()
+    countries = 35  # You can calculate this from location data
+    mentors = AlumniProfile.objects.filter(is_published=True, willing_to_mentor=True).count()
+    industries = 60  # You can calculate this from company/position data
+    
     context = {
         'college_info': college_info,
-        'alumni': featured_alumni,
+        'alumni': alumni_list,
+        'graduation_years': graduation_years,
+        'total_alumni': total_alumni,
+        'countries': countries,
+        'mentors': mentors,
+        'industries': industries,
+        'search_query': search_query,
+        'filter_type': filter_type,
+        'year_filter': year_filter,
     }
     return render(request, 'college_website/alumni.html', context)
 
@@ -1545,3 +2498,555 @@ class AlumniDetailView(DetailView):
     
     def get_queryset(self):
         return AlumniProfile.objects.filter(is_published=True)
+
+
+class DepartmentListView(ListView):
+    """List view for departments with filtering by discipline"""
+    model = Department
+    template_name = 'college_website/departments_list.html'
+    context_object_name = 'departments'
+    paginate_by = 12
+    
+    def get_queryset(self):
+        queryset = Department.objects.filter(is_active=True)
+        discipline = self.request.GET.get('discipline')
+        if discipline:
+            queryset = queryset.filter(discipline=discipline)
+        return queryset.order_by('ordering', 'name')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        discipline = self.request.GET.get('discipline')
+        
+        context.update({
+            'current_discipline': discipline,
+            'discipline_choices': Department.DISCIPLINE_CHOICES,
+            'total_departments': Department.objects.filter(is_active=True).count(),
+            'science_count': Department.objects.filter(is_active=True, discipline='science').count(),
+            'arts_count': Department.objects.filter(is_active=True, discipline='arts').count(),
+            'commerce_count': Department.objects.filter(is_active=True, discipline='commerce').count(),
+            'featured_departments': Department.objects.filter(is_active=True, is_featured=True)[:3],
+        })
+        return context
+
+
+class DepartmentDetailView(DetailView):
+    """Detail view for individual department"""
+    model = Department
+    template_name = 'college_website/department_detail.html'
+    context_object_name = 'department'
+    
+    def get_queryset(self):
+        return Department.objects.filter(is_active=True)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        department = self.get_object()
+        
+        # Get related programs
+        related_programs = department.get_programs()
+        
+        # Get other departments in same discipline
+        related_departments = Department.objects.filter(
+            discipline=department.discipline,
+            is_active=True
+        ).exclude(pk=department.pk)[:4]
+        
+        context.update({
+            'related_programs': related_programs,
+            'related_departments': related_departments,
+            'laboratories_list': [lab.strip() for lab in department.laboratories.split('\n') if lab.strip()] if department.laboratories else [],
+            'research_areas_list': [area.strip() for area in department.research_areas.split('\n') if area.strip()] if department.research_areas else [],
+            'programs_offered_list': [program.strip() for program in department.programs_offered.split('\n') if program.strip()] if department.programs_offered else [],
+            'facilities_list': [facility.strip() for facility in department.facilities.split('\n') if facility.strip()] if department.facilities else [],
+        })
+        return context
+
+
+def hero_banner_management(request):
+    """View for managing hero banner content and styling"""
+    from .forms import HeroBannerForm
+    
+    if request.method == 'POST':
+        form = HeroBannerForm(request.POST, request.FILES)
+        if form.is_valid():
+            hero_banner = form.save()
+            messages.success(request, f'Hero banner "{hero_banner.title}" has been saved successfully!')
+            return redirect('college_website:hero_banner_management')
+    else:
+        # Try to get existing active hero banner or create new form
+        try:
+            hero_banner = HeroBanner.objects.filter(is_active=True).first()
+            if hero_banner:
+                form = HeroBannerForm(instance=hero_banner)
+            else:
+                form = HeroBannerForm()
+        except:
+            form = HeroBannerForm()
+    
+    # Get all hero banners for management
+    all_hero_banners = HeroBanner.objects.all().order_by('order', '-created_at')
+    
+    context = {
+        'form': form,
+        'hero_banners': all_hero_banners,
+        'active_banner': HeroBanner.objects.filter(is_active=True).first(),
+    }
+
+    return render(request, 'college_website/hero_banner_management.html', context)
+
+
+# Program Management Views
+@login_required
+def program_list_view(request):
+    """List all programs with management options"""
+    college_info = get_college_info()
+    programs = Program.objects.all().order_by('discipline', 'name')
+    
+    # Filter by discipline
+    discipline = request.GET.get('discipline')
+    if discipline:
+        programs = programs.filter(discipline=discipline)
+    
+    # Filter by degree type
+    degree_type = request.GET.get('degree_type')
+    if degree_type:
+        programs = programs.filter(degree_type=degree_type)
+    
+    # Filter by active status
+    is_active = request.GET.get('is_active')
+    if is_active is not None:
+        programs = programs.filter(is_active=is_active == 'true')
+    
+    # Search functionality
+    search_query = request.GET.get('search')
+    if search_query:
+        programs = programs.filter(
+            Q(name__icontains=search_query) |
+            Q(short_name__icontains=search_query) |
+            Q(department__icontains=search_query)
+        )
+    
+    # Pagination
+    paginator = Paginator(programs, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'college_info': college_info,
+        'programs': page_obj,
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+        'disciplines': Program.DISCIPLINE_CHOICES,
+        'degree_types': Program.DEGREE_TYPE_CHOICES,
+        'selected_discipline': discipline,
+        'selected_degree_type': degree_type,
+        'selected_is_active': is_active,
+        'search_query': search_query,
+    }
+    return render(request, 'college_website/program_list.html', context)
+
+
+@login_required
+def program_create_view(request):
+    """Create a new program"""
+    college_info = get_college_info()
+    
+    if request.method == 'POST':
+        form = ProgramCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            program = form.save()
+            messages.success(request, f'Program "{program.name}" created successfully!')
+            return redirect('college_website:program_detail', slug=program.slug)
+    else:
+        form = ProgramCreateForm()
+    
+    context = {
+        'college_info': college_info,
+        'form': form,
+        'title': 'Create New Program',
+    }
+    return render(request, 'college_website/program_form.html', context)
+
+
+@login_required
+def program_update_view(request, slug):
+    """Update an existing program"""
+    college_info = get_college_info()
+    
+    try:
+        program = Program.objects.get(slug=slug)
+    except Program.DoesNotExist:
+        messages.error(request, 'Program not found.')
+        return redirect('college_website:program_list')
+    
+    if request.method == 'POST':
+        form = ProgramUpdateForm(request.POST, request.FILES, instance=program)
+        if form.is_valid():
+            program = form.save()
+            messages.success(request, f'Program "{program.name}" updated successfully!')
+            return redirect('college_website:program_detail', slug=program.slug)
+    else:
+        form = ProgramUpdateForm(instance=program)
+    
+    context = {
+        'college_info': college_info,
+        'form': form,
+        'program': program,
+        'title': f'Update {program.name}',
+    }
+    return render(request, 'college_website/program_form.html', context)
+
+
+@login_required
+def program_quick_edit_view(request, slug):
+    """Quick edit form for basic program information"""
+    college_info = get_college_info()
+    
+    try:
+        program = Program.objects.get(slug=slug)
+    except Program.DoesNotExist:
+        messages.error(request, 'Program not found.')
+        return redirect('college_website:program_list')
+    
+    if request.method == 'POST':
+        form = ProgramQuickEditForm(request.POST, instance=program)
+        if form.is_valid():
+            program = form.save()
+            messages.success(request, f'Program "{program.name}" updated successfully!')
+            return redirect('college_website:program_list')
+    else:
+        form = ProgramQuickEditForm(instance=program)
+    
+    context = {
+        'college_info': college_info,
+        'form': form,
+        'program': program,
+        'title': f'Quick Edit - {program.name}',
+    }
+    return render(request, 'college_website/program_quick_edit.html', context)
+
+
+@login_required
+def program_delete_view(request, slug):
+    """Delete a program"""
+    college_info = get_college_info()
+    
+    try:
+        program = Program.objects.get(slug=slug)
+    except Program.DoesNotExist:
+        messages.error(request, 'Program not found.')
+        return redirect('college_website:program_list')
+    
+    if request.method == 'POST':
+        program_name = program.name
+        program.delete()
+        messages.success(request, f'Program "{program_name}" deleted successfully!')
+        return redirect('college_website:program_list')
+    
+    context = {
+        'college_info': college_info,
+        'program': program,
+    }
+    return render(request, 'college_website/program_confirm_delete.html', context)
+
+
+@login_required
+def program_toggle_status_view(request, slug):
+    """Toggle program active status"""
+    try:
+        program = Program.objects.get(slug=slug)
+        program.is_active = not program.is_active
+        program.save()
+        
+        status = "activated" if program.is_active else "deactivated"
+        messages.success(request, f'Program "{program.name}" {status} successfully!')
+    except Program.DoesNotExist:
+        messages.error(request, 'Program not found.')
+    
+    return redirect('college_website:program_list')
+
+
+@login_required
+def program_toggle_featured_view(request, slug):
+    """Toggle program featured status"""
+    try:
+        program = Program.objects.get(slug=slug)
+        program.is_featured = not program.is_featured
+        program.save()
+        
+        status = "featured" if program.is_featured else "unfeatured"
+        messages.success(request, f'Program "{program.name}" {status} successfully!')
+    except Program.DoesNotExist:
+        messages.error(request, 'Program not found.')
+    
+    return redirect('college_website:program_list')
+
+
+def program_detail_view(request, slug):
+    """Detailed view of a specific program"""
+    college_info = get_college_info()
+    
+    try:
+        program = Program.objects.get(slug=slug, is_active=True)
+    except Program.DoesNotExist:
+        messages.error(request, 'Program not found or not available.')
+        return redirect('college_website:programs')
+    
+    # Get related programs
+    related_programs = Program.objects.filter(
+        is_active=True,
+        discipline=program.discipline
+    ).exclude(id=program.id)[:4]
+    
+    context = {
+        'college_info': college_info,
+        'program': program,
+        'related_programs': related_programs,
+    }
+    return render(request, 'college_website/program_detail.html', context)
+
+
+# Question Paper Management Views
+@login_required
+def question_paper_list_view(request):
+    """List all question papers with management options"""
+    from .forms import QuestionPaperSearchForm
+    
+    # Get all question papers
+    question_papers = QuestionPaper.objects.all().order_by('-academic_year', 'semester', 'subject')
+    
+    # Apply search and filters
+    search_form = QuestionPaperSearchForm(request.GET)
+    if search_form.is_valid():
+        search = search_form.cleaned_data.get('search')
+        subject = search_form.cleaned_data.get('subject')
+        semester = search_form.cleaned_data.get('semester')
+        degree_type = search_form.cleaned_data.get('degree_type')
+        academic_year = search_form.cleaned_data.get('academic_year')
+        is_featured = search_form.cleaned_data.get('is_featured')
+        
+        if search:
+            question_papers = question_papers.filter(
+                Q(title__icontains=search) |
+                Q(subject__icontains=search) |
+                Q(description__icontains=search)
+            )
+        if subject:
+            question_papers = question_papers.filter(subject=subject)
+        if semester:
+            question_papers = question_papers.filter(semester=semester)
+        if degree_type:
+            question_papers = question_papers.filter(degree_type=degree_type)
+        if academic_year:
+            question_papers = question_papers.filter(academic_year__icontains=academic_year)
+        if is_featured:
+            question_papers = question_papers.filter(is_featured=True)
+    
+    # Pagination
+    from django.core.paginator import Paginator
+    paginator = Paginator(question_papers, 20)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'question_papers': page_obj,
+        'search_form': search_form,
+        'is_paginated': page_obj.has_other_pages(),
+    }
+    return render(request, 'college_website/question_paper_list.html', context)
+
+
+@login_required
+def question_paper_create_view(request):
+    """Create new question paper"""
+    from .forms import QuestionPaperCreateForm
+    
+    if request.method == 'POST':
+        form = QuestionPaperCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            question_paper = form.save()
+            messages.success(request, f'Question paper "{question_paper.title}" created successfully!')
+            return redirect('college_website:question_paper_list')
+    else:
+        form = QuestionPaperCreateForm()
+    
+    context = {
+        'form': form,
+        'title': 'Create Question Paper',
+        'submit_text': 'Create Question Paper',
+    }
+    return render(request, 'college_website/question_paper_form.html', context)
+
+
+@login_required
+def question_paper_update_view(request, slug):
+    """Update existing question paper"""
+    from .forms import QuestionPaperUpdateForm
+    
+    try:
+        question_paper = QuestionPaper.objects.get(slug=slug)
+    except QuestionPaper.DoesNotExist:
+        messages.error(request, 'Question paper not found.')
+        return redirect('college_website:question_paper_list')
+    
+    if request.method == 'POST':
+        form = QuestionPaperUpdateForm(request.POST, request.FILES, instance=question_paper)
+        if form.is_valid():
+            question_paper = form.save()
+            messages.success(request, f'Question paper "{question_paper.title}" updated successfully!')
+            return redirect('college_website:question_paper_list')
+    else:
+        form = QuestionPaperUpdateForm(instance=question_paper)
+    
+    context = {
+        'form': form,
+        'question_paper': question_paper,
+        'title': 'Update Question Paper',
+        'submit_text': 'Update Question Paper',
+    }
+    return render(request, 'college_website/question_paper_form.html', context)
+
+
+@login_required
+def question_paper_quick_edit_view(request, slug):
+    """Quick edit for essential question paper fields"""
+    from .forms import QuestionPaperQuickEditForm
+    
+    try:
+        question_paper = QuestionPaper.objects.get(slug=slug)
+    except QuestionPaper.DoesNotExist:
+        messages.error(request, 'Question paper not found.')
+        return redirect('college_website:question_paper_list')
+    
+    if request.method == 'POST':
+        form = QuestionPaperQuickEditForm(request.POST, instance=question_paper)
+        if form.is_valid():
+            question_paper = form.save()
+            messages.success(request, f'Question paper "{question_paper.title}" updated successfully!')
+            return redirect('college_website:question_paper_list')
+    else:
+        form = QuestionPaperQuickEditForm(instance=question_paper)
+    
+    context = {
+        'form': form,
+        'question_paper': question_paper,
+        'title': 'Quick Edit Question Paper',
+        'submit_text': 'Update',
+    }
+    return render(request, 'college_website/question_paper_quick_edit.html', context)
+
+
+@login_required
+def question_paper_delete_view(request, slug):
+    """Delete question paper"""
+    try:
+        question_paper = QuestionPaper.objects.get(slug=slug)
+    except QuestionPaper.DoesNotExist:
+        messages.error(request, 'Question paper not found.')
+        return redirect('college_website:question_paper_list')
+    
+    if request.method == 'POST':
+        title = question_paper.title
+        question_paper.delete()
+        messages.success(request, f'Question paper "{title}" deleted successfully!')
+        return redirect('college_website:question_paper_list')
+    
+    context = {
+        'question_paper': question_paper,
+    }
+    return render(request, 'college_website/question_paper_confirm_delete.html', context)
+
+
+@login_required
+def question_paper_toggle_status_view(request, slug):
+    """Toggle active status of question paper"""
+    try:
+        question_paper = QuestionPaper.objects.get(slug=slug)
+        question_paper.is_active = not question_paper.is_active
+        question_paper.save()
+        
+        status = "activated" if question_paper.is_active else "deactivated"
+        messages.success(request, f'Question paper "{question_paper.title}" {status} successfully!')
+    except QuestionPaper.DoesNotExist:
+        messages.error(request, 'Question paper not found.')
+    
+    return redirect('college_website:question_paper_list')
+
+
+@login_required
+def question_paper_toggle_featured_view(request, slug):
+    """Toggle featured status of question paper"""
+    try:
+        question_paper = QuestionPaper.objects.get(slug=slug)
+        question_paper.is_featured = not question_paper.is_featured
+        question_paper.save()
+        
+        status = "featured" if question_paper.is_featured else "unfeatured"
+        messages.success(request, f'Question paper "{question_paper.title}" {status} successfully!')
+    except QuestionPaper.DoesNotExist:
+        messages.error(request, 'Question paper not found.')
+    
+    return redirect('college_website:question_paper_list')
+
+
+def question_paper_detail_view(request, slug):
+    """Public view for question paper details"""
+    try:
+        question_paper = QuestionPaper.objects.get(slug=slug, is_active=True)
+    except QuestionPaper.DoesNotExist:
+        messages.error(request, 'Question paper not found.')
+        return redirect('college_website:question_papers')
+    
+    # Get related question papers
+    related_papers = QuestionPaper.objects.filter(
+        is_active=True,
+        subject=question_paper.subject
+    ).exclude(id=question_paper.id)[:4]
+    
+    context = {
+        'question_paper': question_paper,
+        'related_papers': related_papers,
+    }
+    return render(request, 'college_website/question_paper_detail.html', context)
+
+
+def question_paper_download_view(request, slug):
+    """Handle question paper downloads"""
+    try:
+        question_paper = QuestionPaper.objects.get(slug=slug, is_active=True)
+        
+        # Increment download count
+        question_paper.increment_download_count()
+        
+        # Return file response
+        from django.http import FileResponse
+        return FileResponse(
+            question_paper.question_paper_file,
+            as_attachment=True,
+            filename=f"{question_paper.title}.pdf"
+        )
+    except QuestionPaper.DoesNotExist:
+        messages.error(request, 'Question paper not found.')
+        return redirect('college_website:question_papers')
+
+
+def navigation_demo_view(request):
+    """Navigation demo page to showcase the new navigation menu"""
+    college_info = get_college_info()
+    
+    context = {
+        'college_info': college_info,
+        'page_title': 'Navigation Demo',
+    }
+    return render(request, 'college_website/navigation_demo.html', context)
+
+
+def test_navigation_view(request):
+    """Simple test page for navigation"""
+    return render(request, 'test_navigation.html')
+
+
+def simple_nav_test_view(request):
+    """Ultra-simple navigation test page"""
+    return render(request, 'simple_nav_test.html')

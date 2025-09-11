@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Examinations - {{ college_info.college_name }}{% endblock %}
+
+{% block content %}
+<style>
+    .quick-actions a {
+        text-decoration: none !important;
+    }
+    .quick-actions a:hover {
+        text-decoration: none !important;
+    }
+    .quick-actions h4,
+    .quick-actions p {
+        text-decoration: none !important;
+    }
+</style>
+<!-- Header Section -->
+<section class="hero-section tw-bg-gradient-to-r tw-from-blue-600 tw-to-purple-700 tw-py-16">
+    <div class="container">
+        <div class="row tw-justify-center text-center">
+            <div class="col-lg-8">
+                <h1 class="tw-text-4xl tw-font-bold tw-text-white tw-mb-4">Examinations</h1>
+                <p class="tw-text-xl tw-text-blue-100 tw-mb-6">Comprehensive examination management and information center</p>
+                <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-3">
+                    <div class="tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-px-4 tw-py-2">
+                        <i class="fas fa-calendar-alt tw-text-white tw-mr-2"></i>
+                        <span class="tw-text-white tw-font-medium tw-no-underline">Exam Schedule</span>
+                    </div>
+                    <div class="tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-px-4 tw-py-2">
+                        <i class="fas fa-file-alt tw-text-white tw-mr-2"></i>
+                        <span class="tw-text-white tw-font-medium tw-no-underline">Results & Papers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Actions Section -->
+<section class="quick-actions tw-py-12">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <h2 class="section-title tw-text-3xl tw-font-bold tw-text-gray-800 tw-mb-8 text-center tw-no-underline">Quick Actions</h2>
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <a href="{% url 'college_website:exam_results' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl tw-no-underline">
+                            <div class="tw-bg-green-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-chart-line tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-2 tw-no-underline">Exam Results</h4>
+                            <p class="tw-text-gray-600 tw-text-sm tw-no-underline">Check your examination results</p>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <a href="{% url 'college_website:exam_timetable' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl tw-no-underline">
+                            <div class="tw-bg-blue-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-calendar-alt tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-2 tw-no-underline">Exam Timetable</h4>
+                            <p class="tw-text-gray-600 tw-text-sm tw-no-underline">View examination schedules</p>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <a href="{% url 'college_website:question_papers' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl tw-no-underline">
+                            <div class="tw-bg-purple-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-file-alt tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-2 tw-no-underline">Question Papers</h4>
+                            <p class="tw-text-gray-600 tw-text-sm tw-no-underline">Access previous papers</p>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <a href="{% url 'college_website:exam_notices' %}" class="tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl tw-no-underline">
+                            <div class="tw-bg-orange-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-bullhorn tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-2 tw-no-underline">Exam Notices</h4>
+                            <p class="tw-text-gray-600 tw-text-sm tw-no-underline">Important announcements</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Results Section -->
+{% if recent_results %}
+<section class="recent-results tw-py-12 tw-bg-gray-50">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <div class="d-flex tw-justify-content-between tw-align-items-center tw-mb-6">
+                    <h2 class="section-title tw-text-3xl tw-font-bold tw-text-gray-800 tw-no-underline">Recent Results</h2>
+                    <a href="{% url 'college_website:exam_results' %}" class="btn btn-primary tw-rounded-full tw-px-6 tw-py-2">
+                        <i class="fas fa-arrow-right tw-mr-2"></i>View All Results
+                    </a>
+                </div>
+                
+                <div class="row g-4">
+                    {% for result in recent_results %}
+                    <div class="col-lg-6 mb-4">
+                        <div class="card h-100 border-0 shadow-sm result-card">
+                            <div class="card-body tw-p-6">
+                                <div class="d-flex tw-justify-content-between tw-align-items-start tw-mb-3">
+                                    <span class="badge bg-{{ result.result_type|default:'primary' }} tw-px-3 tw-py-2 tw-text-sm">
+                                        {% if result.result_type == 'semester' %}
+                                            <i class="fas fa-calendar-alt tw-mr-2"></i>Semester
+                                        {% elif result.result_type == 'annual' %}
+                                            <i class="fas fa-calendar-check tw-mr-2"></i>Annual
+                                        {% elif result.result_type == 'entrance' %}
+                                            <i class="fas fa-sign-in-alt tw-mr-2"></i>Entrance
+                                        {% elif result.result_type == 'supplementary' %}
+                                            <i class="fas fa-redo tw-mr-2"></i>Supplementary
+                                        {% else %}
+                                            <i class="fas fa-file-alt tw-mr-2"></i>{{ result.get_result_type_display }}
+                                        {% endif %}
+                                    </span>
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar tw-mr-1"></i>{{ result.result_date|date:"M d, Y" }}
+                                    </small>
+                                </div>
+                                
+                                <h5 class="card-title tw-text-xl tw-font-semibold tw-text-gray-800 tw-mb-3">
+                                    {{ result.title }}
+                                </h5>
+                                
+                                {% if result.description %}
+                                <p class="card-text tw-text-gray-600 tw-mb-4">
+                                    {{ result.description|striptags|truncatewords:20 }}
+                                </p>
+                                {% endif %}
+                                
+                                <div class="tw-flex tw-flex-wrap tw-gap-2">
+                                    {% if result.result_file %}
+                                    <a href="{{ result.result_file.url }}" class="btn btn-primary btn-sm tw-rounded-full tw-px-4 tw-py-2" target="_blank">
+                                        <i class="fas fa-download tw-mr-2"></i>Download
+                                    </a>
+                                    {% endif %}
+                                    
+                                    {% if result.result_link %}
+                                    <a href="{{ result.result_link }}" class="btn btn-outline-primary btn-sm tw-rounded-full tw-px-4 tw-py-2" target="_blank">
+                                        <i class="fas fa-external-link-alt tw-mr-2"></i>View Online
+                                    </a>
+                                    {% endif %}
+                                    
+                                    <a href="{% url 'college_website:result_detail' result.slug %}" class="btn btn-outline-secondary btn-sm tw-rounded-full tw-px-4 tw-py-2">
+                                        <i class="fas fa-eye tw-mr-2"></i>Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Additional Resources Section -->
+<section class="additional-resources tw-py-12">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-10">
+                <h2 class="section-title tw-text-3xl tw-font-bold tw-text-gray-800 tw-mb-8 text-center tw-no-underline">Additional Resources</h2>
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center">
+                            <div class="tw-bg-red-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-redo tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-3 tw-no-underline">Revaluation</h4>
+                            <p class="tw-text-gray-600 tw-mb-4 tw-no-underline">Apply for result revaluation and review</p>
+                            <a href="{% url 'college_website:revaluation' %}" class="btn btn-outline-primary tw-rounded-full tw-px-6 tw-py-2">
+                                Learn More
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center">
+                            <div class="tw-bg-indigo-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-gavel tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-3 tw-no-underline">Exam Rules</h4>
+                            <p class="tw-text-gray-600 tw-mb-4 tw-no-underline">Important examination guidelines and policies</p>
+                            <a href="{% url 'college_website:exam_rules' %}" class="btn btn-outline-primary tw-rounded-full tw-px-6 tw-py-2">
+                                View Rules
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center">
+                            <div class="tw-bg-teal-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                                <i class="fas fa-info-circle tw-text-white tw-text-2xl"></i>
+                            </div>
+                            <h4 class="tw-font-semibold tw-text-gray-800 tw-mb-3 tw-no-underline">Exam Notices</h4>
+                            <p class="tw-text-gray-600 tw-mb-4 tw-no-underline">Stay updated with exam announcements</p>
+                            <a href="{% url 'college_website:exam_notices' %}" class="btn btn-outline-primary tw-rounded-full tw-px-6 tw-py-2">
+                                View Notices
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Support Section -->
+<section class="contact-support tw-py-12 tw-bg-gray-50">
+    <div class="container">
+        <div class="row tw-justify-center">
+            <div class="col-lg-8 text-center">
+                <div class="tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-8">
+                    <h3 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-4 tw-no-underline">Need Help?</h3>
+                    <p class="tw-text-gray-600 tw-mb-6 tw-no-underline">If you have questions about examinations or need assistance, our support team is here to help.</p>
+                    <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-4">
+                        <a href="{% url 'college_website:contact' %}" class="btn btn-primary tw-rounded-full tw-px-6 tw-py-3">
+                            <i class="fas fa-envelope tw-mr-2"></i>Contact Support
+                        </a>
+                        <a href="{% url 'college_website:exam_rules' %}" class="btn btn-outline-primary tw-rounded-full tw-px-6 tw-py-3">
+                            <i class="fas fa-book tw-mr-2"></i>Read Guidelines
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

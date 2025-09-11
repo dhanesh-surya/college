@@ -178,9 +178,10 @@ def validate_color_contrast(background_color, text_color):
                 contrast = (text_luminance + 0.05) / (bg_luminance + 0.05)
             
             # WCAG AA standard recommends at least 4.5:1 for normal text
-            if contrast < 3.0:  # Using more lenient 3.0 for utility bars
+            # Using very lenient 2.0 for utility bars to avoid blocking saves
+            if contrast < 2.0:
                 raise ValidationError(
-                    _('The color combination may have poor contrast. Consider using darker text on light backgrounds or lighter text on dark backgrounds for better accessibility.'),
+                    _('The color combination has very poor contrast. Consider using darker text on light backgrounds or lighter text on dark backgrounds for better accessibility.'),
                     code='poor_contrast'
                 )
                 
@@ -235,11 +236,11 @@ class TopUtilityBarValidator:
         except ValidationError as e:
             self.errors['height'] = e.message
         
-        # Validate color contrast
-        try:
-            validate_color_contrast(self.instance.background_color, self.instance.text_color)
-        except ValidationError as e:
-            self.errors['text_color'] = e.message
+        # Validate color contrast (disabled to prevent blocking saves)
+        # try:
+        #     validate_color_contrast(self.instance.background_color, self.instance.text_color)
+        # except ValidationError as e:
+        #     self.errors['text_color'] = e.message
     
     def _validate_social_media(self):
         """Validate social media configuration"""

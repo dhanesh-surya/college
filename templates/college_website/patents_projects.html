@@ -1,0 +1,622 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Patents & Projects - {{ college_info.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="text-center">
+                <h1 class="display-4 fw-bold text-primary mb-3">
+                    <i class="fas fa-lightbulb me-3"></i>{{ patents_projects_info.title }}
+                </h1>
+                <p class="lead text-muted mb-4">
+                    {{ patents_projects_info.subtitle }}
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <span class="badge bg-primary fs-6 px-3 py-2">
+                        <i class="fas fa-certificate me-2"></i>{{ patents_projects_info.total_patents }}+ Patents
+                    </span>
+                    <span class="badge bg-success fs-6 px-3 py-2">
+                        <i class="fas fa-project-diagram me-2"></i>{{ patents_projects_info.total_projects }}+ Projects
+                    </span>
+                    <span class="badge bg-info fs-6 px-3 py-2">
+                        <i class="fas fa-award me-2"></i>{{ patents_projects_info.innovation_awards }}+ Awards
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-certificate text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-primary mb-1">{{ patents_projects_info.total_patents }}+</h3>
+                            <p class="text-muted mb-0">Patents Filed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-project-diagram text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-success mb-1">{{ patents_projects_info.total_projects }}+</h3>
+                            <p class="text-muted mb-0">Research Projects</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-handshake text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-info mb-1">{{ patents_projects_info.industry_collaborations }}+</h3>
+                            <p class="text-muted mb-0">Industry Collaborations</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-warning bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-trophy text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-warning mb-1">{{ patents_projects_info.get_funding_display }}</h3>
+                            <p class="text-muted mb-0">Research Funding</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="h4 mb-4">
+                        <i class="fas fa-search text-primary me-2"></i>Search & Filter
+                    </h3>
+                    <div class="row g-3">
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-search text-primary me-2"></i>Search
+                            </label>
+                            <input type="text" class="form-control" placeholder="Search by title, description, or keywords..." id="searchInput" value="{{ search_query }}">
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-filter text-primary me-2"></i>Category
+                            </label>
+                            <select class="form-select" id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <option value="patent" {% if category_filter == 'patent' %}selected{% endif %}>Patents</option>
+                                <option value="project" {% if category_filter == 'project' %}selected{% endif %}>Research Projects</option>
+                                <option value="collaboration" {% if category_filter == 'collaboration' %}selected{% endif %}>Industry Collaborations</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-calendar text-primary me-2"></i>Year
+                            </label>
+                            <select class="form-select" id="yearFilter">
+                                <option value="">All Years</option>
+                                {% for year in available_years %}
+                                <option value="{{ year }}" {% if year_filter == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-sort text-primary me-2"></i>Sort By
+                            </label>
+                            <select class="form-select" id="sortFilter">
+                                <option value="date-desc" {% if sort_by == 'date-desc' %}selected{% endif %}>Date (Newest)</option>
+                                <option value="date-asc" {% if sort_by == 'date-asc' %}selected{% endif %}>Date (Oldest)</option>
+                                <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Title (A-Z)</option>
+                                <option value="title-desc" {% if sort_by == 'title-desc' %}selected{% endif %}>Title (Z-A)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patents Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-certificate text-primary me-2"></i>Recent Patents
+            </h3>
+        </div>
+        
+        <!-- Patent Cards -->
+        {% for patent in recent_patents %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift patent-card" data-category="patent" data-year="{{ patent.filing_year }}">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary">Patent</span>
+                        <span class="text-muted small">{{ patent.filing_year }}</span>
+                    </div>
+                    <h5 class="card-title text-primary mb-3">
+                        <a href="{% if patent.patent_url %}{{ patent.patent_url }}{% else %}#{% endif %}" class="text-decoration-none">{{ patent.title }}</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        {{ patent.description|truncatewords:20 }}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="inventor-info">
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>{{ patent.inventors|truncatewords:3 }}
+                            </small>
+                        </div>
+                        <div class="patent-status">
+                            <span class="badge {% if patent.status == 'granted' %}bg-success{% elif patent.status == 'pending' %}bg-warning{% else %}bg-info{% endif %} me-2">
+                                <i class="fas {% if patent.status == 'granted' %}fa-check{% elif patent.status == 'pending' %}fa-clock{% else %}fa-file{% endif %} me-1"></i>{{ patent.get_status_display }}
+                            </span>
+                            <span class="badge bg-info">
+                                <i class="fas fa-file-alt me-1"></i>{{ patent.patent_number }}
+                            </span>
+                        </div>
+                    </div>
+                    {% if patent.pdf_file %}
+                    <div class="mt-3">
+                        <a href="{{ patent.pdf_file.url }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                            <i class="fas fa-download me-1"></i>Download PDF
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-certificate text-muted" style="font-size: 3rem;"></i>
+                <h4 class="text-muted mt-3">No Patents Available</h4>
+                <p class="text-muted">Check back later for patent information.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Research Projects Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-project-diagram text-success me-2"></i>Research Projects
+            </h3>
+        </div>
+        
+        <!-- Project Cards -->
+        {% for project in recent_projects %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift project-card" data-category="project" data-year="{{ project.start_year }}">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-success">Research Project</span>
+                        <span class="text-muted small">{{ project.start_year }}</span>
+                    </div>
+                    <h5 class="card-title text-success mb-3">
+                        <a href="{% if project.project_url %}{{ project.project_url }}{% else %}#{% endif %}" class="text-decoration-none">{{ project.title }}</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        {{ project.description|truncatewords:20 }}
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="project-info">
+                            <small class="text-muted">
+                                <i class="fas fa-university me-1"></i>Funded by: {{ project.funding_agency }}
+                            </small>
+                        </div>
+                        <div class="project-status">
+                            <span class="badge {% if project.status == 'ongoing' %}bg-success{% elif project.status == 'completed' %}bg-warning{% else %}bg-info{% endif %} me-2">
+                                <i class="fas {% if project.status == 'ongoing' %}fa-play{% elif project.status == 'completed' %}fa-check{% else %}fa-clock{% endif %} me-1"></i>{{ project.get_status_display }}
+                            </span>
+                            <span class="badge bg-info">
+                                <i class="fas fa-rupee-sign me-1"></i>{{ project.get_funding_display }}
+                            </span>
+                        </div>
+                    </div>
+                    {% if project.report_file %}
+                    <div class="mt-3">
+                        <a href="{{ project.report_file.url }}" class="btn btn-outline-success btn-sm" target="_blank">
+                            <i class="fas fa-download me-1"></i>Download Report
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-project-diagram text-muted" style="font-size: 3rem;"></i>
+                <h4 class="text-muted mt-3">No Research Projects Available</h4>
+                <p class="text-muted">Check back later for research project information.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Industry Collaborations Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-handshake text-info me-2"></i>Industry Collaborations
+            </h3>
+        </div>
+        
+        <!-- Collaboration Cards -->
+        {% for collaboration in featured_collaborations %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-industry text-white fs-3"></i>
+                    </div>
+                    <h5 class="card-title text-info">{{ collaboration.company_name }}</h5>
+                    <p class="card-text text-muted">{{ collaboration.description|truncatewords:15 }}</p>
+                    <div class="d-flex justify-content-center gap-2">
+                        <span class="badge bg-info">{{ collaboration.duration_years }} Years</span>
+                        <span class="badge bg-success">{{ collaboration.get_funding_display }} Funding</span>
+                    </div>
+                    {% if collaboration.company_website %}
+                    <div class="mt-3">
+                        <a href="{{ collaboration.company_website }}" class="btn btn-outline-info btn-sm" target="_blank">
+                            <i class="fas fa-external-link-alt me-1"></i>Visit Website
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-handshake text-muted" style="font-size: 3rem;"></i>
+                <h4 class="text-muted mt-3">No Industry Collaborations Available</h4>
+                <p class="text-muted">Check back later for collaboration information.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Research Impact Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-gradient" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h3 class="h4 text-primary mb-3">
+                                <i class="fas fa-chart-line me-2"></i>Research Impact & Achievements
+                            </h3>
+                            <p class="text-muted mb-4">
+                                Our patents and research projects have made significant contributions to various fields, earning recognition from the academic community and industry professionals worldwide.
+                            </p>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-award text-warning me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">Innovation Awards</h6>
+                                            <small class="text-muted">{{ patents_projects_info.innovation_awards }} awards received</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-globe text-info me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">International Recognition</h6>
+                                            <small class="text-muted">Featured in {{ patents_projects_info.international_recognition }}+ countries</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-users text-success me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">Industry Partnerships</h6>
+                                            <small class="text-muted">{{ patents_projects_info.active_partnerships }}+ active collaborations</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-graduation-cap text-primary me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">Student Involvement</h6>
+                                            <small class="text-muted">{{ patents_projects_info.students_involved }}+ students engaged</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 120px;">
+                                <i class="fas fa-trophy text-white" style="font-size: 3rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-gradient" style="background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);">
+                <div class="card-body p-5 text-center text-white">
+                    <h3 class="h4 mb-3">
+                        <i class="fas fa-paper-plane me-2"></i>{{ patents_projects_info.cta_title }}
+                    </h3>
+                    <p class="mb-4">
+                        {{ patents_projects_info.cta_description }}
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="mailto:{{ patents_projects_info.contact_email }}" class="btn btn-light btn-lg">
+                            <i class="fas fa-envelope me-2"></i>Contact Research Team
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-download me-2"></i>Download Portfolio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Custom CSS for enhanced styling */
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.patent-card, .project-card {
+    transition: all 0.3s ease;
+}
+
+.patent-card:hover, .project-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+}
+
+.badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.card-title a {
+    transition: color 0.3s ease;
+}
+
+.card-title a:hover {
+    color: #0056b3 !important;
+}
+
+/* Animation for cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Gradient backgrounds */
+.bg-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Custom button styles */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .d-flex.gap-3 {
+        flex-direction: column;
+        gap: 1rem !important;
+    }
+}
+
+/* Tailwind-inspired utilities */
+.shadow-sm {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.fw-bold {
+    font-weight: 700 !important;
+}
+
+.fw-semibold {
+    font-weight: 600 !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const yearFilter = document.getElementById('yearFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    
+    const patentCards = document.querySelectorAll('.patent-card');
+    const projectCards = document.querySelectorAll('.project-card');
+    const allCards = [...patentCards, ...projectCards];
+    
+    function filterCards() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const category = categoryFilter.value;
+        const year = yearFilter.value;
+        
+        allCards.forEach(card => {
+            const title = card.querySelector('.card-title a').textContent.toLowerCase();
+            const description = card.querySelector('.card-text').textContent.toLowerCase();
+            const cardCategory = card.dataset.category;
+            const cardYear = card.dataset.year;
+            
+            const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+            const matchesCategory = !category || cardCategory === category;
+            const matchesYear = !year || cardYear === year;
+            
+            if (matchesSearch && matchesCategory && matchesYear) {
+                card.style.display = 'block';
+                card.style.animation = 'fadeInUp 0.6s ease-out';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    
+    // Event listeners
+    searchInput.addEventListener('input', filterCards);
+    categoryFilter.addEventListener('change', filterCards);
+    yearFilter.addEventListener('change', filterCards);
+    
+    // Sort functionality
+    sortFilter.addEventListener('change', function() {
+        const sortValue = this.value;
+        const container = document.querySelector('.row.mb-5:nth-of-type(4)'); // Patents section
+        const cards = Array.from(container.querySelectorAll('.patent-card, .project-card'));
+        
+        cards.sort((a, b) => {
+            const titleA = a.querySelector('.card-title a').textContent;
+            const titleB = b.querySelector('.card-title a').textContent;
+            const yearA = parseInt(a.dataset.year);
+            const yearB = parseInt(b.dataset.year);
+            
+            switch(sortValue) {
+                case 'date-desc':
+                    return yearB - yearA;
+                case 'date-asc':
+                    return yearA - yearB;
+                case 'title':
+                    return titleA.localeCompare(titleB);
+                case 'title-desc':
+                    return titleB.localeCompare(titleA);
+                default:
+                    return 0;
+            }
+        });
+        
+        // Re-append sorted cards
+        cards.forEach(card => {
+            container.appendChild(card);
+        });
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all cards
+    allCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
+});
+</script>
+{% endblock %}

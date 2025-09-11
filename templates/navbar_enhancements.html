@@ -30,21 +30,22 @@
             </div>
             <div class="col-md-3">
                 <h6 class="dropdown-header">Departments</h6>
-                <a class="dropdown-item" href="/academics/departments/arts/">Arts Department</a>
-                <a class="dropdown-item" href="/academics/departments/science/">Science Department</a>
-                <a class="dropdown-item" href="/academics/departments/commerce/">Commerce Department</a>
+                <a class="dropdown-item" href="{% url 'college_website:academics' %}">All Departments</a>
+                <a class="dropdown-item" href="{% url 'college_website:departments_list' %}?discipline=arts">Arts Department</a>
+                <a class="dropdown-item" href="{% url 'college_website:departments_list' %}?discipline=science">Science Department</a>
+                <a class="dropdown-item" href="{% url 'college_website:departments_list' %}?discipline=commerce">Commerce Department</a>
             </div>
             <div class="col-md-3">
                 <h6 class="dropdown-header">Resources</h6>
-                <a class="dropdown-item" href="/academics/library/">Library</a>
-                <a class="dropdown-item" href="/academics/academic-calendar/">Academic Calendar</a>
-                <a class="dropdown-item" href="/academics/syllabus-curriculum/">Syllabus</a>
+                <a class="dropdown-item" href="{% url 'college_website:academics_library' %}">Library</a>
+                <a class="dropdown-item" href="{% url 'college_website:academic_calendar' %}">Academic Calendar</a>
+                <a class="dropdown-item" href="{% url 'college_website:syllabus_curriculum' %}">Syllabus</a>
             </div>
             <div class="col-md-3">
                 <h6 class="dropdown-header">Quick Links</h6>
-                <a class="dropdown-item" href="/academics/faculties/">Faculty</a>
-                <a class="dropdown-item" href="/academics/teaching-learning-resources/">Resources</a>
-                <a class="dropdown-item" href="/examinations/">Examinations</a>
+                <a class="dropdown-item" href="{% url 'college_website:faculties' %}">Faculty</a>
+                <a class="dropdown-item" href="{% url 'college_website:teaching_learning_resources' %}">Resources</a>
+                <a class="dropdown-item" href="{% url 'college_website:examinations' %}">Examinations</a>
             </div>
         </div>
     </div>

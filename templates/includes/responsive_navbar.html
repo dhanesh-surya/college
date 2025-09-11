@@ -1,0 +1,492 @@
+{% load static %}
+
+<!-- Enhanced Responsive Navbar - Bootstrap 5 + Tailwind CSS -->
+<!-- Desktop Navigation (Hidden on Mobile) -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg d-none d-lg-block sticky-top" id="desktopNavbar" style="z-index: 1050;">
+    <div class="container-fluid px-4" style="max-width: 1400px;">
+        <!-- Brand Logo -->
+        <a class="navbar-brand me-4" href="{% url 'college_website:home' %}">
+            {% if college_info.logo %}
+                <img src="{{ college_info.logo.url }}" alt="{{ college_info.college_name|default:'College' }}" class="h-10 w-auto">
+            {% else %}
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-r from-red-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                        {{ college_info.college_name.0|default:'C' }}
+                    </div>
+                </div>
+            {% endif %}
+        </a>
+        
+        <!-- Main Navigation Menu -->
+        <div class="navbar-collapse justify-content-center" id="desktopNavbarContent">
+            <ul class="navbar-nav mx-auto gap-1">
+                
+                <!-- Home -->
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 rounded-lg transition-all duration-300 hover:bg-red-50 hover:text-red-600 {% if request.resolver_match.url_name == 'home' %}text-red-600 bg-red-50{% endif %}" 
+                       href="{% url 'college_website:home' %}">
+                        <i class="fas fa-home me-2"></i>Home
+                    </a>
+                </li>
+
+                <!-- About Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-lg transition-all duration-300" 
+                       href="{% url 'college_website:about' %}" 
+                       id="aboutDropdown" 
+                       role="button" 
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
+                        <i class="fas fa-info-circle me-2"></i>About
+                    </a>
+                    <ul class="dropdown-menu border-0 shadow-lg rounded-xl mt-2 p-2" style="min-width: 280px;">
+                        <li>
+                            <h6 class="dropdown-header text-red-600 font-bold border-b border-gray-200 pb-2 mb-2">
+                                <i class="fas fa-university me-2"></i>Institution
+                            </h6>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:about' %}">
+                                <i class="fas fa-building me-3 text-blue-500"></i>
+                                <span class="hover:text-white">Overview</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:history' %}">
+                                <i class="fas fa-history me-3 text-amber-500"></i>
+                                <span class="hover:text-white">History</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:vision_mission' %}">
+                                <i class="fas fa-bullseye me-3 text-green-500"></i>
+                                <span class="hover:text-white">Vision & Mission</span>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider border-gray-200 my-2"></li>
+                        <li>
+                            <h6 class="dropdown-header text-red-600 font-bold pb-2">
+                                <i class="fas fa-users-cog me-2"></i>Leadership
+                            </h6>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:principal_message' %}">
+                                <i class="fas fa-user-tie me-3 text-indigo-500"></i>
+                                <span class="hover:text-white">Principal's Message</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300" 
+                               href="{% url 'college_website:governing_body' %}">
+                                <i class="fas fa-users me-3 text-purple-500"></i>
+                                <span class="hover:text-white">Governing Body</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Academics Mega Menu -->
+                <li class="nav-item dropdown mega-dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-lg transition-all duration-300" 
+                       href="{% url 'college_website:programs_list' %}" 
+                       id="academicsDropdown" 
+                       role="button" 
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
+                        <i class="fas fa-graduation-cap me-2"></i>Academics
+                    </a>
+                    <div class="dropdown-menu border-0 shadow-xl rounded-xl mt-2 p-4" style="min-width: 600px;">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h6 class="dropdown-header text-red-600 font-bold border-b border-gray-200 pb-2 mb-3">
+                                    <i class="fas fa-book-open me-2"></i>Programs & Departments
+                                </h6>
+                                <a class="dropdown-item px-3 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-2 d-block" 
+                                   href="{% url 'college_website:programs_list' %}">
+                                    <i class="fas fa-list me-3 text-gray-600"></i>
+                                    <span class="hover:text-white">All Programs</span>
+                                </a>
+                                <a class="dropdown-item px-3 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-2 d-block" 
+                                   href="{% url 'college_website:academics' %}">
+                                    <i class="fas fa-building me-3 text-purple-500"></i>
+                                    <span class="hover:text-white">All Departments</span>
+                                </a>
+                                <a class="dropdown-item px-3 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-2 d-block" 
+                                   href="{% url 'college_website:departments_list' %}?discipline=science">
+                                    <i class="fas fa-flask me-3 text-blue-500"></i>
+                                    <span class="hover:text-white">Science Departments</span>
+                                </a>
+                                <a class="dropdown-item px-3 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-2 d-block" 
+                                   href="{% url 'college_website:departments_list' %}?discipline=arts">
+                                    <i class="fas fa-palette me-3 text-pink-500"></i>
+                                    <span class="hover:text-white">Arts Departments</span>
+                                </a>
+                                <a class="dropdown-item px-3 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 d-block" 
+                                   href="{% url 'college_website:departments_list' %}?discipline=commerce">
+                                    <i class="fas fa-chart-line me-3 text-green-500"></i>
+                                    <span class="hover:text-white">Commerce Departments</span>
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="dropdown-header text-red-600 font-bold border-b border-gray-200 pb-2 mb-3">
+                                    <i class="fas fa-chalkboard-teacher me-2"></i>Faculty & Resources
+                                </h6>
+                                <a class="dropdown-item px-3 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-2 d-block" 
+                                   href="{% url 'college_website:academic_faculties' %}">
+                                    <i class="fas fa-user-graduate me-3 text-blue-500"></i>
+                                    <span class="hover:text-white">Academic Faculties</span>
+                                </a>
+                                <a class="dropdown-item px-3 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-2 d-block" 
+                                   href="{% url 'college_website:non_academic_faculties' %}">
+                                    <i class="fas fa-user-cog me-3 text-green-500"></i>
+                                    <span class="hover:text-white">Non-Academic Faculties</span>
+                                </a>
+                                <a class="dropdown-item px-3 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-2 d-block" 
+                                   href="{% url 'college_website:academics_library' %}">
+                                    <i class="fas fa-book-reader me-3 text-indigo-500"></i>
+                                    <span class="hover:text-white">Library</span>
+                                </a>
+                                <a class="dropdown-item px-3 py-2 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 d-block" 
+                                   href="{% url 'college_website:academic_calendar' %}">
+                                    <i class="fas fa-calendar-alt me-3 text-orange-500"></i>
+                                    <span class="hover:text-white">Academic Calendar</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Admissions Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-lg transition-all duration-300" 
+                       href="{% url 'college_website:admissions' %}" 
+                       id="admissionsDropdown" 
+                       role="button" 
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
+                        <i class="fas fa-door-open me-2"></i>Admissions
+                    </a>
+                    <ul class="dropdown-menu border-0 shadow-lg rounded-xl mt-2 p-2" style="min-width: 300px;">
+                        <li>
+                            <h6 class="dropdown-header text-red-600 font-bold border-b border-gray-200 pb-2 mb-2">
+                                <i class="fas fa-clipboard-list me-2"></i>Apply Now
+                            </h6>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:admissions' %}">
+                                <i class="fas fa-edit me-3 text-blue-500"></i>
+                                <span class="hover:text-white">Admission Process</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:courses_offered' %}">
+                                <i class="fas fa-book-open me-3 text-green-500"></i>
+                                <span class="hover:text-white">Courses Offered</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:fee_structure' %}">
+                                <i class="fas fa-rupee-sign me-3 text-amber-500"></i>
+                                <span class="hover:text-white">Fee Structure</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300" 
+                               href="{% url 'college_website:scholarships' %}">
+                                <i class="fas fa-hand-holding-heart me-3 text-purple-500"></i>
+                                <span class="hover:text-white">Scholarships</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Examinations Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-lg transition-all duration-300" 
+                       href="{% url 'college_website:examinations' %}" 
+                       id="examinationsDropdown" 
+                       role="button" 
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
+                        <i class="fas fa-file-alt me-2"></i>Examinations
+                    </a>
+                    <ul class="dropdown-menu border-0 shadow-lg rounded-xl mt-2 p-2" style="min-width: 280px;">
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:exam_notices' %}">
+                                <i class="fas fa-bell me-3 text-blue-500"></i>
+                                <span class="hover:text-white">Exam Notices</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:exam_timetable' %}">
+                                <i class="fas fa-calendar-alt me-3 text-indigo-500"></i>
+                                <span class="hover:text-white">Timetable</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:exam_results' %}">
+                                <i class="fas fa-chart-bar me-3 text-green-500"></i>
+                                <span class="hover:text-white">Results</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300" 
+                               href="{% url 'college_website:question_papers' %}">
+                                <i class="fas fa-file-lines me-3 text-gray-600"></i>
+                                <span class="hover:text-white">Question Papers</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Student Corner Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle px-3 py-2 rounded-lg transition-all duration-300" 
+                       href="{% url 'college_website:student_corner' %}" 
+                       id="studentDropdown" 
+                       role="button" 
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
+                        <i class="fas fa-user-graduate me-2"></i>Student Corner
+                    </a>
+                    <ul class="dropdown-menu border-0 shadow-lg rounded-xl mt-2 p-2" style="min-width: 280px;">
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:student_portal' %}">
+                                <i class="fas fa-laptop me-3 text-blue-500"></i>
+                                <span class="hover:text-white">Student Portal</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:library' %}">
+                                <i class="fas fa-book-reader me-3 text-green-500"></i>
+                                <span class="hover:text-white">Library</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300 mb-1" 
+                               href="{% url 'college_website:sports_cultural' %}">
+                                <i class="fas fa-running me-3 text-orange-500"></i>
+                                <span class="hover:text-white">Sports & Cultural</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-300" 
+                               href="{% url 'college_website:placement_cell' %}">
+                                <i class="fas fa-briefcase me-3 text-indigo-500"></i>
+                                <span class="hover:text-white">Placement Cell</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Events -->
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 rounded-lg transition-all duration-300 hover:bg-red-50 hover:text-red-600" 
+                       href="{% url 'college_website:events' %}">
+                        <i class="fas fa-calendar-alt me-2"></i>Events
+                    </a>
+                </li>
+
+                <!-- Gallery -->
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 rounded-lg transition-all duration-300 hover:bg-red-50 hover:text-red-600" 
+                       href="{% url 'college_website:gallery' %}">
+                        <i class="fas fa-images me-2"></i>Gallery
+                    </a>
+                </li>
+
+                <!-- Contact -->
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 rounded-lg transition-all duration-300 hover:bg-red-50 hover:text-red-600" 
+                       href="{% url 'college_website:contact' %}">
+                        <i class="fas fa-phone me-2"></i>Contact
+                    </a>
+                </li>
+            </ul>
+            
+            <!-- Search Form -->
+            <form class="d-flex ms-3" method="GET" action="{% url 'college_website:search' %}" role="search">
+                <div class="input-group">
+                    <input class="form-control border-gray-300 rounded-l-lg" type="search" name="q" placeholder="Search..." aria-label="Search">
+                    <button class="btn btn-outline-red-600 border-gray-300 rounded-r-lg hover:bg-red-600 hover:text-white transition-colors" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Navigation (Hidden on Desktop) -->
+<nav class="navbar navbar-dark bg-gradient-to-r from-red-600 to-purple-600 shadow-lg d-lg-none sticky-top" id="mobileNavbar" style="z-index: 1050;">
+    <div class="container-fluid px-3">
+        <!-- Brand Logo -->
+        <a class="navbar-brand" href="{% url 'college_website:home' %}">
+            {% if college_info.logo %}
+                <img src="{{ college_info.logo.url }}" alt="{{ college_info.college_name|default:'College' }}" style="height: 32px;">
+            {% else %}
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-content-center text-red-600 font-bold text-sm me-2">
+                        {{ college_info.college_name.0|default:'C' }}
+                    </div>
+                    <span class="text-white font-medium">{{ college_info.college_name|default:'College' }}</span>
+                </div>
+            {% endif %}
+        </a>
+        
+        <!-- Hamburger Toggle -->
+        <button class="navbar-toggler border-0 p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all" type="button" data-bs-toggle="collapse" data-bs-target="#mobileNavbarContent" aria-controls="mobileNavbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Collapsible Mobile Menu -->
+        <div class="collapse navbar-collapse" id="mobileNavbarContent">
+            <div class="mt-4">
+                <!-- Search Form -->
+                <div class="mb-4">
+                    <form class="d-flex" method="GET" action="{% url 'college_website:search' %}" role="search">
+                        <div class="input-group">
+                            <input class="form-control bg-white bg-opacity-20 border-white border-opacity-30 text-white placeholder-gray-300" type="search" name="q" placeholder="Search..." aria-label="Search">
+                            <button class="btn btn-light text-red-600 hover:bg-gray-100" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Navigation Links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white px-3 py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all {% if request.resolver_match.url_name == 'home' %}bg-white bg-opacity-20{% endif %}" 
+                           href="{% url 'college_website:home' %}">
+                            <i class="fas fa-home me-3"></i>Home
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white px-3 py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all" 
+                           href="{% url 'college_website:about' %}" 
+                           id="mobileAboutDropdown" 
+                           role="button" 
+                           data-bs-toggle="dropdown" 
+                           aria-expanded="false">
+                            <i class="fas fa-info-circle me-3"></i>About
+                        </a>
+                        <ul class="dropdown-menu border-0 mt-2 bg-white bg-opacity-95 backdrop-blur">
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:about' %}"><i class="fas fa-building me-2 text-blue-500"></i>Overview</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:history' %}"><i class="fas fa-history me-2 text-amber-500"></i>History</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:vision_mission' %}"><i class="fas fa-bullseye me-2 text-green-500"></i>Vision & Mission</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:principal_message' %}"><i class="fas fa-user-tie me-2 text-indigo-500"></i>Principal's Message</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white px-3 py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all" 
+                           href="{% url 'college_website:programs_list' %}" 
+                           id="mobileAcademicsDropdown" 
+                           role="button" 
+                           data-bs-toggle="dropdown" 
+                           aria-expanded="false">
+                            <i class="fas fa-graduation-cap me-3"></i>Academics
+                        </a>
+                        <ul class="dropdown-menu border-0 mt-2 bg-white bg-opacity-95 backdrop-blur">
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:programs_list' %}"><i class="fas fa-list me-2 text-gray-600"></i>All Programs</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:academics' %}"><i class="fas fa-building me-2 text-purple-500"></i>All Departments</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:departments_list' %}?discipline=science"><i class="fas fa-flask me-2 text-blue-500"></i>Science</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:departments_list' %}?discipline=arts"><i class="fas fa-palette me-2 text-pink-500"></i>Arts</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:departments_list' %}?discipline=commerce"><i class="fas fa-chart-line me-2 text-green-500"></i>Commerce</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:academic_faculties' %}"><i class="fas fa-user-graduate me-2 text-blue-500"></i>Faculties</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:academics_library' %}"><i class="fas fa-book-reader me-2 text-indigo-500"></i>Library</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white px-3 py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all" 
+                           href="{% url 'college_website:admissions' %}" 
+                           id="mobileAdmissionsDropdown" 
+                           role="button" 
+                           data-bs-toggle="dropdown" 
+                           aria-expanded="false">
+                            <i class="fas fa-door-open me-3"></i>Admissions
+                        </a>
+                        <ul class="dropdown-menu border-0 mt-2 bg-white bg-opacity-95 backdrop-blur">
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:admissions' %}"><i class="fas fa-edit me-2 text-blue-500"></i>Admission Process</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:courses_offered' %}"><i class="fas fa-book-open me-2 text-green-500"></i>Courses Offered</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:fee_structure' %}"><i class="fas fa-rupee-sign me-2 text-amber-500"></i>Fee Structure</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:scholarships' %}"><i class="fas fa-hand-holding-heart me-2 text-purple-500"></i>Scholarships</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white px-3 py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all" 
+                           href="{% url 'college_website:examinations' %}" 
+                           id="mobileExaminationsDropdown" 
+                           role="button" 
+                           data-bs-toggle="dropdown" 
+                           aria-expanded="false">
+                            <i class="fas fa-file-alt me-3"></i>Examinations
+                        </a>
+                        <ul class="dropdown-menu border-0 mt-2 bg-white bg-opacity-95 backdrop-blur">
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:exam_notices' %}"><i class="fas fa-bell me-2 text-blue-500"></i>Notices</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:exam_timetable' %}"><i class="fas fa-calendar-alt me-2 text-indigo-500"></i>Timetable</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:exam_results' %}"><i class="fas fa-chart-bar me-2 text-green-500"></i>Results</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:question_papers' %}"><i class="fas fa-file-lines me-2 text-gray-600"></i>Question Papers</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white px-3 py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all" 
+                           href="{% url 'college_website:student_corner' %}" 
+                           id="mobileStudentDropdown" 
+                           role="button" 
+                           data-bs-toggle="dropdown" 
+                           aria-expanded="false">
+                            <i class="fas fa-user-graduate me-3"></i>Student Corner
+                        </a>
+                        <ul class="dropdown-menu border-0 mt-2 bg-white bg-opacity-95 backdrop-blur">
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:student_portal' %}"><i class="fas fa-laptop me-2 text-blue-500"></i>Student Portal</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:library' %}"><i class="fas fa-book-reader me-2 text-green-500"></i>Library</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:sports_cultural' %}"><i class="fas fa-running me-2 text-orange-500"></i>Sports & Cultural</a></li>
+                            <li><a class="dropdown-item py-2 hover:bg-red-50" href="{% url 'college_website:placement_cell' %}"><i class="fas fa-briefcase me-2 text-indigo-500"></i>Placement Cell</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link text-white px-3 py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all" 
+                           href="{% url 'college_website:events' %}">
+                            <i class="fas fa-calendar-alt me-3"></i>Events
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link text-white px-3 py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all" 
+                           href="{% url 'college_website:gallery' %}">
+                            <i class="fas fa-images me-3"></i>Gallery
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link text-white px-3 py-3 rounded-lg hover:bg-white hover:bg-opacity-20 transition-all" 
+                           href="{% url 'college_website:contact' %}">
+                            <i class="fas fa-phone me-3"></i>Contact
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navbar Test - {{ college_info.college_name|default:'College' }}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'red': {
+                            600: '#dc2626',
+                            50: '#fef2f2'
+                        },
+                        'purple': {
+                            600: '#7c3aed'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% load static %}{% static 'css/responsive-navbar.css' %}">
+    <link rel="stylesheet" href="{% load static %}{% static 'css/navbar-enhancements.css' %}">
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 80px; /* Account for fixed navbar */
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #dc2626 0%, #7c3aed 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .features-grid {
+            padding: 4rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+        
+        .test-section {
+            background-color: #f8fafc;
+            padding: 3rem 0;
+        }
+        
+        .alert-custom {
+            background: linear-gradient(135deg, #fee2e2 0%, #fef3c7 100%);
+            border: 1px solid #fbbf24;
+            color: #92400e;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+        
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include the new responsive navbar -->
+    {% include 'includes/responsive_navbar.html' %}
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-rocket me-3"></i>
+                        Enhanced Responsive Navbar
+                    </h1>
+                    <p class="lead mb-4">
+                        Professional Bootstrap 5 + Tailwind CSS navigation system with separate desktop and mobile versions, 
+                        complete with hover effects, mega menus, and accessibility features.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <span class="badge bg-white text-primary px-3 py-2 rounded-pill fs-6">
+                            <i class="fas fa-desktop me-2"></i>Desktop Optimized
+                        </span>
+                        <span class="badge bg-white text-primary px-3 py-2 rounded-pill fs-6">
+                            <i class="fas fa-mobile-alt me-2"></i>Mobile Responsive
+                        </span>
+                        <span class="badge bg-white text-primary px-3 py-2 rounded-pill fs-6">
+                            <i class="fas fa-universal-access me-2"></i>Accessible
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Test Instructions -->
+    <section class="test-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="alert-custom">
+                        <h4 class="mb-3">
+                            <i class="fas fa-clipboard-check me-2"></i>
+                            Test Instructions
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="fw-bold text-decoration-underline">Desktop Testing:</h6>
+                                <ul class="mb-3">
+                                    <li><strong>Hover Effects:</strong> Hover over menu items to see automatic submenu display</li>
+                                    <li><strong>Mega Menu:</strong> Hover over "Academics" to see the 2-column mega menu</li>
+                                    <li><strong>Hover Colors:</strong> Submenu items show white text on red background when hovered</li>
+                                    <li><strong>Animations:</strong> Smooth slide-in animations for all dropdowns</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="fw-bold text-decoration-underline">Mobile Testing:</h6>
+                                <ul class="mb-3">
+                                    <li><strong>Responsive:</strong> Resize browser to see mobile navbar appear at <992px</li>
+                                    <li><strong>Hamburger Menu:</strong> Click the hamburger icon to open/close mobile menu</li>
+                                    <li><strong>Mobile Dropdowns:</strong> Tap dropdown toggles to expand submenu items</li>
+                                    <li><strong>Search:</strong> Mobile search form at the top of the collapsed menu</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Grid -->
+    <section class="features-grid">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="display-5 fw-bold text-gray-800 mb-3">Key Features</h2>
+                    <p class="lead text-muted">Everything you need for a professional navigation experience</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Desktop Navigation</h5>
+                        <p class="text-muted">
+                            Sophisticated desktop navbar with hover effects, automatic submenu display, 
+                            and a beautiful mega menu for the Academics section.
+                        </p>
+                        <ul class="list-unstyled mt-3">
+                            <li><i class="fas fa-check text-success me-2"></i>Hover-activated dropdowns</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Mega menu support</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Smooth animations</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Mobile Responsive</h5>
+                        <p class="text-muted">
+                            Dedicated mobile navbar with hamburger menu, collapsible navigation, 
+                            and touch-friendly dropdown interactions.
+                        </p>
+                        <ul class="list-unstyled mt-3">
+                            <li><i class="fas fa-check text-success me-2"></i>Hamburger menu toggle</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Touch-optimized</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Auto-collapse on link click</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Professional Styling</h5>
+                        <p class="text-muted">
+                            Beautiful hover effects with white text on red background, gradient colors, 
+                            and glassmorphism effects for modern appeal.
+                        </p>
+                        <ul class="list-unstyled mt-3">
+                            <li><i class="fas fa-check text-success me-2"></i>White text on red hover</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Gradient backgrounds</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Glassmorphism effects</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-universal-access"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Accessibility</h5>
+                        <p class="text-muted">
+                            Full keyboard navigation support, screen reader compatibility, 
+                            focus management, and high contrast mode support.
+                        </p>
+                        <ul class="list-unstyled mt-3">
+                            <li><i class="fas fa-check text-success me-2"></i>Keyboard navigation</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Screen reader support</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Focus management</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Bootstrap 5 + Tailwind</h5>
+                        <p class="text-muted">
+                            Perfect integration of Bootstrap 5 components with Tailwind CSS utilities 
+                            for rapid development and consistent styling.
+                        </p>
+                        <ul class="list-unstyled mt-3">
+                            <li><i class="fas fa-check text-success me-2"></i>Bootstrap 5 dropdowns</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Tailwind utilities</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Custom CSS integration</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h5 class="fw-bold mb-3">Search Integration</h5>
+                        <p class="text-muted">
+                            Built-in search functionality with validation, loading states, 
+                            and responsive positioning for both desktop and mobile views.
+                        </p>
+                        <ul class="list-unstyled mt-3">
+                            <li><i class="fas fa-check text-success me-2"></i>Input validation</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Loading states</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Mobile optimized</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Implementation Details -->
+    <section class="test-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <h3 class="fw-bold mb-4 text-center">
+                        <i class="fas fa-code me-2"></i>Implementation Details
+                    </h3>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h5 class="fw-bold">Files Created:</h5>
+                            <div class="code-block">
+templates/includes/responsive_navbar.html
+static/css/responsive-navbar.css
+static/js/responsive-navbar.js
+                            </div>
+                            
+                            <h5 class="fw-bold mt-4">Files Updated:</h5>
+                            <div class="code-block">
+static/css/navbar-enhancements.css
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5 class="fw-bold">Key Technologies:</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fab fa-bootstrap text-purple-600 me-2"></i><strong>Bootstrap 5:</strong> Core framework</li>
+                                <li class="mb-2"><i class="fas fa-wind text-blue-500 me-2"></i><strong>Tailwind CSS:</strong> Utility classes</li>
+                                <li class="mb-2"><i class="fab fa-js-square text-yellow-500 me-2"></i><strong>JavaScript ES6:</strong> Modern functionality</li>
+                                <li class="mb-2"><i class="fab fa-css3-alt text-blue-600 me-2"></i><strong>CSS3:</strong> Animations & effects</li>
+                                <li class="mb-2"><i class="fas fa-universal-access text-green-600 me-2"></i><strong>ARIA:</strong> Accessibility</li>
+                            </ul>
+                            
+                            <h5 class="fw-bold mt-4">Browser Support:</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="badge bg-success">Chrome 90+</span>
+                                <span class="badge bg-success">Firefox 88+</span>
+                                <span class="badge bg-success">Safari 14+</span>
+                                <span class="badge bg-success">Edge 90+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Usage Instructions -->
+    <section class="features-grid">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="alert alert-info border-0 rounded-3 p-4">
+                        <h4 class="mb-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            How to Use This Navbar
+                        </h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="fw-bold">1. Include the Template:</h6>
+                                <div class="code-block">
+{% include 'includes/responsive_navbar.html' %}
+                                </div>
+                                
+                                <h6 class="fw-bold">2. Add Required CSS:</h6>
+                                <div class="code-block">
+&lt;link rel="stylesheet" href="{% static 'css/responsive-navbar.css' %}"&gt;
+&lt;link rel="stylesheet" href="{% static 'css/navbar-enhancements.css' %}"&gt;
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="fw-bold">3. Include JavaScript:</h6>
+                                <div class="code-block">
+&lt;script src="{% static 'js/responsive-navbar.js' %}"&gt;&lt;/script&gt;
+                                </div>
+                                
+                                <h6 class="fw-bold">4. Required Dependencies:</h6>
+                                <div class="code-block">
+Bootstrap 5.3.2+
+Font Awesome 6.4.0+
+Tailwind CSS (optional)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 p-3 bg-light rounded">
+                            <strong><i class="fas fa-lightbulb text-warning me-2"></i>Pro Tip:</strong>
+                            The navbar automatically switches between desktop and mobile versions at the 992px breakpoint. 
+                            All hover effects are disabled on mobile for better touch interaction.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="{% load static %}{% static 'js/responsive-navbar.js' %}"></script>
+    
+    <script>
+        // Demo functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add resize event listener to show current screen size
+            const addScreenSizeIndicator = () => {
+                const indicator = document.createElement('div');
+                indicator.id = 'screen-size-indicator';
+                indicator.style.cssText = `
+                    position: fixed;
+                    top: 10px;
+                    right: 10px;
+                    background: rgba(0, 0, 0, 0.8);
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    font-size: 12px;
+                    z-index: 9999;
+                    font-family: monospace;
+                `;
+                document.body.appendChild(indicator);
+                
+                const updateIndicator = () => {
+                    const width = window.innerWidth;
+                    indicator.textContent = `${width}px ${width >= 992 ? '(Desktop)' : '(Mobile)'}`;
+                };
+                
+                updateIndicator();
+                window.addEventListener('resize', updateIndicator);
+            };
+            
+            addScreenSizeIndicator();
+            
+            // Test hover effect announcement
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            dropdownItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    if (window.NavbarAPI && window.innerWidth >= 992) {
+                        window.NavbarAPI.announce(`Hovering: ${this.textContent.trim()}`);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

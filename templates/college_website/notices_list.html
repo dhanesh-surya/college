@@ -47,14 +47,11 @@
                                     <p class="card-text text-muted mb-2">
                                         {{ notice.content|striptags|truncatewords:25 }}
                                     </p>
-                                    <small class="text-muted">
-                                        <i class="fas fa-calendar me-1"></i>{{ notice.published_date|date:"M d, Y" }}
-                                        {% if notice.expiry_date %}
-                                        <span class="ms-3">
-                                            <i class="fas fa-clock me-1"></i>Valid till {{ notice.expiry_date|date:"M d, Y" }}
+                                    <div class="notice-dates mt-2">
+                                        <span class="badge bg-primary text-white" style="background-color: #0d6efd !important; color: white !important; padding: 8px 12px !important; border-radius: 15px !important; font-weight: bold !important;">
+                                            <i class="fas fa-calendar me-1"></i>{{ notice.publish_date|date:"M d, Y" }}
                                         </span>
-                                        {% endif %}
-                                    </small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -147,6 +144,53 @@
 }
 .bg-gradient-to-r {
     background: linear-gradient(to right, #fefce8, #fed7aa);
+}
+
+/* Notice Date Styling */
+.notice-dates {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px !important;
+    visibility: visible !important;
+}
+
+.notice-dates .badge {
+    font-size: 0.8rem !important;
+    padding: 6px 12px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: white !important;
+    background-color: #0d6efd !important;
+}
+
+.notice-dates .badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.notice-dates .badge.bg-primary {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+    color: white !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .notice-dates {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .notice-dates .badge {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
 }
 </style>
 {% endblock %}

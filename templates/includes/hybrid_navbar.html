@@ -3,17 +3,17 @@
 
 <!-- Desktop Navigation -->
 <nav class="navbar navbar-expand-lg tw-shadow-lg d-none d-lg-block" id="desktopNavbar">
-    <div class="container" style="padding-left: 0;">
+    <div class="container-fluid" style="max-width: 1400px; padding-left: 1rem; padding-right: 1rem;">
         <!-- Brand - No Text -->
-        <a class="navbar-brand" href="{% url 'college_website:home' %}" style="margin-right: 0.5rem; padding: 0;">
+        <a class="navbar-brand" href="{% url 'college_website:home' %}" style="margin-right: 1rem; padding: 0;">
             {% if college_info.logo %}
-                <img src="{{ college_info.logo.url }}" alt="{{ college_info.name }}" class="tw-h-8 tw-w-8 tw-object-contain">
+                <img src="{{ college_info.logo.url }}" alt="{{ college_info.name }}" class="tw-h-10 tw-w-10 tw-object-contain">
             {% endif %}
         </a>
         
         <!-- Navigation Content -->
         <div class="navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto" style="gap: 0.1rem;">
+            <ul class="navbar-nav me-auto tw-flex tw-items-center tw-justify-center tw-w-full" style="gap: 0.25rem; margin: 0;">
                 <!-- HOME (Always Static) with Institution Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
@@ -29,7 +29,7 @@
                         <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:about' %}">
                             <i class="fas fa-university me-3 tw-text-indigo-500 tw-w-4"></i>About Institution
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/about/history/">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:history' %}">
                             <i class="fas fa-history me-3 tw-text-amber-500 tw-w-4"></i>History
                         </a></li>
                         <li><hr class="dropdown-divider tw-border-gray-200"></li>
@@ -37,7 +37,7 @@
                         <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:principal_message' %}">
                             <i class="fas fa-user-tie me-3 tw-text-purple-500 tw-w-4"></i>Principal's Message
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/about/governing-body/">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:governing_body' %}">
                             <i class="fas fa-users-cog me-3 tw-text-teal-500 tw-w-4"></i>Governing Body
                         </a></li>
                     </ul>
@@ -55,10 +55,10 @@
                         <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:about' %}">
                             <i class="fas fa-university me-3 tw-text-blue-500 tw-w-4"></i>Overview
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/about/history/">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:history' %}">
                             <i class="fas fa-history me-3 tw-text-amber-500 tw-w-4"></i>History
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/about/vision-mission/">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:vision_mission' %}">
                             <i class="fas fa-bullseye me-3 tw-text-green-500 tw-w-4"></i>Vision & Mission
                         </a></li>
                         <li><hr class="dropdown-divider tw-border-gray-200"></li>
@@ -80,24 +80,37 @@
                     </a>
                     <ul class="dropdown-menu tw-animate-pulse">
                         <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Programs</h6></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:programs_list' %}">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:programs_list' %}?type=programs">
                             <i class="fas fa-list me-3 tw-text-gray-600 tw-w-4"></i>All Programs
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:programs_list' %}?discipline=science">
-                            <i class="fas fa-flask me-3 tw-text-blue-500 tw-w-4"></i>Science
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Departments</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:academics' %}">
+                            <i class="fas fa-building me-3 tw-text-purple-500 tw-w-4"></i>All Departments
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:programs_list' %}?discipline=arts">
-                            <i class="fas fa-palette me-3 tw-text-pink-500 tw-w-4"></i>Arts
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:departments_list' %}?discipline=science">
+                            <i class="fas fa-flask me-3 tw-text-blue-500 tw-w-4"></i>Science Departments
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:programs_list' %}?discipline=commerce">
-                            <i class="fas fa-chart-line me-3 tw-text-green-500 tw-w-4"></i>Commerce
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:departments_list' %}?discipline=arts">
+                            <i class="fas fa-palette me-3 tw-text-pink-500 tw-w-4"></i>Arts Departments
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:departments_list' %}?discipline=commerce">
+                            <i class="fas fa-chart-line me-3 tw-text-green-500 tw-w-4"></i>Commerce Departments
+                        </a></li>
+                        <li><hr class="dropdown-divider tw-border-gray-200"></li>
+                        <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Faculties</h6></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:academic_faculties' %}">
+                            <i class="fas fa-chalkboard-teacher me-3 tw-text-blue-500 tw-w-4"></i>Academic Faculties
+                        </a></li>
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:non_academic_faculties' %}">
+                            <i class="fas fa-user-cog me-3 tw-text-green-500 tw-w-4"></i>Non-Academic Faculties
                         </a></li>
                         <li><hr class="dropdown-divider tw-border-gray-200"></li>
                         <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Resources</h6></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/academics/library/">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:academics_library' %}">
                             <i class="fas fa-book-reader me-3 tw-text-indigo-500 tw-w-4"></i>Library
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/academics/calendar/">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:academic_calendar' %}">
                             <i class="fas fa-calendar-alt me-3 tw-text-orange-500 tw-w-4"></i>Academic Calendar
                         </a></li>
                     </ul>
@@ -142,66 +155,83 @@
                 
                 <!-- Examinations -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="/examinations/" role="button" data-bs-toggle="dropdown" 
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:examinations' %}" role="button" data-bs-toggle="dropdown" 
                        aria-expanded="false" id="examinationsDropdown">
                         <i class="fas fa-file-alt me-2 tw-text-sm"></i>Examinations
                     </a>
                     <ul class="dropdown-menu tw-animate-pulse">
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/notices/">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:exam_notices' %}">
                             <i class="fas fa-bell me-3 tw-text-blue-500 tw-w-4"></i>Notices
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/timetable/">
+                        {% if menu_visibility.show_exam_timetable %}
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:exam_timetable' %}">
                             <i class="fas fa-calendar-alt me-3 tw-text-indigo-500 tw-w-4"></i>Timetable
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/question-papers/">
+                        {% endif %}
+                        {% if menu_visibility.show_exam_question_papers %}
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:question_papers' %}">
                             <i class="fas fa-file-lines me-3 tw-text-gray-600 tw-w-4"></i>Question Papers
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/results/">
+                        {% endif %}
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:exam_results' %}">
                             <i class="fas fa-chart-bar me-3 tw-text-green-500 tw-w-4"></i>Results
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/revaluation/">
+                        {% if menu_visibility.show_exam_revaluation %}
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:revaluation' %}">
                             <i class="fas fa-sync-alt me-3 tw-text-amber-500 tw-w-4"></i>Revaluation
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/examinations/rules/">
+                        {% endif %}
+                        {% if menu_visibility.show_exam_rules %}
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:exam_rules' %}">
                             <i class="fas fa-gavel me-3 tw-text-red-500 tw-w-4"></i>Rules
                         </a></li>
+                        {% endif %}
                     </ul>
                 </li>
                 
                 <!-- Research -->
+                {% if menu_visibility.show_research_menu %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="/research/" role="button" data-bs-toggle="dropdown" 
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:research' %}" role="button" data-bs-toggle="dropdown" 
                        aria-expanded="false" id="researchDropdown">
                         <i class="fas fa-microscope me-2 tw-text-sm"></i>Research
                     </a>
                     <ul class="dropdown-menu tw-animate-pulse">
                         <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Research Infrastructure</h6></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/centers/">
+                        {% if menu_visibility.show_research_centers %}
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:research_centers' %}">
                             <i class="fas fa-building me-3 tw-text-blue-500 tw-w-4"></i>Research Centers
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/innovation-incubation/">
+                        {% endif %}
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:innovation_incubation' %}">
                             <i class="fas fa-lightbulb me-3 tw-text-yellow-500 tw-w-4"></i>Innovation & Incubation
                         </a></li>
                         <li><hr class="dropdown-divider tw-border-gray-200"></li>
                         <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Research Output</h6></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/publications/">
+                        {% if menu_visibility.show_publications %}
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:publications' %}">
                             <i class="fas fa-book-open me-3 tw-text-green-500 tw-w-4"></i>Publications
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/patents-projects/">
+                        {% endif %}
+                        {% if menu_visibility.show_patents_projects %}
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:patents_projects' %}">
                             <i class="fas fa-certificate me-3 tw-text-purple-500 tw-w-4"></i>Patents & Projects
                         </a></li>
+                        {% endif %}
                         <li><hr class="dropdown-divider tw-border-gray-200"></li>
                         <li><h6 class="dropdown-header tw-text-red-600 tw-font-bold">Partnerships</h6></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/collaborations-mous/">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:collaborations_mous' %}">
                             <i class="fas fa-handshake me-3 tw-text-teal-500 tw-w-4"></i>Collaborations & MOUs
                         </a></li>
-                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="/research/consultancy/">
+                        <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:consultancy' %}">
                             <i class="fas fa-user-cog me-3 tw-text-indigo-500 tw-w-4"></i>Consultancy
                         </a></li>
                     </ul>
                 </li>
+                {% endif %}
                 
                 <!-- Student Support -->
+                {% if menu_visibility.show_student_portal %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="{% url 'college_website:student_corner' %}" role="button" data-bs-toggle="dropdown" 
                        aria-expanded="false" id="studentSupportDropdown">
@@ -215,22 +245,32 @@
                         <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:library' %}">
                             <i class="fas fa-book-reader me-3 tw-text-green-500 tw-w-4"></i>Library
                         </a></li>
+                        {% if menu_visibility.show_sports_cultural %}
                         <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:sports_cultural' %}">
                             <i class="fas fa-running me-3 tw-text-orange-500 tw-w-4"></i>Sports & Cultural
                         </a></li>
+                        {% endif %}
+                        {% if menu_visibility.show_nss_ncc %}
                         <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:nss_ncc_clubs' %}">
                             <i class="fas fa-users me-3 tw-text-purple-500 tw-w-4"></i>NSS, NCC & Clubs
                         </a></li>
+                        {% endif %}
+                        {% if menu_visibility.show_placement_menu %}
                         <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:placement_cell' %}">
                             <i class="fas fa-briefcase me-3 tw-text-indigo-500 tw-w-4"></i>Placement Cell
                         </a></li>
+                        {% endif %}
+                        {% if menu_visibility.show_alumni_menu %}
                         <li><a class="dropdown-item tw-transition-all tw-duration-200" href="{% url 'college_website:alumni' %}">
                             <i class="fas fa-user-tie me-3 tw-text-teal-500 tw-w-4"></i>Alumni
                         </a></li>
+                        {% endif %}
                     </ul>
                 </li>
+                {% endif %}
                 
                 <!-- Events -->
+                {% if menu_visibility.show_events_menu %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="{% url 'college_website:events' %}" role="button" data-bs-toggle="dropdown" 
                        aria-expanded="false" id="eventsDropdown">
@@ -259,6 +299,7 @@
                         </a></li>
                     </ul>
                 </li>
+                {% endif %}
                 
                 <!-- DYNAMIC CMS MENUS -->
                 {% for menu in cms_menus %}
@@ -320,40 +361,7 @@
                         <i class="fas fa-images me-2 tw-text-sm"></i>Gallery
                     </a>
                 </li>
-                
-                <!-- Notices (with notification badge) -->
-                <li class="nav-item">
-                    <a class="nav-link position-relative" href="{% url 'college_website:notices_list' %}">
-                        <i class="fas fa-bell me-2 tw-text-sm"></i>Notices
-                        {% if recent_notices_count > 0 %}
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                            {{ recent_notices_count }}
-                            <span class="visually-hidden">new notices</span>
-                        </span>
-                        {% endif %}
-                    </a>
-                </li>
-                
-                <!-- Contact -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'college_website:contact' %}">
-                        <i class="fas fa-phone me-2 tw-text-sm"></i>Contact
-                    </a>
-                </li>
             </ul>
-            
-            <!-- Right side: Search -->
-            {% if navbar_info.enable_search %}
-            <form class="d-flex tw-ml-4" method="GET" action="{% url 'college_website:search' %}" role="search">
-                <div class="input-group tw-w-64">
-                    <input class="form-control tw-bg-white tw-bg-opacity-20 tw-border-white tw-border-opacity-30 tw-text-white tw-placeholder-white tw-placeholder-opacity-70 focus:tw-bg-white focus:tw-bg-opacity-30 focus:tw-border-white focus:tw-border-opacity-50" 
-                           type="search" name="q" placeholder="{{ navbar_info.search_placeholder|default:'Search...' }}" aria-label="Search">
-                    <button class="btn btn-outline-light tw-border-white tw-border-opacity-50 hover:tw-bg-white hover:tw-bg-opacity-20 tw-transition-all tw-duration-200" type="submit">
-                        <i class="fas fa-search tw-text-sm"></i>
-                    </button>
-                </div>
-            </form>
-            {% endif %}
         </div>
     </div>
 </nav>
@@ -404,14 +412,14 @@
                         <li><a class="dropdown-item" href="{% url 'college_website:about' %}">
                             <i class="fas fa-university me-2 text-primary"></i>About Institution
                         </a></li>
-                        <li><a class="dropdown-item" href="/about/history/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:history' %}">
                             <i class="fas fa-history me-2 text-primary"></i>History
                         </a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'college_website:principal_message' %}">
                             <i class="fas fa-user-tie me-2 text-secondary"></i>Principal's Message
                         </a></li>
-                        <li><a class="dropdown-item" href="/about/governing-body/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:governing_body' %}">
                             <i class="fas fa-users-cog me-2 text-secondary"></i>Governing Body
                         </a></li>
                     </ul>
@@ -426,69 +434,104 @@
                 </li>
                 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:programs_list' %}" id="mobileProgramsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:programs_list' %}" id="mobileAcademicsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="d-flex align-items-center justify-content-end">
-                            <span>Programs</span><i class="fas fa-graduation-cap ms-3"></i>
+                            <span>Academics</span><i class="fas fa-graduation-cap ms-3"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{% url 'college_website:programs_list' %}">
+                        <!-- Programs Section -->
+                        <li><h6 class="dropdown-header text-primary fw-bold">Programs</h6></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:programs_list' %}?type=programs">
                             <i class="fas fa-list me-2 text-primary"></i>All Programs
+                        </a></li>
+                        
+                        <!-- Departments Section -->
+                        <li><h6 class="dropdown-header text-secondary fw-bold">Departments</h6></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:academics' %}">
+                            <i class="fas fa-building me-2 text-secondary"></i>All Departments
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:departments_list' %}?discipline=commerce">
+                            <i class="fas fa-chart-line me-2 text-success"></i>Commerce Departments
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:departments_list' %}?discipline=science">
+                            <i class="fas fa-flask me-2 text-info"></i>Science Departments
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:departments_list' %}?discipline=arts">
+                            <i class="fas fa-palette me-2 text-warning"></i>Arts Departments
+                        </a></li>
+                        
+                        <!-- Faculties Section -->
+                        <li><h6 class="dropdown-header text-success fw-bold">Faculties</h6></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:academic_faculties' %}">
+                            <i class="fas fa-chalkboard-teacher me-2 text-primary"></i>Academic Faculties
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:non_academic_faculties' %}">
+                            <i class="fas fa-user-cog me-2 text-success"></i>Non-Academic Faculties
+                        </a></li>
+                        
+                        <!-- Resources Section -->
+                        <li><h6 class="dropdown-header text-info fw-bold">Resources</h6></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:academics_library' %}">
+                            <i class="fas fa-book-reader me-2 text-info"></i>Library
+                        </a></li>
+                        <li><a class="dropdown-item" href="{% url 'college_website:academic_calendar' %}">
+                            <i class="fas fa-calendar-alt me-2 text-info"></i>Academic Calendar
                         </a></li>
                     </ul>
                 </li>
                 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="/examinations/" id="mobileExaminationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:examinations' %}" id="mobileExaminationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="d-flex align-items-center justify-content-end">
                             <span>Examinations</span><i class="fas fa-file-alt ms-3"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/examinations/notices/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:exam_notices' %}">
                             <i class="fas fa-bell me-2 text-primary"></i>Notices
                         </a></li>
-                        <li><a class="dropdown-item" href="/examinations/timetable/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:exam_timetable' %}">
                             <i class="fas fa-calendar-alt me-2 text-primary"></i>Timetable
                         </a></li>
-                        <li><a class="dropdown-item" href="/examinations/question-papers/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:question_papers' %}">
                             <i class="fas fa-file-lines me-2 text-primary"></i>Question Papers
                         </a></li>
-                        <li><a class="dropdown-item" href="/examinations/results/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:exam_results' %}">
                             <i class="fas fa-chart-bar me-2 text-primary"></i>Results
                         </a></li>
-                        <li><a class="dropdown-item" href="/examinations/revaluation/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:revaluation' %}">
                             <i class="fas fa-sync-alt me-2 text-primary"></i>Revaluation
                         </a></li>
-                        <li><a class="dropdown-item" href="/examinations/rules/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:exam_rules' %}">
                             <i class="fas fa-gavel me-2 text-primary"></i>Rules
                         </a></li>
                     </ul>
                 </li>
                 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="/research/" id="mobileResearchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="{% url 'college_website:research' %}" id="mobileResearchDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="d-flex align-items-center justify-content-end">
                             <span>Research</span><i class="fas fa-microscope ms-3"></i>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/research/centers/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:research_centers' %}">
                             <i class="fas fa-building me-2 text-primary"></i>Research Centers
                         </a></li>
-                        <li><a class="dropdown-item" href="/research/publications/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:publications' %}">
                             <i class="fas fa-book-open me-2 text-primary"></i>Publications
                         </a></li>
-                        <li><a class="dropdown-item" href="/research/patents-projects/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:patents_projects' %}">
                             <i class="fas fa-certificate me-2 text-primary"></i>Patents & Projects
                         </a></li>
-                        <li><a class="dropdown-item" href="/research/collaborations-mous/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:collaborations_mous' %}">
                             <i class="fas fa-handshake me-2 text-primary"></i>Collaborations & MOUs
                         </a></li>
-                        <li><a class="dropdown-item" href="/research/innovation-incubation/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:innovation_incubation' %}">
                             <i class="fas fa-lightbulb me-2 text-primary"></i>Innovation & Incubation
                         </a></li>
-                        <li><a class="dropdown-item" href="/research/consultancy/">
+                        <li><a class="dropdown-item" href="{% url 'college_website:consultancy' %}">
                             <i class="fas fa-user-cog me-2 text-primary"></i>Consultancy
                         </a></li>
                     </ul>

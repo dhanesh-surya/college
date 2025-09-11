@@ -1,453 +1,1872 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Alumni - {{ block.super }}{% endblock %}
+{% block title %}Alumni Network - {{ block.super }}{% endblock %}
 
 {% block extra_css %}
 <style>
+/* 
+OPTIMIZED FRAMEWORK STRATEGY:
+- PRIMARY: Bootstrap 5 (Grid, Components, Utilities, Typography, Spacing)
+- SECONDARY: Custom CSS (Professional enhancements and animations)
+- MINIMAL: Tailwind CSS (Only where Bootstrap 5 lacks functionality)
+
+Bootstrap 5 Features Used:
+- Grid System (container, row, col-*)
+- Components (btn, card, badge, navbar)
+- Utilities (d-flex, text-center, mb-4, px-3, py-2)
+- Typography (display-*, lead, fw-bold)
+- Spacing (m-*, p-*, gap-*)
+- Colors (text-primary, bg-primary)
+- Responsive (d-none d-lg-block)
+*/
+
+/* Enhanced Professional Alumni Page Styles with Bootstrap 5 Focus */
+
+/* Enhanced Hero Section */
 .alumni-hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 4rem 0 2rem;
+    padding: 5rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+}
+
+.alumni-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.03) 0%, transparent 50%);
+    animation: heroFloat 20s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.05) rotate(1deg); }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-icon {
+    font-size: 5rem;
+    opacity: 0.9;
+    animation: float 6s ease-in-out infinite;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    color: #fbbf24;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-10px) rotate(2deg); }
+    50% { transform: translateY(-5px) rotate(-1deg); }
+    75% { transform: translateY(-15px) rotate(1deg); }
+}
+
+.hero-stats {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    margin-top: 3rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: slideInUp 1s ease-out 0.5s both;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Professional Section Container */
+.section-container {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 3rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.section-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Section Headers */
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.section-subtitle {
+    font-size: 1.25rem;
+    color: #64748b;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.section-divider {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 9999px;
+    margin: 1.5rem auto;
+    animation: scaleIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+/* Enhanced Search Section */
+.search-section {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    position: relative;
+}
+
+.search-container {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.search-container:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 3px rgba(37, 99, 235, 0.1);
+    transform: translateY(-2px);
+}
+
+.search-input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3.5rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.75rem;
+    font-size: 1.125rem;
+    background: #f8fafc;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus + .search-icon {
+    color: #2563eb;
+}
+
+.search-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    color: white;
+}
+
+/* Professional Statistics Section */
+.stats-section {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, transparent 70%);
+    animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.stats-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 3rem;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+}
+
+.stat-card:nth-child(1)::before { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.stat-card:nth-child(2)::before { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.stat-card:nth-child(3)::before { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.stat-card:nth-child(4)::before { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+
+.stat-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.stat-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-icon.icon-alumni { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.stat-icon.icon-countries { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.stat-icon.icon-mentors { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.stat-icon.icon-industries { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+
+.stat-card:hover .stat-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #1e293b;
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    animation: countUp 2s ease-out;
+}
+
+@keyframes countUp {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.stat-label {
+    color: #475569;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.stat-description {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+/* Enhanced Filter System */
+.filter-section {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 3rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.filter-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.filter-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.filter-subtitle {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.filter-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.filter-tab {
+    background: white;
+    border: 2px solid #e2e8f0;
+    color: #64748b;
+    padding: 0.875rem 1.5rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-tab:nth-child(1) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.filter-tab:nth-child(2) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.filter-tab:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.filter-tab:nth-child(4) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.filter-tab:nth-child(5) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.filter-tab:nth-child(6) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+
+.filter-tab:hover,
+.filter-tab.active {
+    color: white;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: transparent;
+}
+
+.filter-icon {
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.filter-tab:hover .filter-icon {
+    transform: scale(1.2);
+}
+
+/* Premium Alumni Cards */
+.alumni-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 3rem;
+    margin-bottom: 4rem;
 }
 
 .alumni-card {
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
+    background: white;
+    border-radius: 1.5rem;
     overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
     height: 100%;
 }
 
-.alumni-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+.alumni-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.featured-badge {
+.alumni-card:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-color: rgba(37, 99, 235, 0.2);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    padding: 3rem;
+    text-align: center;
+    position: relative;
+}
+
+.badge-container {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
-    color: white;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.7rem;
-    font-weight: 600;
+    left: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 10;
 }
 
-.mentor-badge {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+.alumni-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
     color: white;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.7rem;
-    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.badge-featured {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.badge-mentor {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.badge-recent {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .alumni-photo {
-    width: 100px;
-    height: 100px;
+    width: 140px;
+    height: 140px;
     object-fit: cover;
     border-radius: 50%;
-    border: 4px solid #fff;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    margin: 0 auto;
+    border: 5px solid white;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    margin: 0 auto 1.5rem;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.photo-placeholder {
+    width: 140px;
+    height: 140px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    border: 5px solid white;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.alumni-card:hover .alumni-photo,
+.alumni-card:hover .photo-placeholder {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+}
+
+.alumni-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
 }
 
 .graduation-year {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
     font-weight: 600;
     display: inline-block;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-body {
+    padding: 3rem;
+}
+
+.course-info {
+    color: #64748b;
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.professional-info {
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.professional-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.position-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.company-name {
+    color: #2563eb;
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+}
+
+.location-info {
+    color: #64748b;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.location-icon {
+    color: #f97316;
+}
+
+.bio-section {
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    text-align: center;
 }
 
 .social-links {
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     justify-content: center;
+    margin-bottom: 1.5rem;
 }
 
 .social-link {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    border-radius: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     text-decoration: none;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    font-size: 1.25rem;
+    position: relative;
+    overflow: hidden;
 }
 
 .social-link:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.1) rotate(5deg);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     color: white;
 }
 
-.linkedin { background: #0077b5; }
-.twitter { background: #1da1f2; }
-.email { background: #ea4335; }
+.linkedin { background: linear-gradient(135deg, #0077b5, #00a0dc); }
+.email { background: linear-gradient(135deg, #ea4335, #ff6b35); }
+.phone { background: linear-gradient(135deg, #25d366, #128c7e); }
 
-.filter-tabs {
-    background: white;
-    border-radius: 15px;
-    padding: 1rem;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-}
-
-.filter-tab {
-    background: transparent;
-    border: 2px solid #e9ecef;
-    color: #6c757d;
-    padding: 0.75rem 1.5rem;
-    border-radius: 25px;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-    margin: 0.25rem;
-}
-
-.filter-tab:hover,
-.filter-tab.active {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-color: #667eea;
-    color: white;
-}
-
-.stats-section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 15px;
-    padding: 2rem;
-}
-
-.stat-item {
-    text-align: center;
-    padding: 1.5rem;
-}
-
-.stat-number {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #667eea;
-    display: block;
-    line-height: 1;
-}
-
-.stat-label {
-    color: #6c757d;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .connect-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    padding: 0.875rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     transition: all 0.3s ease;
-    font-size: 0.9rem;
+    border: none;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
 }
 
 .connect-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     color: white;
 }
 
-.mentor-btn {
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-}
-
-.mentor-btn:hover {
-    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-}
-
-.network-section {
+.btn-primary-modern {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    border-radius: 15px;
-    padding: 2rem;
-    text-align: center;
 }
 
-.search-section {
-    background: white;
-    border-radius: 15px;
+.btn-success-modern {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+/* Enhanced Mentorship Section */
+.mentorship-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 1.5rem;
+    padding: 4rem 3rem;
+    position: relative;
+    overflow: hidden;
+    margin: 4rem 0;
+}
+
+.mentorship-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: float 15s ease-in-out infinite reverse;
+}
+
+.mentorship-content {
+    position: relative;
+    z-index: 2;
+}
+
+.mentorship-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.mentorship-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    padding: 3rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.mentorship-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.mentorship-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 2rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.mentorship-card:hover .mentorship-icon {
+    transform: scale(1.1) rotate(10deg);
+}
+
+.mentorship-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.mentorship-description {
+    opacity: 0.9;
+    line-height: 1.6;
+    font-size: 0.875rem;
+}
+
+/* Call to Action Section */
+.cta-section {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 1.5rem;
+    padding: 4rem 3rem;
+    text-align: center;
+    margin-top: 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(37, 99, 235, 0.03) 0%, transparent 50%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    color: #64748b;
+}
+
+.empty-icon {
+    width: 140px;
+    height: 140px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.empty-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.empty-description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .alumni-hero {
+        padding: 3rem 0 2rem;
+        min-height: 60vh;
+    }
+    
+    .hero-icon {
+        font-size: 4rem;
+    }
+    
+    .hero-stats {
     padding: 2rem;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
+        margin-top: 2rem;
+}
+
+    .section-container {
+    padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+    }
+    
+    .filter-tabs {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+    }
+    
+    .filter-tab {
+        flex-shrink: 0;
+    }
+    
+    .alumni-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .mentorship-section {
+        padding: 3rem 1.5rem;
+        margin: 3rem 0;
+    }
+    
+    .mentorship-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .cta-section {
+        padding: 3rem 1.5rem;
+        margin-top: 3rem;
+    }
+}
+
+/* Animation utilities */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.animate-on-scroll.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.delay-100 { transition-delay: 0.1s; }
+.delay-200 { transition-delay: 0.2s; }
+.delay-300 { transition-delay: 0.3s; }
+.delay-400 { transition-delay: 0.4s; }
+.delay-500 { transition-delay: 0.5s; }
+.delay-600 { transition-delay: 0.6s; }
+
+/* Bootstrap 5 Color Utilities - Clean and Simple */
+.hero-icon {
+    color: #fbbf24 !important;
+    font-size: 5rem !important;
+}
+
+/* Ensure proper contrast for text elements */
+.alumni-name { color: #212529 !important; }
+.position-title { color: #212529 !important; }
+.company-name { color: #0d6efd !important; }
+.stat-number { color: #212529 !important; }
+.stat-label { color: #495057 !important; }
+.stat-description { color: #6c757d !important; }
+.course-info { color: #6c757d !important; }
+.bio-section { color: #495057 !important; }
+.location-info { color: #6c757d !important; }
+.empty-title { color: #212529 !important; }
+.empty-description { color: #6c757d !important; }
+.filter-title { color: #212529 !important; }
+.filter-subtitle { color: #6c757d !important; }
+.mentorship-title { color: white !important; }
+.mentorship-description { color: rgba(255, 255, 255, 0.9) !important; }
+
+/* Alumni card badges with proper Bootstrap colors */
+.badge-featured { 
+    background-color: #fd7e14 !important; 
+    color: white !important; 
+}
+.badge-mentor { 
+    background-color: #20c997 !important; 
+    color: white !important; 
+}
+.badge-recent { 
+    background-color: #6f42c1 !important; 
+    color: white !important; 
+}
+
+/* Social links with proper Bootstrap colors */
+.linkedin { 
+    background-color: #0a66c2 !important; 
+    color: white !important; 
+}
+.email { 
+    background-color: #dc3545 !important; 
+    color: white !important; 
+}
+.phone { 
+    background-color: #198754 !important; 
+    color: white !important; 
+}
+
+/* Button colors using Bootstrap 5 */
+.btn-primary-modern { 
+    background-color: #0d6efd !important; 
+    color: white !important; 
+}
+.btn-success-modern { 
+    background-color: #198754 !important; 
+    color: white !important; 
+}
+
+/* Bootstrap 5 Enhanced Components */
+.mentorship-feature-card {
+    transition: all 0.3s ease;
+}
+
+.mentorship-feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.empty-state-suggestion {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.empty-state-suggestion:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.empty-state-benefit {
+    transition: all 0.3s ease;
+}
+
+.empty-state-benefit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Enhanced text opacity utilities for Bootstrap 5 */
+.text-white-75 {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Backdrop blur utility */
+.backdrop-blur {
+    backdrop-filter: blur(10px);
 }
 </style>
 {% endblock %}
 
 {% block breadcrumb_items %}
-<li class="breadcrumb-item active text-white">Alumni</li>
+<li class="breadcrumb-item active text-white">Alumni Network</li>
 {% endblock %}
 
 {% block content %}
-<!-- Alumni Hero Section -->
-<div class="alumni-hero">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-3">Alumni Network</h1>
-                <p class="lead mb-4">Connect with our distinguished alumni who are making their mark across various industries worldwide. Join our thriving community of successful professionals.</p>
+<!-- Bootstrap 5 Professional Hero Section -->
+<section class="alumni-hero py-5">
+    <div class="container hero-content">
+        <!-- Bootstrap 5: Grid System with alignment utilities -->
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <!-- Bootstrap 5: Animation wrapper -->
+                <div class="animate-on-scroll">
+                    <!-- Bootstrap 5: Typography utilities -->
+                    <h1 class="display-2 fw-bold mb-4 text-white">Alumni Network</h1>
+                    <p class="lead fs-4 mb-4 text-white-75 lh-base">Connect with our distinguished alumni who are making their mark across various industries worldwide. Join our thriving community of successful professionals, innovators, and leaders.</p>
+                    <!-- Bootstrap 5: Flexbox utilities with gap -->
                 <div class="d-flex gap-3 flex-wrap">
-                    <a href="#alumni-directory" class="btn btn-light btn-lg">
-                        <i class="fas fa-users me-2"></i>Browse Alumni
+                        <a href="#alumni-directory" class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">
+                            <i class="fas fa-users me-2 text-primary"></i>Browse Alumni
                     </a>
-                    <a href="#mentorship" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-handshake me-2"></i>Find Mentors
+                        <a href="#mentorship" class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">
+                            <i class="fas fa-handshake me-2 text-success"></i>Find Mentors
                     </a>
                 </div>
             </div>
+            </div>
+            <!-- Bootstrap 5: Grid column with text utilities -->
             <div class="col-lg-4 text-center">
-                <i class="fas fa-user-graduate fa-8x opacity-75"></i>
+                <div class="animate-on-scroll delay-200">
+                    <i class="fas fa-user-graduate hero-icon display-1" style="color: #fbbf24 !important; font-size: 5rem !important;"></i>
             </div>
         </div>
     </div>
+        
+        <!-- Bootstrap 5 Enhanced Hero Stats -->
+        <div class="hero-stats bg-white bg-opacity-25 border border-white border-opacity-25 rounded-4 mt-5 p-4 shadow-lg backdrop-blur">
+            <!-- Bootstrap 5: Grid system with gap utilities -->
+            <div class="row g-0">
+                <div class="col-6 col-lg-3 border-end border-white border-opacity-25">
+                    <!-- Bootstrap 5: Text and spacing utilities -->
+                    <div class="text-center p-4">
+                        <div class="stat-number display-4 fw-black text-white">{{ total_alumni|default:"2500" }}+</div>
+                        <div class="fw-bold text-white fs-5">Global Alumni</div>
+                        <small class="text-white text-opacity-75">Worldwide network</small>
 </div>
+                </div>
+                <div class="col-6 col-lg-3 border-end border-white border-opacity-25">
+                    <div class="text-center p-4">
+                        <div class="stat-number display-4 fw-black text-white">{{ countries|default:"45" }}+</div>
+                        <div class="fw-bold text-white fs-5">Countries</div>
+                        <small class="text-white text-opacity-75">International reach</small>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3 border-end border-white border-opacity-25">
+                    <div class="text-center p-4">
+                        <div class="stat-number display-4 fw-black text-white">{{ mentors|default:"200" }}+</div>
+                        <div class="fw-bold text-white fs-5">Active Mentors</div>
+                        <small class="text-white text-opacity-75">Ready to guide</small>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="text-center p-4">
+                        <div class="stat-number display-4 fw-black text-white">{{ industries|default:"75" }}+</div>
+                        <div class="fw-bold text-white fs-5">Industries</div>
+                        <small class="text-white text-opacity-75">Diverse careers</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <div class="container py-5">
-    <!-- Search Section -->
-    <div class="search-section">
+    <!-- Bootstrap 5 Professional Search Section -->
+    <section class="search-section">
+        <div class="card border-0 shadow-lg mb-5 animate-on-scroll">
+            <div class="card-body p-5">
+                <div class="text-center mb-5">
+                    <h2 class="display-5 fw-bold text-primary mb-3">
+                        <i class="fas fa-search me-3 text-primary"></i>Discover Alumni
+                    </h2>
+                    <hr class="border-primary border-3 opacity-75 w-25 mx-auto mb-4">
+                    <p class="lead text-muted">Search through our extensive network of graduates and connect with professionals in your field of interest</p>
+                </div>
+                
         <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h3 class="mb-3">Find Alumni</h3>
-                <form method="GET" class="d-flex gap-3">
-                    <input type="text" name="q" class="form-control form-control-lg" 
-                           placeholder="Search by name, company, position, or course..." 
-                           value="{{ request.GET.q }}">
-                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                    <div class="col-lg-8 mb-4 mb-lg-0">
+                        <!-- Bootstrap 5 Input Group -->
+                        <form method="GET">
+                            <div class="input-group input-group-lg shadow-sm">
+                                <span class="input-group-text bg-primary text-white border-primary">
                         <i class="fas fa-search"></i>
+                                </span>
+                                <input type="text" name="q" class="form-control border-primary" 
+                                       placeholder="Search by name, company, position, course, or industry..." 
+                                       value="{{ request.GET.q }}">
+                                <button type="submit" class="btn btn-primary px-4 fw-bold">
+                                    <i class="fas fa-search me-2"></i>Search
                     </button>
+                            </div>
                 </form>
             </div>
             <div class="col-lg-4 text-center">
-                <i class="fas fa-search fa-4x text-primary opacity-75"></i>
+                        <i class="fas fa-user-friends text-primary opacity-75" style="font-size: 4rem;"></i>
             </div>
         </div>
     </div>
-
-    <!-- Alumni Statistics -->
-    <div class="stats-section mb-5">
-        <div class="text-center mb-4">
-            <h2 class="display-5 fw-bold mb-3">Alumni Network Stats</h2>
-            <p class="lead text-muted">Our global community continues to grow</p>
         </div>
-        <div class="row">
-            <div class="col-md-3">
-                <div class="stat-item">
-                    <span class="stat-number">{{ total_alumni|default:"2500" }}+</span>
-                    <div class="stat-label">Total Alumni</div>
+    </section>
+
+    <!-- Bootstrap 5 Professional Statistics Section -->
+    <section class="stats-section mb-5">
+        <div class="text-center mb-5 animate-on-scroll delay-200">
+            <h2 class="display-5 fw-bold text-success mb-3">
+                <i class="fas fa-chart-line me-3 text-success"></i>Our Global Impact
+            </h2>
+            <hr class="border-success border-3 opacity-75 w-25 mx-auto mb-4">
+            <p class="lead text-muted">Connecting graduates across continents and industries, building bridges for future success</p>
+        </div>
+        
+        <!-- Bootstrap 5 Card Grid -->
+        <div class="row g-4">
+            <div class="col-md-6 col-xl-3">
+                <div class="card border-0 shadow-lg h-100 text-center animate-on-scroll delay-300">
+                    <div class="card-header bg-primary bg-gradient border-0 py-4">
+                        <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-graduation-cap text-primary fa-2x"></i>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="stat-item">
-                    <span class="stat-number">{{ countries|default:"25" }}+</span>
-                    <div class="stat-label">Countries</div>
+                    <div class="card-body py-4">
+                        <h3 class="display-4 fw-black text-dark mb-2">{{ total_alumni|default:"2500" }}+</h3>
+                        <h5 class="fw-bold text-secondary mb-2">Total Alumni</h5>
+                        <p class="text-muted small mb-0">Worldwide graduates making impact</p>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="stat-item">
-                    <span class="stat-number">{{ mentors|default:"150" }}+</span>
-                    <div class="stat-label">Active Mentors</div>
                 </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card border-0 shadow-lg h-100 text-center animate-on-scroll delay-400">
+                    <div class="card-header bg-info bg-gradient border-0 py-4">
+                        <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-globe-americas text-info fa-2x"></i>
             </div>
-            <div class="col-md-3">
-                <div class="stat-item">
-                    <span class="stat-number">{{ industries|default:"50" }}+</span>
-                    <div class="stat-label">Industries</div>
                 </div>
+                    <div class="card-body py-4">
+                        <h3 class="display-4 fw-black text-dark mb-2">{{ countries|default:"45" }}+</h3>
+                        <h5 class="fw-bold text-secondary mb-2">Countries</h5>
+                        <p class="text-muted small mb-0">Global presence and reach</p>
             </div>
         </div>
     </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card border-0 shadow-lg h-100 text-center animate-on-scroll delay-500">
+                    <div class="card-header bg-warning bg-gradient border-0 py-4">
+                        <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-handshake text-warning fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="card-body py-4">
+                        <h3 class="display-4 fw-black text-dark mb-2">{{ mentors|default:"200" }}+</h3>
+                        <h5 class="fw-bold text-secondary mb-2">Active Mentors</h5>
+                        <p class="text-muted small mb-0">Ready to guide and support</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card border-0 shadow-lg h-100 text-center animate-on-scroll delay-600">
+                    <div class="card-header bg-success bg-gradient border-0 py-4">
+                        <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-industry text-success fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="card-body py-4">
+                        <h3 class="display-4 fw-black text-dark mb-2">{{ industries|default:"75" }}+</h3>
+                        <h5 class="fw-bold text-secondary mb-2">Industries</h5>
+                        <p class="text-muted small mb-0">Diverse career pathways</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Filter Tabs -->
-    <div class="filter-tabs text-center">
-        <a href="?filter=all" class="filter-tab {% if not request.GET.filter or request.GET.filter == 'all' %}active{% endif %}">
-            <i class="fas fa-list"></i>All Alumni
-        </a>
-        <a href="?filter=featured" class="filter-tab {% if request.GET.filter == 'featured' %}active{% endif %}">
-            <i class="fas fa-star"></i>Featured
-        </a>
-        <a href="?filter=mentors" class="filter-tab {% if request.GET.filter == 'mentors' %}active{% endif %}">
-            <i class="fas fa-handshake"></i>Mentors
-        </a>
-        <a href="?year=2020-2024" class="filter-tab {% if request.GET.year == '2020-2024' %}active{% endif %}">
-            <i class="fas fa-calendar"></i>Recent Grads
-        </a>
-        <a href="?year=2015-2019" class="filter-tab {% if request.GET.year == '2015-2019' %}active{% endif %}">
-            <i class="fas fa-calendar-alt"></i>2015-2019
-        </a>
-        <a href="?year=2010-2014" class="filter-tab {% if request.GET.year == '2010-2014' %}active{% endif %}">
-            <i class="fas fa-history"></i>2010-2014
-        </a>
-    </div>
+    <!-- Bootstrap 5 Enhanced Filter Section -->
+    <section class="filter-section mb-5">
+        <div class="card border-0 shadow-lg animate-on-scroll delay-300">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <h3 class="h4 fw-bold text-dark mb-3">
+                        <i class="fas fa-filter me-2 text-primary"></i>Browse by Category
+                    </h3>
+                    <p class="text-muted">Filter alumni by different criteria to find exactly who you're looking for</p>
+                </div>
+                
+                <!-- Bootstrap 5 Button Group with Pills -->
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <a href="?filter=all" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold {% if not request.GET.filter or request.GET.filter == 'all' %}active{% endif %}">
+                        <i class="fas fa-list me-2"></i>All Alumni
+                    </a>
+                    <a href="?filter=featured" class="btn btn-warning rounded-pill px-4 py-2 fw-semibold {% if request.GET.filter == 'featured' %}active{% endif %}">
+                        <i class="fas fa-star me-2"></i>Featured Alumni
+                    </a>
+                    <a href="?filter=mentors" class="btn btn-info rounded-pill px-4 py-2 fw-semibold {% if request.GET.filter == 'mentors' %}active{% endif %}">
+                        <i class="fas fa-handshake me-2"></i>Available Mentors
+                    </a>
+                    <a href="?year=2020-2024" class="btn btn-success rounded-pill px-4 py-2 fw-semibold {% if request.GET.year == '2020-2024' %}active{% endif %}">
+                        <i class="fas fa-clock me-2"></i>Recent Grads
+                    </a>
+                    <a href="?year=2015-2019" class="btn btn-danger rounded-pill px-4 py-2 fw-semibold {% if request.GET.year == '2015-2019' %}active{% endif %}">
+                        <i class="fas fa-calendar-alt me-2"></i>2015-2019
+                    </a>
+                    <a href="?year=2010-2014" class="btn btn-secondary rounded-pill px-4 py-2 fw-semibold {% if request.GET.year == '2010-2014' %}active{% endif %}">
+                        <i class="fas fa-history me-2"></i>2010-2014
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Alumni Directory -->
-    <div id="alumni-directory" class="row g-4 mb-5">
-        {% for alumni in alumni_profiles %}
-        <div class="col-lg-4 col-md-6">
-            <div class="card alumni-card">
-                {% if alumni.is_featured %}
-                <div class="featured-badge">
-                    <i class="fas fa-star me-1"></i>Featured
+    <!-- Enhanced Alumni Directory -->
+    <section id="alumni-directory" class="animate-on-scroll delay-400">
+        {% if request.GET.q or request.GET.filter or request.GET.year %}
+        <div class="section-header">
+            <h3 class="section-title">
+                <i class="fas fa-search-plus me-3 text-info"></i>Search Results
+            </h3>
+            <div class="section-divider"></div>
+            <p class="section-subtitle">
+                Found {{ alumni|length }} alumni 
+                {% if request.GET.q %}matching "{{ request.GET.q }}"{% endif %}
+                {% if request.GET.filter and request.GET.filter != 'all' %}in {{ request.GET.filter }} category{% endif %}
+                {% if request.GET.year %}from {{ request.GET.year }}{% endif %}
+            </p>
                 </div>
                 {% endif %}
-                {% if alumni.willing_to_mentor %}
-                <div class="mentor-badge">
+        
+        <div class="alumni-grid">
+            {% for alumni_member in alumni %}
+            <div class="alumni-card animate-on-scroll delay-{{ forloop.counter|add:4 }}">
+                <div class="badge-container">
+                    {% if alumni_member.is_featured %}
+                    <span class="alumni-badge badge-featured">
+                        <i class="fas fa-star me-1"></i>Featured
+                    </span>
+                    {% endif %}
+                    {% if alumni_member.willing_to_mentor %}
+                    <span class="alumni-badge badge-mentor">
                     <i class="fas fa-handshake me-1"></i>Mentor
-                </div>
+                    </span>
                 {% endif %}
-                <div class="card-body p-4 text-center">
-                    {% if alumni.profile_photo %}
-                    <img src="{{ alumni.profile_photo.url }}" alt="{{ alumni.name }}" class="alumni-photo mb-3">
+                    {% if alumni_member.graduation_year >= 2020 %}
+                    <span class="alumni-badge badge-recent">
+                        <i class="fas fa-clock me-1"></i>Recent
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <div class="card-header">
+                    {% if alumni_member.profile_photo %}
+                    <img src="{{ alumni_member.profile_photo.url }}" alt="{{ alumni_member.name }}" class="alumni-photo">
                     {% else %}
-                    <div class="alumni-photo bg-primary d-flex align-items-center justify-content-center mb-3">
+                    <div class="photo-placeholder">
                         <i class="fas fa-user text-white fa-3x"></i>
                     </div>
                     {% endif %}
                     
-                    <h5 class="card-title mb-2">{{ alumni.name }}</h5>
-                    <div class="graduation-year mb-2">Class of {{ alumni.graduation_year }}</div>
-                    <p class="text-muted mb-1">{{ alumni.course }}</p>
+                    <h4 class="alumni-name">{{ alumni_member.name }}</h4>
+                    <div class="graduation-year">Class of {{ alumni_member.graduation_year }}</div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="course-info">{{ alumni_member.course }}</div>
                     
-                    <div class="mb-3">
-                        <h6 class="text-primary mb-1">{{ alumni.current_position }}</h6>
-                        <p class="text-muted mb-0">{{ alumni.current_company }}{% if alumni.location %} • {{ alumni.location }}{% endif %}</p>
+                    <div class="professional-info">
+                        <div class="position-title">{{ alumni_member.current_position }}</div>
+                        <div class="company-name">{{ alumni_member.current_company }}</div>
+                        {% if alumni_member.location %}
+                        <div class="location-info">
+                            <i class="fas fa-map-marker-alt location-icon"></i>
+                            <span>{{ alumni_member.location }}</span>
+                        </div>
+                        {% endif %}
                     </div>
                     
-                    {% if alumni.bio %}
-                    <p class="card-text text-muted mb-3">{{ alumni.bio|truncatewords:15 }}</p>
+                    {% if alumni_member.bio %}
+                    <div class="bio-section">
+                        {{ alumni_member.bio|truncatewords:25 }}
+                    </div>
                     {% endif %}
                     
-                    <!-- Social Links -->
-                    <div class="social-links mb-3">
-                        {% if alumni.linkedin_profile %}
-                        <a href="{{ alumni.linkedin_profile }}" class="social-link linkedin" target="_blank">
+                    <!-- Enhanced Social Links -->
+                    <div class="social-links">
+                        {% if alumni_member.linkedin_profile %}
+                        <a href="{{ alumni_member.linkedin_profile }}" class="social-link linkedin" target="_blank" title="LinkedIn Profile">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
                         {% endif %}
-                        {% if alumni.email %}
-                        <a href="mailto:{{ alumni.email }}" class="social-link email">
+                        {% if alumni_member.email %}
+                        <a href="mailto:{{ alumni_member.email }}" class="social-link email" title="Send Email">
                             <i class="fas fa-envelope"></i>
                         </a>
                         {% endif %}
-                        {% if alumni.phone %}
-                        <a href="tel:{{ alumni.phone }}" class="social-link twitter">
+                        {% if alumni_member.phone %}
+                        <a href="tel:{{ alumni_member.phone }}" class="social-link phone" title="Call">
                             <i class="fas fa-phone"></i>
                         </a>
                         {% endif %}
                     </div>
                     
-                    <div class="d-flex gap-2 justify-content-center flex-wrap">
-                        <a href="{{ alumni.get_absolute_url }}" class="connect-btn">
+                    <div class="action-buttons">
+                        <a href="{{ alumni_member.get_absolute_url }}" class="connect-btn btn-primary-modern">
                             <i class="fas fa-eye"></i>View Profile
                         </a>
-                        {% if alumni.willing_to_mentor %}
-                        <a href="#" class="connect-btn mentor-btn">
+                        {% if alumni_member.willing_to_mentor %}
+                        <a href="{% url 'college_website:contact' %}?subject=Mentorship Request&recipient={{ alumni_member.name }}" class="connect-btn btn-success-modern">
                             <i class="fas fa-handshake"></i>Connect
                         </a>
                         {% endif %}
-                    </div>
                 </div>
             </div>
         </div>
         {% empty %}
-        <div class="col-12 text-center py-5">
-            <i class="fas fa-user-graduate fa-4x text-muted mb-3"></i>
-            <h4 class="text-muted">No Alumni Found</h4>
-            <p class="text-muted">No alumni profiles match your current search or filters. Try adjusting your criteria.</p>
+            <div class="col-12">
+                <!-- Bootstrap 5 Enhanced Empty State -->
+                <div class="text-center py-5 my-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-xl-6">
+                            <!-- Bootstrap 5 Icon Container -->
+                            <div class="mb-5">
+                                <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center shadow-lg mx-auto animate-bounce" style="width: 140px; height: 140px;">
+                                    <i class="fas fa-user-graduate text-white" style="font-size: 4rem;"></i>
         </div>
-        {% endfor %}
     </div>
 
-    <!-- Mentorship Program -->
-    <div id="mentorship" class="network-section">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h3 class="mb-3">Alumni Mentorship Program</h3>
-                <p class="mb-4">Connect with experienced alumni who can guide you in your career journey. Our mentors are industry leaders ready to share their knowledge and experience.</p>
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6">
+                            <!-- Bootstrap 5 Typography -->
+                            <h3 class="display-6 fw-bold text-dark mb-4">
+                                {% if request.GET.q or request.GET.filter or request.GET.year %}
+                                    No Alumni Found
+                                {% else %}
+                                    Join Our Growing Network
+                                {% endif %}
+                            </h3>
+                            
+                            <!-- Bootstrap 5 Alert Component (Conditional) -->
+                            {% if request.GET.q or request.GET.filter or request.GET.year %}
+                                <div class="alert alert-info border-0 shadow-sm mb-4" role="alert">
                         <div class="d-flex align-items-center">
-                            <i class="fas fa-user-tie fa-2x me-3"></i>
+                                        <i class="fas fa-info-circle text-info me-3 fa-lg"></i>
                             <div>
-                                <strong>Career Guidance</strong><br>
-                                <small>Get advice on career paths and industry insights</small>
+                                            <strong>Search Results:</strong> No alumni match your current criteria
+                                            {% if request.GET.q %}<br><small class="text-muted">Query: "{{ request.GET.q }}"</small>{% endif %}
+                                            {% if request.GET.filter and request.GET.filter != 'all' %}<br><small class="text-muted">Filter: {{ request.GET.filter|title }}</small>{% endif %}
+                                            {% if request.GET.year %}<br><small class="text-muted">Year Range: {{ request.GET.year }}</small>{% endif %}
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-network-wired fa-2x me-3"></i>
-                            <div>
-                                <strong>Professional Network</strong><br>
-                                <small>Expand your connections in your field of interest</small>
+                            {% endif %}
+                            
+                            <!-- Bootstrap 5 Lead Text -->
+                            <p class="lead text-muted mb-5 lh-base">
+                                {% if request.GET.q or request.GET.filter or request.GET.year %}
+                                    We couldn't find any alumni matching your search criteria. Try adjusting your filters or search terms to discover more of our amazing graduates.
+                                {% else %}
+                                    Our alumni network is rapidly growing! Be among the first to join and start connecting with fellow graduates around the world.
+                                {% endif %}
+                            </p>
+                            
+                            <!-- Bootstrap 5 Suggestion Cards (For Search Results) -->
+                            {% if request.GET.q or request.GET.filter or request.GET.year %}
+                                <div class="row g-3 mb-5">
+                                    <div class="col-md-4">
+                                        <div class="card border-primary border-opacity-25 h-100 empty-state-suggestion">
+                                            <div class="card-body text-center p-4">
+                                                <i class="fas fa-filter text-primary fa-2x mb-3"></i>
+                                                <h6 class="card-title fw-semibold">Try Different Filters</h6>
+                                                <p class="card-text small text-muted mb-0">Browse by different categories or time periods</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-lightbulb fa-2x me-3"></i>
-                            <div>
-                                <strong>Skill Development</strong><br>
-                                <small>Learn about industry trends and required skills</small>
+                                    <div class="col-md-4">
+                                        <div class="card border-success border-opacity-25 h-100 empty-state-suggestion">
+                                            <div class="card-body text-center p-4">
+                                                <i class="fas fa-search text-success fa-2x mb-3"></i>
+                                                <h6 class="card-title fw-semibold">Broaden Search</h6>
+                                                <p class="card-text small text-muted mb-0">Use fewer keywords or search terms</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card border-warning border-opacity-25 h-100 empty-state-suggestion">
+                                            <div class="card-body text-center p-4">
+                                                <i class="fas fa-users text-warning fa-2x mb-3"></i>
+                                                <h6 class="card-title fw-semibold">View All Alumni</h6>
+                                                <p class="card-text small text-muted mb-0">See our complete alumni directory</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <!-- Bootstrap 5 Feature Benefits (For No Alumni) -->
+                                                                <div class="row g-4 mb-5">
+                                    <div class="col-md-6">
+                                        <div class="card border-0 bg-primary bg-opacity-10 h-100 empty-state-benefit">
+                                            <div class="card-body text-center p-4">
+                                                <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                                    <i class="fas fa-network-wired text-white fa-lg"></i>
+                                                </div>
+                                                <h6 class="card-title fw-bold text-primary mb-2">Professional Networking</h6>
+                                                <p class="card-text text-muted small mb-0">Connect with industry professionals and expand your career network</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-0 bg-success bg-opacity-10 h-100 empty-state-benefit">
+                                            <div class="card-body text-center p-4">
+                                                <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                                    <i class="fas fa-handshake text-white fa-lg"></i>
+                                                </div>
+                                                <h6 class="card-title fw-bold text-success mb-2">Mentorship Opportunities</h6>
+                                                <p class="card-text text-muted small mb-0">Get guidance from experienced alumni in your field</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Bootstrap 5 Action Buttons -->
+                            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                                {% if request.GET.q or request.GET.filter or request.GET.year %}
+                                    <a href="?filter=all" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-semibold shadow-sm empty-state-btn">
+                                        <i class="fas fa-refresh me-2"></i>Reset Filters
+                                    </a>
+                                    <a href="{% url 'college_website:contact' %}" class="btn btn-outline-primary btn-lg rounded-pill px-5 py-3 fw-semibold empty-state-btn">
+                                        <i class="fas fa-envelope me-2"></i>Contact Support
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'college_website:contact' %}?subject=Alumni Registration" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg empty-state-btn">
+                                        <i class="fas fa-user-plus me-2"></i>Join Alumni Network
+                                    </a>
+                                    <a href="{% url 'college_website:contact' %}?subject=Alumni Information" class="btn btn-outline-primary btn-lg rounded-pill px-5 py-3 fw-semibold empty-state-btn">
+                                        <i class="fas fa-info-circle me-2"></i>Learn More
+                                    </a>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Bootstrap 5 Additional Info -->
+                            <div class="mt-5 pt-4 border-top border-opacity-25 empty-state-stats">
+                                <div class="row text-center g-4">
+                                    <div class="col-4">
+                                        <div class="text-primary">
+                                            <i class="fas fa-globe fa-lg mb-2 d-block"></i>
+                                            <div class="fw-semibold small">Global Network</div>
+                                            <div class="text-muted small">45+ Countries</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="text-success">
+                                            <i class="fas fa-users fa-lg mb-2 d-block"></i>
+                                            <div class="fw-semibold small">Growing Community</div>
+                                            <div class="text-muted small">2500+ Alumni</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="text-warning">
+                                            <i class="fas fa-star fa-lg mb-2 d-block"></i>
+                                            <div class="fw-semibold small">Success Stories</div>
+                                            <div class="text-muted small">Industry Leaders</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-handshake fa-2x me-3"></i>
-                            <div>
-                                <strong>Job Opportunities</strong><br>
-                                <small>Get referrals and insider information about openings</small>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<!-- Bootstrap 5 Enhanced Mentorship Program -->
+<section id="mentorship" class="py-5 mb-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <div class="mentorship-content">
+            <!-- Bootstrap 5 Header Section -->
+            <div class="row align-items-center mb-5 text-white">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <div class="animate-on-scroll">
+                        <h2 class="display-4 fw-bold mb-4">
+                            <i class="fas fa-hands-helping me-3 text-warning"></i>Alumni Mentorship Program
+                        </h2>
+                        <p class="lead fs-5 mb-0 text-white-75">Connect with experienced alumni who can guide you in your career journey. Our mentors are industry leaders ready to share their knowledge, experience, and professional networks to help you succeed.</p>
                 </div>
             </div>
             <div class="col-lg-4 text-center">
-                <a href="{% url 'college_website:contact' %}" class="btn btn-light btn-lg">
+                    <div class="animate-on-scroll delay-200">
+                        <a href="{% url 'college_website:contact' %}?subject=Mentorship Program" class="btn btn-warning btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">
                     <i class="fas fa-rocket me-2"></i>Join Program
                 </a>
+                        <div class="mt-3">
+                            <small class="text-white-75 d-block">
+                                <i class="fas fa-users me-1"></i>200+ Active Mentors
+                            </small>
+                        </div>
             </div>
         </div>
     </div>
 
-    <!-- Call to Action -->
-    <div class="text-center mt-5">
+            <!-- Bootstrap 5 Feature Cards Grid -->
+            <div class="row g-4">
+                <div class="col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-lg h-100 text-center mentorship-feature-card animate-on-scroll delay-300">
+                        <div class="card-body p-4">
+                            <!-- Bootstrap 5 Icon Container -->
+                            <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-4 shadow-lg" style="width: 100px; height: 100px;">
+                                <i class="fas fa-chart-line text-white fa-2x"></i>
+                            </div>
+                            <h4 class="card-title fw-bold text-dark mb-3">Career Guidance</h4>
+                            <p class="card-text text-muted">Get personalized advice on career paths, industry insights, and professional development strategies from experienced professionals in your field.</p>
+                            <!-- Bootstrap 5 Badge -->
+                            <span class="badge bg-primary bg-gradient rounded-pill px-3 py-2">
+                                <i class="fas fa-star me-1"></i>Expert Advice
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-lg h-100 text-center mentorship-feature-card animate-on-scroll delay-400">
+                        <div class="card-body p-4">
+                            <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-4 shadow-lg" style="width: 100px; height: 100px;">
+                                <i class="fas fa-network-wired text-white fa-2x"></i>
+                            </div>
+                            <h4 class="card-title fw-bold text-dark mb-3">Professional Network</h4>
+                            <p class="card-text text-muted">Expand your connections and build meaningful relationships that benefit both mentors and mentees in their professional journey.</p>
+                            <span class="badge bg-success bg-gradient rounded-pill px-3 py-2">
+                                <i class="fas fa-handshake me-1"></i>Networking
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-lg h-100 text-center mentorship-feature-card animate-on-scroll delay-500">
+                        <div class="card-body p-4">
+                            <div class="bg-warning bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-4 shadow-lg" style="width: 100px; height: 100px;">
+                                <i class="fas fa-lightbulb text-white fa-2x"></i>
+                            </div>
+                            <h4 class="card-title fw-bold text-dark mb-3">Skill Development</h4>
+                            <p class="card-text text-muted">Learn about industry trends, required skills, and stay updated with current technologies and market demands that matter.</p>
+                            <span class="badge bg-warning bg-gradient rounded-pill px-3 py-2">
+                                <i class="fas fa-brain me-1"></i>Skills
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-xl-3">
+                    <div class="card border-0 shadow-lg h-100 text-center mentorship-feature-card animate-on-scroll delay-600">
+                        <div class="card-body p-4">
+                            <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-4 shadow-lg" style="width: 100px; height: 100px;">
+                                <i class="fas fa-door-open text-white fa-2x"></i>
+                            </div>
+                            <h4 class="card-title fw-bold text-dark mb-3">Job Opportunities</h4>
+                            <p class="card-text text-muted">Get exclusive job referrals, insider information about openings, and guidance on the application and interview process.</p>
+                            <span class="badge bg-info bg-gradient rounded-pill px-3 py-2">
+                                <i class="fas fa-briefcase me-1"></i>Careers
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bootstrap 5 Statistics Row -->
+            <div class="row g-4 mt-4">
+                <div class="col-md-3 col-6">
+                    <div class="text-center text-white">
+                        <h3 class="display-6 fw-bold mb-2">200+</h3>
+                        <p class="text-white-75 mb-0">Active Mentors</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="text-center text-white">
+                        <h3 class="display-6 fw-bold mb-2">500+</h3>
+                        <p class="text-white-75 mb-0">Successful Matches</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="text-center text-white">
+                        <h3 class="display-6 fw-bold mb-2">50+</h3>
+                        <p class="text-white-75 mb-0">Industries</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="text-center text-white">
+                        <h3 class="display-6 fw-bold mb-2">95%</h3>
+                        <p class="text-white-75 mb-0">Success Rate</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bootstrap 5 Call to Action -->
+            <div class="row mt-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <div class="bg-white bg-opacity-10 border border-white border-opacity-25 rounded-4 p-5 backdrop-blur">
+                        <h4 class="text-white fw-bold mb-3">Ready to Connect with Industry Leaders?</h4>
+                        <p class="text-white-75 mb-4">Join our mentorship program and take the next step in your career journey with guidance from successful alumni.</p>
+                        <div class="d-flex gap-3 justify-content-center flex-wrap">
+                            <a href="{% url 'college_website:contact' %}?subject=Become a Mentor" class="btn btn-outline-light btn-lg rounded-pill px-4 py-3 fw-semibold">
+                                <i class="fas fa-user-tie me-2"></i>Become a Mentor
+                            </a>
+                            <a href="{% url 'college_website:contact' %}?subject=Find a Mentor" class="btn btn-light btn-lg rounded-pill px-4 py-3 fw-semibold">
+                                <i class="fas fa-search me-2"></i>Find a Mentor
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Enhanced Call to Action -->
+<div class="container">
+    <section class="cta-section animate-on-scroll">
+        <div class="cta-content">
         <div class="row align-items-center">
-            <div class="col-lg-8 mx-auto">
-                <h3 class="mb-3">Stay Connected with Your Alma Mater</h3>
-                <p class="text-muted mb-4">Join our alumni network and stay updated with college news, events, and networking opportunities.</p>
+                <div class="col-lg-8 mx-auto text-center">
+                    <h3 class="display-6 fw-bold mb-4">
+                        <i class="fas fa-heart me-3 text-danger"></i>Stay Connected with Your Alma Mater
+                    </h3>
+                    <p class="lead text-muted mb-5">Join our alumni network and stay updated with college news, events, and networking opportunities. Be part of a community that supports each other's growth and celebrates collective success.</p>
                 <div class="d-flex gap-3 justify-content-center flex-wrap">
-                    <a href="{% url 'college_website:contact' %}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-user-plus me-2"></i>Update Your Profile
+                        <a href="{% url 'college_website:contact' %}?subject=Alumni Profile Update" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold">
+                            <i class="fas fa-user-edit me-2"></i>Update Profile
                     </a>
-                    <a href="#" class="btn btn-outline-primary btn-lg">
-                        <i class="fas fa-calendar me-2"></i>Alumni Events
+                        <a href="{% url 'college_website:contact' %}?subject=Alumni Events" class="btn btn-outline-primary btn-lg rounded-pill px-5 py-3 fw-bold">
+                            <i class="fas fa-calendar-check me-2"></i>Alumni Events
                     </a>
                 </div>
             </div>
         </div>
     </div>
+    </section>
 </div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Enhanced search functionality with real-time feedback
+    const searchInput = document.querySelector('input[name="q"]');
+    if (searchInput) {
+        let searchTimeout;
+        
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            const value = this.value.trim();
+            
+            // Visual feedback for search input
+            if (value.length > 0) {
+                this.style.borderColor = '#2563eb';
+                this.style.background = 'white';
+            } else {
+                this.style.borderColor = '#e2e8f0';
+                this.style.background = '#f8fafc';
+            }
+            
+            searchTimeout = setTimeout(() => {
+                console.log('Search term:', value);
+                // Auto-complete functionality could be added here
+            }, 500);
+        });
+    }
+    
+    // Smooth scrolling for all anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Enhanced Intersection Observer for scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+                // Add stagger effect for multiple elements
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all animated elements
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+    
+    // Enhanced alumni card interactions
+    document.querySelectorAll('.alumni-card').forEach(card => {
+        const photo = card.querySelector('.alumni-photo, .photo-placeholder');
+        const badges = card.querySelectorAll('.alumni-badge');
+        
+        card.addEventListener('mouseenter', function() {
+            if (photo) {
+                photo.style.transform = 'scale(1.1) rotate(5deg)';
+            }
+            // Animate badges
+            badges.forEach((badge, index) => {
+                setTimeout(() => {
+                    badge.style.transform = 'scale(1.1) translateY(-2px)';
+                }, index * 100);
+            });
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            if (photo) {
+                photo.style.transform = 'scale(1)';
+            }
+            // Reset badges
+            badges.forEach(badge => {
+                badge.style.transform = 'scale(1) translateY(0)';
+            });
+        });
+    });
+    
+    // Filter tab management with animation
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Remove active from all tabs with animation
+            document.querySelectorAll('.filter-tab').forEach(t => {
+                t.classList.remove('active');
+                t.style.transform = 'scale(1)';
+            });
+            
+            // Add active to clicked tab with animation
+            this.classList.add('active');
+            this.style.transform = 'scale(1.05)';
+            
+            // Reset transform after animation
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 300);
+        });
+    });
+    
+    // Enhanced counter animation for statistics
+    function animateCounter(element, target, duration = 2000) {
+        let start = 0;
+        const increment = target / (duration / 16);
+        
+        const timer = setInterval(() => {
+            start += increment;
+            if (start >= target) {
+                element.textContent = target + '+';
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.ceil(start) + '+';
+            }
+        }, 16);
+    }
+    
+    // Trigger counter animations when stats come into view
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const statNumber = entry.target.querySelector('.stat-number');
+                if (statNumber && !statNumber.classList.contains('animated')) {
+                    const target = parseInt(statNumber.textContent.replace('+', ''));
+                    if (!isNaN(target)) {
+                        statNumber.classList.add('animated');
+                        animateCounter(statNumber, target);
+                    }
+                }
+            }
+        });
+    });
+    
+    document.querySelectorAll('.stat-card').forEach(card => {
+        statsObserver.observe(card);
+    });
+    
+    console.log('Alumni page animations initialized successfully!');
+});
+</script>
+{% endblock %}
 {% endblock %}

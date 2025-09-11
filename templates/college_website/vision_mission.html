@@ -1,0 +1,579 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vision & Mission - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block meta_description %}Discover our vision and mission at {{ college_info.name|default:"Chaitanya Science and Arts College" }} - Empowering rural youth through quality education and innovation.{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:about' %}" class="text-white-50">About</a></li>
+<li class="breadcrumb-item active text-white">Vision & Mission</li>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <section class="position-relative tw-h-[500px] d-flex align-items-center justify-content-center overflow-hidden tw-bg-gradient-to-br tw-from-blue-900 tw-via-purple-900 tw-to-indigo-900">
+        <!-- Animated Background -->
+        <div class="position-absolute top-0 start-0 w-100 h-100 tw-opacity-20">
+            <div class="position-absolute tw-top-10 tw-left-10 tw-w-72 tw-h-72 tw-bg-yellow-400 tw-rounded-full tw-mix-blend-multiply tw-filter tw-blur-xl animate-blob"></div>
+            <div class="position-absolute tw-top-10 tw-right-10 tw-w-72 tw-h-72 tw-bg-purple-400 tw-rounded-full tw-mix-blend-multiply tw-filter tw-blur-xl animate-blob animation-delay-2000"></div>
+            <div class="position-absolute tw--bottom-8 tw-left-20 tw-w-72 tw-h-72 tw-bg-pink-400 tw-rounded-full tw-mix-blend-multiply tw-filter tw-blur-xl animate-blob animation-delay-4000"></div>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="container position-relative z-3">
+            <div class="row align-items-center text-center text-white">
+                <div class="col-12">
+                    <div class="animate-fade-in-up">
+                        <span class="badge tw-bg-gradient-to-r tw-from-yellow-400 tw-to-orange-500 text-dark rounded-pill px-4 py-2 mb-3 fs-6 fw-bold">
+                            <i class="fas fa-compass me-2"></i>Our Direction
+                        </span>
+                        <h1 class="display-3 fw-bold mb-3 tw-bg-gradient-to-r tw-from-white tw-to-blue-200 tw-bg-clip-text tw-text-transparent">
+                            Vision & Mission
+                        </h1>
+                        <p class="lead mb-4 tw-max-w-3xl mx-auto tw-text-blue-100">
+                            Guiding principles that shape our commitment to excellence in education and community development
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="#vision-section" class="btn btn-light rounded-pill px-4 py-2 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                                <i class="fas fa-eye me-2"></i>Our Vision
+                            </a>
+                            <a href="#mission-section" class="btn btn-outline-light rounded-pill px-4 py-2 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                                <i class="fas fa-bullseye me-2"></i>Our Mission
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4">
+            <div class="tw-animate-bounce">
+                <i class="fas fa-chevron-down text-white fa-2x tw-opacity-70"></i>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="container my-5">
+    <!-- Vision Section -->
+    <section id="vision-section" class="mb-5 py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="position-relative">
+                    <!-- Vision Icon Background -->
+                    <div class="tw-bg-gradient-to-br tw-from-blue-500 tw-to-indigo-600 rounded-4 p-5 text-white shadow-lg tw-transform tw-transition-all tw-duration-500 hover:tw-scale-105">
+                        <div class="text-center mb-4">
+                            <div class="tw-bg-white tw-bg-opacity-20 tw-backdrop-blur-sm tw-w-24 tw-h-24 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4">
+                                <i class="fas fa-eye fa-3x text-white"></i>
+                            </div>
+                            <h2 class="fw-bold mb-0">Our Vision</h2>
+                        </div>
+                        
+                        <!-- Decorative Elements -->
+                        <div class="tw-absolute tw-top-4 tw-right-4 tw-w-16 tw-h-16 tw-bg-white tw-rounded-full tw-opacity-10"></div>
+                        <div class="tw-absolute tw-bottom-4 tw-left-4 tw-w-12 tw-h-12 tw-bg-yellow-400 tw-rounded-full tw-opacity-30"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="ps-lg-4">
+                    <div class="tw-bg-gradient-to-br tw-from-gray-50 tw-to-blue-50 rounded-4 p-5 shadow-sm border">
+                        <blockquote class="blockquote mb-0">
+                            <div class="fs-4 fw-medium text-dark mb-4 tw-leading-relaxed">
+                                {% if vision_mission_content %}
+                                    {{ vision_mission_content.vision_statement|safe }}
+                                {% else %}
+                                    "{{ college_info.vision_statement|default:'To be a leading institution of higher education that transforms lives through innovative teaching, research, and community engagement, empowering students from rural backgrounds to become global citizens and leaders of tomorrow.' }}"
+                                {% endif %}
+                            </div>
+                        </blockquote>
+                        
+                        <!-- Vision Highlights -->
+                        <div class="row g-3 mt-3">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="tw-bg-gradient-to-r tw-from-blue-400 tw-to-indigo-400 tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                        <i class="fas fa-star text-white fa-sm"></i>
+                                    </div>
+                                    <span class="fw-medium text-muted">
+                                        {% if vision_mission_content %}
+                                            {{ vision_mission_content.vision_highlight_1 }}
+                                        {% else %}
+                                            Excellence in Education
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="tw-bg-gradient-to-r tw-from-green-400 tw-to-emerald-400 tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                        <i class="fas fa-users text-white fa-sm"></i>
+                                    </div>
+                                    <span class="fw-medium text-muted">
+                                        {% if vision_mission_content %}
+                                            {{ vision_mission_content.vision_highlight_2 }}
+                                        {% else %}
+                                            Community Impact
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="tw-bg-gradient-to-r tw-from-purple-400 tw-to-pink-400 tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                        <i class="fas fa-lightbulb text-white fa-sm"></i>
+                                    </div>
+                                    <span class="fw-medium text-muted">
+                                        {% if vision_mission_content %}
+                                            {{ vision_mission_content.vision_highlight_3 }}
+                                        {% else %}
+                                            Innovation & Research
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="tw-bg-gradient-to-r tw-from-orange-400 tw-to-red-400 tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3">
+                                        <i class="fas fa-globe text-white fa-sm"></i>
+                                    </div>
+                                    <span class="fw-medium text-muted">
+                                        {% if vision_mission_content %}
+                                            {{ vision_mission_content.vision_highlight_4 }}
+                                        {% else %}
+                                            Global Perspective
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission-section" class="mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                <div class="position-relative">
+                    <!-- Mission Icon Background -->
+                    <div class="tw-bg-gradient-to-br tw-from-green-500 tw-to-emerald-600 rounded-4 p-5 text-white shadow-lg tw-transform tw-transition-all tw-duration-500 hover:tw-scale-105">
+                        <div class="text-center mb-4">
+                            <div class="tw-bg-white tw-bg-opacity-20 tw-backdrop-blur-sm tw-w-24 tw-h-24 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4">
+                                <i class="fas fa-bullseye fa-3x text-white"></i>
+                            </div>
+                            <h2 class="fw-bold mb-0">Our Mission</h2>
+                        </div>
+                        
+                        <!-- Decorative Elements -->
+                        <div class="tw-absolute tw-top-4 tw-left-4 tw-w-16 tw-h-16 tw-bg-white tw-rounded-full tw-opacity-10"></div>
+                        <div class="tw-absolute tw-bottom-4 tw-right-4 tw-w-12 tw-h-12 tw-bg-yellow-400 tw-rounded-full tw-opacity-30"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 order-lg-1">
+                <div class="pe-lg-4">
+                    <div class="tw-bg-gradient-to-br tw-from-gray-50 tw-to-green-50 rounded-4 p-5 shadow-sm border">
+                        <blockquote class="blockquote mb-0">
+                            <div class="fs-4 fw-medium text-dark mb-4 tw-leading-relaxed">
+                                {% if vision_mission_content %}
+                                    {{ vision_mission_content.mission_statement|safe }}
+                                {% else %}
+                                    "{{ college_info.mission_statement|default:'To provide accessible, affordable, and quality higher education that nurtures critical thinking, creativity, and character development while fostering research, innovation, and social responsibility among our diverse student community.' }}"
+                                {% endif %}
+                            </div>
+                        </blockquote>
+                        
+                        <!-- Mission Objectives -->
+                        <div class="mt-4">
+                            <h6 class="fw-bold text-success mb-3">Key Objectives:</h6>
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <div class="d-flex align-items-start">
+                                        <div class="tw-bg-gradient-to-r tw-from-green-400 tw-to-emerald-400 tw-w-6 tw-h-6 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3 mt-1 tw-flex-shrink-0">
+                                            <i class="fas fa-check text-white" style="font-size: 0.7rem;"></i>
+                                        </div>
+                                        <span class="text-muted">
+                                            {% if vision_mission_content %}
+                                                {{ vision_mission_content.mission_objective_1 }}
+                                            {% else %}
+                                                Deliver quality education accessible to all
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex align-items-start">
+                                        <div class="tw-bg-gradient-to-r tw-from-blue-400 tw-to-indigo-400 tw-w-6 tw-h-6 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3 mt-1 tw-flex-shrink-0">
+                                            <i class="fas fa-check text-white" style="font-size: 0.7rem;"></i>
+                                        </div>
+                                        <span class="text-muted">
+                                            {% if vision_mission_content %}
+                                                {{ vision_mission_content.mission_objective_2 }}
+                                            {% else %}
+                                                Foster research and innovation culture
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-flex align-items-start">
+                                        <div class="tw-bg-gradient-to-r tw-from-purple-400 tw-to-pink-400 tw-w-6 tw-h-6 tw-rounded-full tw-flex tw-items-center tw-justify-center me-3 mt-1 tw-flex-shrink-0">
+                                            <i class="fas fa-check text-white" style="font-size: 0.7rem;"></i>
+                                        </div>
+                                        <span class="text-muted">
+                                            {% if vision_mission_content %}
+                                                {{ vision_mission_content.mission_objective_3 }}
+                                            {% else %}
+                                                Develop socially responsible citizens
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Values Section -->
+    <section class="mb-5">
+        <div class="text-center mb-5">
+            <span class="badge tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 text-white rounded-pill px-4 py-2 mb-3">
+                <i class="fas fa-heart me-2"></i>Our Foundation
+            </span>
+            <h2 class="section-title text-primary mb-3">Core Values</h2>
+            <p class="lead text-muted tw-max-w-3xl tw-mx-auto">The fundamental principles that guide every aspect of our institution</p>
+        </div>
+        
+        <div class="row g-4">
+            {% if core_values %}
+                {% for value in core_values %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
+                            <div class="card-body text-center p-5">
+                                {% if value.gradient_color == 'yellow-orange' %}
+                                    <div class="tw-bg-gradient-to-br tw-from-yellow-400 tw-to-orange-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                        <i class="{{ value.icon_class }} text-white fa-2x"></i>
+                                    </div>
+                                {% elif value.gradient_color == 'blue-indigo' %}
+                                    <div class="tw-bg-gradient-to-br tw-from-blue-500 tw-to-indigo-600 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                        <i class="{{ value.icon_class }} text-white fa-2x"></i>
+                                    </div>
+                                {% elif value.gradient_color == 'purple-pink' %}
+                                    <div class="tw-bg-gradient-to-br tw-from-purple-500 tw-to-pink-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                        <i class="{{ value.icon_class }} text-white fa-2x"></i>
+                                    </div>
+                                {% elif value.gradient_color == 'green-emerald' %}
+                                    <div class="tw-bg-gradient-to-br tw-from-green-500 tw-to-emerald-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                        <i class="{{ value.icon_class }} text-white fa-2x"></i>
+                                    </div>
+                                {% elif value.gradient_color == 'teal-cyan' %}
+                                    <div class="tw-bg-gradient-to-br tw-from-teal-500 tw-to-cyan-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                        <i class="{{ value.icon_class }} text-white fa-2x"></i>
+                                    </div>
+                                {% elif value.gradient_color == 'red-pink' %}
+                                    <div class="tw-bg-gradient-to-br tw-from-red-500 tw-to-pink-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                        <i class="{{ value.icon_class }} text-white fa-2x"></i>
+                                    </div>
+                                {% else %}
+                                    <div class="tw-bg-gradient-to-br tw-from-blue-500 tw-to-indigo-600 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                        <i class="{{ value.icon_class }} text-white fa-2x"></i>
+                                    </div>
+                                {% endif %}
+                                <h4 class="fw-bold text-dark mb-3">{{ value.title }}</h4>
+                                <p class="text-muted tw-leading-relaxed">{{ value.description }}</p>
+                                {% if value.gradient_color == 'yellow-orange' %}
+                                    <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-yellow-400 tw-to-orange-500 tw-mx-auto tw-rounded"></div>
+                                {% elif value.gradient_color == 'blue-indigo' %}
+                                    <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-600 tw-mx-auto tw-rounded"></div>
+                                {% elif value.gradient_color == 'purple-pink' %}
+                                    <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 tw-mx-auto tw-rounded"></div>
+                                {% elif value.gradient_color == 'green-emerald' %}
+                                    <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-green-500 tw-to-emerald-500 tw-mx-auto tw-rounded"></div>
+                                {% elif value.gradient_color == 'teal-cyan' %}
+                                    <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-teal-500 tw-to-cyan-500 tw-mx-auto tw-rounded"></div>
+                                {% elif value.gradient_color == 'red-pink' %}
+                                    <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-red-500 tw-to-pink-500 tw-mx-auto tw-rounded"></div>
+                                {% else %}
+                                    <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-600 tw-mx-auto tw-rounded"></div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <!-- Default Core Values if no dynamic content -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
+                        <div class="card-body text-center p-5">
+                            <div class="tw-bg-gradient-to-br tw-from-yellow-400 tw-to-orange-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                <i class="fas fa-trophy text-white fa-2x"></i>
+                            </div>
+                            <h4 class="fw-bold text-dark mb-3">Excellence</h4>
+                            <p class="text-muted tw-leading-relaxed">Striving for the highest standards in education, research, and service to create lasting impact.</p>
+                            <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-yellow-400 tw-to-orange-500 tw-mx-auto tw-rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
+                        <div class="card-body text-center p-5">
+                            <div class="tw-bg-gradient-to-br tw-from-blue-500 tw-to-indigo-600 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                <i class="fas fa-shield-alt text-white fa-2x"></i>
+                            </div>
+                            <h4 class="fw-bold text-dark mb-3">Integrity</h4>
+                            <p class="text-muted tw-leading-relaxed">Upholding honesty, transparency, and ethical conduct in all our interactions and decisions.</p>
+                            <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-600 tw-mx-auto tw-rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 hover:tw-shadow-2xl">
+                        <div class="card-body text-center p-5">
+                            <div class="tw-bg-gradient-to-br tw-from-purple-500 tw-to-pink-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-4 tw-shadow-lg">
+                                <i class="fas fa-lightbulb text-white fa-2x"></i>
+                            </div>
+                            <h4 class="fw-bold text-dark mb-3">Innovation</h4>
+                            <p class="text-muted tw-leading-relaxed">Embracing creativity and forward-thinking approaches to solve challenges and create opportunities.</p>
+                            <div class="tw-w-16 tw-h-1 tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 tw-mx-auto tw-rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="text-center py-5">
+        <div class="tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50 rounded-4 p-5">
+            <h3 class="fw-bold text-primary mb-3">
+                {% if vision_mission_content %}
+                    {{ vision_mission_content.cta_title }}
+                {% else %}
+                    Join Our Journey
+                {% endif %}
+            </h3>
+            <div class="lead text-muted mb-4 tw-max-w-2xl tw-mx-auto">
+                {% if vision_mission_content %}
+                    {{ vision_mission_content.cta_description|safe }}
+                {% else %}
+                    Be part of our mission to transform lives through education. Whether you're a prospective student, faculty member, or community partner, we welcome you to join our journey.
+                {% endif %}
+            </div>
+            
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="{% url 'college_website:admissions' %}" 
+                   class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105 tw-shadow-lg">
+                    <i class="fas fa-user-graduate me-2"></i>Apply Now
+                </a>
+                <a href="{% url 'college_website:programs_list' %}" 
+                   class="btn btn-outline-primary btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <i class="fas fa-book-open me-2"></i>Explore Programs
+                </a>
+                <a href="{% url 'college_website:contact' %}" 
+                   class="btn btn-outline-secondary btn-lg rounded-pill px-5 py-3 fw-bold tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
+                    <i class="fas fa-envelope me-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Enhanced Custom Styles -->
+<style>
+/* Blob Animation for Background Elements */
+@keyframes blob {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+}
+
+.animate-blob {
+    animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+    animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+    animation-delay: 4s;
+}
+
+/* Advanced Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Enhanced Card Hover Effects */
+.card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15) !important;
+}
+
+/* Section Title Styling */
+.section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--bs-primary), #fbbf24);
+    border-radius: 2px;
+}
+
+/* Button Enhancements */
+.btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .display-2 {
+        font-size: 2.5rem;
+    }
+    
+    .tw-py-24 {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* Loading Animation for Cards */
+.card {
+    opacity: 0;
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+.card:nth-child(4) { animation-delay: 0.4s; }
+.card:nth-child(5) { animation-delay: 0.5s; }
+.card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<!-- Enhanced JavaScript for Interactions -->
+<script>
+// Smooth scrolling for internal links
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('section, .card').forEach(el => {
+        observer.observe(el);
+    });
+});
+
+// Parallax effect for hero section
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const parallaxElements = document.querySelectorAll('.tw-animate-pulse, .tw-animate-bounce');
+    
+    parallaxElements.forEach(element => {
+        const speed = 0.1;
+        element.style.transform = `translateY(${scrolled * speed}px)`;
+    });
+});
+</script>
+{% endblock %}

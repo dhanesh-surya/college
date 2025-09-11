@@ -1,0 +1,472 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Academic Events - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Academic Events Page Styles */
+.academic-events-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 5rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.academic-events-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);
+    animation: heroFloat 20s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.05) rotate(1deg); }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-icon {
+    font-size: 5rem;
+    opacity: 0.9;
+    animation: float 6s ease-in-out infinite;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    color: #fbbf24;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-10px) rotate(2deg); }
+    50% { transform: translateY(-5px) rotate(-1deg); }
+    75% { transform: translateY(-15px) rotate(1deg); }
+}
+
+.event-card {
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    height: 100%;
+}
+
+.event-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.event-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-color: rgba(37, 99, 235, 0.2);
+}
+
+.event-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.event-card:hover .event-image {
+    transform: scale(1.05);
+}
+
+.event-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.event-content {
+    padding: 2rem;
+}
+
+.event-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.event-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.event-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.event-location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.event-description {
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.event-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-event {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary-event {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary-event:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.btn-outline-event {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.btn-outline-event:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #64748b;
+}
+
+.empty-icon {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.empty-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.empty-description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .academic-events-hero {
+        padding: 3rem 0 2rem;
+        min-height: 50vh;
+    }
+    
+    .hero-icon {
+        font-size: 4rem;
+    }
+    
+    .event-content {
+        padding: 1.5rem;
+    }
+    
+    .event-title {
+        font-size: 1.25rem;
+    }
+    
+    .event-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .event-actions {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .btn-event {
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Academic Events</li>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="academic-events-hero py-5">
+    <div class="container hero-content">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <h1 class="display-2 fw-bold mb-4 text-white">Academic Events</h1>
+                <p class="lead fs-4 mb-4 text-white-75 lh-base">
+                    Discover our comprehensive academic events, workshops, seminars, and conferences designed to enhance learning and professional development.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#events" class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">
+                        <i class="fas fa-calendar-alt me-2 text-primary"></i>View Events
+                    </a>
+                    <a href="#upcoming" class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">
+                        <i class="fas fa-clock me-2 text-success"></i>Upcoming Events
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-graduation-cap hero-icon display-1"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Events Section -->
+<div class="container py-5">
+    <section id="events">
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <h2 class="display-5 fw-bold text-primary mb-3 text-center">
+                    <i class="fas fa-calendar-check me-3"></i>Academic Events & Workshops
+                </h2>
+                <hr class="border-primary border-3 opacity-75 w-25 mx-auto mb-4">
+                <p class="lead text-muted text-center">
+                    Join our academic events designed to foster learning, research, and professional growth
+                </p>
+            </div>
+        </div>
+        
+        {% if events %}
+        <div class="row g-4">
+            {% for event in events %}
+            <div class="col-lg-4 col-md-6">
+                <div class="event-card">
+                    {% if event.image %}
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="event-image">
+                    {% else %}
+                    <div class="event-image bg-gradient" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-calendar-alt text-white" style="font-size: 3rem;"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="event-badge">
+                        {{ event.type|title }}
+                    </div>
+                    
+                    <div class="event-content">
+                        <h3 class="event-title">{{ event.title }}</h3>
+                        
+                        <div class="event-meta">
+                            {% if event.date %}
+                            <div class="event-date">
+                                <i class="fas fa-calendar text-primary"></i>
+                                <span>{{ event.date|date:"M d, Y" }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if event.location %}
+                            <div class="event-location">
+                                <i class="fas fa-map-marker-alt text-primary"></i>
+                                <span>{{ event.location }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if event.description %}
+                        <p class="event-description">{{ event.description|truncatewords:25 }}</p>
+                        {% endif %}
+                        
+                        <div class="event-actions">
+                            <a href="{% url 'college_website:event_detail' event.id %}" class="btn-event btn-primary-event">
+                                <i class="fas fa-eye"></i>View Details
+                            </a>
+                            {% if event.registration_link %}
+                            <a href="{{ event.registration_link }}" class="btn-event btn-outline-event" target="_blank">
+                                <i class="fas fa-user-plus"></i>Register
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-calendar-times text-white" style="font-size: 3rem;"></i>
+            </div>
+            <h3 class="empty-title">No Academic Events Available</h3>
+            <p class="empty-description">
+                We're currently planning exciting academic events and workshops. Check back soon for updates on upcoming seminars, conferences, and learning opportunities.
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{% url 'college_website:contact' %}?subject=Academic Events Inquiry" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold">
+                    <i class="fas fa-envelope me-2"></i>Contact Us
+                </a>
+                <a href="{% url 'college_website:news_announcements' %}" class="btn btn-outline-primary btn-lg rounded-pill px-5 py-3 fw-bold">
+                    <i class="fas fa-newspaper me-2"></i>News & Updates
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </section>
+</div>
+
+<!-- Call to Action Section -->
+<div class="container py-5">
+    <section class="bg-light rounded-4 p-5 text-center">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto">
+                <h3 class="display-6 fw-bold mb-4">
+                    <i class="fas fa-bell me-3 text-warning"></i>Stay Updated with Academic Events
+                </h3>
+                <p class="lead text-muted mb-4">
+                    Don't miss out on important academic events, workshops, and seminars. Subscribe to our newsletter and follow us on social media for the latest updates.
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{% url 'college_website:contact' %}?subject=Newsletter Subscription" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold">
+                        <i class="fas fa-envelope me-2"></i>Subscribe Newsletter
+                    </a>
+                    <a href="{% url 'college_website:contact' %}?subject=Event Information" class="btn btn-outline-primary btn-lg rounded-pill px-5 py-3 fw-bold">
+                        <i class="fas fa-info-circle me-2"></i>Get Information
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Enhanced event card interactions
+    document.querySelectorAll('.event-card').forEach(card => {
+        const image = card.querySelector('.event-image');
+        const badge = card.querySelector('.event-badge');
+        
+        card.addEventListener('mouseenter', function() {
+            if (image) {
+                image.style.transform = 'scale(1.05)';
+            }
+            if (badge) {
+                badge.style.transform = 'scale(1.1) translateY(-2px)';
+            }
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            if (image) {
+                image.style.transform = 'scale(1)';
+            }
+            if (badge) {
+                badge.style.transform = 'scale(1) translateY(0)';
+            }
+        });
+    });
+    
+    console.log('Academic Events page initialized successfully!');
+});
+</script>
+{% endblock %}

@@ -1,0 +1,371 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Research Centers - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Research Centers</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">{{ research_center_info.title }}</h1>
+        <p class="lead text-muted">{{ research_center_info.subtitle }}</p>
+    </div>
+
+    <!-- Research Centers Overview -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-microscope text-primary me-2"></i>Our Research Centers
+            </h3>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="research-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-flask fa-lg"></i>
+                    </div>
+                    <h5 class="card-title text-primary">{{ research_center_info.center1_name }}</h5>
+                    <p class="card-text text-muted">{{ research_center_info.center1_description }}</p>
+                    <div class="research-areas">
+                        {{ research_center_info.center1_areas|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="research-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-laptop-code fa-lg"></i>
+                    </div>
+                    <h5 class="card-title text-primary">{{ research_center_info.center2_name }}</h5>
+                    <p class="card-text text-muted">{{ research_center_info.center2_description }}</p>
+                    <div class="research-areas">
+                        {{ research_center_info.center2_areas|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="research-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-leaf fa-lg"></i>
+                    </div>
+                    <h5 class="card-title text-primary">{{ research_center_info.center3_name }}</h5>
+                    <p class="card-text text-muted">{{ research_center_info.center3_description }}</p>
+                    <div class="research-areas">
+                        {{ research_center_info.center3_areas|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research Facilities -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-building text-primary me-2"></i>Research Facilities
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-tools me-2"></i>Laboratory Infrastructure
+                    </h5>
+                    <div class="facility-list">
+                        {{ research_center_info.lab_infrastructure|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-users me-2"></i>Research Support
+                    </h5>
+                    <div class="support-list">
+                        {{ research_center_info.research_support|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research Areas -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-lightbulb text-primary me-2"></i>Research Areas
+            </h3>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="area-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-atom fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Physics</h5>
+                    <p class="card-text text-muted">{{ research_center_info.physics_description }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="area-icon bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-dna fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Biology</h5>
+                    <p class="card-text text-muted">{{ research_center_info.biology_description }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="area-icon bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-chart-line fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Mathematics</h5>
+                    <p class="card-text text-muted">{{ research_center_info.mathematics_description }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="area-icon bg-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-globe fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Social Sciences</h5>
+                    <p class="card-text text-muted">{{ research_center_info.social_sciences_description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research Achievements -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-trophy text-primary me-2"></i>Research Achievements
+            </h3>
+        </div>
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Recent Accomplishments
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Publications & Patents</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ research_center_info.publications_count }}+ Research Papers Published
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ research_center_info.patents_count }}+ Patents Filed
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ research_center_info.conferences_count }}+ Conference Presentations
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    {{ research_center_info.book_chapters_count }}+ Book Chapters
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Grants & Funding</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-dollar-sign text-info me-2"></i>
+                                    {{ research_center_info.get_grants_display }} in Research Grants
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-handshake text-warning me-2"></i>
+                                    {{ research_center_info.industry_collaborations }}+ Industry Collaborations
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-university text-danger me-2"></i>
+                                    {{ research_center_info.international_partnerships }}+ International Partnerships
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-award text-secondary me-2"></i>
+                                    {{ research_center_info.national_awards }}+ National Awards
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research Opportunities -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-graduation-cap text-primary me-2"></i>Research Opportunities
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-user-graduate me-2"></i>For Students
+                    </h5>
+                    <div class="opportunities-list">
+                        {{ research_center_info.student_opportunities|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-user-tie me-2"></i>For Faculty
+                    </h5>
+                    <div class="faculty-opportunities-list">
+                        {{ research_center_info.faculty_opportunities|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-phone text-primary me-2"></i>Contact Information
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-user-tie me-2"></i>Research Director
+                    </h5>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="fas fa-user text-primary me-2"></i>
+                            {{ research_center_info.director_name }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            {{ research_center_info.director_phone }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope text-info me-2"></i>
+                            {{ research_center_info.director_email }}
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            Office Hours: {{ research_center_info.director_office_hours }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-building me-2"></i>Research Office
+                    </h5>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                            {{ research_center_info.office_location }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            {{ research_center_info.office_phone }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope text-info me-2"></i>
+                            {{ research_center_info.office_email }}
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            Working Days: {{ research_center_info.office_working_days }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3 p-4 border-start border-primary border-4">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-rocket fa-2x text-primary me-3"></i>
+            <div>
+                <h5 class="text-primary mb-1">{{ research_center_info.cta_title }}</h5>
+                <p class="mb-0 text-muted">
+                    {{ research_center_info.cta_description }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.research-icon, .area-icon {
+    transition: all 0.3s ease;
+}
+
+.card:hover .research-icon,
+.card:hover .area-icon {
+    transform: scale(1.1);
+}
+
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #eff6ff, #e0e7ff);
+}
+
+/* Card hover effects */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+
+/* Contact info styling */
+.contact-info p {
+    display: flex;
+    align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .research-icon, .area-icon {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+}
+</style>
+{% endblock %}

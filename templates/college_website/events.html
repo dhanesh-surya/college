@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Events - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Events</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">College Events</h1>
+        <p class="lead text-muted">Stay updated with our latest events, workshops, and activities</p>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <a href="{% url 'college_website:events' %}" 
+                           class="btn {% if not request.GET.type %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">
+                            <i class="fas fa-calendar-alt me-1"></i>All Events
+                        </a>
+                        <a href="{% url 'college_website:events' %}?type=academic" 
+                           class="btn {% if request.GET.type == 'academic' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">
+                            <i class="fas fa-graduation-cap me-1"></i>Academic
+                        </a>
+                        <a href="{% url 'college_website:events' %}?type=cultural" 
+                           class="btn {% if request.GET.type == 'cultural' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">
+                            <i class="fas fa-theater-masks me-1"></i>Cultural
+                        </a>
+                        <a href="{% url 'college_website:events' %}?type=sports" 
+                           class="btn {% if request.GET.type == 'sports' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">
+                            <i class="fas fa-running me-1"></i>Sports
+                        </a>
+                        <a href="{% url 'college_website:events' %}?type=workshop" 
+                           class="btn {% if request.GET.type == 'workshop' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">
+                            <i class="fas fa-tools me-1"></i>Workshop
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Grid -->
+    <div class="row">
+        {% for event in events %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm event-card">
+                <div class="row g-0 h-100">
+                    <div class="col-md-4">
+                        {% if event.featured_image %}
+                        <img src="{{ event.featured_image.url }}" class="img-fluid h-100 object-cover rounded-start" alt="{{ event.title }}">
+                        {% else %}
+                        <div class="h-100 d-flex align-items-center justify-content-center bg-gradient-to-br from-{{ event.type|default:'primary' }}-500 to-{{ event.type|default:'primary' }}-600 text-white rounded-start">
+                            {% if event.type == 'academic' %}<i class="fas fa-graduation-cap fa-3x"></i>
+                            {% elif event.type == 'cultural' %}<i class="fas fa-theater-masks fa-3x"></i>
+                            {% elif event.type == 'sports' %}<i class="fas fa-running fa-3x"></i>
+                            {% elif event.type == 'workshop' %}<i class="fas fa-tools fa-3x"></i>
+                            {% else %}<i class="fas fa-calendar-alt fa-3x"></i>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body p-4 d-flex flex-column h-100">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-{{ event.type|default:'primary' }} mb-2">
+                                    {% if event.type == 'academic' %}<i class="fas fa-graduation-cap me-1"></i>Academic
+                                    {% elif event.type == 'cultural' %}<i class="fas fa-theater-masks me-1"></i>Cultural
+                                    {% elif event.type == 'sports' %}<i class="fas fa-running me-1"></i>Sports
+                                    {% elif event.type == 'workshop' %}<i class="fas fa-tools me-1"></i>Workshop
+                                    {% else %}<i class="fas fa-calendar-alt me-1"></i>{{ event.get_type_display }}
+                                    {% endif %}
+                                </span>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>{{ event.start_date|date:"M d, Y" }}
+                                </small>
+                            </div>
+                            <h5 class="card-title mb-3">{{ event.title }}</h5>
+                            {% if event.description %}
+                            <p class="card-text text-muted mb-3 flex-grow-1">
+                                {{ event.description|striptags|truncatewords:20 }}
+                            </p>
+                            {% endif %}
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {% if event.venue %}
+                                    <small class="text-muted">
+                                        <i class="fas fa-map-marker-alt me-1"></i>{{ event.venue }}
+                                    </small>
+                                    {% endif %}
+                                    <a href="{% url 'college_website:event_detail' event.slug %}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-arrow-right me-1"></i>Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No events available</h4>
+                    <p class="text-muted">Check back later for exciting campus activities!</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Quick Links Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-3">Event Categories</h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <a href="{% url 'college_website:academic_events' %}" class="text-decoration-none">
+                                <div class="d-flex align-items-center p-3 bg-light rounded">
+                                    <i class="fas fa-graduation-cap fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Academic Events</h6>
+                                        <small class="text-muted">Workshops, seminars, conferences</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'college_website:extracurricular_events' %}" class="text-decoration-none">
+                                <div class="d-flex align-items-center p-3 bg-light rounded">
+                                    <i class="fas fa-theater-masks fa-2x text-success me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Cultural Events</h6>
+                                        <small class="text-muted">Performances, celebrations</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'college_website:events_gallery' %}" class="text-decoration-none">
+                                <div class="d-flex align-items-center p-3 bg-light rounded">
+                                    <i class="fas fa-images fa-2x text-info me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Event Gallery</h6>
+                                        <small class="text-muted">Photos and memories</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'college_website:annual_reports' %}" class="text-decoration-none">
+                                <div class="d-flex align-items-center p-3 bg-light rounded">
+                                    <i class="fas fa-file-alt fa-2x text-warning me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Annual Reports</h6>
+                                        <small class="text-muted">Yearly summaries</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.event-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.object-cover {
+    object-fit: cover;
+}
+
+.bg-gradient-to-br {
+    background: linear-gradient(to bottom right, var(--bs-primary), var(--bs-primary));
+}
+
+.from-primary-500 {
+    --bs-primary: #0d6efd;
+}
+
+.to-primary-600 {
+    --bs-primary: #0b5ed7;
+}
+
+.from-academic-500 {
+    --bs-academic: #198754;
+}
+
+.to-academic-600 {
+    --bs-academic: #157347;
+}
+
+.from-cultural-500 {
+    --bs-cultural: #fd7e14;
+}
+
+.to-cultural-600 {
+    --bs-cultural: #e8590c;
+}
+
+.from-sports-500 {
+    --bs-sports: #dc3545;
+}
+
+.to-sports-600 {
+    --bs-sports: #bb2d3b;
+}
+
+.from-workshop-500 {
+    --bs-workshop: #6f42c1;
+}
+
+.to-workshop-600 {
+    --bs-workshop: #5a32a3;
+}
+</style>
+{% endblock %}

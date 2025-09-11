@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Non-Academic Faculties - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:academics' %}" class="text-white">Academics</a></li>
+<li class="breadcrumb-item active text-white" aria-current="page">Non-Academic Faculties</li>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="tw-bg-gradient-to-br tw-from-green-900 tw-via-green-800 tw-to-emerald-900 tw-py-16 tw-relative tw-overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="tw-absolute tw-inset-0 tw-overflow-hidden">
+        <div class="tw-absolute tw-top-10 tw-left-10 tw-w-72 tw-h-72 tw-bg-green-500 tw-rounded-full tw-mix-blend-multiply tw-filter tw-blur-xl tw-opacity-20 tw-animate-blob"></div>
+        <div class="tw-absolute tw-top-0 tw-right-4 tw-w-72 tw-h-72 tw-bg-teal-500 tw-rounded-full tw-mix-blend-multiply tw-filter tw-blur-xl tw-opacity-20 tw-animate-blob tw-animation-delay-2000"></div>
+        <div class="tw-absolute tw--bottom-8 tw-left-20 tw-w-72 tw-h-72 tw-bg-emerald-500 tw-rounded-full tw-mix-blend-multiply tw-filter tw-blur-xl tw-opacity-20 tw-animate-blob tw-animation-delay-4000"></div>
+    </div>
+    
+    <div class="container tw-relative tw-z-10">
+        <div class="row tw-items-center tw-min-h-96">
+            <div class="col-lg-8 tw-mx-auto tw-text-center">
+                <!-- Badge -->
+                <div class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-mb-6 tw-bg-green-100 tw-bg-opacity-20 tw-backdrop-blur-sm tw-rounded-full tw-border tw-border-green-300 tw-border-opacity-30">
+                    <i class="fas fa-user-cog tw-text-green-300 tw-mr-2 tw-text-lg"></i>
+                    <span class="tw-text-green-200 tw-font-semibold tw-text-sm tw-tracking-wide tw-uppercase">Support Staff</span>
+                </div>
+                
+                <!-- Main Title -->
+                <h1 class="tw-text-5xl tw-font-bold tw-text-white tw-mb-6 tw-leading-tight">
+                    <span class="tw-bg-gradient-to-r tw-from-green-200 tw-to-white tw-bg-clip-text tw-text-transparent">Non-Academic Faculties</span>
+                </h1>
+                
+                <!-- Subtitle -->
+                <p class="tw-text-xl tw-text-green-100 tw-mb-8 tw-leading-relaxed tw-max-w-3xl tw-mx-auto">
+                    Meet our dedicated non-academic staff members who ensure the smooth operation of our college and provide essential support services to students and faculty.
+                </p>
+                
+                <!-- Action Buttons -->
+                <div class="tw-flex tw-flex-wrap tw-justify-center tw-gap-4">
+                    <a href="#staff-grid" class="tw-inline-flex tw-items-center tw-px-6 tw-py-3 tw-bg-white tw-text-green-900 tw-font-semibold tw-rounded-lg tw-shadow-lg tw-hover:tw-shadow-xl tw-transition-all tw-duration-300 tw-hover:tw-scale-105">
+                        <i class="fas fa-users tw-mr-2"></i>
+                        View Staff
+                    </a>
+                    <a href="{% url 'college_website:academic_faculties' %}" class="tw-inline-flex tw-items-center tw-px-6 tw-py-3 tw-bg-green-600 tw-bg-opacity-20 tw-text-white tw-font-semibold tw-rounded-lg tw-border tw-border-green-400 tw-border-opacity-30 tw-backdrop-blur-sm tw-hover:tw-bg-opacity-30 tw-transition-all tw-duration-300">
+                        <i class="fas fa-chalkboard-teacher tw-mr-2"></i>
+                        Academic Staff
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="tw-absolute tw-bottom-8 tw-left-1/2 tw-transform tw--translate-x-1/2 tw-animate-bounce">
+        <i class="fas fa-chevron-down tw-text-white tw-text-2xl tw-opacity-60"></i>
+    </div>
+</section>
+
+<!-- Staff Statistics Section -->
+<section class="tw-py-16 tw-bg-gray-50">
+    <div class="container">
+        <div class="row tw-gap-6">
+            <div class="col-lg-3 col-md-6">
+                <div class="tw-bg-white tw-p-8 tw-rounded-2xl tw-shadow-lg tw-text-center tw-hover:tw-shadow-xl tw-transition-all tw-duration-300 tw-hover:tw-scale-105">
+                    <div class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-user-cog tw-text-green-600 tw-text-2xl"></i>
+                    </div>
+                    <h3 class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">25+</h3>
+                    <p class="tw-text-gray-600 tw-font-medium">Support Staff</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="tw-bg-white tw-p-8 tw-rounded-2xl tw-shadow-lg tw-text-center tw-hover:tw-shadow-xl tw-transition-all tw-duration-300 tw-hover:tw-scale-105">
+                    <div class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-clipboard-list tw-text-blue-600 tw-text-2xl"></i>
+                    </div>
+                    <h3 class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">8</h3>
+                    <p class="tw-text-gray-600 tw-font-medium">Departments</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="tw-bg-white tw-p-8 tw-rounded-2xl tw-shadow-lg tw-text-center tw-hover:tw-shadow-xl tw-transition-all tw-duration-300 tw-hover:tw-scale-105">
+                    <div class="tw-w-16 tw-h-16 tw-bg-purple-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-clock tw-text-purple-600 tw-text-2xl"></i>
+                    </div>
+                    <h3 class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">24/7</h3>
+                    <p class="tw-text-gray-600 tw-font-medium">Support Available</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="tw-bg-white tw-p-8 tw-rounded-2xl tw-shadow-lg tw-text-center tw-hover:tw-shadow-xl tw-transition-all tw-duration-300 tw-hover:tw-scale-105">
+                    <div class="tw-w-16 tw-h-16 tw-bg-orange-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-handshake tw-text-orange-600 tw-text-2xl"></i>
+                    </div>
+                    <h3 class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">100%</h3>
+                    <p class="tw-text-gray-600 tw-font-medium">Service Commitment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Staff Grid Section -->
+<section id="staff-grid" class="tw-py-16 tw-bg-white">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="tw-text-center tw-mb-16">
+            <h2 class="tw-text-4xl tw-font-bold tw-text-gray-900 tw-mb-4">Our Support Staff</h2>
+            <p class="tw-text-xl tw-text-gray-600 tw-max-w-3xl tw-mx-auto">
+                Our dedicated non-academic staff members work tirelessly to ensure the smooth operation of our college and provide excellent support services.
+            </p>
+        </div>
+        
+        <!-- Staff by Department -->
+        {% if staff_by_department %}
+        <div class="row tw-gap-8">
+            {% for department, staff_members in staff_by_department.items %}
+            <div class="col-lg-6">
+                <div class="tw-bg-gradient-to-br tw-from-green-50 tw-to-green-100 tw-p-8 tw-rounded-2xl tw-shadow-lg tw-h-full">
+                    <div class="tw-flex tw-items-center tw-mb-6">
+                        <div class="tw-w-12 tw-h-12 tw-bg-green-600 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mr-4">
+                            <i class="fas fa-building tw-text-white tw-text-xl"></i>
+                        </div>
+                        <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900">{{ department.name }}</h3>
+                    </div>
+                    
+                    <div class="tw-space-y-6">
+                        {% for staff in staff_members %}
+                        <!-- Staff Card -->
+                        <div class="tw-bg-white tw-p-6 tw-rounded-xl tw-shadow-sm tw-hover:tw-shadow-lg tw-transition-all tw-duration-300">
+                            <div class="tw-flex tw-items-start tw-gap-4">
+                                <!-- Staff Photo -->
+                                <div class="tw-flex-shrink-0">
+                                    {% if staff.photo %}
+                                        <img src="{{ staff.photo.url }}" alt="{{ staff.name }}" class="tw-w-20 tw-h-20 tw-rounded-full tw-object-cover tw-shadow-md">
+                                    {% else %}
+                                        <div class="tw-w-20 tw-h-20 tw-bg-gradient-to-br tw-from-green-400 tw-to-green-600 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-shadow-md">
+                                            <span class="tw-text-white tw-font-bold tw-text-2xl">{{ staff.name|slice:":2"|upper }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Staff Info -->
+                                <div class="tw-flex-grow">
+                                    <div class="tw-flex tw-items-center tw-gap-2 tw-mb-2">
+                                        <h4 class="tw-font-bold tw-text-gray-900 tw-text-lg">{{ staff.name }}</h4>
+                                        <span class="tw-px-2 tw-py-1 tw-bg-green-100 tw-text-green-800 tw-text-xs tw-font-semibold tw-rounded-full">{{ staff.get_designation_display }}</span>
+                                    </div>
+                                    
+                                    <div class="tw-space-y-2 tw-mb-3">
+                                        <p class="tw-text-green-600 tw-font-semibold tw-text-sm">
+                                            <i class="fas fa-user-tie tw-mr-1"></i>{{ staff.get_designation_display }} - {{ department.name }}
+                                        </p>
+                                        {% if staff.email %}
+                                        <p class="tw-text-gray-600 tw-text-sm">
+                                            <i class="fas fa-envelope tw-mr-1"></i>{{ staff.email }}
+                                        </p>
+                                        {% endif %}
+                                        {% if staff.phone %}
+                                        <p class="tw-text-gray-600 tw-text-sm">
+                                            <i class="fas fa-phone tw-mr-1"></i>{{ staff.phone }}
+                                        </p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="tw-mb-3">
+                                        {% if staff.specialization %}
+                                        <p class="tw-text-gray-700 tw-text-sm tw-mb-2">
+                                            <strong>Specialization:</strong> {{ staff.specialization }}
+                                        </p>
+                                        {% endif %}
+                                        <p class="tw-text-gray-700 tw-text-sm tw-mb-2">
+                                            <strong>Experience:</strong> {{ staff.experience_years }}+ years in service
+                                        </p>
+                                        <p class="tw-text-gray-700 tw-text-sm">
+                                            <strong>Qualification:</strong> {{ staff.get_highest_qualification_display }}
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="tw-flex tw-gap-2">
+                                        <a href="{% url 'college_website:staff_detail' department.slug staff.slug %}" class="tw-px-3 tw-py-1 tw-bg-green-100 tw-text-green-700 tw-text-xs tw-font-medium tw-rounded-full tw-hover:tw-bg-green-200 tw-transition-colors">
+                                            <i class="fas fa-user tw-mr-1"></i>Know More
+                                        </a>
+                                        <a href="{% url 'college_website:department_detail' department.slug %}" class="tw-px-3 tw-py-1 tw-bg-gray-100 tw-text-gray-700 tw-text-xs tw-font-medium tw-rounded-full tw-hover:tw-bg-gray-200 tw-transition-colors">
+                                            <i class="fas fa-building tw-mr-1"></i>{{ department.name }}
+                                        </a>
+                                        {% if staff.cv_file %}
+                                        <a href="{{ staff.cv_file.url }}" target="_blank" class="tw-px-3 tw-py-1 tw-bg-gray-100 tw-text-gray-700 tw-text-xs tw-font-medium tw-rounded-full tw-hover:tw-bg-gray-200 tw-transition-colors">
+                                            <i class="fas fa-file-pdf tw-mr-1"></i>CV
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="tw-text-center tw-py-16">
+            <div class="tw-w-24 tw-h-24 tw-bg-gray-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-6">
+                <i class="fas fa-user-cog tw-text-gray-400 tw-text-3xl"></i>
+            </div>
+            <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">No Staff Found</h3>
+            <p class="tw-text-gray-600 tw-max-w-md tw-mx-auto">
+                Staff information is being updated. Please check back later or contact the administration for more information.
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Staff Services Section -->
+<section class="tw-py-16 tw-bg-gray-50">
+    <div class="container">
+        <div class="tw-text-center tw-mb-12">
+            <h2 class="tw-text-4xl tw-font-bold tw-text-gray-900 tw-mb-4">Our Services</h2>
+            <p class="tw-text-xl tw-text-gray-600 tw-max-w-3xl tw-mx-auto">
+                Our non-academic staff provides comprehensive support services to ensure the best experience for students and faculty.
+            </p>
+        </div>
+        
+        <div class="row tw-gap-6">
+            <div class="col-lg-4 col-md-6">
+                <div class="tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-lg tw-text-center tw-hover:tw-shadow-xl tw-transition-all tw-duration-300">
+                    <div class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-clipboard-list tw-text-blue-600 tw-text-2xl"></i>
+                    </div>
+                    <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-2">Administrative Support</h3>
+                    <p class="tw-text-gray-600">Comprehensive administrative services including registration, records management, and student services.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-lg tw-text-center tw-hover:tw-shadow-xl tw-transition-all tw-duration-300">
+                    <div class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-tools tw-text-green-600 tw-text-2xl"></i>
+                    </div>
+                    <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-2">Technical Support</h3>
+                    <p class="tw-text-gray-600">IT support, maintenance services, and technical assistance for all college operations.</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-lg tw-text-center tw-hover:tw-shadow-xl tw-transition-all tw-duration-300">
+                    <div class="tw-w-16 tw-h-16 tw-bg-purple-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-heart tw-text-purple-600 tw-text-2xl"></i>
+                    </div>
+                    <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-2">Student Support</h3>
+                    <p class="tw-text-gray-600">Dedicated support for student welfare, counseling, and extracurricular activities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="tw-py-16 tw-bg-gradient-to-r tw-from-green-600 tw-to-emerald-700">
+    <div class="container">
+        <div class="row tw-items-center">
+            <div class="col-lg-8">
+                <h2 class="tw-text-3xl tw-font-bold tw-text-white tw-mb-4">Join Our Support Team</h2>
+                <p class="tw-text-xl tw-text-green-100 tw-mb-0">
+                    Interested in joining our support staff? We welcome applications from dedicated individuals committed to excellence in service.
+                </p>
+            </div>
+            <div class="col-lg-4 tw-text-center tw-lg:text-right">
+                <a href="{% url 'college_website:contact' %}" class="tw-inline-flex tw-items-center tw-px-8 tw-py-4 tw-bg-white tw-text-green-600 tw-font-semibold tw-rounded-lg tw-shadow-lg tw-hover:tw-shadow-xl tw-transition-all tw-duration-300 tw-hover:tw-scale-105">
+                    <i class="fas fa-envelope tw-mr-2"></i>
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+@keyframes blob {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+}
+
+.tw-animate-blob {
+    animation: blob 7s infinite;
+}
+
+.tw-animation-delay-2000 {
+    animation-delay: 2s;
+}
+
+.tw-animation-delay-4000 {
+    animation-delay: 4s;
+}
+</style>
+{% endblock %}

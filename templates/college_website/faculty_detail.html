@@ -1,0 +1,389 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ faculty.name }} - {{ faculty.department.name }} - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:academics' %}" class="text-white">Academics</a></li>
+<li class="breadcrumb-item"><a href="{% url 'college_website:academic_faculties' %}" class="text-white">Academic Faculties</a></li>
+<li class="breadcrumb-item"><a href="{% url 'college_website:department_detail' faculty.department.slug %}" class="text-white">{{ faculty.department.name }}</a></li>
+<li class="breadcrumb-item active text-white" aria-current="page">{{ faculty.name }}</li>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="tw-bg-gradient-to-br tw-from-blue-900 tw-via-blue-800 tw-to-indigo-900 tw-py-16 tw-relative tw-overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="tw-absolute tw-inset-0 tw-overflow-hidden">
+        <div class="tw-absolute tw-top-10 tw-left-10 tw-w-72 tw-h-72 tw-bg-blue-500 tw-rounded-full tw-mix-blend-multiply tw-filter tw-blur-xl tw-opacity-20 tw-animate-blob"></div>
+        <div class="tw-absolute tw-top-0 tw-right-4 tw-w-72 tw-h-72 tw-bg-purple-500 tw-rounded-full tw-mix-blend-multiply tw-filter tw-blur-xl tw-opacity-20 tw-animate-blob tw-animation-delay-2000"></div>
+        <div class="tw-absolute tw--bottom-8 tw-left-20 tw-w-72 tw-h-72 tw-bg-pink-500 tw-rounded-full tw-mix-blend-multiply tw-filter tw-blur-xl tw-opacity-20 tw-animate-blob tw-animation-delay-4000"></div>
+    </div>
+    
+    <div class="container tw-relative tw-z-10">
+        <div class="row tw-items-center tw-min-h-96">
+            <div class="col-lg-4 tw-text-center tw-lg:text-left tw-mb-8 tw-lg:mb-0">
+                <!-- Faculty Photo -->
+                <div class="tw-relative tw-inline-block">
+                    {% if faculty.photo %}
+                        <img src="{{ faculty.photo.url }}" alt="{{ faculty.name }}" class="tw-w-64 tw-h-64 tw-rounded-full tw-object-cover tw-shadow-2xl tw-border-4 tw-border-white">
+                    {% else %}
+                        <div class="tw-w-64 tw-h-64 tw-bg-gradient-to-br tw-from-blue-400 tw-to-blue-600 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-shadow-2xl tw-border-4 tw-border-white">
+                            <span class="tw-text-white tw-font-bold tw-text-6xl">
+                                {{ faculty.name|slice:":2"|upper }}
+                            </span>
+                        </div>
+                    {% endif %}
+                    <!-- Status Badge -->
+                    <div class="tw-absolute tw-bottom-4 tw-right-4 tw-bg-green-500 tw-text-white tw-px-3 tw-py-1 tw-rounded-full tw-text-sm tw-font-semibold tw-shadow-lg">
+                        <i class="fas fa-circle tw-mr-1 tw-text-xs"></i>Active
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-8">
+                <!-- Faculty Info -->
+                <div class="tw-text-center tw-lg:text-left">
+                    <!-- Badge -->
+                    <div class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-mb-6 tw-bg-blue-100 tw-bg-opacity-20 tw-backdrop-blur-sm tw-rounded-full tw-border tw-border-blue-300 tw-border-opacity-30">
+                        <i class="fas fa-chalkboard-teacher tw-text-blue-300 tw-mr-2 tw-text-lg"></i>
+                        <span class="tw-text-blue-200 tw-font-semibold tw-text-sm tw-tracking-wide tw-uppercase">{{ faculty.department.name }}</span>
+                    </div>
+                    
+                    <!-- Name and Designation -->
+                    <h1 class="tw-text-5xl tw-font-bold tw-text-white tw-mb-4 tw-leading-tight">
+                        <span class="tw-bg-gradient-to-r tw-from-blue-200 tw-to-white tw-bg-clip-text tw-text-transparent">{{ faculty.name }}</span>
+                    </h1>
+                    
+                    <h2 class="tw-text-2xl tw-text-blue-200 tw-mb-6 tw-font-medium">
+                        {{ faculty.get_designation_display }}
+                    </h2>
+                    
+                    <!-- Quick Info -->
+                    <div class="tw-flex tw-flex-wrap tw-justify-center tw-lg:justify-start tw-gap-4 tw-mb-8">
+                        {% if faculty.email %}
+                        <div class="tw-flex tw-items-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-px-4 tw-py-2 tw-rounded-lg">
+                            <i class="fas fa-envelope tw-text-blue-300 tw-mr-2"></i>
+                            <span class="tw-text-white tw-text-sm">{{ faculty.email }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if faculty.phone %}
+                        <div class="tw-flex tw-items-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-px-4 tw-py-2 tw-rounded-lg">
+                            <i class="fas fa-phone tw-text-blue-300 tw-mr-2"></i>
+                            <span class="tw-text-white tw-text-sm">{{ faculty.phone }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if faculty.office_location %}
+                        <div class="tw-flex tw-items-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-px-4 tw-py-2 tw-rounded-lg">
+                            <i class="fas fa-map-marker-alt tw-text-blue-300 tw-mr-2"></i>
+                            <span class="tw-text-white tw-text-sm">{{ faculty.office_location }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="tw-flex tw-flex-wrap tw-justify-center tw-lg:justify-start tw-gap-4">
+                        {% if faculty.cv_file %}
+                        <a href="{{ faculty.cv_file.url }}" target="_blank" class="tw-inline-flex tw-items-center tw-px-6 tw-py-3 tw-bg-white tw-text-blue-900 tw-font-semibold tw-rounded-lg tw-shadow-lg tw-hover:tw-shadow-xl tw-transition-all tw-duration-300 tw-hover:tw-scale-105">
+                            <i class="fas fa-download tw-mr-2"></i>
+                            Download CV
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'college_website:department_detail' faculty.department.slug %}" class="tw-inline-flex tw-items-center tw-px-6 tw-py-3 tw-bg-blue-600 tw-bg-opacity-20 tw-text-white tw-font-semibold tw-rounded-lg tw-border tw-border-blue-400 tw-border-opacity-30 tw-backdrop-blur-sm tw-hover:tw-bg-opacity-30 tw-transition-all tw-duration-300">
+                            <i class="fas fa-building tw-mr-2"></i>
+                            Department
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Faculty Details Section -->
+<section class="tw-py-16 tw-bg-white">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8 tw-mb-8">
+                <!-- About Section -->
+                {% if faculty.bio %}
+                <div class="tw-bg-gray-50 tw-p-8 tw-rounded-2xl tw-shadow-lg tw-mb-8">
+                    <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-user tw-text-blue-600 tw-mr-2"></i>About
+                    </h3>
+                    <div class="tw-prose tw-prose-lg tw-max-w-none">
+                        {{ faculty.bio|safe }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Qualifications Section -->
+                <div class="tw-bg-gray-50 tw-p-8 tw-rounded-2xl tw-shadow-lg tw-mb-8">
+                    <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-graduation-cap tw-text-blue-600 tw-mr-2"></i>Qualifications
+                    </h3>
+                    <div class="tw-prose tw-prose-lg tw-max-w-none">
+                        {{ faculty.qualifications|linebreaks }}
+                    </div>
+                </div>
+                
+                <!-- Research Interests -->
+                {% if faculty.research_interests %}
+                <div class="tw-bg-gray-50 tw-p-8 tw-rounded-2xl tw-shadow-lg tw-mb-8">
+                    <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-search tw-text-blue-600 tw-mr-2"></i>Research Interests
+                    </h3>
+                    <div class="tw-flex tw-flex-wrap tw-gap-2">
+                        {% for interest in faculty.get_research_interests_list %}
+                        <span class="tw-px-3 tw-py-1 tw-bg-blue-100 tw-text-blue-800 tw-text-sm tw-font-medium tw-rounded-full">
+                            {{ interest }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Courses Taught -->
+                {% if faculty.courses_taught %}
+                <div class="tw-bg-gray-50 tw-p-8 tw-rounded-2xl tw-shadow-lg tw-mb-8">
+                    <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-book tw-text-blue-600 tw-mr-2"></i>Courses Taught
+                    </h3>
+                    <ul class="tw-space-y-2">
+                        {% for course in faculty.get_courses_taught_list %}
+                        <li class="tw-flex tw-items-center tw-text-gray-700">
+                            <i class="fas fa-check tw-text-green-500 tw-mr-2 tw-text-sm"></i>
+                            {{ course }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <!-- Publications -->
+                {% if faculty.publications %}
+                <div class="tw-bg-gray-50 tw-p-8 tw-rounded-2xl tw-shadow-lg tw-mb-8">
+                    <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-file-alt tw-text-blue-600 tw-mr-2"></i>Publications
+                    </h3>
+                    <div class="tw-prose tw-prose-lg tw-max-w-none">
+                        {{ faculty.publications|safe }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Message to Students -->
+                {% if faculty.message %}
+                <div class="tw-bg-gradient-to-r tw-from-blue-50 tw-to-indigo-50 tw-p-8 tw-rounded-2xl tw-shadow-lg tw-mb-8 tw-border-l-4 tw-border-blue-500">
+                    <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-quote-left tw-text-blue-600 tw-mr-2"></i>Message to Students
+                    </h3>
+                    <blockquote class="tw-text-lg tw-text-gray-700 tw-italic tw-leading-relaxed">
+                        "{{ faculty.message }}"
+                    </blockquote>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Contact Information -->
+                <div class="tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-lg tw-mb-6">
+                    <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-address-card tw-text-blue-600 tw-mr-2"></i>Contact Information
+                    </h3>
+                    <div class="tw-space-y-3">
+                        {% if faculty.email %}
+                        <div class="tw-flex tw-items-center">
+                            <i class="fas fa-envelope tw-text-gray-400 tw-mr-3 tw-w-5"></i>
+                            <a href="mailto:{{ faculty.email }}" class="tw-text-blue-600 tw-hover:tw-text-blue-800 tw-transition-colors">{{ faculty.email }}</a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if faculty.phone %}
+                        <div class="tw-flex tw-items-center">
+                            <i class="fas fa-phone tw-text-gray-400 tw-mr-3 tw-w-5"></i>
+                            <a href="tel:{{ faculty.phone }}" class="tw-text-blue-600 tw-hover:tw-text-blue-800 tw-transition-colors">{{ faculty.phone }}</a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if faculty.office_location %}
+                        <div class="tw-flex tw-items-center">
+                            <i class="fas fa-map-marker-alt tw-text-gray-400 tw-mr-3 tw-w-5"></i>
+                            <span class="tw-text-gray-700">{{ faculty.office_location }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if faculty.employee_id %}
+                        <div class="tw-flex tw-items-center">
+                            <i class="fas fa-id-badge tw-text-gray-400 tw-mr-3 tw-w-5"></i>
+                            <span class="tw-text-gray-700">ID: {{ faculty.employee_id }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Professional Details -->
+                <div class="tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-lg tw-mb-6">
+                    <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-briefcase tw-text-blue-600 tw-mr-2"></i>Professional Details
+                    </h3>
+                    <div class="tw-space-y-3">
+                        <div class="tw-flex tw-justify-between">
+                            <span class="tw-text-gray-600">Designation:</span>
+                            <span class="tw-font-semibold tw-text-gray-900">{{ faculty.get_designation_display }}</span>
+                        </div>
+                        
+                        <div class="tw-flex tw-justify-between">
+                            <span class="tw-text-gray-600">Department:</span>
+                            <span class="tw-font-semibold tw-text-gray-900">{{ faculty.department.name }}</span>
+                        </div>
+                        
+                        <div class="tw-flex tw-justify-between">
+                            <span class="tw-text-gray-600">Experience:</span>
+                            <span class="tw-font-semibold tw-text-gray-900">{{ faculty.experience_years }}+ years</span>
+                        </div>
+                        
+                        {% if faculty.joining_date %}
+                        <div class="tw-flex tw-justify-between">
+                            <span class="tw-text-gray-600">Joined:</span>
+                            <span class="tw-font-semibold tw-text-gray-900">{{ faculty.joining_date|date:"M Y" }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="tw-flex tw-justify-between">
+                            <span class="tw-text-gray-600">Qualification:</span>
+                            <span class="tw-font-semibold tw-text-gray-900">{{ faculty.get_highest_qualification_display }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Social Media & Academic Profiles -->
+                {% with faculty.get_social_media_links as social_links %}
+                {% if social_links %}
+                <div class="tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-lg tw-mb-6">
+                    <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-share-alt tw-text-blue-600 tw-mr-2"></i>Connect
+                    </h3>
+                    <div class="tw-flex tw-flex-wrap tw-gap-3">
+                        {% if social_links.linkedin %}
+                        <a href="{{ social_links.linkedin }}" target="_blank" class="tw-p-3 tw-bg-blue-600 tw-text-white tw-rounded-lg tw-hover:tw-bg-blue-700 tw-transition-colors">
+                            <i class="fab fa-linkedin tw-text-lg"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if social_links.google_scholar %}
+                        <a href="{{ social_links.google_scholar }}" target="_blank" class="tw-p-3 tw-bg-green-600 tw-text-white tw-rounded-lg tw-hover:tw-bg-green-700 tw-transition-colors">
+                            <i class="fas fa-graduation-cap tw-text-lg"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if social_links.researchgate %}
+                        <a href="{{ social_links.researchgate }}" target="_blank" class="tw-p-3 tw-bg-emerald-600 tw-text-white tw-rounded-lg tw-hover:tw-bg-emerald-700 tw-transition-colors">
+                            <i class="fab fa-researchgate tw-text-lg"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if social_links.orcid %}
+                        <a href="{{ social_links.orcid }}" target="_blank" class="tw-p-3 tw-bg-orange-600 tw-text-white tw-rounded-lg tw-hover:tw-bg-orange-700 tw-transition-colors">
+                            <i class="fab fa-orcid tw-text-lg"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if social_links.scopus %}
+                        <a href="{{ social_links.scopus }}" target="_blank" class="tw-p-3 tw-bg-red-600 tw-text-white tw-rounded-lg tw-hover:tw-bg-red-700 tw-transition-colors">
+                            <i class="fas fa-search tw-text-lg"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if social_links.twitter %}
+                        <a href="{{ social_links.twitter }}" target="_blank" class="tw-p-3 tw-bg-sky-500 tw-text-white tw-rounded-lg tw-hover:tw-bg-sky-600 tw-transition-colors">
+                            <i class="fab fa-twitter tw-text-lg"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if social_links.facebook %}
+                        <a href="{{ social_links.facebook }}" target="_blank" class="tw-p-3 tw-bg-blue-700 tw-text-white tw-rounded-lg tw-hover:tw-bg-blue-800 tw-transition-colors">
+                            <i class="fab fa-facebook tw-text-lg"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if social_links.instagram %}
+                        <a href="{{ social_links.instagram }}" target="_blank" class="tw-p-3 tw-bg-pink-600 tw-text-white tw-rounded-lg tw-hover:tw-bg-pink-700 tw-transition-colors">
+                            <i class="fab fa-instagram tw-text-lg"></i>
+                        </a>
+                        {% endif %}
+                        
+                        {% if social_links.website %}
+                        <a href="{{ social_links.website }}" target="_blank" class="tw-p-3 tw-bg-gray-600 tw-text-white tw-rounded-lg tw-hover:tw-bg-gray-700 tw-transition-colors">
+                            <i class="fas fa-globe tw-text-lg"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endwith %}
+                
+                <!-- Related Faculty -->
+                {% if related_faculty %}
+                <div class="tw-bg-white tw-p-6 tw-rounded-2xl tw-shadow-lg">
+                    <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-4">
+                        <i class="fas fa-users tw-text-blue-600 tw-mr-2"></i>Other Faculty
+                    </h3>
+                    <div class="tw-space-y-3">
+                        {% for related in related_faculty %}
+                        <a href="{% url 'college_website:faculty_detail' related.department.slug related.slug %}" class="tw-flex tw-items-center tw-p-3 tw-bg-gray-50 tw-rounded-lg tw-hover:tw-bg-gray-100 tw-transition-colors">
+                            {% if related.photo %}
+                                <img src="{{ related.photo.url }}" alt="{{ related.name }}" class="tw-w-12 tw-h-12 tw-rounded-full tw-object-cover tw-mr-3">
+                            {% else %}
+                                <div class="tw-w-12 tw-h-12 tw-bg-gradient-to-br tw-from-blue-400 tw-to-blue-600 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mr-3">
+                                    <span class="tw-text-white tw-font-bold tw-text-sm">{{ related.name|slice:":2"|upper }}</span>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <div class="tw-font-semibold tw-text-gray-900 tw-text-sm">{{ related.name }}</div>
+                                <div class="tw-text-gray-600 tw-text-xs">{{ related.get_designation_display }}</div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+@keyframes blob {
+    0% {
+        transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(1);
+    }
+}
+
+.tw-animate-blob {
+    animation: blob 7s infinite;
+}
+
+.tw-animation-delay-2000 {
+    animation-delay: 2s;
+}
+
+.tw-animation-delay-4000 {
+    animation-delay: 4s;
+}
+</style>
+{% endblock %}

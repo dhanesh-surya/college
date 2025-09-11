@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django import forms
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 from django_ckeditor_5.widgets import CKEditor5Widget
-from .forms import TopUtilityBarForm, CustomLinkForm
+from .forms import TopUtilityBarForm, CustomLinkForm, NavbarInfoForm
 from datetime import datetime, timezone, timedelta
 from .models import (
     ScrollingNotification, SliderImage, HeaderInfo, NavbarInfo, CollegeInfo, Program, Event, EventImage, Notice, SocialInitiative, 
@@ -19,12 +19,38 @@ from .models import (
     PlacementRecord, AlumniProfile, DirectorMessage, PrincipalMessage, TopUtilityBar, CustomLink,
     # IQAC Models
     IQACInfo, IQACReport, NAACInfo, NIRFInfo, QualityInitiative, 
-    AccreditationInfo, IQACFeedback, SideMenu, SideMenuItem
+    AccreditationInfo, IQACFeedback, SideMenu, SideMenuItem,
+    # Vision Mission Models
+    VisionMissionContent, CoreValue,
+    # History Models
+    HistoryContent, TimelineEvent, Milestone, HistoryGalleryImage,
+    # Department Models
+    Department, Faculty, NonAcademicStaff, DepartmentEvent,
+    # Hero Banner Models
+    HeroBanner,
+    # Exam Timetable Models
+    ExamTimetable, ExamTimetableWeek, ExamTimetableTimeSlot, ExamTimetableExam,
+    # Question Paper Models
+    QuestionPaper,
+    # Revaluation Models
+    RevaluationInfo,
+    # Exam Rules Models
+    ExamRulesInfo,
+    # Research Center Models
+    ResearchCenterInfo,
+    # Publication Models
+    PublicationInfo, Publication, PatentsProjectsInfo, Patent, ResearchProject, IndustryCollaboration,
+    # Consultancy Models
+    ConsultancyInfo, ConsultancyService, ConsultancyExpertise, ConsultancySuccessStory,
+    MenuSubmenu, MenuCategory, MenuVisibilitySettings,
+    # NSS-NCC Models
+    NSSNCCClub, NSSNCCNotice, NSSNCCGallery, NSSNCCAchievement,
+    HeroCarouselSlide, HeroCarouselSettings
 )
 
 
 # CustomLink Inline Admin for TopUtilityBar
-class CustomLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+class CustomLinkInline(admin.TabularInline):
     """Enhanced inline admin for CustomLink with better UX"""
     model = CustomLink
     form = CustomLinkForm
@@ -41,7 +67,7 @@ class CustomLinkInline(SortableInlineAdminMixin, admin.TabularInline):
 
 
 @admin.register(TopUtilityBar)
-class TopUtilityBarAdmin(SortableAdminMixin, admin.ModelAdmin):
+class TopUtilityBarAdmin(admin.ModelAdmin):
     """Enhanced admin interface for Top Utility Bar management with comprehensive controls"""
     
     form = TopUtilityBarForm
@@ -799,8 +825,25 @@ class SliderImageAdmin(SortableAdminMixin, admin.ModelAdmin):
         js = ('admin/js/slider_admin.js',)
 
 
+from django import forms
+from colorfield.widgets import ColorWidget
+
+class HeaderInfoForm(forms.ModelForm):
+    class Meta:
+        model = HeaderInfo
+        fields = '__all__'
+        widgets = {
+            'college_name_color': ColorWidget,
+            'address_color': ColorWidget,
+            'affiliations_color': ColorWidget,
+            'contact_color': ColorWidget,
+            'header_background_color': ColorWidget,
+            'header_border_color': ColorWidget,
+        }
+
 @admin.register(HeaderInfo)
 class HeaderInfoAdmin(admin.ModelAdmin):
+    form = HeaderInfoForm
     list_display = [
         'college_name', 'email', 'phone', 'header_layout', 
         'show_college_name', 'show_contact_info', 'show_social_links', 'is_active'
@@ -908,27 +951,78 @@ class HeaderInfoAdmin(admin.ModelAdmin):
 
 @admin.register(NavbarInfo)
 class NavbarInfoAdmin(admin.ModelAdmin):
-    list_display = ['brand_name', 'show_logo', 'show_brand_text', 'is_sticky', 'is_active']
-    list_filter = ['is_active', 'show_logo', 'show_brand_text', 'is_sticky']
+    form = NavbarInfoForm
+    list_display = ['brand_name', 'navbar_height', 'menu_font_size', 'is_sticky', 'is_active']
+    list_filter = ['is_active', 'show_logo', 'show_brand_text', 'is_sticky', 'enable_search']
+    search_fields = ['brand_name', 'brand_subtitle']
     
     fieldsets = (
         ('Brand Information', {
-            'fields': ('brand_name', 'brand_subtitle', 'logo', 'show_logo', 'show_brand_text')
+            'fields': ('brand_name', 'brand_subtitle', 'logo', 'show_logo', 'show_brand_text'),
+            'description': 'Configure the navbar brand, logo, and text display settings.'
+        }),
+        ('Navbar Dimensions & Spacing', {
+            'fields': (
+                'navbar_height', 'navbar_padding_top', 'navbar_padding_bottom', 'navbar_padding_horizontal',
+                'menu_item_padding_vertical', 'menu_item_padding_horizontal', 'menu_item_margin', 
+                'menu_item_gap', 'menu_item_border_radius'
+            ),
+            'description': 'Control the overall navbar size and spacing between elements.'
+        }),
+        ('Typography & Logo', {
+            'fields': (
+                'brand_font_size', 'menu_font_size', 'menu_line_height', 'logo_height'
+            ),
+            'description': 'Configure font sizes, line height, and logo dimensions.'
+        }),
+        ('Responsive Breakpoints', {
+            'fields': ('mobile_breakpoint', 'tablet_breakpoint'),
+            'description': 'Define screen size breakpoints for responsive behavior.'
+        }),
+        ('Mobile Settings', {
+            'fields': (
+                'mobile_navbar_height', 'mobile_padding_horizontal', 'mobile_menu_font_size', 
+                'mobile_brand_font_size', 'mobile_logo_height'
+            ),
+            'description': 'Mobile-specific navbar configuration.'
+        }),
+        ('Dropdown & Mega Menu', {
+            'fields': (
+                'dropdown_padding', 'dropdown_item_padding_vertical', 'dropdown_item_padding_horizontal',
+                'dropdown_item_font_size', 'dropdown_item_margin', 'mega_menu_padding', 
+                'mega_menu_columns', 'mega_menu_width'
+            ),
+            'description': 'Configure dropdown menus and mega menu appearance.'
+        }),
+        ('Colors & Styling', {
+            'fields': (
+                'navbar_background_color', 'navbar_text_color', 'navbar_hover_color', 'navbar_border_color',
+                'box_shadow', 'border_radius'
+            ),
+            'description': 'Customize navbar colors, shadows, and border styling.'
+        }),
+        ('Animation & Effects', {
+            'fields': ('transition_duration', 'hover_scale'),
+            'description': 'Configure animation timing and hover effects.'
         }),
         ('Navigation Behavior', {
-            'fields': ('is_sticky', 'show_below_header')
-        }),
-        ('Search Settings', {
-            'fields': ('enable_search', 'search_placeholder')
-        }),
-        ('Styling', {
-            'fields': ('navbar_background_color', 'navbar_text_color', 'navbar_hover_color', 'navbar_border_color'),
-            'classes': ('collapse',)
+            'fields': ('is_sticky', 'show_below_header', 'enable_search', 'search_placeholder'),
+            'description': 'Control navbar behavior and search functionality.'
         }),
         ('Status', {
-            'fields': ('is_active',)
+            'fields': ('is_active',),
+            'description': 'Activate or deactivate this navbar configuration.'
         }),
     )
+    
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        # Add help text for better user experience
+        form.base_fields['navbar_height'].help_text = "Height of the navbar in pixels (20-100px)"
+        form.base_fields['menu_font_size'].help_text = "Font size for menu items in rem units"
+        form.base_fields['mobile_breakpoint'].help_text = "Screen width below which mobile layout is used"
+        form.base_fields['mega_menu_columns'].help_text = "Number of columns in the mega menu (1-6)"
+        return form
 
 
 @admin.register(CollegeInfo)
@@ -962,13 +1056,82 @@ class CollegeInfoAdmin(admin.ModelAdmin):
 
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
-    list_display = ['name', 'discipline', 'duration', 'is_active', 'created_at']
-    list_filter = ['discipline', 'is_active', 'created_at']
-    search_fields = ['name', 'description']
+    list_display = ['name', 'short_name', 'discipline', 'degree_type', 'duration', 'fees', 'total_seats', 'is_featured', 'is_active', 'created_at']
+    list_filter = ['discipline', 'degree_type', 'is_active', 'is_featured', 'scholarship_available', 'created_at']
+    search_fields = ['name', 'short_name', 'description', 'department']
     prepopulated_fields = {'slug': ('name',)}
+    readonly_fields = ['last_updated', 'created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'short_name', 'discipline', 'degree_type', 'description', 'department', 'is_featured', 'is_active')
+        }),
+        ('Academic Details', {
+            'fields': ('duration', 'total_seats', 'minimum_percentage', 'entrance_exam', 'accreditation', 'established_year')
+        }),
+        ('Course Syllabus', {
+            'fields': ('first_year_subjects', 'second_year_subjects', 'third_year_subjects', 'elective_options'),
+            'classes': ('collapse',),
+            'description': 'Detailed syllabus for each year of the program'
+        }),
+        ('Course Outcomes & Program Outcomes (CO-PO)', {
+            'fields': ('program_outcomes', 'course_outcomes', 'co_po_mapping'),
+            'classes': ('collapse',),
+            'description': 'Learning outcomes and program objectives'
+        }),
+        ('Academic Timetable', {
+            'fields': ('timetable_info', 'class_timings', 'weekly_schedule'),
+            'classes': ('collapse',),
+            'description': 'Class schedule and timetable information'
+        }),
+        ('Enhanced Career Prospects', {
+            'fields': ('teaching_careers', 'media_journalism_careers', 'government_careers', 'private_sector_careers', 'further_studies', 'entrepreneurship'),
+            'classes': ('collapse',),
+            'description': 'Detailed career opportunities in different sectors'
+        }),
+        ('Course Features & Benefits', {
+            'fields': ('expert_faculty', 'infrastructure', 'research_opportunities', 'industry_connect', 'additional_benefits', 'assessment_methods', 'global_opportunities'),
+            'classes': ('collapse',),
+            'description': 'Program features, facilities, and additional benefits'
+        }),
+        ('Legacy Curriculum & Subjects', {
+            'fields': ('curriculum', 'core_subjects', 'elective_subjects'),
+            'classes': ('collapse',),
+            'description': 'Legacy fields - use new syllabus fields above'
+        }),
+        ('Eligibility & Admission', {
+            'fields': ('eligibility', 'admission_process'),
+            'classes': ('collapse',)
+        }),
+        ('Career & Opportunities (Legacy)', {
+            'fields': ('career_opportunities', 'average_salary', 'top_recruiters'),
+            'classes': ('collapse',),
+            'description': 'Legacy career fields - use enhanced career prospects above'
+        }),
+        ('Financial Information', {
+            'fields': ('fees', 'scholarship_available', 'scholarship_details')
+        }),
+        ('Media & Files', {
+            'fields': ('program_image', 'brochure')
+        }),
+        ('SEO & Management', {
+            'fields': ('slug',)
+        }),
+        ('Timestamps', {
+            'fields': ('last_updated', 'created_at', 'updated_at'),
+            'classes': ('collapse',)
+        })
+    )
     
     def get_queryset(self, request):
         return super().get_queryset(request).select_related()
+    
+    def save_model(self, request, obj, form, change):
+        """Auto-generate slug if not provided"""
+        if not obj.slug and obj.name:
+            from django.utils.text import slugify
+            obj.slug = slugify(obj.name)
+        super().save_model(request, obj, form, change)
 
 
 # Event Image Forms and Inlines
@@ -3658,5 +3821,3191 @@ class SideMenuItemAdmin(admin.ModelAdmin):
 # Customize admin site
 
 admin.site.site_header = "Chaitanya College Administration"
+
+
+# Core Value Inline Admin for Vision Mission Content
+class CoreValueInline(admin.TabularInline):
+    """Inline admin for Core Values"""
+    model = CoreValue
+    extra = 1
+    min_num = 1
+    max_num = 6
+    fields = ('title', 'description', 'icon_class', 'gradient_color', 'ordering', 'is_active')
+    ordering = ['ordering', 'title']
+    
+    class Media:
+        css = {
+            'all': ('admin/css/core_value_inline.css',)
+        }
+
+
+@admin.register(VisionMissionContent)
+class VisionMissionContentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_active', 'get_status_display', 'get_core_values_count', 'get_preview_link', 'updated_at']
+    inlines = [CoreValueInline]
+    actions = ['activate_content', 'deactivate_content', 'duplicate_content']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'is_active'),
+            'description': 'Basic configuration settings'
+        }),
+        ('Hero Section', {
+            'fields': ('hero_badge_text', 'hero_title', 'hero_subtitle'),
+            'description': 'Content for the main hero section'
+        }),
+        ('Vision Section', {
+            'fields': (
+                'vision_statement', 
+                ('vision_highlight_1', 'vision_highlight_2'),
+                ('vision_highlight_3', 'vision_highlight_4')
+            ),
+            'description': 'Vision statement and key highlights'
+        }),
+        ('Mission Section', {
+            'fields': (
+                'mission_statement',
+                'mission_objective_1',
+                'mission_objective_2', 
+                'mission_objective_3'
+            ),
+            'description': 'Mission statement and objectives'
+        }),
+        ('Call to Action', {
+            'fields': ('cta_title', 'cta_description'),
+            'description': 'Call to action section content'
+        }),
+    )
+    
+    inlines = [CoreValueInline]
+    
+    def get_status_display(self, obj):
+        """Display active status with color coding"""
+        if obj.is_active:
+            return format_html(
+                '<span style="color: #28a745; font-weight: bold;">● Active</span>'
+            )
+        else:
+            return format_html(
+                '<span style="color: #6c757d;">○ Inactive</span>'
+            )
+    get_status_display.short_description = 'Status'
+    
+    def get_core_values_count(self, obj):
+        """Display count of active core values"""
+        active_count = obj.core_values.filter(is_active=True).count()
+        total_count = obj.core_values.count()
+        
+        if active_count == 0:
+            color = '#dc3545'  # Red
+        elif active_count <= 3:
+            color = '#ffc107'  # Yellow
+        else:
+            color = '#28a745'  # Green
+            
+        return format_html(
+            '<span style="color: {}; font-weight: bold;">{}/{} Active</span>',
+            color, active_count, total_count
+        )
+    get_core_values_count.short_description = 'Core Values'
+    
+    def get_preview_link(self, obj):
+        """Display preview link"""
+        if obj.is_active:
+            return format_html(
+                '<a href="/about/vision-mission/" target="_blank" '
+                'style="color: #007bff; text-decoration: none;">'
+                '🔗 Preview Page</a>'
+            )
+        else:
+            return format_html(
+                '<span style="color: #6c757d;">Inactive</span>'
+            )
+    get_preview_link.short_description = 'Preview'
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        # If this is being set to active, deactivate others
+        if obj.is_active:
+            VisionMissionContent.objects.filter(is_active=True).exclude(pk=obj.pk).update(is_active=False)
+        
+        super().save_model(request, obj, form, change)
+        
+        # Create default core values if this is a new object
+        if not change:
+            self.create_default_core_values(obj)
+    
+    def create_default_core_values(self, content):
+        """Create default core values for new content"""
+        default_values = [
+            {
+                'title': 'Excellence',
+                'description': 'Striving for the highest standards in education, research, and service to create lasting impact.',
+                'icon_class': 'fas fa-trophy',
+                'gradient_color': 'yellow-orange',
+                'ordering': 1
+            },
+            {
+                'title': 'Integrity', 
+                'description': 'Upholding honesty, transparency, and ethical conduct in all our interactions and decisions.',
+                'icon_class': 'fas fa-shield-alt',
+                'gradient_color': 'blue-indigo',
+                'ordering': 2
+            },
+            {
+                'title': 'Innovation',
+                'description': 'Embracing creativity and forward-thinking approaches to solve challenges and create opportunities.',
+                'icon_class': 'fas fa-lightbulb',
+                'gradient_color': 'purple-pink',
+                'ordering': 3
+            },
+            {
+                'title': 'Inclusivity',
+                'description': 'Creating a welcoming environment where diversity is celebrated and everyone can thrive.',
+                'icon_class': 'fas fa-users',
+                'gradient_color': 'green-emerald',
+                'ordering': 4
+            },
+            {
+                'title': 'Sustainability',
+                'description': 'Promoting environmental responsibility and sustainable practices for future generations.',
+                'icon_class': 'fas fa-leaf',
+                'gradient_color': 'teal-cyan',
+                'ordering': 5
+            },
+            {
+                'title': 'Community',
+                'description': 'Building strong partnerships and contributing meaningfully to local and global communities.',
+                'icon_class': 'fas fa-hands-helping',
+                'gradient_color': 'red-pink',
+                'ordering': 6
+            }
+        ]
+        
+        for value_data in default_values:
+            CoreValue.objects.create(
+                vision_mission_content=content,
+                **value_data
+            )
+    
+    actions = ['activate_content', 'deactivate_content', 'duplicate_content']
+    
+    def activate_content(self, request, queryset):
+        """Activate selected content (only one can be active)"""
+        if queryset.count() > 1:
+            self.message_user(request, "Only one content can be active at a time.", level=messages.ERROR)
+            return
+        
+        # Deactivate all others first
+        VisionMissionContent.objects.all().update(is_active=False)
+        
+        # Activate selected
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} content activated successfully.')
+    activate_content.short_description = "Activate selected content"
+    
+    def deactivate_content(self, request, queryset):
+        """Deactivate selected content"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} content deactivated.')
+    deactivate_content.short_description = "Deactivate selected content"
+    
+    def duplicate_content(self, request, queryset):
+        """Duplicate selected content with all core values"""
+        duplicated = 0
+        for content in queryset:
+            # Store original core values
+            original_values = list(content.core_values.all())
+            
+            # Duplicate content
+            content.pk = None
+            content.name = f"{content.name} (Copy)"
+            content.is_active = False
+            content.save()
+            
+            # Duplicate core values
+            for value in original_values:
+                value.pk = None
+                value.vision_mission_content = content
+                value.save()
+            
+            duplicated += 1
+        
+        self.message_user(request, f'{duplicated} content(s) duplicated with all core values.')
+    duplicate_content.short_description = "Duplicate selected content"
+    
+    class Media:
+        css = {
+            'all': ('admin/css/vision_mission_admin.css',)
+        }
+        js = ('admin/js/vision_mission_admin.js',)
+
+
+@admin.register(CoreValue)
+class CoreValueAdmin(admin.ModelAdmin):
+    """Admin interface for Core Values"""
+    
+    list_display = [
+        'title', 'vision_mission_content', 'get_gradient_preview', 
+        'icon_class', 'ordering', 'is_active'
+    ]
+    list_filter = ['vision_mission_content', 'gradient_color', 'is_active', 'created_at']
+    list_editable = ['ordering', 'is_active']
+    search_fields = ['title', 'description']
+    ordering = ['vision_mission_content', 'ordering', 'title']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('vision_mission_content', 'title', 'description'),
+        }),
+        ('Visual Design', {
+            'fields': ('icon_class', 'gradient_color'),
+            'description': 'Icon and color scheme for this core value'
+        }),
+        ('Display Options', {
+            'fields': ('ordering', 'is_active'),
+        }),
+    )
+    
+    def get_gradient_preview(self, obj):
+        """Display gradient color preview"""
+        gradient_colors = {
+            'yellow-orange': 'linear-gradient(45deg, #fbbf24, #f97316)',
+            'blue-indigo': 'linear-gradient(45deg, #3b82f6, #6366f1)',
+            'purple-pink': 'linear-gradient(45deg, #8b5cf6, #ec4899)',
+            'green-emerald': 'linear-gradient(45deg, #10b981, #059669)',
+            'teal-cyan': 'linear-gradient(45deg, #14b8a6, #06b6d4)',
+            'red-pink': 'linear-gradient(45deg, #ef4444, #ec4899)',
+        }
+        
+        gradient = gradient_colors.get(obj.gradient_color, gradient_colors['blue-indigo'])
+        
+        return format_html(
+            '<div style="width: 30px; height: 20px; background: {}; border-radius: 4px; border: 1px solid #ddd;"></div>',
+            gradient
+        )
+    get_gradient_preview.short_description = 'Color'
+    
+    class Media:
+        css = {
+            'all': ('admin/css/core_value_admin.css',)
+        }
+
+
+# History Content Admin
+class TimelineEventInline(admin.TabularInline):
+    model = TimelineEvent
+    extra = 1
+    min_num = 1
+    max_num = 10
+    fields = ('year', 'title', 'description', 'icon_class', 'gradient_color', 'ordering', 'is_active')
+    ordering = ['ordering', 'year']
+
+
+class MilestoneInline(admin.TabularInline):
+    model = Milestone
+    extra = 1
+    min_num = 1
+    max_num = 8
+    fields = ('title', 'description', 'icon_class', 'gradient_color', 'ordering', 'is_active')
+    ordering = ['ordering', 'title']
+
+
+class HistoryGalleryImageInline(admin.TabularInline):
+    model = HistoryGalleryImage
+    extra = 1
+    min_num = 0
+    max_num = 20
+    fields = ('title', 'image', 'category', 'year_taken', 'is_featured', 'ordering', 'is_active')
+    ordering = ['category', 'ordering']
+    
+    def get_thumbnail(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="width: 50px; height: 40px; object-fit: cover; border-radius: 4px;" />', obj.image.url)
+        return "No Image"
+    get_thumbnail.short_description = 'Preview'
+
+
+@admin.register(HistoryContent)
+class HistoryContentAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_active', 'get_status_display', 'get_timeline_count', 'get_milestones_count', 'get_gallery_count', 'updated_at']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['name', 'hero_title', 'foundation_title']
+    inlines = [TimelineEventInline, MilestoneInline, HistoryGalleryImageInline]
+    actions = ['activate_content', 'deactivate_content', 'duplicate_content']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'is_active')
+        }),
+        ('Hero Section', {
+            'fields': ('hero_title', 'hero_subtitle', 'hero_badge_text'),
+            'classes': ('collapse',)
+        }),
+        ('Foundation Story', {
+            'fields': ('foundation_title', 'foundation_content', 'establishment_year', 'faculty_count', 'alumni_count', 'accreditations'),
+            'classes': ('collapse',)
+        }),
+        ('Timeline Section', {
+            'fields': ('timeline_title', 'timeline_description'),
+            'classes': ('collapse',)
+        }),
+        ('Milestones Section', {
+            'fields': ('milestones_title', 'milestones_description'),
+            'classes': ('collapse',)
+        }),
+        ('Legacy Section', {
+            'fields': ('legacy_title', 'legacy_content'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def get_status_display(self, obj):
+        if obj.is_active:
+            return format_html('<span style="color: green; font-weight: bold;">✓ Active</span>')
+        return format_html('<span style="color: red;">✗ Inactive</span>')
+    get_status_display.short_description = 'Status'
+    
+    def get_timeline_count(self, obj):
+        count = obj.timeline_events.filter(is_active=True).count()
+        return format_html('<span style="color: blue; font-weight: bold;">{}</span>', count)
+    get_timeline_count.short_description = 'Timeline Events'
+    
+    def get_milestones_count(self, obj):
+        count = obj.milestones.filter(is_active=True).count()
+        return format_html('<span style="color: green; font-weight: bold;">{}</span>', count)
+    get_milestones_count.short_description = 'Milestones'
+    
+    def get_gallery_count(self, obj):
+        count = obj.gallery_images.filter(is_active=True).count()
+        return format_html('<span style="color: purple; font-weight: bold;">{}</span>', count)
+    get_gallery_count.short_description = 'Gallery Images'
+    
+    def activate_content(self, request, queryset):
+        # Deactivate all other content first
+        HistoryContent.objects.all().update(is_active=False)
+        # Activate selected content
+        queryset.update(is_active=True)
+        self.message_user(request, f'Activated {queryset.count()} history content(s). All others deactivated.')
+    activate_content.short_description = 'Activate selected content (deactivates others)'
+    
+    def deactivate_content(self, request, queryset):
+        queryset.update(is_active=False)
+        self.message_user(request, f'Deactivated {queryset.count()} history content(s).')
+    deactivate_content.short_description = 'Deactivate selected content'
+    
+    def duplicate_content(self, request, queryset):
+        for obj in queryset:
+            # Store related objects
+            timeline_events = list(obj.timeline_events.all())
+            milestones = list(obj.milestones.all())
+            
+            # Duplicate main object
+            obj.pk = None
+            obj.name = f"{obj.name} (Copy)"
+            obj.is_active = False
+            obj.save()
+            
+            # Duplicate timeline events
+            for event in timeline_events:
+                event.pk = None
+                event.history_content = obj
+                event.save()
+            
+            # Duplicate milestones
+            for milestone in milestones:
+                milestone.pk = None
+                milestone.history_content = obj
+                milestone.save()
+            
+            # Duplicate gallery images
+            gallery_images = list(obj.gallery_images.all())
+            for image in gallery_images:
+                image.pk = None
+                image.history_content = obj
+                image.save()
+        
+        self.message_user(request, f'Duplicated {queryset.count()} history content(s) with all related data.')
+    duplicate_content.short_description = 'Duplicate content with timeline, milestones and gallery'
+
+
+@admin.register(TimelineEvent)
+class TimelineEventAdmin(admin.ModelAdmin):
+    list_display = ['year', 'title', 'history_content', 'gradient_color', 'ordering', 'is_active']
+    list_filter = ['is_active', 'gradient_color', 'history_content']
+    search_fields = ['title', 'description', 'year']
+    list_editable = ['ordering', 'is_active']
+    ordering = ['history_content', 'ordering', 'year']
+
+
+@admin.register(Milestone)
+class MilestoneAdmin(admin.ModelAdmin):
+    list_display = ['title', 'history_content', 'gradient_color', 'ordering', 'is_active']
+    list_filter = ['is_active', 'gradient_color', 'history_content']
+    search_fields = ['title', 'description']
+    list_editable = ['ordering', 'is_active']
+    ordering = ['history_content', 'ordering', 'title']
+
+
+@admin.register(HistoryGalleryImage)
+class HistoryGalleryImageAdmin(admin.ModelAdmin):
+    list_display = ['get_thumbnail', 'title', 'category', 'history_content', 'year_taken', 'is_featured', 'ordering', 'is_active']
+    list_filter = ['is_active', 'category', 'is_featured', 'history_content', 'year_taken']
+    search_fields = ['title', 'description', 'photographer']
+    list_editable = ['ordering', 'is_active', 'is_featured']
+    ordering = ['history_content', 'category', 'ordering']
+    
+    def get_thumbnail(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="width: 60px; height: 45px; object-fit: cover; border-radius: 6px; border: 2px solid #ddd;" />', obj.image.url)
+        return format_html('<div style="width: 60px; height: 45px; background: #f0f0f0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999;">No Image</div>')
+    get_thumbnail.short_description = 'Preview'
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('history_content', 'title', 'image', 'category')
+        }),
+        ('Details', {
+            'fields': ('description', 'year_taken', 'photographer'),
+            'classes': ('collapse',)
+        }),
+        ('Display Settings', {
+            'fields': ('ordering', 'is_featured', 'is_active')
+        }),
+    )
+
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    """Admin interface for Department management"""
+    list_display = [
+        'name', 'discipline', 'head_of_department', 'faculty_count', 
+        'student_count', 'established_year', 'is_featured', 'is_active', 'ordering'
+    ]
+    list_filter = ['discipline', 'is_active', 'is_featured', 'established_year']
+    list_editable = ['ordering', 'is_active', 'is_featured']
+    search_fields = ['name', 'short_name', 'head_of_department', 'description']
+    ordering = ['ordering', 'discipline', 'name']
+    prepopulated_fields = {'slug': ('name',)}
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'short_name', 'discipline', 'slug', 'tagline'),
+            'description': 'Basic department identification'
+        }),
+        ('Visual Identity', {
+            'fields': ('theme_color', 'department_logo', 'department_image', 'banner_image'),
+            'description': 'Department branding and visual elements'
+        }),
+        ('Department Leadership', {
+            'fields': ('head_of_department', 'hod_designation', 'hod_qualification', 'hod_message', 'hod_image'),
+            'description': 'Head of Department information'
+        }),
+        ('Department Overview', {
+            'fields': ('short_description', 'description', 'vision', 'mission'),
+            'description': 'Department description and objectives'
+        }),
+        ('Statistics', {
+            'fields': ('established_year', 'faculty_count', 'student_count', 'alumni_count'),
+            'description': 'Department statistics and numbers'
+        }),
+        ('Achievements', {
+            'fields': ('achievements',),
+            'classes': ('collapse',),
+            'description': 'Department accomplishments'
+        }),
+        ('Contact Information', {
+            'fields': ('office_location', 'phone_number', 'email', 'website_url'),
+            'description': 'Department contact details'
+        }),
+        ('Documents', {
+            'fields': ('brochure', 'syllabus'),
+            'description': 'Department documents and resources'
+        }),
+        ('SEO Settings', {
+            'fields': ('meta_title', 'meta_description', 'meta_keywords'),
+            'classes': ('collapse',),
+            'description': 'Search engine optimization'
+        }),
+        ('Display Settings', {
+            'fields': ('ordering', 'is_featured', 'is_active'),
+            'description': 'Control how this department appears on the website'
+        }),
+    )
+    
+    actions = ['activate_departments', 'deactivate_departments', 'feature_departments']
+    
+    def activate_departments(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} department(s) were activated.')
+    activate_departments.short_description = "Activate selected departments"
+    
+    def deactivate_departments(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} department(s) were deactivated.')
+    deactivate_departments.short_description = "Deactivate selected departments"
+    
+    def feature_departments(self, request, queryset):
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} department(s) were marked as featured.')
+    feature_departments.short_description = "Mark as featured departments"
+
+
+@admin.register(Faculty)
+class FacultyAdmin(admin.ModelAdmin):
+    """Admin interface for Faculty management"""
+    list_display = [
+        'name', 'department', 'designation', 'highest_qualification', 
+        'experience_years', 'is_featured', 'is_active'
+    ]
+    list_filter = ['department', 'designation', 'highest_qualification', 'is_active', 'is_featured']
+    list_editable = ['is_active', 'is_featured']
+    search_fields = ['name', 'qualifications', 'specialization', 'email']
+    ordering = ['department', 'designation_order', 'name']
+    prepopulated_fields = {'slug': ('name',)}
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'slug', 'department', 'photo'),
+            'description': 'Basic faculty identification'
+        }),
+        ('Professional Details', {
+            'fields': ('designation', 'designation_order', 'employee_id', 'joining_date'),
+            'description': 'Professional information'
+        }),
+        ('Qualifications & Experience', {
+            'fields': ('highest_qualification', 'qualifications', 'specialization', 'experience_years'),
+            'description': 'Academic qualifications and experience'
+        }),
+        ('Academic Details', {
+            'fields': ('research_interests', 'courses_taught', 'publications'),
+            'description': 'Teaching and research information'
+        }),
+        ('Contact Information', {
+            'fields': ('email', 'phone', 'office_location'),
+            'description': 'Contact details'
+        }),
+        ('Social Media & Academic Profiles', {
+            'fields': ('linkedin_url', 'google_scholar_url', 'researchgate_url', 'orcid_id', 'scopus_id', 'twitter_url', 'facebook_url', 'instagram_url', 'website_url'),
+            'classes': ('collapse',),
+            'description': 'Social media and academic profile links'
+        }),
+        ('Biography & Message', {
+            'fields': ('bio', 'message', 'cv_file'),
+            'classes': ('collapse',),
+            'description': 'Personal information and documents'
+        }),
+        ('SEO Settings', {
+            'fields': ('meta_title', 'meta_description'),
+            'classes': ('collapse',),
+            'description': 'Search engine optimization'
+        }),
+        ('Display Settings', {
+            'fields': ('is_active', 'is_featured', 'show_on_website'),
+            'description': 'Control visibility and display'
+        }),
+    )
+    
+    actions = ['activate_faculty', 'deactivate_faculty', 'feature_faculty']
+    
+    def activate_faculty(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} faculty member(s) were activated.')
+    activate_faculty.short_description = "Activate selected faculty"
+    
+    def deactivate_faculty(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} faculty member(s) were deactivated.')
+    deactivate_faculty.short_description = "Deactivate selected faculty"
+    
+    def feature_faculty(self, request, queryset):
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} faculty member(s) were marked as featured.')
+    feature_faculty.short_description = "Mark as featured faculty"
+
+
+@admin.register(NonAcademicStaff)
+class NonAcademicStaffAdmin(admin.ModelAdmin):
+    """Admin interface for Non-Academic Staff management"""
+    list_display = [
+        'name', 'department', 'designation', 'highest_qualification', 
+        'experience_years', 'is_featured', 'is_active'
+    ]
+    list_filter = ['department', 'designation', 'highest_qualification', 'is_active', 'is_featured']
+    list_editable = ['is_active', 'is_featured']
+    search_fields = ['name', 'qualifications', 'specialization', 'email']
+    ordering = ['department', 'designation_order', 'name']
+    prepopulated_fields = {'slug': ('name',)}
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'slug', 'department', 'photo'),
+            'description': 'Basic staff identification'
+        }),
+        ('Professional Details', {
+            'fields': ('designation', 'designation_order', 'employee_id', 'joining_date'),
+            'description': 'Professional information'
+        }),
+        ('Qualifications & Experience', {
+            'fields': ('highest_qualification', 'qualifications', 'specialization', 'experience_years'),
+            'description': 'Academic qualifications and experience'
+        }),
+        ('Job Details', {
+            'fields': ('job_description', 'skills'),
+            'description': 'Job responsibilities and skills'
+        }),
+        ('Contact Information', {
+            'fields': ('email', 'phone', 'office_location'),
+            'description': 'Contact details'
+        }),
+        ('Social Media & Academic Profiles', {
+            'fields': ('linkedin_url', 'google_scholar_url', 'researchgate_url', 'orcid_id', 'scopus_id', 'twitter_url', 'facebook_url', 'instagram_url', 'website_url'),
+            'classes': ('collapse',),
+            'description': 'Social media and academic profile links'
+        }),
+        ('Biography & Message', {
+            'fields': ('bio', 'message', 'cv_file'),
+            'classes': ('collapse',),
+            'description': 'Personal information and documents'
+        }),
+        ('SEO Settings', {
+            'fields': ('meta_title', 'meta_description'),
+            'classes': ('collapse',),
+            'description': 'Search engine optimization'
+        }),
+        ('Display Settings', {
+            'fields': ('is_active', 'is_featured', 'show_on_website'),
+            'description': 'Control visibility and display'
+        }),
+    )
+    
+    actions = ['activate_staff', 'deactivate_staff', 'feature_staff']
+    
+    def activate_staff(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} staff member(s) were activated.')
+    activate_staff.short_description = "Activate selected staff"
+    
+    def deactivate_staff(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} staff member(s) were deactivated.')
+    deactivate_staff.short_description = "Deactivate selected staff"
+    
+    def feature_staff(self, request, queryset):
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} staff member(s) were marked as featured.')
+    feature_staff.short_description = "Mark as featured staff"
+
+
+@admin.register(DepartmentEvent)
+class DepartmentEventAdmin(admin.ModelAdmin):
+    """Admin interface for Department Events management"""
+    list_display = [
+        'title', 'department', 'event_type', 'event_date', 
+        'is_upcoming', 'is_featured', 'is_active'
+    ]
+    list_filter = ['department', 'event_type', 'event_date', 'is_active', 'is_featured']
+    list_editable = ['is_active', 'is_featured']
+    search_fields = ['title', 'description', 'speaker', 'venue']
+    ordering = ['-event_date', 'department', 'title']
+    prepopulated_fields = {'slug': ('title',)}
+    date_hierarchy = 'event_date'
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'slug', 'department', 'event_type', 'featured_image'),
+            'description': 'Basic event identification'
+        }),
+        ('Event Details', {
+            'fields': ('short_description', 'description'),
+            'description': 'Event description and details'
+        }),
+        ('Date & Time', {
+            'fields': ('event_date', 'start_time', 'end_time'),
+            'description': 'When the event takes place'
+        }),
+        ('Location', {
+            'fields': ('venue', 'location_details'),
+            'description': 'Where the event takes place'
+        }),
+        ('People & Organization', {
+            'fields': ('organizer', 'speaker', 'speaker_bio'),
+            'description': 'Event organizers and speakers'
+        }),
+        ('Registration', {
+            'fields': ('registration_required', 'registration_link', 'max_participants'),
+            'classes': ('collapse',),
+            'description': 'Registration settings'
+        }),
+        ('Media', {
+            'fields': ('gallery_images',),
+            'classes': ('collapse',),
+            'description': 'Event photos and media'
+        }),
+        ('SEO Settings', {
+            'fields': ('meta_title', 'meta_description'),
+            'classes': ('collapse',),
+            'description': 'Search engine optimization'
+        }),
+        ('Display Settings', {
+            'fields': ('is_active', 'is_featured', 'show_on_homepage'),
+            'description': 'Control visibility and display'
+        }),
+    )
+    
+    actions = ['activate_events', 'deactivate_events', 'feature_events']
+    
+    def is_upcoming(self, obj):
+        return obj.is_upcoming
+    is_upcoming.boolean = True
+    is_upcoming.short_description = 'Upcoming'
+    
+    def activate_events(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} event(s) were activated.')
+    activate_events.short_description = "Activate selected events"
+    
+    def deactivate_events(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} event(s) were deactivated.')
+    deactivate_events.short_description = "Deactivate selected events"
+    
+    def feature_events(self, request, queryset):
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} event(s) were marked as featured.')
+    feature_events.short_description = "Mark as featured events"
+
+
+@admin.register(HeroBanner)
+class HeroBannerAdmin(admin.ModelAdmin):
+    """Admin interface for Hero Banner management with comprehensive customization options"""
+    
+    list_display = [
+        'title', 'background_type', 'is_active', 'order', 'content_alignment', 
+        'enable_animations', 'created_at'
+    ]
+    list_filter = [
+        'background_type', 'is_active', 'content_alignment', 'enable_animations', 
+        'title_font_family', 'created_at'
+    ]
+    list_editable = ['is_active', 'order']
+    search_fields = ['title', 'subtitle']
+    ordering = ['order', '-created_at']
+    actions = ['activate_banners', 'deactivate_banners', 'duplicate_banners']
+    
+    fieldsets = (
+        ('Basic Content', {
+            'fields': ('title', 'subtitle'),
+            'description': 'Main hero banner content'
+        }),
+        ('Two-Color Title Support', {
+            'fields': ('title_highlight_text', 'title_highlight_color'),
+            'description': 'Highlight specific text in the title with a different color',
+            'classes': ('wide',)
+        }),
+        ('Call-to-Action Buttons', {
+            'fields': (
+                ('primary_button_text', 'primary_button_url'),
+                ('secondary_button_text', 'secondary_button_url')
+            ),
+            'description': 'Configure primary and secondary action buttons',
+            'classes': ('wide',)
+        }),
+        ('Background Configuration', {
+            'fields': ('background_type',),
+            'description': 'Choose the type of background for your hero banner'
+        }),
+        ('Gradient Background', {
+            'fields': (
+                ('gradient_start_color', 'gradient_end_color'),
+                'gradient_direction'
+            ),
+            'description': 'Configure gradient background colors and direction',
+            'classes': ('wide', 'gradient-fields')
+        }),
+        ('Solid Background', {
+            'fields': ('solid_background_color',),
+            'description': 'Configure solid background color',
+            'classes': ('wide', 'solid-fields')
+        }),
+        ('Image Background', {
+            'fields': ('background_image', 'background_image_opacity'),
+            'description': 'Upload and configure background image with opacity control',
+            'classes': ('wide', 'image-fields')
+        }),
+        ('Video Background', {
+            'fields': ('background_video_url',),
+            'description': 'Add YouTube or Vimeo video URL for background video',
+            'classes': ('wide', 'video-fields')
+        }),
+        ('Typography - Title', {
+            'fields': (
+                'title_font_family', 'title_font_size', 'title_font_weight', 'title_color'
+            ),
+            'description': 'Customize title appearance',
+            'classes': ('wide',)
+        }),
+        ('Typography - Subtitle', {
+            'fields': (
+                'subtitle_font_family', 'subtitle_font_size', 'subtitle_color'
+            ),
+            'description': 'Customize subtitle appearance',
+            'classes': ('wide',)
+        }),
+        ('Button Styling', {
+            'fields': (
+                ('primary_button_bg_color', 'primary_button_text_color'),
+                ('secondary_button_bg_color', 'secondary_button_text_color', 'secondary_button_border_color')
+            ),
+            'description': 'Customize button colors and appearance',
+            'classes': ('wide',)
+        }),
+        ('Layout & Spacing', {
+            'fields': ('padding_top', 'content_alignment'),
+            'description': 'Control spacing and content alignment'
+        }),
+        ('Animation Settings', {
+            'fields': ('enable_animations', 'animation_duration'),
+            'description': 'Configure entrance animations'
+        }),
+        ('Statistics Cards', {
+            'fields': (
+                'show_statistics',
+                ('stat_1_icon', 'stat_1_number', 'stat_1_label', 'stat_1_color'),
+                ('stat_2_icon', 'stat_2_number', 'stat_2_label', 'stat_2_color'),
+                ('stat_3_icon', 'stat_3_number', 'stat_3_label', 'stat_3_color'),
+                ('stat_4_icon', 'stat_4_number', 'stat_4_label', 'stat_4_color')
+            ),
+            'description': 'Customize statistics cards with icons, numbers, labels, and colors',
+            'classes': ('wide',)
+        }),
+        ('Accreditation Badges', {
+            'fields': (
+                'show_accreditations',
+                ('accred_1_text', 'accred_1_icon', 'accred_1_color'),
+                ('accred_2_text', 'accred_2_icon', 'accred_2_color'),
+                ('accred_3_text', 'accred_3_icon', 'accred_3_color')
+            ),
+            'description': 'Customize accreditation badges with text, icons, and colors',
+            'classes': ('wide',)
+        }),
+        ('Display Settings', {
+            'fields': ('is_active', 'order'),
+            'description': 'Control visibility and display order'
+        }),
+    )
+    
+    class Media:
+        css = {
+            'all': ('admin/css/hero_banner_admin.css',)
+        }
+        js = ('admin/js/hero_banner_admin.js',)
+    
+    def activate_banners(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} hero banner(s) were activated.')
+    activate_banners.short_description = "Activate selected banners"
+    
+    def deactivate_banners(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} hero banner(s) were deactivated.')
+    deactivate_banners.short_description = "Deactivate selected banners"
+    
+    def duplicate_banners(self, request, queryset):
+        for banner in queryset:
+            banner.pk = None
+            banner.title = f"{banner.title} (Copy)"
+            banner.is_active = False
+            banner.order = banner.order + 1
+            banner.save()
+        self.message_user(request, f'{queryset.count()} hero banner(s) were duplicated.')
+    duplicate_banners.short_description = "Duplicate selected banners"
+
+
 admin.site.site_title = "Chaitanya College Admin"
 admin.site.index_title = "Welcome to Chaitanya College Administration"
+
+# Exam Timetable Admin Classes
+class ExamTimetableExamInline(admin.TabularInline):
+    """Inline admin for individual exam entries"""
+    model = ExamTimetableExam
+    extra = 1
+    min_num = 0
+    max_num = 20
+    fields = [
+        'day_of_week', 'subject_name', 'room_number', 'duration', 'semester',
+        'priority', 'is_featured', 'background_color', 'border_color', 'text_color', 'is_active'
+    ]
+    
+    class Media:
+        css = {
+            'all': ('admin/css/exam_timetable_admin.css',)
+        }
+
+
+class ExamTimetableTimeSlotInline(admin.TabularInline):
+    """Inline admin for time slots"""
+    model = ExamTimetableTimeSlot
+    extra = 1
+    min_num = 0
+    max_num = 10
+    fields = ['start_time', 'end_time', 'is_active']
+    inlines = [ExamTimetableExamInline]
+
+
+class ExamTimetableWeekInline(admin.TabularInline):
+    """Inline admin for weeks"""
+    model = ExamTimetableWeek
+    extra = 1
+    min_num = 0
+    max_num = 12
+    fields = ['week_number', 'week_title', 'is_active']
+    inlines = [ExamTimetableTimeSlotInline]
+
+
+@admin.register(ExamTimetable)
+class ExamTimetableAdmin(admin.ModelAdmin):
+    """Admin interface for managing exam timetables"""
+    
+    list_display = [
+        'name', 'academic_year', 'semester', 'is_active', 'is_featured',
+        'get_week_count', 'created_at'
+    ]
+    list_filter = [
+        'is_active', 'is_featured', 'academic_year', 'semester', 'created_at'
+    ]
+    list_editable = ['is_active', 'is_featured']
+    search_fields = ['name', 'academic_year', 'semester']
+    ordering = ['-academic_year', 'semester', '-created_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'academic_year', 'semester'),
+            'description': 'Basic timetable identification'
+        }),
+        ('Header Customization', {
+            'fields': (
+                'header_title', 'header_subtitle',
+                ('header_gradient_start', 'header_gradient_end')
+            ),
+            'description': 'Customize the header appearance'
+        }),
+        ('Session Timing', {
+            'fields': (
+                ('morning_session_start', 'morning_session_end'),
+                ('afternoon_session_start', 'afternoon_session_end'),
+                'break_duration'
+            ),
+            'description': 'Configure exam session timings'
+        }),
+        ('Guidelines & Status', {
+            'fields': ('exam_guidelines', 'is_active', 'is_featured'),
+            'description': 'Exam guidelines and timetable status'
+        }),
+    )
+    
+    inlines = [ExamTimetableWeekInline]
+    
+    actions = ['activate_timetables', 'deactivate_timetables', 'duplicate_timetables']
+    
+    class Media:
+        css = {
+            'all': ('admin/css/exam_timetable_admin.css',)
+        }
+        js = ('admin/js/exam_timetable_admin.js',)
+    
+    def activate_timetables(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} timetable(s) were activated.')
+    activate_timetables.short_description = "Activate selected timetables"
+    
+    def deactivate_timetables(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} timetable(s) were deactivated.')
+    deactivate_timetables.short_description = "Deactivate selected timetables"
+    
+    def duplicate_timetables(self, request, queryset):
+        for timetable in queryset:
+            old_pk = timetable.pk
+            timetable.pk = None
+            timetable.name = f"{timetable.name} (Copy)"
+            timetable.is_active = False
+            timetable.save()
+            
+            # Duplicate weeks
+            for week in ExamTimetableWeek.objects.filter(timetable_id=old_pk):
+                old_week_pk = week.pk
+                week.pk = None
+                week.timetable = timetable
+                week.save()
+                
+                # Duplicate time slots
+                for time_slot in ExamTimetableTimeSlot.objects.filter(week_id=old_week_pk):
+                    old_time_slot_pk = time_slot.pk
+                    time_slot.pk = None
+                    time_slot.week = week
+                    time_slot.save()
+                    
+                    # Duplicate exams
+                    for exam in ExamTimetableExam.objects.filter(time_slot_id=old_time_slot_pk):
+                        exam.pk = None
+                        exam.time_slot = time_slot
+                        exam.save()
+        
+        self.message_user(request, f'{queryset.count()} timetable(s) were duplicated with all content.')
+    duplicate_timetables.short_description = "Duplicate selected timetables"
+
+
+@admin.register(ExamTimetableWeek)
+class ExamTimetableWeekAdmin(admin.ModelAdmin):
+    """Admin interface for managing individual weeks"""
+    
+    list_display = ['week_number', 'timetable', 'week_title', 'is_active', 'get_active_time_slots_count']
+    list_filter = ['is_active', 'timetable__academic_year', 'timetable__semester']
+    list_editable = ['is_active']
+    search_fields = ['week_number', 'week_title', 'timetable__name']
+    ordering = ['timetable__academic_year', 'timetable__semester', 'week_number']
+    
+    inlines = [ExamTimetableTimeSlotInline]
+    
+    def get_active_time_slots_count(self, obj):
+        return obj.get_active_time_slots().count()
+    get_active_time_slots_count.short_description = 'Time Slots'
+
+
+@admin.register(ExamTimetableTimeSlot)
+class ExamTimetableTimeSlotAdmin(admin.ModelAdmin):
+    """Admin interface for managing time slots"""
+    
+    list_display = ['start_time', 'end_time', 'week', 'is_active', 'get_active_exams_count']
+    list_filter = ['is_active', 'week__timetable__academic_year', 'week__timetable__semester']
+    list_editable = ['is_active']
+    search_fields = ['start_time', 'end_time', 'week__timetable__name']
+    ordering = ['week__timetable__academic_year', 'week__timetable__semester', 'week__week_number', 'start_time']
+    
+    inlines = [ExamTimetableExamInline]
+    
+    def get_active_exams_count(self, obj):
+        return obj.get_active_exams().count()
+    get_active_exams_count.short_description = 'Exams'
+
+
+@admin.register(ExamTimetableExam)
+class ExamTimetableExamAdmin(admin.ModelAdmin):
+    """Admin interface for managing individual exams"""
+    
+    list_display = [
+        'subject_name', 'day_of_week', 'time_slot', 'room_number', 
+        'duration', 'semester', 'priority', 'is_active'
+    ]
+    list_filter = [
+        'is_active', 'priority', 'semester', 'day_of_week',
+        'time_slot__week__timetable__academic_year'
+    ]
+    list_editable = ['is_active', 'priority']
+    search_fields = ['subject_name', 'room_number', 'time_slot__week__timetable__name']
+    ordering = [
+        'time_slot__week__timetable__academic_year',
+        'time_slot__week__timetable__semester',
+        'time_slot__week__week_number',
+        'day_of_week',
+        'time_slot__start_time'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('time_slot', 'day_of_week', 'subject_name')
+        }),
+        ('Exam Details', {
+            'fields': ('room_number', 'duration', 'semester')
+        }),
+        ('Priority & Status', {
+            'fields': ('priority', 'is_featured', 'is_active')
+        }),
+        ('Visual Customization', {
+            'fields': ('background_color', 'border_color', 'text_color'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+# Menu Management Admin Classes
+class MenuSubmenuInline(admin.TabularInline):
+    """Inline admin for submenu items"""
+    model = MenuSubmenu
+    extra = 1
+    min_num = 0
+    max_num = 20
+    fields = [
+        'name', 'url', 'icon_class', 'order', 'is_active', 'is_featured',
+        'group_header', 'show_divider', 'text_color', 'hover_color'
+    ]
+    
+    class Media:
+        css = {
+            'all': ('admin/css/menu_admin.css',)
+        }
+
+
+@admin.register(MenuCategory)
+class MenuCategoryAdmin(admin.ModelAdmin):
+    """Admin interface for managing menu categories"""
+    
+    list_display = [
+        'name', 'slug', 'icon_class', 'order', 'is_active', 'is_featured',
+        'get_submenu_count', 'created_at'
+    ]
+    list_filter = ['is_active', 'is_featured', 'created_at']
+    list_editable = ['is_active', 'is_featured', 'order']
+    search_fields = ['name', 'slug']
+    ordering = ['order', 'name']
+    prepopulated_fields = {'slug': ('name',)}
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('name', 'slug', 'icon_class', 'order')
+        }),
+        ('Status & Features', {
+            'fields': ('is_active', 'is_featured')
+        }),
+        ('Visual Customization', {
+            'fields': ('text_color', 'hover_color'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    inlines = [MenuSubmenuInline]
+    
+    actions = ['activate_categories', 'deactivate_categories', 'duplicate_categories']
+    
+    class Media:
+        css = {
+            'all': ('admin/css/menu_admin.css',)
+        }
+        js = ('admin/js/menu_admin.js',)
+    
+    def activate_categories(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} menu category(ies) were activated.')
+    activate_categories.short_description = "Activate selected categories"
+    
+    def deactivate_categories(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} menu category(ies) were deactivated.')
+    deactivate_categories.short_description = "Deactivate selected categories"
+    
+    def duplicate_categories(self, request, queryset):
+        for category in queryset:
+            old_pk = category.pk
+            category.pk = None
+            category.name = f"{category.name} (Copy)"
+            category.slug = f"{category.slug}-copy"
+            category.is_active = False
+            category.order = category.order + 1
+            category.save()
+            
+            # Duplicate submenus
+            for submenu in MenuSubmenu.objects.filter(category_id=old_pk):
+                submenu.pk = None
+                submenu.category = category
+                submenu.save()
+        
+        self.message_user(request, f'{queryset.count()} menu category(ies) were duplicated with all submenus.')
+    duplicate_categories.short_description = "Duplicate selected categories"
+
+
+@admin.register(MenuSubmenu)
+class MenuSubmenuAdmin(admin.ModelAdmin):
+    """Admin interface for managing individual submenu items"""
+    
+    list_display = [
+        'name', 'category', 'url', 'icon_class', 'order', 'is_active',
+        'is_featured', 'group_header', 'show_divider'
+    ]
+    list_filter = [
+        'is_active', 'is_featured', 'category', 'show_divider',
+        'category__is_active'
+    ]
+    list_editable = ['is_active', 'is_featured', 'order', 'show_divider']
+    search_fields = ['name', 'url', 'category__name']
+    ordering = ['category__order', 'category__name', 'order', 'name']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('category', 'name', 'url', 'icon_class', 'order')
+        }),
+        ('Status & Features', {
+            'fields': ('is_active', 'is_featured')
+        }),
+        ('Grouping & Styling', {
+            'fields': ('group_header', 'show_divider')
+        }),
+        ('Visual Customization', {
+            'fields': ('text_color', 'hover_color'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['activate_submenus', 'deactivate_submenus', 'add_group_headers']
+    
+    def activate_submenus(self, request, queryset):
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} submenu item(s) were activated.')
+    activate_submenus.short_description = "Activate selected submenus"
+    
+    def deactivate_submenus(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} submenu item(s) were deactivated.')
+    deactivate_submenus.short_description = "Deactivate selected submenus"
+    
+    def add_group_headers(self, request, queryset):
+        # Add group headers to selected submenus
+        for submenu in queryset:
+            if not submenu.group_header:
+                if 'institution' in submenu.name.lower() or 'overview' in submenu.name.lower():
+                    submenu.group_header = 'Institution'
+                elif 'leadership' in submenu.name.lower() or 'message' in submenu.name.lower():
+                    submenu.group_header = 'Leadership'
+                elif 'programs' in submenu.name.lower() or 'courses' in submenu.name.lower():
+                    submenu.group_header = 'Programs'
+                elif 'departments' in submenu.name.lower():
+                    submenu.group_header = 'Departments'
+                submenu.save()
+        
+        self.message_user(request, f'Group headers were added to {queryset.count()} submenu item(s).')
+    add_group_headers.short_description = "Add group headers to selected submenus"
+
+
+@admin.register(MenuVisibilitySettings)
+class MenuVisibilitySettingsAdmin(admin.ModelAdmin):
+    """Admin interface for managing global menu visibility settings"""
+    
+    list_display = ['name', 'is_active', 'get_menu_summary', 'get_visible_count', 'get_total_count', 'created_at']
+    list_filter = ['is_active', 'created_at']
+    list_editable = ['is_active']
+    
+    fieldsets = (
+        ('Basic Settings', {
+            'fields': ('name', 'is_active'),
+            'description': 'Configure global menu visibility settings'
+        }),
+        ('Main Menu Controls', {
+            'fields': (
+                'show_research_menu', 'show_placement_menu', 
+                'show_alumni_menu', 'show_events_menu', 'show_student_portal'
+            ),
+            'description': 'Control visibility of main menu categories'
+        }),
+        ('Academics Section Controls', {
+            'fields': (
+                'show_academics_programs', 'show_academics_departments',
+                'show_academics_library', 'show_academics_calendar'
+            ),
+            'description': 'Control visibility of academics section items'
+        }),
+        ('Admissions Section Controls', {
+            'fields': (
+                'show_admissions_process', 'show_admissions_guidelines',
+                'show_admissions_eligibility', 'show_admissions_courses',
+                'show_admissions_application', 'show_admissions_fees',
+                'show_admissions_prospectus', 'show_admissions_scholarships'
+            ),
+            'description': 'Control visibility of admissions section items'
+        }),
+        ('Examination Section Controls', {
+            'fields': (
+                'show_exam_notices', 'show_exam_timetable', 'show_exam_revaluation',
+                'show_exam_question_papers', 'show_exam_results', 'show_exam_rules'
+            ),
+            'description': 'Control visibility of examination section items'
+        }),
+        ('Research Section Controls', {
+            'fields': (
+                'show_research_centers', 'show_research_innovation',
+                'show_publications', 'show_patents_projects',
+                'show_research_collaborations', 'show_research_consultancy'
+            ),
+            'description': 'Control visibility of research section items'
+        }),
+        ('Student Support Section Controls', {
+            'fields': (
+                'show_student_portal_main', 'show_student_library',
+                'show_sports_cultural', 'show_nss_ncc'
+            ),
+            'description': 'Control visibility of student support section items'
+        }),
+        ('Events Section Controls', {
+            'fields': (
+                'show_news_announcements', 'show_academic_events',
+                'show_extracurricular_events', 'show_gallery', 'show_annual_reports'
+            ),
+            'description': 'Control visibility of events section items'
+        }),
+        ('Core Navigation Controls', {
+            'fields': (
+                'show_about_section', 'show_contact_section', 'show_notices_section'
+            ),
+            'description': 'Control visibility of core navigation items'
+        }),
+    )
+    
+    actions = ['activate_settings', 'deactivate_settings', 'duplicate_settings', 'show_all_menus', 'hide_all_menus', 'show_academic_menus', 'show_student_menus', 'show_research_menus']
+    
+    class Media:
+        css = {
+            'all': ('admin/css/menu_admin.css',)
+        }
+        js = ('admin/js/menu_admin.js',)
+    
+    def get_menu_summary(self, obj):
+        """Get a summary of menu visibility settings"""
+        active_count = obj.get_visible_menu_count()
+        total_count = obj.get_total_menu_count()
+        return f"{active_count}/{total_count} menus visible"
+    get_menu_summary.short_description = 'Menu Summary'
+    
+    def get_visible_count(self, obj):
+        """Get count of visible menu items"""
+        return obj.get_visible_menu_count()
+    get_visible_count.short_description = 'Visible'
+    
+    def get_total_count(self, obj):
+        """Get total count of menu items"""
+        return obj.get_total_menu_count()
+    get_total_count.short_description = 'Total'
+    
+    def activate_settings(self, request, queryset):
+        # Deactivate all other settings first
+        MenuVisibilitySettings.objects.exclude(pk__in=queryset.values_list('pk', flat=True)).update(is_active=False)
+        # Activate selected settings
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} setting(s) were activated. Other settings were deactivated.')
+    activate_settings.short_description = "Activate selected settings"
+    
+    def deactivate_settings(self, request, queryset):
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} setting(s) were deactivated.')
+    deactivate_settings.short_description = "Deactivate selected settings"
+    
+    def duplicate_settings(self, request, queryset):
+        for settings in queryset:
+            old_pk = settings.pk
+            settings.pk = None
+            settings.name = f"{settings.name} (Copy)"
+            settings.is_active = False
+            settings.save()
+        
+        self.message_user(request, f'{queryset.count()} setting(s) were duplicated.')
+    duplicate_settings.short_description = "Duplicate selected settings"
+    
+    def show_all_menus(self, request, queryset):
+        """Show all menu items"""
+        for settings in queryset:
+            # Set all show_* fields to True
+            for field in settings._meta.fields:
+                if field.name.startswith('show_') and isinstance(field, models.BooleanField):
+                    setattr(settings, field.name, True)
+            settings.save()
+        
+        self.message_user(request, f'All menus are now visible for {queryset.count()} setting(s).')
+    show_all_menus.short_description = "Show all menus"
+    
+    def hide_all_menus(self, request, queryset):
+        """Hide all menu items"""
+        for settings in queryset:
+            # Set all show_* fields to False
+            for field in settings._meta.fields:
+                if field.name.startswith('show_') and isinstance(field, models.BooleanField):
+                    setattr(settings, field.name, False)
+            settings.save()
+        
+        self.message_user(request, f'All menus are now hidden for {queryset.count()} setting(s).')
+    hide_all_menus.short_description = "Hide all menus"
+    
+    def show_academic_menus(self, request, queryset):
+        """Show only academic-related menus"""
+        for settings in queryset:
+            # Show academic menus
+            academic_fields = [
+                'show_academics_programs', 'show_academics_departments',
+                'show_academics_library', 'show_academics_calendar',
+                'show_admissions_process', 'show_admissions_guidelines',
+                'show_admissions_eligibility', 'show_admissions_courses',
+                'show_admissions_application', 'show_admissions_fees',
+                'show_admissions_prospectus', 'show_admissions_scholarships',
+                'show_exam_notices', 'show_exam_timetable', 'show_exam_revaluation',
+                'show_exam_question_papers', 'show_exam_results', 'show_exam_rules'
+            ]
+            for field in academic_fields:
+                if hasattr(settings, field):
+                    setattr(settings, field, True)
+            settings.save()
+        
+        self.message_user(request, f'Academic menus are now visible for {queryset.count()} setting(s).')
+    show_academic_menus.short_description = "Show academic menus only"
+    
+    def show_student_menus(self, request, queryset):
+        """Show only student-related menus"""
+        for settings in queryset:
+            # Show student menus
+            student_fields = [
+                'show_student_portal', 'show_student_portal_main',
+                'show_student_library', 'show_sports_cultural',
+                'show_nss_ncc', 'show_placement_menu', 'show_alumni_menu'
+            ]
+            for field in student_fields:
+                if hasattr(settings, field):
+                    setattr(settings, field, True)
+            settings.save()
+        
+        self.message_user(request, f'Student menus are now visible for {queryset.count()} setting(s).')
+    show_student_menus.short_description = "Show student menus only"
+    
+    def show_research_menus(self, request, queryset):
+        """Show only research-related menus"""
+        for settings in queryset:
+            # Show research menus
+            research_fields = [
+                'show_research_menu', 'show_research_centers',
+                'show_research_innovation', 'show_publications',
+                'show_patents_projects', 'show_research_collaborations',
+                'show_research_consultancy'
+            ]
+            for field in research_fields:
+                if hasattr(settings, field):
+                    setattr(settings, field, True)
+            settings.save()
+        
+        self.message_user(request, f'Research menus are now visible for {queryset.count()} setting(s).')
+    show_research_menus.short_description = "Show research menus only"
+    
+    def save_model(self, request, obj, form, change):
+        """Ensure only one settings configuration is active at a time"""
+        if obj.is_active:
+            # Deactivate all other settings
+            MenuVisibilitySettings.objects.exclude(pk=obj.pk).update(is_active=False)
+        super().save_model(request, obj, form, change)
+
+
+# Question Paper Admin
+@admin.register(QuestionPaper)
+class QuestionPaperAdmin(admin.ModelAdmin):
+    """Admin interface for Question Paper management"""
+    
+    list_display = [
+        'title', 'subject', 'semester', 'degree_type', 'academic_year', 
+        'is_active', 'is_featured', 'download_count', 'created_at'
+    ]
+    
+    list_filter = [
+        'subject', 'semester', 'degree_type', 'academic_year', 
+        'is_active', 'is_featured', 'created_at'
+    ]
+    
+    search_fields = [
+        'title', 'subject', 'description', 'academic_year'
+    ]
+    
+    list_editable = ['is_active', 'is_featured']
+    
+    readonly_fields = [
+        'slug', 'file_size', 'download_count', 'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'subject', 'semester', 'degree_type', 'academic_year')
+        }),
+        ('File Information', {
+            'fields': ('question_paper_file', 'file_size', 'download_count')
+        }),
+        ('Additional Information', {
+            'fields': ('description', 'exam_date', 'duration', 'total_marks'),
+            'classes': ('collapse',)
+        }),
+        ('Status and Visibility', {
+            'fields': ('is_active', 'is_featured')
+        }),
+        ('SEO and Metadata', {
+            'fields': ('slug',),
+            'classes': ('collapse',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-academic_year', 'semester', 'subject', 'title']
+    
+    actions = ['make_active', 'make_inactive', 'make_featured', 'remove_featured']
+    
+    def make_active(self, request, queryset):
+        """Make selected question papers active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} question paper(s) marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected question papers inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} question paper(s) marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def make_featured(self, request, queryset):
+        """Make selected question papers featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} question paper(s) marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def remove_featured(self, request, queryset):
+        """Remove featured status from selected question papers"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} question paper(s) removed from featured.')
+    remove_featured.short_description = "Remove featured status"
+    
+    def get_queryset(self, request):
+        """Optimize queryset for admin list view"""
+        return super().get_queryset(request).select_related()
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Question paper "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Revaluation Info Admin
+@admin.register(RevaluationInfo)
+class RevaluationInfoAdmin(admin.ModelAdmin):
+    """Admin interface for Revaluation Information management"""
+    
+    list_display = [
+        'title', 'is_active', 'theory_paper_fee', 'practical_paper_fee', 
+        'project_fee', 'created_at'
+    ]
+    
+    list_filter = [
+        'is_active', 'created_at'
+    ]
+    
+    search_fields = [
+        'title', 'subtitle', 'controller_name', 'controller_email'
+    ]
+    
+    list_editable = ['is_active']
+    
+    readonly_fields = [
+        'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'subtitle', 'is_active')
+        }),
+        ('Process Steps', {
+            'fields': (
+                ('step1_title', 'step1_description'),
+                ('step2_title', 'step2_description'),
+                ('step3_title', 'step3_description'),
+                ('step4_title', 'step4_description'),
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Fee Information', {
+            'fields': (
+                ('theory_paper_fee', 'practical_paper_fee', 'project_fee'),
+            )
+        }),
+        ('Important Dates', {
+            'fields': (
+                ('application_period', 'processing_time', 'result_notification'),
+            )
+        }),
+        ('Rules and Guidelines', {
+            'fields': ('eligibility_rules', 'required_documents'),
+            'classes': ('collapse',)
+        }),
+        ('Contact Information', {
+            'fields': (
+                ('controller_name', 'controller_phone'),
+                ('controller_email', 'controller_office_hours'),
+                ('office_location', 'office_phone'),
+                ('office_email', 'office_working_days'),
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Download Forms', {
+            'fields': (
+                'application_form_file',
+                'guidelines_file',
+                'fee_structure_file',
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Important Notice', {
+            'fields': ('important_notice',),
+            'classes': ('collapse',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-created_at']
+    
+    actions = ['make_active', 'make_inactive']
+    
+    def make_active(self, request, queryset):
+        """Make selected revaluation info active"""
+        # Deactivate all others first
+        RevaluationInfo.objects.exclude(pk__in=queryset.values_list('pk', flat=True)).update(is_active=False)
+        # Activate selected ones
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} revaluation information marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected revaluation info inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} revaluation information marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        # Ensure only one active revaluation info at a time
+        if obj.is_active:
+            RevaluationInfo.objects.exclude(pk=obj.pk).update(is_active=False)
+        
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Revaluation information "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Exam Rules Info Admin
+@admin.register(ExamRulesInfo)
+class ExamRulesInfoAdmin(admin.ModelAdmin):
+    """Admin interface for Exam Rules Information management"""
+    
+    list_display = [
+        'title', 'is_active', 'controller_name', 'controller_email', 'created_at'
+    ]
+    
+    list_filter = [
+        'is_active', 'created_at'
+    ]
+    
+    search_fields = [
+        'title', 'subtitle', 'controller_name', 'controller_email'
+    ]
+    
+    list_editable = ['is_active']
+    
+    readonly_fields = [
+        'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'subtitle', 'is_active')
+        }),
+        ('General Rules', {
+            'fields': ('timing_rules', 'prohibited_items'),
+            'classes': ('collapse',)
+        }),
+        ('Examination Conduct', {
+            'fields': ('conduct_rules',),
+            'classes': ('collapse',)
+        }),
+        ('Answer Sheet Guidelines', {
+            'fields': ('answer_sheet_details', 'submission_rules'),
+            'classes': ('collapse',)
+        }),
+        ('Disciplinary Actions', {
+            'fields': ('violations_penalties', 'appeal_process'),
+            'classes': ('collapse',)
+        }),
+        ('Special Instructions', {
+            'fields': ('calculator_rules', 'open_book_rules', 'time_extension_rules'),
+            'classes': ('collapse',)
+        }),
+        ('Contact Information', {
+            'fields': (
+                ('controller_name', 'controller_phone'),
+                ('controller_email', 'controller_office_hours'),
+                ('office_location', 'office_phone'),
+                ('office_email', 'office_working_days'),
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Important Notice', {
+            'fields': ('important_notice',),
+            'classes': ('collapse',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-created_at']
+    
+    actions = ['make_active', 'make_inactive']
+    
+    def make_active(self, request, queryset):
+        """Make selected exam rules info active"""
+        # Deactivate all others first
+        ExamRulesInfo.objects.exclude(pk__in=queryset.values_list('pk', flat=True)).update(is_active=False)
+        # Activate selected ones
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} exam rules information marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected exam rules info inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} exam rules information marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        # Ensure only one active exam rules info at a time
+        if obj.is_active:
+            ExamRulesInfo.objects.exclude(pk=obj.pk).update(is_active=False)
+        
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Exam rules information "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Research Center Info Admin
+@admin.register(ResearchCenterInfo)
+class ResearchCenterInfoAdmin(admin.ModelAdmin):
+    """Admin interface for Research Center Information management"""
+    
+    list_display = [
+        'title', 'is_active', 'director_name', 'director_email', 'publications_count', 'created_at'
+    ]
+    
+    list_filter = [
+        'is_active', 'created_at'
+    ]
+    
+    search_fields = [
+        'title', 'subtitle', 'director_name', 'director_email'
+    ]
+    
+    list_editable = ['is_active']
+    
+    readonly_fields = [
+        'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'subtitle', 'is_active')
+        }),
+        ('Research Centers', {
+            'fields': (
+                ('center1_name', 'center1_description'),
+                'center1_areas',
+                ('center2_name', 'center2_description'),
+                'center2_areas',
+                ('center3_name', 'center3_description'),
+                'center3_areas',
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Research Facilities', {
+            'fields': ('lab_infrastructure', 'research_support'),
+            'classes': ('collapse',)
+        }),
+        ('Research Areas', {
+            'fields': (
+                ('physics_description', 'biology_description'),
+                ('mathematics_description', 'social_sciences_description'),
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Research Achievements', {
+            'fields': (
+                ('publications_count', 'patents_count'),
+                ('conferences_count', 'book_chapters_count'),
+                ('grants_amount', 'industry_collaborations'),
+                ('international_partnerships', 'national_awards'),
+            )
+        }),
+        ('Research Opportunities', {
+            'fields': ('student_opportunities', 'faculty_opportunities'),
+            'classes': ('collapse',)
+        }),
+        ('Contact Information', {
+            'fields': (
+                ('director_name', 'director_phone'),
+                ('director_email', 'director_office_hours'),
+                ('office_location', 'office_phone'),
+                ('office_email', 'office_working_days'),
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Call to Action', {
+            'fields': ('cta_title', 'cta_description'),
+            'classes': ('collapse',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-created_at']
+    
+    actions = ['make_active', 'make_inactive']
+    
+    def make_active(self, request, queryset):
+        """Make selected research center info active"""
+        # Deactivate all others first
+        ResearchCenterInfo.objects.exclude(pk__in=queryset.values_list('pk', flat=True)).update(is_active=False)
+        # Activate selected ones
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} research center information marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected research center info inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} research center information marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        # Ensure only one active research center info at a time
+        if obj.is_active:
+            ResearchCenterInfo.objects.exclude(pk=obj.pk).update(is_active=False)
+        
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Research center information "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Publication Info Admin
+@admin.register(PublicationInfo)
+class PublicationInfoAdmin(admin.ModelAdmin):
+    """Admin interface for Publication Information management"""
+    
+    list_display = [
+        'title', 'is_active', 'total_publications', 'total_citations', 'contact_email', 'created_at'
+    ]
+    
+    list_filter = [
+        'is_active', 'created_at'
+    ]
+    
+    search_fields = [
+        'title', 'subtitle', 'contact_email'
+    ]
+    
+    list_editable = ['is_active']
+    
+    readonly_fields = [
+        'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'subtitle', 'is_active')
+        }),
+        ('Statistics', {
+            'fields': (
+                ('total_publications', 'book_chapters'),
+                ('total_citations', 'awards_received'),
+            )
+        }),
+        ('Journal Categories', {
+            'fields': (
+                ('international_journals_count', 'international_citations'),
+                ('national_journals_count', 'national_citations'),
+                ('conference_papers_count', 'conference_citations'),
+            )
+        }),
+        ('Research Impact', {
+            'fields': (
+                ('best_paper_awards', 'average_impact_factor'),
+                ('international_collaborations', 'research_students'),
+            )
+        }),
+        ('Call to Action', {
+            'fields': ('cta_title', 'cta_description', 'contact_email')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-created_at']
+    
+    actions = ['make_active', 'make_inactive']
+    
+    def make_active(self, request, queryset):
+        """Make selected publication info active"""
+        # Deactivate all others first
+        PublicationInfo.objects.exclude(pk__in=queryset.values_list('pk', flat=True)).update(is_active=False)
+        # Activate selected ones
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} publication information marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected publication info inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} publication information marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        # Ensure only one active publication info at a time
+        if obj.is_active:
+            PublicationInfo.objects.exclude(pk=obj.pk).update(is_active=False)
+        
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Publication information "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Publication Admin
+@admin.register(Publication)
+class PublicationAdmin(admin.ModelAdmin):
+    """Admin interface for Publication management"""
+    
+    list_display = [
+        'title', 'department', 'journal_type', 'publication_year', 'citations', 'is_featured', 'is_active', 'created_at'
+    ]
+    
+    list_filter = [
+        'department', 'journal_type', 'publication_year', 'is_featured', 'is_active', 'created_at'
+    ]
+    
+    search_fields = [
+        'title', 'authors', 'journal_name', 'abstract'
+    ]
+    
+    list_editable = ['is_featured', 'is_active']
+    
+    readonly_fields = [
+        'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'authors', 'abstract')
+        }),
+        ('Publication Details', {
+            'fields': (
+                ('journal_name', 'journal_type'),
+                ('department', 'publication_year'),
+            )
+        }),
+        ('Metrics', {
+            'fields': (
+                ('citations', 'impact_factor'),
+            )
+        }),
+        ('Links and Files', {
+            'fields': ('doi', 'url', 'pdf_file')
+        }),
+        ('Status', {
+            'fields': ('is_featured', 'is_active')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-publication_year', '-citations']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected publications featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} publications marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected publications unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} publications marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected publications active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} publications marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected publications inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} publications marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Publication "{obj.title[:50]}..." was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Patents & Projects Info Admin
+@admin.register(PatentsProjectsInfo)
+class PatentsProjectsInfoAdmin(admin.ModelAdmin):
+    """Admin interface for Patents & Projects Information management"""
+    
+    list_display = [
+        'title', 'is_active', 'total_patents', 'total_projects', 'contact_email', 'created_at'
+    ]
+    
+    list_filter = [
+        'is_active', 'created_at'
+    ]
+    
+    search_fields = [
+        'title', 'subtitle', 'contact_email'
+    ]
+    
+    list_editable = ['is_active']
+    
+    readonly_fields = [
+        'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'subtitle', 'is_active')
+        }),
+        ('Statistics', {
+            'fields': (
+                ('total_patents', 'total_projects'),
+                ('industry_collaborations', 'research_funding'),
+            )
+        }),
+        ('Research Impact', {
+            'fields': (
+                ('innovation_awards', 'international_recognition'),
+                ('active_partnerships', 'students_involved'),
+            )
+        }),
+        ('Call to Action', {
+            'fields': ('cta_title', 'cta_description', 'contact_email')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-created_at']
+    
+    actions = ['make_active', 'make_inactive']
+    
+    def make_active(self, request, queryset):
+        """Make selected patents & projects info active"""
+        # Deactivate all others first
+        PatentsProjectsInfo.objects.exclude(pk__in=queryset.values_list('pk', flat=True)).update(is_active=False)
+        # Activate selected ones
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} patents & projects information marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected patents & projects info inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} patents & projects information marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        # Ensure only one active patents & projects info at a time
+        if obj.is_active:
+            PatentsProjectsInfo.objects.exclude(pk=obj.pk).update(is_active=False)
+        
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Patents & Projects information "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Patent Admin
+@admin.register(Patent)
+class PatentAdmin(admin.ModelAdmin):
+    """Admin interface for Patent management"""
+    
+    list_display = [
+        'title', 'department', 'status', 'filing_year', 'patent_number', 'is_featured', 'is_active', 'created_at'
+    ]
+    
+    list_filter = [
+        'department', 'status', 'filing_year', 'is_featured', 'is_active', 'created_at'
+    ]
+    
+    search_fields = [
+        'title', 'inventors', 'patent_number', 'description'
+    ]
+    
+    list_editable = ['is_featured', 'is_active']
+    
+    readonly_fields = [
+        'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'inventors', 'description')
+        }),
+        ('Patent Details', {
+            'fields': (
+                ('patent_number', 'application_number'),
+                ('status', 'department'),
+                ('filing_year', 'publication_date', 'grant_date'),
+            )
+        }),
+        ('Links and Files', {
+            'fields': ('patent_url', 'pdf_file')
+        }),
+        ('Status', {
+            'fields': ('is_featured', 'is_active')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-filing_year', '-created_at']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected patents featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} patents marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected patents unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} patents marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected patents active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} patents marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected patents inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} patents marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Patent "{obj.title[:50]}..." was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Research Project Admin
+@admin.register(ResearchProject)
+class ResearchProjectAdmin(admin.ModelAdmin):
+    """Admin interface for Research Project management"""
+    
+    list_display = [
+        'title', 'department', 'status', 'start_year', 'funding_agency', 'funding_amount', 'is_featured', 'is_active', 'created_at'
+    ]
+    
+    list_filter = [
+        'department', 'status', 'start_year', 'is_featured', 'is_active', 'created_at'
+    ]
+    
+    search_fields = [
+        'title', 'principal_investigator', 'funding_agency', 'description'
+    ]
+    
+    list_editable = ['is_featured', 'is_active']
+    
+    readonly_fields = [
+        'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'principal_investigator', 'description')
+        }),
+        ('Project Details', {
+            'fields': (
+                ('department', 'status'),
+                ('start_year', 'end_year', 'project_duration'),
+            )
+        }),
+        ('Funding Information', {
+            'fields': (
+                ('funding_agency', 'funding_amount'),
+            )
+        }),
+        ('Team Information', {
+            'fields': ('team_members',)
+        }),
+        ('Links and Files', {
+            'fields': ('project_url', 'report_file')
+        }),
+        ('Status', {
+            'fields': ('is_featured', 'is_active')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-start_year', '-created_at']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected projects featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} projects marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected projects unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} projects marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected projects active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} projects marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected projects inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} projects marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Research Project "{obj.title[:50]}..." was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Industry Collaboration Admin
+@admin.register(IndustryCollaboration)
+class IndustryCollaborationAdmin(admin.ModelAdmin):
+    """Admin interface for Industry Collaboration management"""
+    
+    list_display = [
+        'company_name', 'collaboration_type', 'duration_years', 'funding_amount', 'is_featured', 'is_active', 'created_at'
+    ]
+    
+    list_filter = [
+        'collaboration_type', 'duration_years', 'is_featured', 'is_active', 'created_at'
+    ]
+    
+    search_fields = [
+        'company_name', 'collaboration_type', 'contact_person', 'description'
+    ]
+    
+    list_editable = ['is_featured', 'is_active']
+    
+    readonly_fields = [
+        'created_at', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('company_name', 'description')
+        }),
+        ('Collaboration Details', {
+            'fields': (
+                ('collaboration_type', 'duration_years'),
+                ('funding_amount',),
+            )
+        }),
+        ('Contact Information', {
+            'fields': (
+                ('contact_person', 'company_website'),
+            )
+        }),
+        ('Status', {
+            'fields': ('is_featured', 'is_active')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-created_at']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected collaborations featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} collaborations marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected collaborations unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} collaborations marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected collaborations active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} collaborations marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected collaborations inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} collaborations marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Industry Collaboration "{obj.company_name}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# Consultancy Admin Classes
+@admin.register(ConsultancyInfo)
+class ConsultancyInfoAdmin(admin.ModelAdmin):
+    """Admin for Consultancy Information"""
+    
+    list_display = ['title', 'total_projects', 'industry_partners', 'revenue_generated', 'client_satisfaction', 'is_active', 'created_at']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['title', 'subtitle', 'cta_title']
+    list_editable = ['is_active']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': (
+                ('title', 'is_active'),
+                'subtitle',
+            )
+        }),
+        ('Statistics', {
+            'fields': (
+                ('total_projects', 'industry_partners'),
+                ('revenue_generated', 'client_satisfaction'),
+            )
+        }),
+        ('Call to Action', {
+            'fields': (
+                'cta_title',
+                'cta_description',
+                'contact_email',
+            )
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['make_active', 'make_inactive']
+    
+    def make_active(self, request, queryset):
+        """Make selected consultancy info active"""
+        # Deactivate all others first
+        ConsultancyInfo.objects.filter(is_active=True).update(is_active=False)
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} consultancy information marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected consultancy info inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} consultancy information marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        super().save_model(request, obj, form, change)
+        
+        # Ensure only one active consultancy info
+        if obj.is_active:
+            ConsultancyInfo.objects.filter(is_active=True).exclude(id=obj.id).update(is_active=False)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Consultancy Information "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+@admin.register(ConsultancyService)
+class ConsultancyServiceAdmin(admin.ModelAdmin):
+    """Admin for Consultancy Services"""
+    
+    list_display = ['title', 'service_type', 'display_order', 'is_featured', 'is_active', 'created_at']
+    list_filter = ['service_type', 'is_featured', 'is_active', 'created_at']
+    search_fields = ['title', 'description']
+    list_editable = ['display_order', 'is_featured', 'is_active']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': (
+                ('title', 'service_type'),
+                'description',
+            )
+        }),
+        ('Service Details', {
+            'fields': (
+                'features',
+                ('icon_class', 'color_class'),
+                'display_order',
+            )
+        }),
+        ('Status', {
+            'fields': ('is_featured', 'is_active')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['display_order', 'title']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected services featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} services marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected services unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} services marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected services active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} services marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected services inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} services marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Consultancy Service "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+@admin.register(ConsultancyExpertise)
+class ConsultancyExpertiseAdmin(admin.ModelAdmin):
+    """Admin for Consultancy Expertise Areas"""
+    
+    list_display = ['title', 'display_order', 'is_active', 'created_at']
+    list_filter = ['is_active', 'created_at']
+    search_fields = ['title', 'description']
+    list_editable = ['display_order', 'is_active']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': (
+                'title',
+                'description',
+                ('icon_class', 'display_order'),
+            )
+        }),
+        ('Status', {
+            'fields': ('is_active',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['display_order', 'title']
+    
+    actions = ['make_active', 'make_inactive']
+    
+    def make_active(self, request, queryset):
+        """Make selected expertise areas active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} expertise areas marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected expertise areas inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} expertise areas marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Consultancy Expertise "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+@admin.register(ConsultancySuccessStory)
+class ConsultancySuccessStoryAdmin(admin.ModelAdmin):
+    """Admin for Consultancy Success Stories"""
+    
+    list_display = ['title', 'category', 'display_order', 'is_featured', 'is_active', 'created_at']
+    list_filter = ['category', 'is_featured', 'is_active', 'created_at']
+    search_fields = ['title', 'description']
+    list_editable = ['display_order', 'is_featured', 'is_active']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': (
+                ('title', 'category'),
+                'description',
+            )
+        }),
+        ('Metrics', {
+            'fields': (
+                ('metric1_label', 'metric1_value'),
+                ('metric2_label', 'metric2_value'),
+                ('metric3_label', 'metric3_value'),
+            )
+        }),
+        ('Display Settings', {
+            'fields': (
+                'display_order',
+                ('is_featured', 'is_active'),
+            )
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['display_order', 'title']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected success stories featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} success stories marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected success stories unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} success stories marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected success stories active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} success stories marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected success stories inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} success stories marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def save_model(self, request, obj, form, change):
+        """Custom save logic"""
+        super().save_model(request, obj, form, change)
+        
+        # Log the action
+        action = "updated" if change else "created"
+        self.message_user(
+            request, 
+            f'Consultancy Success Story "{obj.title}" was {action} successfully.',
+            level=messages.SUCCESS
+        )
+
+
+# NSS-NCC Clubs Admin
+@admin.register(NSSNCCClub)
+class NSSNCCClubAdmin(SortableAdminMixin, admin.ModelAdmin):
+    """Admin interface for NSS-NCC Clubs"""
+    
+    list_display = [
+        'name', 'club_type', 'coordinator_name', 'coordinator_email',
+        'is_active', 'is_featured', 'display_order', 'created_at'
+    ]
+    list_filter = [
+        'club_type', 'is_active', 'is_featured', 'created_at'
+    ]
+    search_fields = [
+        'name', 'coordinator_name', 'coordinator_email', 'description'
+    ]
+    list_editable = ['is_active', 'is_featured', 'display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': (
+                ('name', 'club_type'),
+                'short_description',
+                'description',
+            )
+        }),
+        ('Contact Information', {
+            'fields': (
+                ('coordinator_name', 'coordinator_email'),
+                'coordinator_phone',
+            )
+        }),
+        ('Activities & Events', {
+            'fields': (
+                'main_activities',
+                'upcoming_events',
+            )
+        }),
+        ('Media', {
+            'fields': (
+                'logo',
+                'cover_image',
+            )
+        }),
+        ('Social Media', {
+            'fields': (
+                'facebook_url',
+                'instagram_url',
+                'website_url',
+            )
+        }),
+        ('Display Settings', {
+            'fields': (
+                'display_order',
+                ('is_active', 'is_featured'),
+            )
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['display_order', 'name']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected clubs featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} clubs marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected clubs unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} clubs marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected clubs active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} clubs marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected clubs inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} clubs marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+
+
+class NSSNCCNoticeInline(admin.TabularInline):
+    """Inline admin for NSS-NCC Notices"""
+    model = NSSNCCNotice
+    extra = 0
+    fields = ['title', 'category', 'priority', 'is_active', 'publish_date']
+    readonly_fields = ['created_at']
+
+
+class NSSNCCGalleryInline(admin.TabularInline):
+    """Inline admin for NSS-NCC Gallery Images"""
+    model = NSSNCCGallery
+    extra = 0
+    fields = ['title', 'category', 'image', 'is_active', 'display_order']
+    readonly_fields = ['created_at']
+
+
+class NSSNCCAchievementInline(admin.TabularInline):
+    """Inline admin for NSS-NCC Achievements"""
+    model = NSSNCCAchievement
+    extra = 0
+    fields = ['title', 'achievement_type', 'achievement_date', 'is_active', 'display_order']
+    readonly_fields = ['created_at']
+
+
+@admin.register(NSSNCCNotice)
+class NSSNCCNoticeAdmin(admin.ModelAdmin):
+    """Admin interface for NSS-NCC Notices"""
+    
+    list_display = [
+        'title', 'related_club', 'category', 'priority', 
+        'publish_date', 'is_active', 'is_featured'
+    ]
+    list_filter = [
+        'category', 'priority', 'related_club', 'is_active', 
+        'is_featured', 'publish_date'
+    ]
+    search_fields = [
+        'title', 'content', 'related_club__name'
+    ]
+    list_editable = ['is_active', 'is_featured']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': (
+                'title',
+                'content',
+                ('category', 'priority'),
+                'related_club',
+            )
+        }),
+        ('Publishing', {
+            'fields': (
+                'publish_date',
+                'expiry_date',
+            )
+        }),
+        ('Media', {
+            'fields': (
+                'attachment',
+            )
+        }),
+        ('Display Settings', {
+            'fields': (
+                ('is_active', 'is_featured'),
+            )
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-publish_date', '-created_at']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected notices featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} notices marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected notices unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} notices marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected notices active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} notices marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected notices inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} notices marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+
+
+@admin.register(NSSNCCGallery)
+class NSSNCCGalleryAdmin(SortableAdminMixin, admin.ModelAdmin):
+    """Admin interface for NSS-NCC Gallery Images"""
+    
+    list_display = [
+        'title', 'related_club', 'category', 'is_active', 
+        'is_featured', 'display_order', 'created_at'
+    ]
+    list_filter = [
+        'category', 'related_club', 'is_active', 'is_featured', 'created_at'
+    ]
+    search_fields = [
+        'title', 'description', 'related_club__name'
+    ]
+    list_editable = ['is_active', 'is_featured', 'display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': (
+                'title',
+                'description',
+                ('category', 'related_club'),
+            )
+        }),
+        ('Media', {
+            'fields': (
+                'image',
+            )
+        }),
+        ('Display Settings', {
+            'fields': (
+                'display_order',
+                ('is_active', 'is_featured'),
+            )
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['display_order', '-created_at']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected gallery images featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} gallery images marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected gallery images unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} gallery images marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected gallery images active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} gallery images marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected gallery images inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} gallery images marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+
+
+@admin.register(NSSNCCAchievement)
+class NSSNCCAchievementAdmin(SortableAdminMixin, admin.ModelAdmin):
+    """Admin interface for NSS-NCC Achievements"""
+    
+    list_display = [
+        'title', 'related_club', 'achievement_type', 'achievement_date',
+        'is_active', 'is_featured', 'display_order'
+    ]
+    list_filter = [
+        'achievement_type', 'related_club', 'is_active', 
+        'is_featured', 'achievement_date'
+    ]
+    search_fields = [
+        'title', 'description', 'achieved_by', 'organization', 'related_club__name'
+    ]
+    list_editable = ['is_active', 'is_featured', 'display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': (
+                'title',
+                'description',
+                ('achievement_type', 'related_club'),
+            )
+        }),
+        ('Achievement Details', {
+            'fields': (
+                'achieved_by',
+                'achievement_date',
+                'organization',
+            )
+        }),
+        ('Media', {
+            'fields': (
+                'certificate_image',
+            )
+        }),
+        ('Display Settings', {
+            'fields': (
+                'display_order',
+                ('is_active', 'is_featured'),
+            )
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-achievement_date', 'display_order']
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def make_featured(self, request, queryset):
+        """Make selected achievements featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} achievements marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected achievements unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} achievements marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected achievements active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} achievements marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected achievements inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} achievements marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+
+
+@admin.register(HeroCarouselSlide)
+class HeroCarouselSlideAdmin(SortableAdminMixin, admin.ModelAdmin):
+    """Admin interface for managing hero carousel slides"""
+    
+    list_display = [
+        'title', 'slide_type', 'is_active', 'display_order', 
+        'badge_text', 'gradient_type', 'created_at'
+    ]
+    list_filter = [
+        'slide_type', 'is_active', 'gradient_type', 'show_statistics', 
+        'show_content_cards', 'created_at'
+    ]
+    search_fields = [
+        'title', 'subtitle', 'badge_text', 'primary_button_text', 
+        'secondary_button_text', 'content_title'
+    ]
+    list_editable = ['is_active', 'display_order']
+    ordering = ['display_order', 'created_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': (
+                'title', 'subtitle', 'slide_type', 'is_active', 'display_order'
+            )
+        }),
+        ('Badge Configuration', {
+            'fields': (
+                'badge_text', 'badge_icon', 'badge_color'
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Button Configuration', {
+            'fields': (
+                ('primary_button_text', 'primary_button_url'),
+                ('primary_button_icon', 'primary_button_color'),
+                ('secondary_button_text', 'secondary_button_url'),
+                ('secondary_button_icon', 'secondary_button_color')
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Background Configuration', {
+            'fields': (
+                'gradient_type',
+                ('custom_gradient_from', 'custom_gradient_to', 'custom_gradient_via')
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Statistics Configuration', {
+            'fields': (
+                'show_statistics',
+                ('stat_1_number', 'stat_1_label', 'stat_1_icon', 'stat_1_color'),
+                ('stat_2_number', 'stat_2_label', 'stat_2_icon', 'stat_2_color'),
+                ('stat_3_number', 'stat_3_label', 'stat_3_icon', 'stat_3_color'),
+                ('stat_4_number', 'stat_4_label', 'stat_4_icon', 'stat_4_color')
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Content Configuration', {
+            'fields': (
+                'show_content_cards', 'content_title', 'content_icon', 'content_items'
+            ),
+            'classes': ('collapse',)
+        }),
+        ('Advanced Configuration', {
+            'fields': (
+                'auto_play_interval', 'show_indicators', 'show_controls'
+            ),
+            'classes': ('collapse',)
+        })
+    )
+    
+    actions = ['make_active', 'make_inactive', 'duplicate_slide']
+    
+    def make_active(self, request, queryset):
+        """Make selected slides active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} slides marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected slides inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} slides marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def duplicate_slide(self, request, queryset):
+        """Duplicate selected slides"""
+        for slide in queryset:
+            slide.pk = None
+            slide.title = f"{slide.title} (Copy)"
+            slide.display_order = slide.display_order + 1
+            slide.save()
+        self.message_user(request, f'{queryset.count()} slides duplicated.')
+    duplicate_slide.short_description = "Duplicate selected slides"
+
+
+@admin.register(HeroCarouselSettings)
+class HeroCarouselSettingsAdmin(admin.ModelAdmin):
+    """Admin interface for managing global hero carousel settings"""
+    
+    list_display = [
+        'is_enabled', 'auto_play', 'default_interval', 
+        'show_indicators', 'show_controls', 'updated_at'
+    ]
+    
+    fieldsets = (
+        ('General Settings', {
+            'fields': (
+                'is_enabled', 'auto_play', 'default_interval'
+            )
+        }),
+        ('Display Settings', {
+            'fields': (
+                'show_indicators', 'show_controls'
+            )
+        }),
+        ('Interaction Settings', {
+            'fields': (
+                'pause_on_hover', 'enable_keyboard', 'enable_touch'
+            )
+        }),
+        ('Animation Settings', {
+            'fields': (
+                'transition_duration', 'fade_effect'
+            )
+        }),
+        ('Responsive Settings', {
+            'fields': (
+                'mobile_height', 'tablet_height', 'desktop_height'
+            )
+        })
+    )
+    
+    def has_add_permission(self, request):
+        """Only allow one settings instance"""
+        return not HeroCarouselSettings.objects.exists()
+    
+    def has_delete_permission(self, request, obj=None):
+        """Prevent deletion of settings"""
+        return False

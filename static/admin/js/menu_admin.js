@@ -1,299 +1,703 @@
-// Enhanced Menu Admin JavaScript
+// Menu Management Admin JavaScript
 
-(function($) {
-    'use strict';
-
-    // Initialize when DOM is ready
-    $(document).ready(function() {
-        initMenuAdmin();
-    });
-
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Initialize all menu admin functionality
+    initMenuAdmin();
+    
     function initMenuAdmin() {
-        // Initialize path type conditional fields
-        initPathTypeConditionals();
+        // Initialize color pickers
+        initColorPickers();
+        
+        // Initialize quick toggles
+        initQuickToggles();
+        
+        // Initialize menu tree visualization
+        initMenuTree();
+        
+        // Initialize bulk actions
+        initBulkActions();
         
         // Initialize form validation
         initFormValidation();
         
-        // Initialize drag and drop for sortable items
-        initSortableItems();
-        
-        // Initialize URL preview
-        initUrlPreview();
-        
-        // Initialize menu item counters
-        updateMenuItemCounters();
+        // Initialize live preview
+        initLivePreview();
     }
-
-    // Path Type Conditional Field Display
-    function initPathTypeConditionals() {
-        $(document).on('change', 'select[name*="path_type"]', function() {
-            var $select = $(this);
-            var pathType = $select.val();
-            var $row = $select.closest('.form-row, .inline-related, tr');
+    
+    // Color picker functionality
+    function initColorPickers() {
+        const colorInputs = document.querySelectorAll('input[type="color"]');
+        
+        colorInputs.forEach(input => {
+            // Add color preview
+            const preview = document.createElement('div');
+            preview.className = 'color-preview';
+            preview.style.cssText = `
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                border: 2px solid #fff;
+                box-shadow: 0 0 0 1px #ddd;
+                display: inline-block;
+                margin-right: 8px;
+                vertical-align: middle;
+            `;
             
-            var $externalUrlField = $row.find('.field-external_url, [class*="external_url"]');
-            var $pageField = $row.find('.field-page, [class*="page"]');
+            // Insert preview before input
+            input.parentNode.insertBefore(preview, input);
             
-            if (pathType === 'external') {
-                $externalUrlField.show().removeClass('hidden');
-                $pageField.hide().addClass('hidden');
-                $externalUrlField.find('input').prop('required', true);
-                $pageField.find('select').prop('required', false);
-            } else if (pathType === 'internal') {
-                $pageField.show().removeClass('hidden');
-                $externalUrlField.hide().addClass('hidden');
-                $pageField.find('select').prop('required', true);
-                $externalUrlField.find('input').prop('required', false);
+            // Update preview on change
+            input.addEventListener('change', function() {
+                preview.style.backgroundColor = this.value;
+            });
+            
+            // Set initial preview
+            preview.style.backgroundColor = input.value;
+        });
+    }
+    
+    // Enhanced checkbox and toggle functionality
+    function initQuickToggles() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        
+        checkboxes.forEach(checkbox => {
+            // Find the parent form row or field container
+            const container = findParentContainer(checkbox);
+            if (!container) return;
+            
+            // Add enhanced styling
+            addEnhancedStyling(checkbox, container);
+            
+            // Add change event
+            checkbox.addEventListener('change', function() {
+                updateCheckboxState(this);
+                updateFormValidation(this);
+            });
+            
+            // Set initial state
+            updateCheckboxState(checkbox);
+        });
+    }
+    
+    function findParentContainer(checkbox) {
+        // Look for common parent containers
+        let container = checkbox.closest('.form-row, .field, .form-group, .checkbox-field');
+        if (!container) {
+            // Create a container if none exists
+            container = document.createElement('div');
+            container.className = 'enhanced-checkbox';
+            checkbox.parentNode.insertBefore(container, checkbox);
+            container.appendChild(checkbox);
+        }
+        return container;
+    }
+    
+    function addEnhancedStyling(checkbox, container) {
+        // Add enhanced checkbox class if not already present
+        if (!container.classList.contains('enhanced-checkbox')) {
+            container.classList.add('enhanced-checkbox');
+        }
+        
+        // Ensure checkbox has a label
+        let label = container.querySelector('label');
+        if (!label) {
+            // Create label if none exists
+            label = document.createElement('label');
+            label.textContent = checkbox.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            label.setAttribute('for', checkbox.id || checkbox.name);
+            container.appendChild(label);
+        }
+        
+        // Add status indicator
+        if (!container.querySelector('.checkbox-status')) {
+            const status = document.createElement('span');
+            status.className = 'checkbox-status';
+            label.appendChild(status);
+        }
+    }
+    
+    function updateCheckboxState(checkbox) {
+        const container = checkbox.closest('.enhanced-checkbox');
+        if (!container) return;
+        
+        const status = container.querySelector('.checkbox-status');
+        if (status) {
+            if (checkbox.checked) {
+                status.style.backgroundColor = '#28a745';
+                container.style.borderColor = '#28a745';
+                container.style.backgroundColor = '#f8fff9';
             } else {
-                $externalUrlField.hide().addClass('hidden');
-                $pageField.hide().addClass('hidden');
-                $externalUrlField.find('input').prop('required', false);
-                $pageField.find('select').prop('required', false);
+                status.style.backgroundColor = '#6c757d';
+                container.style.borderColor = '#e9ecef';
+                container.style.backgroundColor = 'white';
+            }
+        }
+        
+        // Update container classes
+        if (checkbox.checked) {
+            container.classList.add('checked');
+        } else {
+            container.classList.remove('checked');
+        }
+    }
+    
+    function updateFormValidation(checkbox) {
+        // Add visual feedback for form validation
+        const form = checkbox.closest('form');
+        if (form) {
+            form.classList.add('was-validated');
+        }
+    }
+    
+    // Menu tree visualization
+    function initMenuTree() {
+        const menuTree = document.querySelector('.menu-tree');
+        if (!menuTree) return;
+        
+        // Add expand/collapse functionality
+        const treeItems = menuTree.querySelectorAll('.menu-tree-item');
+        
+        treeItems.forEach(item => {
+            const subitems = item.querySelectorAll('.menu-tree-subitem');
+            if (subitems.length > 0) {
+                // Add expand/collapse button
+                const toggleBtn = document.createElement('button');
+                toggleBtn.className = 'tree-toggle';
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                toggleBtn.style.cssText = `
+                    background: none;
+                    border: none;
+                    color: #007bff;
+                    cursor: pointer;
+                    padding: 5px;
+                    margin-right: 10px;
+                `;
+                
+                item.insertBefore(toggleBtn, item.firstChild);
+                
+                // Add click event
+                toggleBtn.addEventListener('click', function() {
+                    const isExpanded = item.classList.contains('expanded');
+                    if (isExpanded) {
+                        item.classList.remove('expanded');
+                        toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                        subitems.forEach(subitem => subitem.style.display = 'none');
+                    } else {
+                        item.classList.add('expanded');
+                        toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+                        subitems.forEach(subitem => subitem.style.display = 'block');
+                    }
+                });
+                
+                // Initially hide subitems
+                subitems.forEach(subitem => subitem.style.display = 'none');
             }
         });
-
-        // Trigger on page load for existing forms
-        $('select[name*="path_type"]').trigger('change');
     }
-
-    // Form Validation
+    
+    // Bulk actions functionality
+    function initBulkActions() {
+        const bulkForm = document.querySelector('form');
+        if (!bulkForm) return;
+        
+        const actionSelect = bulkForm.querySelector('select[name="action"]');
+        const selectedItems = bulkForm.querySelectorAll('input[name="selected_items"]');
+        const executeBtn = bulkForm.querySelector('button[type="submit"]');
+        
+        if (actionSelect && executeBtn) {
+            // Update execute button text based on action
+            actionSelect.addEventListener('change', function() {
+                const actionText = this.options[this.selectedIndex].text;
+                executeBtn.innerHTML = `<i class="fas fa-cogs"></i>${actionText}`;
+            });
+            
+            // Confirm destructive actions
+            bulkForm.addEventListener('submit', function(e) {
+                const action = actionSelect.value;
+                const checkedItems = Array.from(selectedItems).filter(item => item.checked);
+                
+                if (checkedItems.length === 0) {
+                    e.preventDefault();
+                    alert('Please select at least one item to perform this action.');
+                    return;
+                }
+                
+                if (action === 'delete' || action.includes('deactivate')) {
+                    if (!confirm(`Are you sure you want to ${action} ${checkedItems.length} selected item(s)? This action cannot be undone.`)) {
+                        e.preventDefault();
+                        return;
+                    }
+                }
+            });
+        }
+        
+        // Select all functionality
+        const selectAllCheckbox = document.getElementById('select-all');
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                selectedItems.forEach(item => {
+                    item.checked = this.checked;
+                });
+            });
+        }
+    }
+    
+    // Form validation
     function initFormValidation() {
-        $('form').on('submit', function(e) {
-            var isValid = true;
-            var errors = [];
-
-            // Validate menu items
-            $('.inline-related:not(.empty-form)').each(function() {
-                var $item = $(this);
-                var pathType = $item.find('select[name*="path_type"]').val();
-                var externalUrl = $item.find('input[name*="external_url"]').val();
-                var page = $item.find('select[name*="page"]').val();
-                var title = $item.find('input[name*="title"]').val();
-
-                if (title) { // Only validate if title is filled
-                    if (pathType === 'external' && !externalUrl) {
-                        errors.push('External URL is required when path type is External');
-                        $item.find('input[name*="external_url"]').addClass('error');
-                        isValid = false;
-                    }
+        const forms = document.querySelectorAll('form');
+        
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     
-                    if (pathType === 'internal' && !page) {
-                        errors.push('Page selection is required when path type is Internal');
-                        $item.find('select[name*="page"]').addClass('error');
-                        isValid = false;
-                    }
+                    // Show validation errors
+                    showValidationErrors(form);
                 }
+                
+                form.classList.add('was-validated');
             });
-
-            if (!isValid) {
-                e.preventDefault();
-                showValidationErrors(errors);
+        });
+    }
+    
+    function showValidationErrors(form) {
+        const invalidFields = form.querySelectorAll(':invalid');
+        
+        invalidFields.forEach(field => {
+            // Add error styling
+            field.classList.add('is-invalid');
+            
+            // Show error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'invalid-feedback';
+            errorDiv.textContent = field.validationMessage;
+            
+            // Remove existing error message
+            const existingError = field.parentNode.querySelector('.invalid-feedback');
+            if (existingError) {
+                existingError.remove();
             }
-        });
-
-        // Clear error styling on input
-        $(document).on('input change', 'input.error, select.error', function() {
-            $(this).removeClass('error');
+            
+            field.parentNode.appendChild(errorDiv);
         });
     }
-
-    // Show validation errors
-    function showValidationErrors(errors) {
-        var errorHtml = '<div class="errorlist"><ul>';
-        errors.forEach(function(error) {
-            errorHtml += '<li>' + error + '</li>';
-        });
-        errorHtml += '</ul></div>';
-
-        // Remove existing error messages
-        $('.errorlist').remove();
+    
+    // Live preview functionality
+    function initLivePreview() {
+        const previewContainer = document.querySelector('.menu-preview');
+        if (!previewContainer) return;
         
-        // Add new error message at the top of the form
-        $('form').prepend(errorHtml);
+        // Watch for changes in form fields
+        const formFields = document.querySelectorAll('input, textarea, select');
         
-        // Scroll to top
-        $('html, body').animate({ scrollTop: 0 }, 300);
-    }
-
-    // Initialize sortable items
-    function initSortableItems() {
-        if ($.fn.sortable) {
-            $('.inline-group').sortable({
-                items: '.inline-related:not(.empty-form)',
-                handle: '.sortable-handle, .drag-handle',
-                axis: 'y',
-                opacity: 0.8,
-                placeholder: 'sortable-placeholder',
-                update: function(event, ui) {
-                    updateOrderingFields($(this));
-                }
+        formFields.forEach(field => {
+            field.addEventListener('input', function() {
+                updateLivePreview(field);
             });
+            
+            field.addEventListener('change', function() {
+                updateLivePreview(field);
+            });
+        });
+    }
+    
+    function updateLivePreview(field) {
+        const previewContainer = document.querySelector('.menu-preview');
+        if (!previewContainer) return;
+        
+        const fieldName = field.name;
+        const fieldValue = field.value;
+        
+        // Update preview based on field type
+        if (fieldName.includes('name')) {
+            const previewName = previewContainer.querySelector('.preview-name');
+            if (previewName) {
+                previewName.textContent = fieldValue || 'Menu Name';
+            }
+        }
+        
+        if (fieldName.includes('icon_class')) {
+            const previewIcon = previewContainer.querySelector('.preview-icon');
+            if (previewIcon) {
+                previewIcon.className = fieldValue || 'fas fa-home';
+            }
+        }
+        
+        if (fieldName.includes('text_color')) {
+            const previewText = previewContainer.querySelector('.preview-text');
+            if (previewText) {
+                previewText.style.color = fieldValue || '#374151';
+            }
+        }
+        
+        if (fieldName.includes('hover_color')) {
+            const previewHover = previewContainer.querySelector('.preview-hover');
+            if (previewHover) {
+                previewHover.style.borderColor = fieldValue || '#1f2937';
+            }
         }
     }
-
-    // Update ordering fields after sorting
-    function updateOrderingFields($container) {
-        $container.find('.inline-related:not(.empty-form)').each(function(index) {
-            $(this).find('input[name*="ordering"]').val(index + 1);
+    
+    // Enhanced table functionality
+    function initEnhancedTable() {
+        const tables = document.querySelectorAll('.results');
+        
+        tables.forEach(table => {
+            // Add row highlighting
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+            
+            // Add sortable columns
+            const headers = table.querySelectorAll('th.sortable');
+            headers.forEach(header => {
+                header.style.cursor = 'pointer';
+                header.addEventListener('click', function() {
+                    sortTable(table, Array.from(rows), this);
+                });
+            });
         });
     }
-
-    // URL Preview functionality
-    function initUrlPreview() {
-        $(document).on('input', 'input[name*="external_url"]', function() {
-            var $input = $(this);
-            var url = $input.val();
-            var $preview = $input.siblings('.url-preview');
+    
+    function sortTable(table, rows, header) {
+        const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+        const isAscending = header.classList.contains('asc');
+        
+        // Remove existing sort classes
+        header.parentNode.querySelectorAll('th').forEach(th => {
+            th.classList.remove('asc', 'desc');
+        });
+        
+        // Add sort class
+        header.classList.add(isAscending ? 'desc' : 'asc');
+        
+        // Sort rows
+        rows.sort((a, b) => {
+            const aValue = a.children[columnIndex].textContent.trim();
+            const bValue = b.children[columnIndex].textContent.trim();
             
-            if (!$preview.length) {
-                $preview = $('<div class="url-preview"></div>');
-                $input.after($preview);
-            }
-            
-            if (url) {
-                $preview.html('<small class="url-display">Preview: <a href="' + url + '" target="_blank">' + url + '</a></small>');
+            if (isAscending) {
+                return bValue.localeCompare(aValue);
             } else {
-                $preview.empty();
+                return aValue.localeCompare(bValue);
             }
         });
-
-        // Trigger on page load
-        $('input[name*="external_url"]').trigger('input');
+        
+        // Reorder rows
+        const tbody = table.querySelector('tbody');
+        rows.forEach(row => tbody.appendChild(row));
     }
-
-    // Update menu item counters
-    function updateMenuItemCounters() {
-        $('.inline-group').each(function() {
-            var $group = $(this);
-            var totalItems = $group.find('.inline-related:not(.empty-form)').length;
-            var activeItems = $group.find('.inline-related:not(.empty-form) input[name*="is_active"]:checked').length;
-            
-            var $counter = $group.find('.menu-items-counter');
-            if (!$counter.length) {
-                $counter = $('<span class="menu-items-counter"></span>');
-                $group.find('h2').append($counter);
+    
+    // Initialize enhanced table
+    initEnhancedTable();
+    
+    // Enhanced checkbox functionality for active/inactive states
+    createEnhancedCheckboxes();
+    
+    // Simple fallback initialization for existing checkboxes
+    setTimeout(function() {
+        const existingCheckboxes = document.querySelectorAll('.enhanced-checkbox input[type="checkbox"]');
+        existingCheckboxes.forEach(checkbox => {
+            if (!checkbox.hasAttribute('data-enhanced-initialized')) {
+                const container = checkbox.closest('.enhanced-checkbox');
+                if (container) {
+                    initializeExistingCheckbox(checkbox, container);
+                }
             }
-            
-            $counter.html('<span class="menu-items-count">' + activeItems + '/' + totalItems + ' active</span>');
         });
-
-        // Update counters when items are added/removed/changed
-        $(document).on('change', 'input[name*="is_active"], input[name*="DELETE"]', function() {
-            setTimeout(updateMenuItemCounters, 100);
+    }, 100);
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + S to save
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            e.preventDefault();
+            const saveBtn = document.querySelector('input[type="submit"], button[type="submit"]');
+            if (saveBtn) {
+                saveBtn.click();
+            }
+        }
+        
+        // Ctrl/Cmd + A to select all
+        if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+            const selectAllCheckbox = document.getElementById('select-all');
+            if (selectAllCheckbox) {
+                selectAllCheckbox.checked = !selectAllCheckbox.checked;
+                selectAllCheckbox.dispatchEvent(new Event('change'));
+            }
+        }
+    });
+    
+    // Create enhanced checkboxes for specific fields
+    function createEnhancedCheckboxes() {
+        // Find fields that should have enhanced styling
+        const enhancedFields = document.querySelectorAll('input[name*="is_active"], input[name*="is_featured"], input[name*="show_"]');
+        
+        enhancedFields.forEach(field => {
+            if (field.type === 'checkbox') {
+                createEnhancedCheckbox(field);
+            }
+        });
+        
+        // Also find existing enhanced-checkbox containers and initialize them
+        const existingContainers = document.querySelectorAll('.enhanced-checkbox');
+        existingContainers.forEach(container => {
+            const checkbox = container.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                initializeExistingCheckbox(checkbox, container);
+            }
         });
     }
-
-    // Add new inline form functionality
-    $(document).on('click', '.add-row a', function(e) {
-        setTimeout(function() {
-            initPathTypeConditionals();
-            updateMenuItemCounters();
-        }, 100);
-    });
-
-    // Delete inline form functionality
-    $(document).on('click', '.delete-row', function() {
-        setTimeout(updateMenuItemCounters, 100);
-    });
-
-    // Auto-generate slug from title
-    $(document).on('input', 'input[name*="title"]:not([name*="meta_title"])', function() {
-        var $titleInput = $(this);
-        var $slugInput = $titleInput.closest('.form-row, .inline-related, tr').find('input[name*="slug"]');
-        
-        if ($slugInput.length && !$slugInput.val()) {
-            var slug = generateSlug($titleInput.val());
-            $slugInput.val(slug);
+    
+    function createEnhancedCheckbox(checkbox) {
+        // Find or create container
+        let container = checkbox.closest('.form-row, .field, .form-group, .enhanced-checkbox');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'enhanced-checkbox compact';
+            checkbox.parentNode.insertBefore(container, checkbox);
+            container.appendChild(checkbox);
         }
-    });
-
-    // Generate URL-friendly slug
-    function generateSlug(text) {
-        return text
-            .toLowerCase()
-            .replace(/[^\w\s-]/g, '') // Remove special characters
-            .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
-            .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+        
+        // Add enhanced checkbox class if not already present
+        if (!container.classList.contains('enhanced-checkbox')) {
+            container.classList.add('enhanced-checkbox', 'admin-compact');
+        }
+        
+        // Ensure checkbox has a label
+        let label = container.querySelector('label');
+        if (!label) {
+            // Create label if none exists
+            label = document.createElement('label');
+            label.textContent = getFieldDisplayName(checkbox.name);
+            label.setAttribute('for', checkbox.id || checkbox.name);
+            container.appendChild(label);
+        }
+        
+        // Add status indicator
+        if (!container.querySelector('.checkbox-status')) {
+            const status = document.createElement('span');
+            status.className = 'checkbox-status';
+            label.appendChild(status);
+        }
+        
+        // Add status text
+        if (!container.querySelector('.status-text')) {
+            const statusText = document.createElement('span');
+            statusText.className = 'status-text';
+            statusText.textContent = checkbox.checked ? 'Active' : 'Inactive';
+            label.appendChild(statusText);
+        }
+        
+        // Add change event
+        checkbox.addEventListener('change', function() {
+            updateEnhancedCheckbox(this);
+        });
+        
+        // Set initial state
+        updateEnhancedCheckbox(checkbox);
     }
-
-    // Keyboard shortcuts
-    $(document).on('keydown', function(e) {
-        // Ctrl+S to save
-        if (e.ctrlKey && e.key === 's') {
-            e.preventDefault();
-            $('input[name="_save"]').click();
+    
+    function initializeExistingCheckbox(checkbox, container) {
+        // Ensure status elements exist
+        let label = container.querySelector('label');
+        if (!label) return;
+        
+        // Add status indicator if missing
+        if (!container.querySelector('.checkbox-status')) {
+            const status = document.createElement('span');
+            status.className = 'checkbox-status';
+            label.appendChild(status);
         }
         
-        // Ctrl+Shift+A to add new menu item
-        if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-            e.preventDefault();
-            $('.add-row a').first().click();
+        // Add status text if missing
+        if (!container.querySelector('.status-text')) {
+            const statusText = document.createElement('span');
+            statusText.className = 'status-text';
+            statusText.textContent = checkbox.checked ? 'Active' : 'Inactive';
+            label.appendChild(statusText);
         }
-    });
-
-    // Enhanced UI feedback
-    function showNotification(message, type) {
-        type = type || 'success';
-        var $notification = $('<div class="notification notification-' + type + '">' + message + '</div>');
         
-        $('body').append($notification);
-        
-        setTimeout(function() {
-            $notification.fadeOut(function() {
-                $(this).remove();
+        // Add change event if not already added
+        if (!checkbox.hasAttribute('data-enhanced-initialized')) {
+            checkbox.addEventListener('change', function() {
+                updateEnhancedCheckbox(this);
             });
+            checkbox.setAttribute('data-enhanced-initialized', 'true');
+        }
+        
+        // Set initial state
+        updateEnhancedCheckbox(checkbox);
+    }
+    
+    function getFieldDisplayName(fieldName) {
+        // Convert field name to display name
+        const nameMap = {
+            'is_active': 'Active Status',
+            'is_featured': 'Featured Item',
+            'show_research_menu': 'Show Research Menu',
+            'show_placement_menu': 'Show Placement Menu',
+            'show_alumni_menu': 'Show Alumni Menu',
+            'show_events_menu': 'Show Events Menu',
+            'show_exam_timetable': 'Show Exam Timetable',
+            'show_exam_revaluation': 'Show Exam Revaluation',
+            'show_exam_question_papers': 'Show Question Papers',
+            'show_exam_rules': 'Show Exam Rules',
+            'show_student_portal': 'Show Student Portal',
+            'show_sports_cultural': 'Show Sports & Cultural',
+            'show_nss_ncc': 'Show NSS & NCC',
+            'show_research_centers': 'Show Research Centers',
+            'show_publications': 'Show Publications',
+            'show_patents_projects': 'Show Patents & Projects'
+        };
+        
+        return nameMap[fieldName] || fieldName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+    
+    function updateEnhancedCheckbox(checkbox) {
+        const container = checkbox.closest('.enhanced-checkbox');
+        if (!container) return;
+        
+        const status = container.querySelector('.checkbox-status');
+        const statusText = container.querySelector('.status-text');
+        
+        if (checkbox.checked) {
+            // Active state
+            container.classList.remove('inactive');
+            container.classList.add('active');
+            
+            if (status) {
+                status.style.backgroundColor = '#28a745';
+            }
+            
+            if (statusText) {
+                statusText.textContent = 'Active';
+                statusText.style.backgroundColor = '#28a745';
+            }
+        } else {
+            // Inactive state
+            container.classList.remove('active');
+            container.classList.add('inactive');
+            
+            if (status) {
+                status.style.backgroundColor = '#dc3545';
+            }
+            
+            if (statusText) {
+                statusText.textContent = 'Inactive';
+                statusText.style.backgroundColor = '#dc3545';
+            }
+        }
+        
+        // Update container classes
+        if (checkbox.checked) {
+            container.classList.add('checked');
+        } else {
+            container.classList.remove('checked');
+        }
+    }
+    
+    // Add tooltips
+    const tooltipElements = document.querySelectorAll('[title]');
+    tooltipElements.forEach(element => {
+        element.addEventListener('mouseenter', function(e) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'custom-tooltip';
+            tooltip.textContent = this.title;
+            tooltip.style.cssText = `
+                position: absolute;
+                background: #333;
+                color: white;
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-size: 12px;
+                z-index: 1000;
+                pointer-events: none;
+                white-space: nowrap;
+            `;
+            
+            document.body.appendChild(tooltip);
+            
+            // Position tooltip
+            const rect = this.getBoundingClientRect();
+            tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+            tooltip.style.top = rect.top - tooltip.offsetHeight - 5 + 'px';
+            
+            this._tooltip = tooltip;
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            if (this._tooltip) {
+                this._tooltip.remove();
+                this._tooltip = null;
+            }
+        });
+    });
+    
+    // Auto-save functionality for long forms
+    let autoSaveTimer;
+    const longForms = document.querySelectorAll('form');
+    
+    longForms.forEach(form => {
+        const inputs = form.querySelectorAll('input, textarea, select');
+        
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(() => {
+                    // Show auto-save indicator
+                    showAutoSaveIndicator();
+                }, 2000);
+            });
+        });
+    });
+    
+    function showAutoSaveIndicator() {
+        const indicator = document.createElement('div');
+        indicator.className = 'auto-save-indicator';
+        indicator.textContent = 'Auto-saving...';
+        indicator.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(indicator);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            indicator.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => indicator.remove(), 300);
         }, 3000);
     }
-
-    // Form auto-save (optional)
-    var autoSaveTimer;
-    $(document).on('input change', 'form input, form select, form textarea', function() {
-        clearTimeout(autoSaveTimer);
-        autoSaveTimer = setTimeout(function() {
-            // Auto-save logic can be implemented here if needed
-            console.log('Auto-save triggered');
-        }, 5000);
-    });
-
-})(django.jQuery);
-
-// CSS for notifications
-var notificationCSS = `
-    .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 12px 20px;
-        border-radius: 4px;
-        color: white;
-        font-weight: 500;
-        z-index: 9999;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-    .notification-success {
-        background: #28a745;
-    }
-    .notification-error {
-        background: #dc3545;
-    }
-    .notification-warning {
-        background: #ffc107;
-        color: #212529;
-    }
-    .sortable-placeholder {
-        height: 60px;
-        background: #f8f9fa;
-        border: 2px dashed #dee2e6;
-        margin: 5px 0;
-    }
-    input.error, select.error {
-        border-color: #dc3545 !important;
-        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
-    }
-`;
-
-// Inject CSS
-var style = document.createElement('style');
-style.textContent = notificationCSS;
-document.head.appendChild(style);
+    
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+});

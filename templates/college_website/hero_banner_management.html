@@ -1,0 +1,1144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hero Banner Management - {{ block.super }}{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/hero_banner_admin.css' %}">
+<style>
+    .hero-banner-admin {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .form-section {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+    
+    .form-section-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        margin: 0;
+    }
+    
+    .form-section-content {
+        padding: 30px;
+    }
+    
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -15px;
+        margin-bottom: 20px;
+    }
+    
+    .form-group {
+        flex: 1;
+        padding: 0 15px;
+        min-width: 300px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .form-control, .form-select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e1e5e9;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+    
+    .color-picker {
+        width: 80px !important;
+        height: 50px !important;
+        padding: 4px !important;
+        border: 3px solid #e1e5e9 !important;
+        border-radius: 8px !important;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .color-picker:hover {
+        border-color: #667eea !important;
+        transform: scale(1.05);
+    }
+    
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+    
+    .btn-success {
+        background: #28a745;
+        color: white;
+    }
+    
+    .btn-success:hover {
+        background: #218838;
+        transform: translateY(-2px);
+    }
+    
+    .btn-danger {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .btn-danger:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+    }
+    
+    .form-actions {
+        background: #f8f9fa;
+        padding: 20px 30px;
+        border-top: 1px solid #e1e5e9;
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+    
+    .help-text {
+        font-size: 12px;
+        color: #6c757d;
+        margin-top: 5px;
+        font-style: italic;
+    }
+    
+    /* Preview Section Styling */
+    .preview-section {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-top: 30px;
+        overflow: hidden;
+    }
+    
+    .preview-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .preview-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    
+    .preview-container {
+        padding: 0;
+        background: #f8f9fa;
+    }
+    
+    .preview-hero-banner {
+        position: relative;
+        overflow: hidden;
+        padding: 80px 0;
+        min-height: 400px;
+        background: linear-gradient(135deg, #1e3a8a, #7c3aed);
+    }
+
+    .banner-list {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+    
+    .banner-list-header {
+        background: #f8f9fa;
+        padding: 20px;
+        border-bottom: 1px solid #e1e5e9;
+    }
+    
+    .banner-item {
+        padding: 20px;
+        border-bottom: 1px solid #e1e5e9;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .banner-item:last-child {
+        border-bottom: none;
+    }
+    
+    .banner-info h4 {
+        margin: 0 0 5px 0;
+        color: #333;
+    }
+    
+    .banner-meta {
+        color: #6c757d;
+        font-size: 14px;
+    }
+    
+    .banner-status {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .status-active {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-inactive {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .banner-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .alert {
+        padding: 15px 20px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+    }
+    
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+    }
+    
+    .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+    }
+    
+    .alert-info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border-color: #bee5eb;
+    }
+    
+    @media (max-width: 768px) {
+        .hero-banner-admin {
+            padding: 10px;
+        }
+        
+        .form-section-content {
+            padding: 20px;
+        }
+        
+        .form-group {
+            min-width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .banner-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .banner-actions {
+            width: 100%;
+            justify-content: flex-start;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-banner-admin">
+    <div class="form-section">
+        <h2 class="form-section-header">
+            <i class="fas fa-edit"></i> Hero Banner Management
+        </h2>
+        
+        <div class="form-section-content">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post" enctype="multipart/form-data" class="hero-banner-form">
+                {% csrf_token %}
+                
+                <!-- Basic Content Section -->
+                <div class="form-section">
+                    <h3 class="form-section-header" style="background: #28a745;">
+                        <i class="fas fa-font"></i> Basic Content
+                    </h3>
+                    <div class="form-section-content">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.title.id_for_label }}">Hero Title *</label>
+                                {{ form.title }}
+                                {% if form.title.help_text %}
+                                    <div class="help-text">{{ form.title.help_text }}</div>
+                                {% endif %}
+                                {% if form.title.errors %}
+                                    <div class="alert alert-danger">{{ form.title.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.subtitle.id_for_label }}">Hero Subtitle</label>
+                                {{ form.subtitle }}
+                                {% if form.subtitle.help_text %}
+                                    <div class="help-text">{{ form.subtitle.help_text }}</div>
+                                {% endif %}
+                                {% if form.subtitle.errors %}
+                                    <div class="alert alert-danger">{{ form.subtitle.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Two-Color Title Support -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.title_highlight_text.id_for_label }}">Title Highlight Text</label>
+                                {{ form.title_highlight_text }}
+                                <div class="help-text">Text to highlight with different color (e.g., "18+ Courses")</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.title_highlight_color.id_for_label }}">Highlight Color</label>
+                                {{ form.title_highlight_color }}
+                                <div class="help-text">Color for highlighted text</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call-to-Action Buttons Section -->
+                <div class="form-section">
+                    <h3 class="form-section-header" style="background: #17a2b8;">
+                        <i class="fas fa-mouse-pointer"></i> Call-to-Action Buttons
+                    </h3>
+                    <div class="form-section-content">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.primary_button_text.id_for_label }}">Primary Button Text</label>
+                                {{ form.primary_button_text }}
+                                {% if form.primary_button_text.help_text %}
+                                    <div class="help-text">{{ form.primary_button_text.help_text }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.primary_button_url.id_for_label }}">Primary Button URL</label>
+                                {{ form.primary_button_url }}
+                                {% if form.primary_button_url.help_text %}
+                                    <div class="help-text">{{ form.primary_button_url.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.secondary_button_text.id_for_label }}">Secondary Button Text</label>
+                                {{ form.secondary_button_text }}
+                                {% if form.secondary_button_text.help_text %}
+                                    <div class="help-text">{{ form.secondary_button_text.help_text }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.secondary_button_url.id_for_label }}">Secondary Button URL</label>
+                                {{ form.secondary_button_url }}
+                                {% if form.secondary_button_url.help_text %}
+                                    <div class="help-text">{{ form.secondary_button_url.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Background Configuration Section -->
+                <div class="form-section">
+                    <h3 class="form-section-header" style="background: #6f42c1;">
+                        <i class="fas fa-image"></i> Background Configuration
+                    </h3>
+                    <div class="form-section-content">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.background_type.id_for_label }}">Background Type *</label>
+                                {{ form.background_type }}
+                                {% if form.background_type.help_text %}
+                                    <div class="help-text">{{ form.background_type.help_text }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Gradient Background Fields -->
+                        <div class="gradient-fields" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="{{ form.gradient_start_color.id_for_label }}">Gradient Start Color</label>
+                                    {{ form.gradient_start_color }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.gradient_end_color.id_for_label }}">Gradient End Color</label>
+                                    {{ form.gradient_end_color }}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="{{ form.gradient_direction.id_for_label }}">Gradient Direction</label>
+                                    {{ form.gradient_direction }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Solid Background Fields -->
+                        <div class="solid-fields" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="{{ form.solid_background_color.id_for_label }}">Solid Background Color</label>
+                                    {{ form.solid_background_color }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Image Background Fields -->
+                        <div class="image-fields" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="{{ form.background_image.id_for_label }}">Background Image</label>
+                                    {{ form.background_image }}
+                                </div>
+                                <div class="form-group">
+                                    <label for="{{ form.background_image_opacity.id_for_label }}">Image Opacity</label>
+                                    {{ form.background_image_opacity }}
+                                    <div class="help-text">Drag to adjust opacity (0-100%)</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Video Background Fields -->
+                        <div class="video-fields" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="{{ form.background_video_url.id_for_label }}">Background Video URL</label>
+                                    {{ form.background_video_url }}
+                                    <div class="help-text">Enter YouTube or Vimeo video URL</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Typography Section -->
+                <div class="form-section">
+                    <h3 class="form-section-header" style="background: #fd7e14;">
+                        <i class="fas fa-text-height"></i> Typography Settings
+                    </h3>
+                    <div class="form-section-content">
+                        <h4>Title Typography</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.title_font_family.id_for_label }}">Title Font Family</label>
+                                {{ form.title_font_family }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.title_font_size.id_for_label }}">Title Font Size</label>
+                                {{ form.title_font_size }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.title_font_weight.id_for_label }}">Title Font Weight</label>
+                                {{ form.title_font_weight }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.title_color.id_for_label }}">Title Color</label>
+                                {{ form.title_color }}
+                            </div>
+                        </div>
+                        
+                        <h4>Subtitle Typography</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.subtitle_font_family.id_for_label }}">Subtitle Font Family</label>
+                                {{ form.subtitle_font_family }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.subtitle_font_size.id_for_label }}">Subtitle Font Size</label>
+                                {{ form.subtitle_font_size }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.subtitle_color.id_for_label }}">Subtitle Color</label>
+                                {{ form.subtitle_color }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Button Styling Section -->
+                <div class="form-section">
+                    <h3 class="form-section-header" style="background: #e83e8c;">
+                        <i class="fas fa-palette"></i> Button Styling
+                    </h3>
+                    <div class="form-section-content">
+                        <h4>Primary Button</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.primary_button_bg_color.id_for_label }}">Background Color</label>
+                                {{ form.primary_button_bg_color }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.primary_button_text_color.id_for_label }}">Text Color</label>
+                                {{ form.primary_button_text_color }}
+                            </div>
+                        </div>
+                        
+                        <h4>Secondary Button</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.secondary_button_bg_color.id_for_label }}">Background Color</label>
+                                {{ form.secondary_button_bg_color }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.secondary_button_text_color.id_for_label }}">Text Color</label>
+                                {{ form.secondary_button_text_color }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.secondary_button_border_color.id_for_label }}">Border Color</label>
+                                {{ form.secondary_button_border_color }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Statistics Cards Customization Section -->
+                <div class="form-section">
+                    <h3 class="form-section-header" style="background: #10b981;">
+                        <i class="fas fa-chart-bar"></i> Statistics Cards
+                    </h3>
+                    <div class="form-section-content">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.show_statistics.id_for_label }}">
+                                    {{ form.show_statistics }} Show Statistics Cards
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Stat 1 -->
+                        <h4>First Statistic</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.stat_1_icon.id_for_label }}">Icon Class</label>
+                                {{ form.stat_1_icon }}
+                                <div class="help-text">FontAwesome icon class (e.g., fas fa-calendar-alt)</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.stat_1_number.id_for_label }}">Number</label>
+                                {{ form.stat_1_number }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.stat_1_label.id_for_label }}">Label</label>
+                                {{ form.stat_1_label }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.stat_1_color.id_for_label }}">Card Color</label>
+                                {{ form.stat_1_color }}
+                            </div>
+                        </div>
+                        
+                        <!-- Stat 2 -->
+                        <h4>Second Statistic</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.stat_2_icon.id_for_label }}">Icon Class</label>
+                                {{ form.stat_2_icon }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.stat_2_number.id_for_label }}">Number</label>
+                                {{ form.stat_2_number }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.stat_2_label.id_for_label }}">Label</label>
+                                {{ form.stat_2_label }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.stat_2_color.id_for_label }}">Card Color</label>
+                                {{ form.stat_2_color }}
+                            </div>
+                        </div>
+                        
+                        <!-- Stat 3 -->
+                        <h4>Third Statistic</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.stat_3_icon.id_for_label }}">Icon Class</label>
+                                {{ form.stat_3_icon }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.stat_3_number.id_for_label }}">Number</label>
+                                {{ form.stat_3_number }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.stat_3_label.id_for_label }}">Label</label>
+                                {{ form.stat_3_label }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.stat_3_color.id_for_label }}">Card Color</label>
+                                {{ form.stat_3_color }}
+                            </div>
+                        </div>
+                        
+                        <!-- Stat 4 -->
+                        <h4>Fourth Statistic</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.stat_4_icon.id_for_label }}">Icon Class</label>
+                                {{ form.stat_4_icon }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.stat_4_number.id_for_label }}">Number</label>
+                                {{ form.stat_4_number }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.stat_4_label.id_for_label }}">Label</label>
+                                {{ form.stat_4_label }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.stat_4_color.id_for_label }}">Card Color</label>
+                                {{ form.stat_4_color }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Accreditations Customization Section -->
+                <div class="form-section">
+                    <h3 class="form-section-header" style="background: #8b5cf6;">
+                        <i class="fas fa-award"></i> Accreditations
+                    </h3>
+                    <div class="form-section-content">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.show_accreditations.id_for_label }}">
+                                    {{ form.show_accreditations }} Show Accreditation Badges
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Accreditation 1 -->
+                        <h4>First Accreditation</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.accred_1_text.id_for_label }}">Text</label>
+                                {{ form.accred_1_text }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.accred_1_icon.id_for_label }}">Icon</label>
+                                {{ form.accred_1_icon }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.accred_1_color.id_for_label }}">Color</label>
+                                {{ form.accred_1_color }}
+                            </div>
+                        </div>
+                        
+                        <!-- Accreditation 2 -->
+                        <h4>Second Accreditation</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.accred_2_text.id_for_label }}">Text</label>
+                                {{ form.accred_2_text }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.accred_2_icon.id_for_label }}">Icon</label>
+                                {{ form.accred_2_icon }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.accred_2_color.id_for_label }}">Color</label>
+                                {{ form.accred_2_color }}
+                            </div>
+                        </div>
+                        
+                        <!-- Accreditation 3 -->
+                        <h4>Third Accreditation</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.accred_3_text.id_for_label }}">Text</label>
+                                {{ form.accred_3_text }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.accred_3_icon.id_for_label }}">Icon</label>
+                                {{ form.accred_3_icon }}
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.accred_3_color.id_for_label }}">Color</label>
+                                {{ form.accred_3_color }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layout & Animation Section -->
+                <div class="form-section">
+                    <h3 class="form-section-header" style="background: #20c997;">
+                        <i class="fas fa-cogs"></i> Layout & Animation
+                    </h3>
+                    <div class="form-section-content">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.padding_top.id_for_label }}">Vertical Padding</label>
+                                {{ form.padding_top }}
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.content_alignment.id_for_label }}">Content Alignment</label>
+                                {{ form.content_alignment }}
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.enable_animations.id_for_label }}">
+                                    {{ form.enable_animations }} Enable Animations
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.animation_duration.id_for_label }}">Animation Duration</label>
+                                {{ form.animation_duration }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Display Settings Section -->
+                <div class="form-section">
+                    <h3 class="form-section-header" style="background: #6c757d;">
+                        <i class="fas fa-eye"></i> Display Settings
+                    </h3>
+                    <div class="form-section-content">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="{{ form.is_active.id_for_label }}">
+                                    {{ form.is_active }} Active Hero Banner
+                                </label>
+                                <div class="help-text">Only one hero banner can be active at a time</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="{{ form.order.id_for_label }}">Display Order</label>
+                                {{ form.order }}
+                                <div class="help-text">Lower numbers appear first</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="{% url 'college_website:home' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Home
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Hero Banner
+                    </button>
+                    <button type="button" class="btn btn-info" id="preview-btn">
+                        <i class="fas fa-eye"></i> Live Preview
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Live Preview Section -->
+    <div class="preview-section" id="preview-section" style="display: none;">
+        <div class="preview-header">
+            <h3><i class="fas fa-eye"></i> Live Preview</h3>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="close-preview">
+                <i class="fas fa-times"></i> Close Preview
+            </button>
+        </div>
+        
+        <div class="preview-container">
+            <div class="preview-hero-banner" id="preview-hero-banner">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <div class="hero-content tw-space-y-6" id="preview-content">
+                                <h1 class="hero-title" id="preview-title">
+                                    Preview Title
+                                </h1>
+                                <p class="hero-subtitle" id="preview-subtitle">
+                                    Preview Subtitle
+                                </p>
+                                <div class="hero-buttons tw-flex tw-flex-wrap tw-gap-4" id="preview-buttons">
+                                    <a href="#" class="btn btn-lg tw-px-8 tw-py-3 tw-rounded-full tw-font-semibold tw-text-lg tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105" id="preview-primary-btn">
+                                        Primary Button
+                                    </a>
+                                    <a href="#" class="btn btn-lg tw-px-8 tw-py-3 tw-rounded-full tw-font-semibold tw-text-lg tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105 tw-border-2" id="preview-secondary-btn">
+                                        Secondary Button
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                                                 <div class="col-lg-6">
+                             <div class="hero-stats tw-grid tw-grid-cols-2 tw-gap-4" id="preview-stats">
+                                 <div class="stat-card tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-xl tw-p-6 tw-text-center tw-text-white" id="preview-stat-1">
+                                     <i class="fas fa-calendar-alt tw-text-4xl tw-mb-3"></i>
+                                     <div class="stat-number tw-text-3xl tw-font-bold">25+</div>
+                                     <div class="stat-label tw-text-sm tw-opacity-90">Years Experience</div>
+                                 </div>
+                                 <div class="stat-card tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-xl tw-p-6 tw-text-center tw-text-white" id="preview-stat-2">
+                                     <i class="fas fa-users tw-text-4xl tw-mb-3"></i>
+                                     <div class="stat-number tw-text-3xl tw-font-bold">8000+</div>
+                                     <div class="stat-label tw-text-sm tw-opacity-90">Students</div>
+                                 </div>
+                                 <div class="stat-card tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-xl tw-p-6 tw-text-center tw-text-white" id="preview-stat-3">
+                                     <i class="fas fa-book-open tw-text-4xl tw-mb-3"></i>
+                                     <div class="stat-number tw-text-3xl tw-font-bold">18+</div>
+                                     <div class="stat-label tw-text-sm tw-opacity-90">Courses</div>
+                                 </div>
+                                 <div class="stat-card tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-xl tw-p-6 tw-text-center tw-text-white" id="preview-stat-4">
+                                     <i class="fas fa-lock tw-text-4xl tw-mb-3"></i>
+                                     <div class="stat-number tw-text-3xl tw-font-bold">95%</div>
+                                     <div class="stat-label tw-text-sm tw-opacity-90">Placement</div>
+                                 </div>
+                             </div>
+                             <div class="accreditations tw-flex tw-justify-center tw-gap-4 tw-mt-6" id="preview-accreditations">
+                                 <div class="accreditation-badge tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-lg tw-px-4 tw-py-2 tw-text-white tw-text-center tw-text-sm" id="preview-accred-1">
+                                     <i class="fas fa-star tw-mr-2"></i>
+                                     <span>UGC Recognized</span>
+                                 </div>
+                                 <div class="accreditation-badge tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-lg tw-px-4 tw-py-2 tw-text-white tw-text-center tw-text-sm" id="preview-accred-2">
+                                     <i class="fas fa-star tw-mr-2"></i>
+                                     <span>NAAC Grade A</span>
+                                 </div>
+                                 <div class="accreditation-badge tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-lg tw-px-4 tw-py-2 tw-text-white tw-text-center tw-text-sm" id="preview-accred-3">
+                                     <i class="fas fa-map-marker-alt tw-mr-2"></i>
+                                     <span>3 Star IIC Rating</span>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Existing Hero Banners List -->
+    <div class="banner-list">
+        <div class="banner-list-header">
+            <h3><i class="fas fa-list"></i> Existing Hero Banners</h3>
+        </div>
+        
+        {% if hero_banners %}
+            {% for banner in hero_banners %}
+                <div class="banner-item">
+                    <div class="banner-info">
+                        <h4>{{ banner.title }}</h4>
+                        <div class="banner-meta">
+                            Background: {{ banner.get_background_type_display }} | 
+                            Created: {{ banner.created_at|date:"M d, Y" }} | 
+                            Order: {{ banner.order }}
+                        </div>
+                    </div>
+                    
+                    <div class="banner-status {% if banner.is_active %}status-active{% else %}status-inactive{% endif %}">
+                        {% if banner.is_active %}Active{% else %}Inactive{% endif %}
+                    </div>
+                    
+                    <div class="banner-actions">
+                        <a href="{% url 'admin:college_website_herobanner_change' banner.id %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'admin:college_website_herobanner_delete' banner.id %}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="banner-item">
+                <p class="text-muted">No hero banners created yet. Create your first one above!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script src="{% static 'admin/js/hero_banner_admin.js' %}"></script>
+<script>
+    // Add hero-banner-admin class to the form container
+    document.addEventListener('DOMContentLoaded', function() {
+        const formContainer = document.querySelector('.hero-banner-admin');
+        if (formContainer) {
+            formContainer.classList.add('hero-banner-admin');
+        }
+        
+        // Live Preview functionality
+        const previewBtn = document.getElementById('preview-btn');
+        const previewSection = document.getElementById('preview-section');
+        const closePreviewBtn = document.getElementById('close-preview');
+        
+        // Show/Hide preview
+        previewBtn.addEventListener('click', function() {
+            previewSection.style.display = previewSection.style.display === 'none' ? 'block' : 'none';
+            if (previewSection.style.display === 'block') {
+                updatePreview();
+                previewSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        
+        closePreviewBtn.addEventListener('click', function() {
+            previewSection.style.display = 'none';
+        });
+        
+        // Update preview function
+        function updatePreview() {
+            const title = document.getElementById('id_title').value || 'Preview Title';
+            const subtitle = document.getElementById('id_subtitle').value || 'Preview Subtitle';
+            const primaryBtnText = document.getElementById('id_primary_button_text').value || 'Primary Button';
+            const secondaryBtnText = document.getElementById('id_secondary_button_text').value || 'Secondary Button';
+            
+            // Two-color title support
+            const titleHighlightText = document.getElementById('id_title_highlight_text').value || '';
+            const titleHighlightColor = document.getElementById('id_title_highlight_color').value || '#fbbf24';
+            
+            // Colors
+            const titleColor = document.getElementById('id_title_color').value || '#ffffff';
+            const subtitleColor = document.getElementById('id_subtitle_color').value || '#e5e7eb';
+            const primaryBtnBg = document.getElementById('id_primary_button_bg_color').value || '#dc2626';
+            const primaryBtnText = document.getElementById('id_primary_button_text_color').value || '#ffffff';
+            const secondaryBtnBg = document.getElementById('id_secondary_button_bg_color').value || 'transparent';
+            const secondaryBtnTextColor = document.getElementById('id_secondary_button_text_color').value || '#ffffff';
+            const secondaryBtnBorder = document.getElementById('id_secondary_button_border_color').value || '#ffffff';
+            
+            // Typography
+            const titleFontSize = document.getElementById('id_title_font_size').value || 'text-6xl';
+            const titleFontWeight = document.getElementById('id_title_font_weight').value || 'font-bold';
+            const subtitleFontSize = document.getElementById('id_subtitle_font_size').value || 'text-xl';
+            
+            // Background
+            const backgroundType = document.getElementById('id_background_type').value || 'gradient';
+            let backgroundStyle = 'background: linear-gradient(135deg, #1e3a8a, #7c3aed);';
+            
+            if (backgroundType === 'gradient') {
+                const startColor = document.getElementById('id_gradient_start_color').value || '#1e3a8a';
+                const endColor = document.getElementById('id_gradient_end_color').value || '#7c3aed';
+                const direction = document.getElementById('id_gradient_direction').value || '135deg';
+                backgroundStyle = `background: linear-gradient(${direction}, ${startColor}, ${endColor});`;
+            } else if (backgroundType === 'solid') {
+                const solidColor = document.getElementById('id_solid_background_color').value || '#1e3a8a';
+                backgroundStyle = `background-color: ${solidColor};`;
+            }
+            
+            // Content alignment
+            const contentAlignment = document.getElementById('id_content_alignment').value || 'text-center';
+            
+            // Statistics Cards
+            const showStatistics = document.getElementById('id_show_statistics').checked;
+            const stat1Icon = document.getElementById('id_stat_1_icon').value || 'fas fa-calendar-alt';
+            const stat1Number = document.getElementById('id_stat_1_number').value || '25+';
+            const stat1Label = document.getElementById('id_stat_1_label').value || 'Years Experience';
+            const stat1Color = document.getElementById('id_stat_1_color').value || '#2563eb';
+            
+            const stat2Icon = document.getElementById('id_stat_2_icon').value || 'fas fa-users';
+            const stat2Number = document.getElementById('id_stat_2_number').value || '8000+';
+            const stat2Label = document.getElementById('id_stat_2_label').value || 'Students';
+            const stat2Color = document.getElementById('id_stat_2_color').value || '#7c3aed';
+            
+            const stat3Icon = document.getElementById('id_stat_3_icon').value || 'fas fa-book-open';
+            const stat3Number = document.getElementById('id_stat_3_number').value || '18+';
+            const stat3Label = document.getElementById('id_stat_3_label').value || 'Courses';
+            const stat3Color = document.getElementById('id_stat_3_color').value || '#2563eb';
+            
+            const stat4Icon = document.getElementById('id_stat_4_icon').value || 'fas fa-lock';
+            const stat4Number = document.getElementById('id_stat_4_number').value || '95%';
+            const stat4Label = document.getElementById('id_stat_4_label').value || 'Placement';
+            const stat4Color = document.getElementById('id_stat_4_color').value || '#7c3aed';
+            
+            // Accreditations
+            const showAccreditations = document.getElementById('id_show_accreditations').checked;
+            const accred1Text = document.getElementById('id_accred_1_text').value || 'UGC Recognized';
+            const accred1Icon = document.getElementById('id_accred_1_icon').value || 'fas fa-star';
+            const accred1Color = document.getElementById('id_accred_1_color').value || '#2563eb';
+            
+            const accred2Text = document.getElementById('id_accred_2_text').value || 'NAAC Grade A';
+            const accred2Icon = document.getElementById('id_accred_2_icon').value || 'fas fa-star';
+            const accred2Color = document.getElementById('id_accred_2_color').value || '#7c3aed';
+            
+            const accred3Text = document.getElementById('id_accred_3_text').value || '3 Star IIC Rating';
+            const accred3Icon = document.getElementById('id_accred_3_icon').value || 'fas fa-map-marker-alt';
+            const accred3Color = document.getElementById('id_accred_3_color').value || '#2563eb';
+            
+            // Update preview elements
+            let displayTitle = title;
+            if (titleHighlightText && titleHighlightText !== '') {
+                displayTitle = title.replace(
+                    titleHighlightText, 
+                    `<span style="color: ${titleHighlightColor};">${titleHighlightText}</span>`
+                );
+            }
+            
+            document.getElementById('preview-title').innerHTML = displayTitle;
+            document.getElementById('preview-title').style.color = titleColor;
+            document.getElementById('preview-title').className = `hero-title ${titleFontSize} ${titleFontWeight} tw-leading-tight`;
+            
+            document.getElementById('preview-subtitle').textContent = subtitle;
+            document.getElementById('preview-subtitle').style.color = subtitleColor;
+            document.getElementById('preview-subtitle').className = `hero-subtitle ${subtitleFontSize} tw-opacity-90 tw-leading-relaxed`;
+            
+            document.getElementById('preview-primary-btn').textContent = primaryBtnText;
+            document.getElementById('preview-primary-btn').style.backgroundColor = primaryBtnBg;
+            document.getElementById('preview-primary-btn').style.color = primaryBtnText;
+            
+            document.getElementById('preview-secondary-btn').textContent = secondaryBtnText;
+            document.getElementById('preview-secondary-btn').style.backgroundColor = secondaryBtnBg;
+            document.getElementById('preview-secondary-btn').style.color = secondaryBtnTextColor;
+            document.getElementById('preview-secondary-btn').style.borderColor = secondaryBtnBorder;
+            
+            document.getElementById('preview-content').className = `hero-content tw-space-y-6 ${contentAlignment}`;
+            document.getElementById('preview-hero-banner').style.cssText = backgroundStyle + 'position: relative; overflow: hidden; padding: 80px 0; min-height: 400px;';
+            
+            // Update Statistics Cards
+            if (showStatistics) {
+                document.getElementById('preview-stats').style.display = 'grid';
+                
+                // Update Stat 1
+                document.getElementById('preview-stat-1').querySelector('i').className = `${stat1Icon} tw-text-4xl tw-mb-3`;
+                document.getElementById('preview-stat-1').querySelector('.stat-number').textContent = stat1Number;
+                document.getElementById('preview-stat-1').querySelector('.stat-label').textContent = stat1Label;
+                document.getElementById('preview-stat-1').style.backgroundColor = stat1Color;
+                
+                // Update Stat 2
+                document.getElementById('preview-stat-2').querySelector('i').className = `${stat2Icon} tw-text-4xl tw-mb-3`;
+                document.getElementById('preview-stat-2').querySelector('.stat-number').textContent = stat2Number;
+                document.getElementById('preview-stat-2').querySelector('.stat-label').textContent = stat2Label;
+                document.getElementById('preview-stat-2').style.backgroundColor = stat2Color;
+                
+                // Update Stat 3
+                document.getElementById('preview-stat-1').querySelector('i').className = `${stat3Icon} tw-text-4xl tw-mb-3`;
+                document.getElementById('preview-stat-3').querySelector('.stat-number').textContent = stat3Number;
+                document.getElementById('preview-stat-3').querySelector('.stat-label').textContent = stat3Label;
+                document.getElementById('preview-stat-3').style.backgroundColor = stat3Color;
+                
+                // Update Stat 4
+                document.getElementById('preview-stat-4').querySelector('i').className = `${stat4Icon} tw-text-4xl tw-mb-3`;
+                document.getElementById('preview-stat-4').querySelector('.stat-number').textContent = stat4Number;
+                document.getElementById('preview-stat-4').querySelector('.stat-label').textContent = stat4Label;
+                document.getElementById('preview-stat-4').style.backgroundColor = stat4Color;
+            } else {
+                document.getElementById('preview-stats').style.display = 'none';
+            }
+            
+            // Update Accreditations
+            if (showAccreditations) {
+                document.getElementById('preview-accreditations').style.display = 'flex';
+                
+                // Update Accreditation 1
+                document.getElementById('preview-accred-1').querySelector('i').className = `${accred1Icon} tw-mr-2`;
+                document.getElementById('preview-accred-1').querySelector('span').textContent = accred1Text;
+                document.getElementById('preview-accred-1').style.backgroundColor = accred1Color;
+                
+                // Update Accreditation 2
+                document.getElementById('preview-accred-2').querySelector('i').className = `${accred2Icon} tw-mr-2`;
+                document.getElementById('preview-accred-2').querySelector('span').textContent = accred2Text;
+                document.getElementById('preview-accred-2').style.backgroundColor = accred2Color;
+                
+                // Update Accreditation 3
+                document.getElementById('preview-accred-3').querySelector('i').className = `${accred3Icon} tw-mr-2`;
+                document.getElementById('preview-accred-3').querySelector('span').textContent = accred3Text;
+                document.getElementById('preview-accred-3').style.backgroundColor = accred3Color;
+            } else {
+                document.getElementById('preview-accreditations').style.display = 'none';
+            }
+        }
+        
+        // Auto-update preview on input changes
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (previewSection.style.display === 'block') {
+                    updatePreview();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

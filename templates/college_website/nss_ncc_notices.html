@@ -1,0 +1,299 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}NSS-NCC Notices - {{ block.super }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:student_support' %}">Student Support</a></li>
+<li class="breadcrumb-item"><a href="{% url 'college_website:nss_ncc_clubs' %}">NSS, NCC & Clubs</a></li>
+<li class="breadcrumb-item active" aria-current="page">Notices</li>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .notice-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+    
+    .notice-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        border-left-color: #0d6efd;
+    }
+    
+    .notice-priority-urgent { border-left-color: #dc3545; }
+    .notice-priority-high { border-left-color: #fd7e14; }
+    .notice-priority-normal { border-left-color: #0d6efd; }
+    .notice-priority-low { border-left-color: #6c757d; }
+    
+    .filter-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .pagination .page-link {
+        border-radius: 0.5rem;
+        margin: 0 2px;
+        border: none;
+        color: #0d6efd;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #6c757d;
+    }
+    
+    .empty-icon {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="text-center">
+                <h1 class="display-4 text-primary mb-3">
+                    <i class="fas fa-newspaper me-3"></i>NSS-NCC Notices
+                </h1>
+                <p class="lead text-muted">Stay updated with the latest announcements and news from our clubs and organizations</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="card filter-card border-0 shadow-sm">
+                <div class="card-body">
+                    <form method="get" class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="club" class="form-label text-white">
+                                <i class="fas fa-users me-2"></i>Filter by Club
+                            </label>
+                            <select name="club" id="club" class="form-select">
+                                <option value="">All Clubs</option>
+                                {% for club in clubs %}
+                                <option value="{{ club.id }}" {% if club_filter == club.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ club.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="category" class="form-label text-white">
+                                <i class="fas fa-tags me-2"></i>Filter by Category
+                            </label>
+                            <select name="category" id="category" class="form-select">
+                                <option value="">All Categories</option>
+                                {% for value, label in notice_categories %}
+                                <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-light btn-lg w-100">
+                                <i class="fas fa-filter me-2"></i>Apply Filters
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notices Section -->
+    <div class="row">
+        {% if notices %}
+            {% for notice in notices %}
+            <div class="col-lg-12 mb-4">
+                <div class="card notice-card notice-priority-{{ notice.priority }} border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="row align-items-start">
+                            <div class="col-lg-8">
+                                <div class="d-flex align-items-start mb-3">
+                                    <div class="flex-grow-1">
+                                        <h4 class="card-title text-primary mb-2">
+                                            <i class="fas fa-{{ notice.category|default:'bullhorn' }} me-2"></i>
+                                            {{ notice.title }}
+                                        </h4>
+                                        <div class="d-flex flex-wrap gap-2 mb-3">
+                                            <span class="badge bg-{{ notice.get_priority_color }} text-white">
+                                                <i class="fas fa-exclamation-circle me-1"></i>{{ notice.get_priority_display }}
+                                            </span>
+                                            <span class="badge bg-secondary text-white">
+                                                <i class="fas fa-tag me-1"></i>{{ notice.get_category_display }}
+                                            </span>
+                                            <span class="badge bg-info text-white">
+                                                <i class="fas fa-users me-1"></i>{{ notice.related_club.name }}
+                                            </span>
+                                        </div>
+                                        <div class="notice-content text-muted">
+                                            {{ notice.content|safe }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="text-end">
+                                    <div class="mb-3">
+                                        <small class="text-muted d-block">
+                                            <i class="fas fa-calendar-alt me-1"></i>
+                                            Published: {{ notice.publish_date|date:"M d, Y" }}
+                                        </small>
+                                        <small class="text-muted d-block">
+                                            <i class="fas fa-clock me-1"></i>
+                                            {{ notice.publish_date|timesince }} ago
+                                        </small>
+                                        {% if notice.expiry_date %}
+                                        <small class="text-muted d-block">
+                                            <i class="fas fa-calendar-times me-1"></i>
+                                            Expires: {{ notice.expiry_date|date:"M d, Y" }}
+                                        </small>
+                                        {% endif %}
+                                    </div>
+                                    {% if notice.attachment %}
+                                    <a href="{{ notice.attachment.url }}" class="btn btn-outline-primary btn-sm" target="_blank">
+                                        <i class="fas fa-download me-2"></i>Download Attachment
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- Empty State -->
+            <div class="col-12">
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-newspaper text-white" style="font-size: 3rem;"></i>
+                    </div>
+                    <h3 class="mb-3">No Notices Found</h3>
+                    <p class="mb-4">
+                        {% if club_filter or category_filter %}
+                            No notices match your current filters. Try adjusting your search criteria.
+                        {% else %}
+                            No notices are available at the moment. Check back later for updates.
+                        {% endif %}
+                    </p>
+                    <div class="d-flex gap-3 justify-content-center flex-wrap">
+                        {% if club_filter or category_filter %}
+                        <a href="{% url 'college_website:nss_ncc_notices' %}" class="btn btn-primary btn-lg rounded-pill px-5 py-3">
+                            <i class="fas fa-refresh me-2"></i>Clear Filters
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'college_website:nss_ncc_clubs' %}" class="btn btn-outline-primary btn-lg rounded-pill px-5 py-3">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Clubs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if notices.has_other_pages %}
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <nav aria-label="Notices pagination">
+                <ul class="pagination justify-content-center">
+                    {% if notices.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if club_filter %}&club={{ club_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ notices.previous_page_number }}{% if club_filter %}&club={{ club_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">
+                                <i class="fas fa-angle-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in notices.paginator.page_range %}
+                        {% if notices.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > notices.number|add:'-3' and num < notices.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if club_filter %}&club={{ club_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if notices.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ notices.next_page_number }}{% if club_filter %}&club={{ club_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ notices.paginator.num_pages }}{% if club_filter %}&club={{ club_filter }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}">
+                                <i class="fas fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Back to Clubs -->
+    <div class="row mt-4">
+        <div class="col-lg-12 text-center">
+            <a href="{% url 'college_website:nss_ncc_clubs' %}" class="btn btn-outline-primary btn-lg rounded-pill px-5 py-3">
+                <i class="fas fa-arrow-left me-2"></i>Back to NSS, NCC & Clubs
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit form when filters change
+    const filterForm = document.querySelector('form');
+    const clubSelect = document.getElementById('club');
+    const categorySelect = document.getElementById('category');
+    
+    if (clubSelect) {
+        clubSelect.addEventListener('change', function() {
+            filterForm.submit();
+        });
+    }
+    
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function() {
+            filterForm.submit();
+        });
+    }
+    
+    console.log('NSS-NCC Notices page initialized successfully!');
+});
+</script>
+{% endblock %}

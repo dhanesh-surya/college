@@ -1,0 +1,700 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Consultancy Services - {{ college_info.college_name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <div class="hero-section bg-gradient-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center min-vh-50">
+                <div class="col-lg-8">
+                    <div class="hero-content">
+                        <h1 class="display-4 fw-bold mb-4 animate-fade-in-up">
+                            <i class="fas fa-briefcase me-3"></i>{{ consultancy_info.title }}
+                        </h1>
+                        <p class="lead mb-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+                            {{ consultancy_info.subtitle }}
+                        </p>
+                        <div class="hero-stats row g-4 animate-fade-in-up" style="animation-delay: 0.4s;">
+                            <div class="col-md-3">
+                                <div class="stat-item text-center">
+                                    <h3 class="h2 fw-bold mb-1">{{ consultancy_info.total_projects }}+</h3>
+                                    <p class="mb-0">Projects Completed</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item text-center">
+                                    <h3 class="h2 fw-bold mb-1">{{ consultancy_info.industry_partners }}+</h3>
+                                    <p class="mb-0">Industry Partners</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item text-center">
+                                    <h3 class="h2 fw-bold mb-1">{{ consultancy_info.get_revenue_display }}</h3>
+                                    <p class="mb-0">Revenue Generated</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-item text-center">
+                                    <h3 class="h2 fw-bold mb-1">{{ consultancy_info.client_satisfaction }}%</h3>
+                                    <p class="mb-0">Client Satisfaction</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="hero-image text-center animate-fade-in-up" style="animation-delay: 0.6s;">
+                        <div class="consultancy-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Overview -->
+    <div class="container py-5">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="h3 mb-4">
+                    <i class="fas fa-cogs text-primary me-2"></i>Our Consultancy Services
+                </h2>
+                <p class="lead text-muted">
+                    We offer comprehensive consultancy services across multiple domains, combining academic rigor with practical industry solutions.
+                </p>
+            </div>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="row g-4 mb-5">
+            {% for service in services %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm hover-lift service-card">
+                    <div class="card-body p-4">
+                        <div class="service-icon mb-3">
+                            <i class="{{ service.icon_class }} text-{{ service.color_class }}"></i>
+                        </div>
+                        <h5 class="card-title text-{{ service.color_class }} mb-3">{{ service.title }}</h5>
+                        <p class="card-text text-muted mb-3">
+                            {{ service.description }}
+                        </p>
+                        <ul class="list-unstyled">
+                            {% for feature in service.get_features_list %}
+                            <li><i class="fas fa-check text-success me-2"></i>{{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>No consultancy services available at the moment.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Expertise Areas -->
+    <div class="bg-light py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="h3 mb-4">
+                        <i class="fas fa-brain text-primary me-2"></i>Our Expertise Areas
+                    </h2>
+                    <p class="lead text-muted">
+                        Our multidisciplinary team brings together expertise from various domains to provide comprehensive solutions.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                {% for expertise in expertise_areas %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="expertise-item text-center">
+                        <div class="expertise-icon mb-3">
+                            <i class="{{ expertise.icon_class }}"></i>
+                        </div>
+                        <h6 class="fw-bold mb-2">{{ expertise.title }}</h6>
+                        <p class="text-muted small">{{ expertise.description }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <i class="fas fa-info-circle me-2"></i>No expertise areas available at the moment.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Stories -->
+    <div class="container py-5">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="h3 mb-4">
+                    <i class="fas fa-trophy text-warning me-2"></i>Success Stories
+                </h2>
+                <p class="lead text-muted">
+                    Discover how we've helped organizations achieve their goals through innovative consultancy solutions.
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            {% for story in success_stories %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm success-story-card">
+                    <div class="card-body p-4">
+                        <div class="success-badge mb-3">
+                            <span class="badge bg-{{ story.get_category_color }}">{{ story.get_category_display }}</span>
+                        </div>
+                        <h5 class="card-title mb-3">{{ story.title }}</h5>
+                        <p class="card-text text-muted mb-3">
+                            {{ story.description }}
+                        </p>
+                        <div class="success-metrics">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <h6 class="text-{{ story.get_category_color }} mb-1">{{ story.metric1_value }}</h6>
+                                    <small class="text-muted">{{ story.metric1_label }}</small>
+                                </div>
+                                <div class="col-4">
+                                    <h6 class="text-{{ story.get_category_color }} mb-1">{{ story.metric2_value }}</h6>
+                                    <small class="text-muted">{{ story.metric2_label }}</small>
+                                </div>
+                                <div class="col-4">
+                                    <h6 class="text-{{ story.get_category_color }} mb-1">{{ story.metric3_value }}</h6>
+                                    <small class="text-muted">{{ story.metric3_label }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>No success stories available at the moment.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Process Section -->
+    <div class="bg-light py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="h3 mb-4">
+                        <i class="fas fa-cogs text-primary me-2"></i>Our Consultancy Process
+                    </h2>
+                    <p class="lead text-muted">
+                        We follow a structured approach to ensure successful project delivery and client satisfaction.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="process-step text-center">
+                        <div class="process-number">1</div>
+                        <div class="process-icon mb-3">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h6 class="fw-bold mb-2">Discovery & Analysis</h6>
+                        <p class="text-muted small">Understanding your requirements and analyzing current challenges</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="process-step text-center">
+                        <div class="process-number">2</div>
+                        <div class="process-icon mb-3">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h6 class="fw-bold mb-2">Solution Design</h6>
+                        <p class="text-muted small">Developing customized solutions tailored to your specific needs</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="process-step text-center">
+                        <div class="process-number">3</div>
+                        <div class="process-icon mb-3">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h6 class="fw-bold mb-2">Implementation</h6>
+                        <p class="text-muted small">Executing the solution with regular monitoring and adjustments</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="process-step text-center">
+                        <div class="process-number">4</div>
+                        <div class="process-icon mb-3">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h6 class="fw-bold mb-2">Support & Review</h6>
+                        <p class="text-muted small">Ongoing support and performance review for continuous improvement</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-lg consultancy-cta-card">
+                    <div class="card-body p-5 text-center text-white">
+                        <div class="cta-icon mb-4">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3 class="h3 mb-4 fw-bold">
+                            <i class="fas fa-rocket me-3"></i>{{ consultancy_info.cta_title }}
+                        </h3>
+                        <p class="lead mb-5 px-3">
+                            {{ consultancy_info.cta_description }}
+                        </p>
+                        <div class="d-flex justify-content-center gap-4 flex-wrap">
+                            <a href="mailto:{{ consultancy_info.contact_email }}" class="btn btn-light btn-lg px-4 py-3 fw-semibold">
+                                <i class="fas fa-envelope me-2"></i>Get Started Today
+                            </a>
+                            <a href="#" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold">
+                                <i class="fas fa-download me-2"></i>Download Brochure
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Custom CSS for enhanced styling */
+.hero-section {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 25%, #0a58ca 50%, #084298 75%, #052c65 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.1) 100%);
+    pointer-events: none;
+}
+
+.min-vh-50 {
+    min-height: 50vh;
+}
+
+.consultancy-icon {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.consultancy-icon i {
+    font-size: 3rem;
+    color: #ffffff;
+}
+
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.service-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.service-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(13, 110, 253, 0.1);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-icon i {
+    font-size: 1.5rem;
+}
+
+.expertise-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.success-story-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.success-badge .badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.process-step {
+    position: relative;
+}
+
+.process-number {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.process-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(13, 110, 253, 0.1);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #0d6efd;
+    font-size: 1.2rem;
+}
+
+/* Consultancy CTA Card */
+.consultancy-cta-card {
+    background: linear-gradient(135deg, #198754 0%, #157347 25%, #146c43 50%, #0f5132 75%, #0a3628 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.consultancy-cta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.1) 100%);
+    pointer-events: none;
+}
+
+.consultancy-cta-card .card-body {
+    background: transparent !important;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.cta-icon i {
+    font-size: 2.5rem;
+    color: #ffffff;
+}
+
+.consultancy-cta-card h3 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.consultancy-cta-card .lead {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.consultancy-cta-card .btn-light {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #198754;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.consultancy-cta-card .btn-light:hover {
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    color: #157347;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.consultancy-cta-card .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.8);
+    color: #ffffff;
+    background-color: transparent;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.consultancy-cta-card .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Animation for cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .consultancy-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .consultancy-icon i {
+        font-size: 2rem;
+    }
+    
+    .consultancy-cta-card .card-body {
+        padding: 3rem 2rem !important;
+    }
+    
+    .cta-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .cta-icon i {
+        font-size: 2rem;
+    }
+    
+    .consultancy-cta-card h3 {
+        font-size: 1.5rem;
+    }
+    
+    .consultancy-cta-card .lead {
+        font-size: 1rem;
+    }
+    
+    .consultancy-cta-card .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .consultancy-cta-card .card-body {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .consultancy-cta-card .d-flex {
+        flex-direction: column;
+        gap: 1rem !important;
+    }
+    
+    .consultancy-cta-card .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Tailwind-inspired utilities */
+.shadow-sm {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.fw-bold {
+    font-weight: 700 !important;
+}
+
+.fw-semibold {
+    font-weight: 600 !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe all cards for animation
+    document.querySelectorAll('.card, .expertise-item, .process-step').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Add ripple effect to buttons
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+});
+
+// Add ripple effect CSS
+const style = document.createElement('style');
+style.textContent = `
+    .btn {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        transform: scale(0);
+        animation: ripple-animation 0.6s linear;
+        pointer-events: none;
+    }
+    
+    @keyframes ripple-animation {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}

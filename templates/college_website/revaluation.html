@@ -1,0 +1,350 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Revaluation - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active text-white">Revaluation</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary mb-3">{{ revaluation_info.title }}</h1>
+        <p class="lead text-muted">{{ revaluation_info.subtitle }}</p>
+    </div>
+
+    <!-- Revaluation Process Steps -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-list-ol text-primary me-2"></i>Revaluation Process
+            </h3>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="step-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">1</span>
+                    </div>
+                    <h5 class="card-title">{{ revaluation_info.step1_title }}</h5>
+                    <p class="card-text text-muted">{{ revaluation_info.step1_description }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="step-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">2</span>
+                    </div>
+                    <h5 class="card-title">{{ revaluation_info.step2_title }}</h5>
+                    <p class="card-text text-muted">{{ revaluation_info.step2_description }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="step-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">3</span>
+                    </div>
+                    <h5 class="card-title">{{ revaluation_info.step3_title }}</h5>
+                    <p class="card-text text-muted">{{ revaluation_info.step3_description }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100 text-center">
+                <div class="card-body p-4">
+                    <div class="step-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">4</span>
+                    </div>
+                    <h5 class="card-title">{{ revaluation_info.step4_title }}</h5>
+                    <p class="card-text text-muted">{{ revaluation_info.step4_description }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Important Information -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Important Information
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Revaluation Fees</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Theory Papers: ₹{{ revaluation_info.theory_paper_fee }} per paper
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Practical Papers: ₹{{ revaluation_info.practical_paper_fee }} per paper
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-success me-2"></i>
+                                    Project Reports: ₹{{ revaluation_info.project_fee }} per project
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary mb-3">Important Dates</h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-calendar text-info me-2"></i>
+                                    Application Period: {{ revaluation_info.application_period }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-clock text-warning me-2"></i>
+                                    Processing Time: {{ revaluation_info.processing_time }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-bell text-danger me-2"></i>
+                                    Result Notification: {{ revaluation_info.result_notification }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revaluation Rules -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-gavel text-primary me-2"></i>Revaluation Rules & Guidelines
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Eligibility
+                    </h5>
+                    <div class="eligibility-rules">
+                        {{ revaluation_info.eligibility_rules|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-clipboard-list me-2"></i>Required Documents
+                    </h5>
+                    <div class="required-documents">
+                        {{ revaluation_info.required_documents|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download Forms -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-download text-primary me-2"></i>Download Forms
+            </h3>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="download-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-file-pdf fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Revaluation Application Form</h5>
+                    <p class="card-text text-muted">Download the official revaluation application form</p>
+                    {% if revaluation_info.application_form_file %}
+                        <a href="{{ revaluation_info.application_form_file.url }}" class="btn btn-primary" target="_blank">
+                            <i class="fas fa-download me-1"></i>Download PDF
+                        </a>
+                    {% else %}
+                        <button class="btn btn-secondary" disabled>
+                            <i class="fas fa-download me-1"></i>File Not Available
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="download-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-file-alt fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Revaluation Guidelines</h5>
+                    <p class="card-text text-muted">Detailed guidelines and instructions for revaluation</p>
+                    {% if revaluation_info.guidelines_file %}
+                        <a href="{{ revaluation_info.guidelines_file.url }}" class="btn btn-info" target="_blank">
+                            <i class="fas fa-download me-1"></i>Download PDF
+                        </a>
+                    {% else %}
+                        <button class="btn btn-secondary" disabled>
+                            <i class="fas fa-download me-1"></i>File Not Available
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <div class="download-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-calculator fa-lg"></i>
+                    </div>
+                    <h5 class="card-title">Fee Structure</h5>
+                    <p class="card-text text-muted">Complete fee structure for revaluation process</p>
+                    {% if revaluation_info.fee_structure_file %}
+                        <a href="{{ revaluation_info.fee_structure_file.url }}" class="btn btn-success" target="_blank">
+                            <i class="fas fa-download me-1"></i>Download PDF
+                        </a>
+                    {% else %}
+                        <button class="btn btn-secondary" disabled>
+                            <i class="fas fa-download me-1"></i>File Not Available
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-phone text-primary me-2"></i>Contact Information
+            </h3>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-user-tie me-2"></i>Examination Controller
+                    </h5>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="fas fa-user text-primary me-2"></i>
+                            {{ revaluation_info.controller_name }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            {{ revaluation_info.controller_phone }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope text-info me-2"></i>
+                            {{ revaluation_info.controller_email }}
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            Office Hours: {{ revaluation_info.controller_office_hours }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary">
+                        <i class="fas fa-building me-2"></i>Examination Office
+                    </h5>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                            {{ revaluation_info.office_location }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone text-success me-2"></i>
+                            {{ revaluation_info.office_phone }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-envelope text-info me-2"></i>
+                            {{ revaluation_info.office_email }}
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            Working Days: {{ revaluation_info.office_working_days }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Important Notice -->
+    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-3 p-4 border-start border-warning border-4">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-exclamation-triangle fa-2x text-warning me-3"></i>
+            <div>
+                <h5 class="text-warning mb-1">Important Notice</h5>
+                <p class="mb-0 text-muted">
+                    {{ revaluation_info.important_notice }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.step-icon {
+    transition: all 0.3s ease;
+}
+
+.card:hover .step-icon {
+    transform: scale(1.1);
+}
+
+.download-icon {
+    transition: all 0.3s ease;
+}
+
+.card:hover .download-icon {
+    transform: scale(1.1);
+}
+
+.bg-gradient-to-r {
+    background: linear-gradient(to right, #fefce8, #fed7aa);
+}
+
+/* Card hover effects */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+
+/* Contact info styling */
+.contact-info p {
+    display: flex;
+    align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .step-icon, .download-icon {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+}
+</style>
+{% endblock %}

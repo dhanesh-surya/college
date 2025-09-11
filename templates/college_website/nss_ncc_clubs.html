@@ -1,0 +1,747 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}NSS, NCC & Clubs - {{ college_info.college_name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:student_support' %}">Student Support</a></li>
+<li class="breadcrumb-item active" aria-current="page">NSS, NCC & Clubs</li>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="text-center mb-5">
+                <h1 class="display-4 text-primary mb-3">NSS, NCC & Clubs</h1>
+                <p class="lead text-muted">Build character, develop leadership skills, and serve the community</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- NSS Section -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="section-title text-primary mb-4">
+                <i class="fas fa-hands-helping me-3"></i>National Service Scheme (NSS)
+            </h2>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary mb-3">
+                        <i class="fas fa-heart me-2"></i>About NSS
+                    </h5>
+                    <p class="card-text text-muted">The National Service Scheme (NSS) is a voluntary association of young people in colleges and universities, working for campus-community linkages. It aims to arouse the social conscience of the students and provide them opportunity to work with people in villages and slums.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Community service programs</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Health awareness campaigns</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Environmental conservation activities</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Literacy and education programs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-hands-helping fa-4x text-primary mb-3"></i>
+                    <h6 class="card-title">NSS Activities</h6>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-circle text-primary me-2"></i>Blood Donation Camps</li>
+                        <li><i class="fas fa-circle text-primary me-2"></i>Tree Plantation</li>
+                        <li><i class="fas fa-circle text-primary me-2"></i>Clean India Campaign</li>
+                        <li><i class="fas fa-circle text-primary me-2"></i>Village Development</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NCC Section -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="section-title text-primary mb-4">
+                <i class="fas fa-flag me-3"></i>National Cadet Corps (NCC)
+            </h2>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-flag fa-4x text-warning mb-3"></i>
+                    <h6 class="card-title">NCC Activities</h6>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-circle text-warning me-2"></i>Drill & Parade</li>
+                        <li><i class="fas fa-circle text-warning me-2"></i>Adventure Training</li>
+                        <li><i class="fas fa-circle text-warning me-2"></i>Leadership Camps</li>
+                        <li><i class="fas fa-circle text-warning me-2"></i>Republic Day Parade</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-warning mb-3">
+                        <i class="fas fa-shield-alt me-2"></i>About NCC
+                    </h5>
+                    <p class="card-text text-muted">The National Cadet Corps (NCC) is a youth development movement. It has enormous potential for nation building by developing character, comradeship, discipline, leadership, secular outlook, and the spirit of adventure in its cadets.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Discipline and leadership training</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Adventure activities and sports</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Social service and community development</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Cultural exchange programs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clubs Section -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="section-title text-primary mb-4">
+                <i class="fas fa-users me-3"></i>Student Clubs & Societies
+            </h2>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-code fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Tech Club</h5>
+                    <p class="card-text text-muted">Explore the latest in technology and participate in coding competitions.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-circle text-info me-2"></i>Programming Contests</li>
+                        <li><i class="fas fa-circle text-info me-2"></i>Tech Workshops</li>
+                        <li><i class="fas fa-circle text-info me-2"></i>Hackathons</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-palette fa-3x text-danger mb-3"></i>
+                    <h5 class="card-title">Art & Design Club</h5>
+                    <p class="card-text text-muted">Express creativity through various forms of art and design.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-circle text-danger me-2"></i>Art Exhibitions</li>
+                        <li><i class="fas fa-circle text-danger me-2"></i>Design Competitions</li>
+                        <li><i class="fas fa-circle text-danger me-2"></i>Creative Workshops</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-music fa-3x text-purple mb-3"></i>
+                    <h5 class="card-title">Music Club</h5>
+                    <p class="card-text text-muted">Share the joy of music and participate in various musical events.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-circle text-purple me-2"></i>Band Performances</li>
+                        <li><i class="fas fa-circle text-purple me-2"></i>Music Competitions</li>
+                        <li><i class="fas fa-circle text-purple me-2"></i>Concert Organization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-microphone fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Debate Club</h5>
+                    <p class="card-text text-muted">Develop public speaking and critical thinking skills.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-circle text-success me-2"></i>Debate Competitions</li>
+                        <li><i class="fas fa-circle text-success me-2"></i>Public Speaking</li>
+                        <li><i class="fas fa-circle text-success me-2"></i>Mock Parliament</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-camera fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Photography Club</h5>
+                    <p class="card-text text-muted">Capture moments and learn the art of photography.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-circle text-warning me-2"></i>Photo Exhibitions</li>
+                        <li><i class="fas fa-circle text-warning me-2"></i>Photography Workshops</li>
+                        <li><i class="fas fa-circle text-warning me-2"></i>College Events Coverage</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="fas fa-leaf fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Eco Club</h5>
+                    <p class="card-text text-muted">Promote environmental awareness and sustainable practices.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-circle text-success me-2"></i>Green Campus Initiative</li>
+                        <li><i class="fas fa-circle text-success me-2"></i>Environmental Campaigns</li>
+                        <li><i class="fas fa-circle text-success me-2"></i>Recycling Programs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notices Section -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="section-title text-primary mb-4">
+                <i class="fas fa-bullhorn me-3"></i>Notices & Announcements
+            </h2>
+            <p class="text-muted mb-4">Stay updated with the latest news and announcements</p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-newspaper me-2"></i>Latest Notices
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="notices-scroll-wrapper" style="max-height: 400px; overflow: hidden; position: relative;">
+                        <div class="notices-auto-scroll">
+                            {% if featured_notices %}
+                                <!-- First set of notices -->
+                                {% for notice in featured_notices %}
+                                <div class="list-group-item border-0">
+                                    <div class="d-flex w-100 justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 text-primary">
+                                                <i class="fas fa-{{ notice.category|default:'bullhorn' }} me-2"></i>{{ notice.title }}
+                                            </h6>
+                                            <p class="mb-1 text-muted">{{ notice.content|striptags|truncatewords:20 }}</p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-clock me-1"></i>{{ notice.publish_date|timesince }} ago
+                                            </small>
+                                        </div>
+                                        <span class="badge bg-{{ notice.get_priority_color }} text-white ms-2">
+                                            {{ notice.get_priority_display }}
+                                        </span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                
+                                <!-- Duplicate set for seamless loop -->
+                                {% for notice in featured_notices %}
+                                <div class="list-group-item border-0">
+                                    <div class="d-flex w-100 justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 text-primary">
+                                                <i class="fas fa-{{ notice.category|default:'bullhorn' }} me-2"></i>{{ notice.title }}
+                                            </h6>
+                                            <p class="mb-1 text-muted">{{ notice.content|striptags|truncatewords:20 }}</p>
+                                            <small class="text-muted">
+                                                <i class="fas fa-clock me-1"></i>{{ notice.publish_date|timesince }} ago
+                                            </small>
+                                        </div>
+                                        <span class="badge bg-{{ notice.get_priority_color }} text-white ms-2">
+                                            {{ notice.get_priority_display }}
+                                        </span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="list-group-item border-0 text-center py-4">
+                                    <div class="text-muted">
+                                        <i class="fas fa-newspaper fa-3x mb-3 opacity-50"></i>
+                                        <p class="mb-0">No notices available at the moment.</p>
+                                        <small>Check back later for updates.</small>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light text-center">
+                    <a href="{% url 'college_website:nss_ncc_notices' %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-list me-2"></i>View All Notices
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-bell me-2"></i>Quick Updates
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-trophy text-warning me-2"></i>
+                            <small class="text-muted">Achievements</small>
+                        </div>
+                        <p class="mb-0 small">NSS team won 1st prize in state-level competition</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-calendar-check text-info me-2"></i>
+                            <small class="text-muted">Upcoming Events</small>
+                        </div>
+                        <p class="mb-0 small">NCC Annual Camp - Dec 15-20, 2024</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-user-plus text-success me-2"></i>
+                            <small class="text-muted">New Members</small>
+                        </div>
+                        <p class="mb-0 small">25 new students joined various clubs this month</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fas fa-star text-primary me-2"></i>
+                            <small class="text-muted">Spotlight</small>
+                        </div>
+                        <p class="mb-0 small">Debate Club won inter-college championship</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Gallery Section -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="section-title text-primary mb-4">
+                <i class="fas fa-images me-3"></i>Gallery
+            </h2>
+            <p class="text-muted mb-4">Moments from our NSS, NCC, and Club activities</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Dynamic Gallery -->
+        {% if gallery_images %}
+            {% for image in gallery_images %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal" onclick="openGalleryModal('{{ image.image.url }}', '{{ image.title }}', '{{ image.description }}')">
+                    <img src="{{ image.image.url }}" class="img-fluid rounded shadow-sm" alt="{{ image.title }}" style="width: 100%; height: 200px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                    <div class="gallery-caption">
+                        <h6 class="mb-1">{{ image.title }}</h6>
+                        <small class="text-muted">{{ image.related_club.name }}</small>
+                        {% if image.is_featured %}
+                        <span class="badge bg-warning text-dark ms-2">Featured</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <div class="text-muted">
+                        <i class="fas fa-images fa-4x mb-3 opacity-50"></i>
+                        <h4 class="mb-3">No Gallery Images Available</h4>
+                        <p class="mb-0">Gallery images will be displayed here once they are added by the admin.</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Join Us Section -->
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body p-5 text-center">
+                    <h3 class="card-title mb-3">Ready to Join Our Community?</h3>
+                    <p class="card-text mb-4">Be part of something bigger. Join NSS, NCC, or any of our student clubs today!</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <a href="{% url 'college_website:contact' %}" class="btn btn-light btn-lg me-3">
+                                <i class="fas fa-phone me-2"></i>Contact Us
+                            </a>
+                            <a href="{% url 'college_website:student_register' %}" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Register Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gallery Modal -->
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-labelledby="galleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-white" id="galleryModalLabel">Gallery Image</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="position-relative">
+                    <img id="modalImage" src="" class="img-fluid w-100" alt="Gallery Image" style="max-height: 80vh; object-fit: contain;">
+                    <div class="position-absolute top-0 start-0 p-3">
+                        <div class="bg-dark bg-opacity-75 text-white p-3 rounded">
+                            <h6 id="modalTitle" class="mb-1"></h6>
+                            <small id="modalCaption" class="text-light"></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Close
+                </button>
+                <button type="button" class="btn btn-primary" id="downloadBtn">
+                    <i class="fas fa-download me-2"></i>Download
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-purple { color: #6f42c1 !important; }
+    .bg-opacity-75 { background-color: rgba(0, 0, 0, 0.75) !important; }
+    .section-title { font-weight: 700; font-size: 2rem; }
+    
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    .list-unstyled li { padding: 0.25rem 0; }
+    
+    /* Notices Scrolling Styles */
+    .notices-scroll-container {
+        scrollbar-width: thin;
+        scrollbar-color: #6c757d #f8f9fa;
+    }
+    
+    .notices-scroll-container::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    .notices-scroll-container::-webkit-scrollbar-track {
+        background: #f8f9fa;
+        border-radius: 4px;
+    }
+    
+    .notices-scroll-container::-webkit-scrollbar-thumb {
+        background: #6c757d;
+        border-radius: 4px;
+        transition: background 0.3s ease;
+    }
+    
+    .notices-scroll-container::-webkit-scrollbar-thumb:hover {
+        background: #495057;
+    }
+    
+    .notices-scroll-container .list-group-item {
+        border-left: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .notices-scroll-container .list-group-item:hover {
+        border-left-color: #0d6efd;
+        background-color: #f8f9fa;
+        transform: translateX(5px);
+    }
+    
+    /* Auto-scroll animation */
+    .notices-scroll-container {
+        animation: autoScroll 20s linear infinite;
+    }
+    
+    .notices-scroll-container:hover {
+        animation-play-state: paused;
+    }
+    
+    @keyframes autoScroll {
+        0% {
+            transform: translateY(0);
+        }
+        100% {
+            transform: translateY(-100%);
+        }
+    }
+    
+    /* Alternative smooth auto-scroll */
+    .notices-auto-scroll {
+        animation: smoothAutoScroll 30s linear infinite;
+    }
+    
+    .notices-auto-scroll:hover {
+        animation-play-state: paused;
+    }
+    
+    @keyframes smoothAutoScroll {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-50%);
+        }
+        100% {
+            transform: translateY(-100%);
+        }
+    }
+    
+    /* Auto-scroll wrapper styling */
+    .notices-scroll-wrapper {
+        position: relative;
+    }
+    
+    .notices-scroll-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
+        z-index: 10;
+        pointer-events: none;
+    }
+    
+    .notices-scroll-wrapper::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 20px;
+        background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0));
+        z-index: 10;
+        pointer-events: none;
+    }
+    
+    /* Smooth transitions for auto-scroll */
+    .notices-auto-scroll {
+        transition: transform 0.1s ease-out;
+    }
+    
+    .gallery-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .gallery-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .gallery-item:hover img {
+        transform: scale(1.1);
+    }
+    
+    .gallery-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.3s ease;
+        border-radius: 0.75rem;
+    }
+    
+    .gallery-overlay i {
+        font-size: 2rem;
+        color: white;
+        transform: scale(0.8);
+        transition: all 0.3s ease;
+    }
+    
+    .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+    }
+    
+    .gallery-item:hover .gallery-overlay i {
+        transform: scale(1.2);
+    }
+    
+    .gallery-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        color: white;
+        padding: 1.5rem 1rem 1rem;
+        transform: translateY(100%);
+        transition: all 0.3s ease;
+    }
+    
+    .gallery-item:hover .gallery-caption {
+        transform: translateY(0);
+    }
+    
+    .modal-content { border: none; border-radius: 1rem; overflow: hidden; }
+    
+    @media (max-width: 768px) {
+        .gallery-item { margin-bottom: 1rem; }
+        .modal-dialog { margin: 0.5rem; }
+        #modalImage { max-height: 60vh; }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const modal = document.getElementById('galleryModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalCaption = document.getElementById('modalCaption');
+    const downloadBtn = document.getElementById('downloadBtn');
+    
+    galleryItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const img = this.querySelector('img');
+            const title = this.querySelector('.gallery-caption h6').textContent;
+            const caption = this.querySelector('.gallery-caption small').textContent;
+            
+            modalImage.src = img.src;
+            modalImage.alt = img.alt;
+            modalTitle.textContent = title;
+            modalCaption.textContent = caption;
+            
+            downloadBtn.onclick = function() {
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.download = title.replace(/\s+/g, '_') + '.jpg';
+                link.click();
+            };
+            
+            const bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+        });
+    });
+    
+    // Fix modal backdrop issue
+    modal.addEventListener('hidden.bs.modal', function() {
+        // Remove any lingering backdrop
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => backdrop.remove());
+        
+        // Remove modal-open class from body
+        document.body.classList.remove('modal-open');
+        
+        // Reset body padding if it was modified
+        document.body.style.paddingRight = '';
+        
+        // Reset overflow
+        document.body.style.overflow = '';
+    });
+    
+    // Additional cleanup on modal show
+    modal.addEventListener('show.bs.modal', function() {
+        // Clean up any existing backdrops before showing new modal
+        const existingBackdrops = document.querySelectorAll('.modal-backdrop');
+        existingBackdrops.forEach(backdrop => backdrop.remove());
+    });
+    
+    // Handle ESC key to close modal
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const bsModal = bootstrap.Modal.getInstance(modal);
+            if (bsModal) {
+                bsModal.hide();
+            }
+        }
+    });
+    
+    // Auto-scroll functionality for notices
+    const noticesContainer = document.querySelector('.notices-auto-scroll');
+    const noticesWrapper = document.querySelector('.notices-scroll-wrapper');
+    
+    if (noticesContainer && noticesWrapper) {
+        let isScrolling = true;
+        let scrollSpeed = 1; // pixels per frame
+        let currentPosition = 0;
+        let maxScroll = 0;
+        
+        // Calculate max scroll position
+        function calculateMaxScroll() {
+            const containerHeight = noticesWrapper.offsetHeight;
+            const contentHeight = noticesContainer.scrollHeight;
+            maxScroll = contentHeight / 2; // Since we duplicate content
+        }
+        
+        // Auto-scroll function
+        function autoScroll() {
+            if (isScrolling) {
+                currentPosition += scrollSpeed;
+                
+                // Reset position when we've scrolled through one complete set
+                if (currentPosition >= maxScroll) {
+                    currentPosition = 0;
+                }
+                
+                noticesContainer.style.transform = `translateY(-${currentPosition}px)`;
+            }
+            
+            requestAnimationFrame(autoScroll);
+        }
+        
+        // Pause on hover
+        noticesWrapper.addEventListener('mouseenter', function() {
+            isScrolling = false;
+        });
+        
+        noticesWrapper.addEventListener('mouseleave', function() {
+            isScrolling = true;
+        });
+        
+        // Initialize
+        calculateMaxScroll();
+        autoScroll();
+        
+        // Recalculate on window resize
+        window.addEventListener('resize', calculateMaxScroll);
+        
+        console.log('Auto-scroll initialized for notices');
+    }
+});
+</script>
+{% endblock %}

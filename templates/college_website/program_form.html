@@ -1,0 +1,632 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Bootstrap 5 Enhanced Program Form */
+.program-form-hero {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: white;
+    padding: 2rem 0;
+}
+
+.form-section {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.section-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 1.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.section-title {
+    margin: 0;
+    color: #495057;
+    font-weight: 600;
+}
+
+.section-content {
+    padding: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+}
+
+.btn-cancel {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    border: none;
+    border-radius: 25px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+}
+
+.help-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.file-upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.file-upload-area:hover {
+    border-color: #0d6efd;
+    background-color: #f8f9ff;
+}
+
+.file-upload-area.dragover {
+    border-color: #0d6efd;
+    background-color: #e3f2fd;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .program-form-hero {
+        padding: 1.5rem 0;
+    }
+    
+    .section-content {
+        padding: 1.5rem;
+    }
+    
+    .btn-submit, .btn-cancel {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Bootstrap 5 Enhanced Hero Section -->
+<div class="program-form-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="fas fa-graduation-cap me-3"></i>
+                    {{ title }}
+                </h1>
+                <p class="lead mb-0">Create and manage academic program details</p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <a href="{% url 'college_website:program_list' %}" class="btn btn-light btn-lg rounded-pill px-4">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Back to Programs
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <!-- Basic Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Basic Information
+                </h3>
+            </div>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">
+                                Program Name <span class="text-danger">*</span>
+                            </label>
+                            {{ form.name }}
+                            {% if form.name.help_text %}
+                                <div class="help-text">{{ form.name.help_text }}</div>
+                            {% endif %}
+                            {% if form.name.errors %}
+                                <div class="error-message">{{ form.name.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.short_name.id_for_label }}" class="form-label">
+                                Short Name
+                            </label>
+                            {{ form.short_name }}
+                            {% if form.short_name.help_text %}
+                                <div class="help-text">{{ form.short_name.help_text }}</div>
+                            {% endif %}
+                            {% if form.short_name.errors %}
+                                <div class="error-message">{{ form.short_name.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.discipline.id_for_label }}" class="form-label">
+                                Discipline <span class="text-danger">*</span>
+                            </label>
+                            {{ form.discipline }}
+                            {% if form.discipline.errors %}
+                                <div class="error-message">{{ form.discipline.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.degree_type.id_for_label }}" class="form-label">
+                                Degree Type <span class="text-danger">*</span>
+                            </label>
+                            {{ form.degree_type }}
+                            {% if form.degree_type.errors %}
+                                <div class="error-message">{{ form.degree_type.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.department.id_for_label }}" class="form-label">
+                                Department
+                            </label>
+                            {{ form.department }}
+                            {% if form.department.errors %}
+                                <div class="error-message">{{ form.department.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">
+                        Program Description <span class="text-danger">*</span>
+                    </label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="error-message">{{ form.description.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic Details Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-book me-2"></i>
+                    Academic Details
+                </h3>
+            </div>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.duration.id_for_label }}" class="form-label">
+                                Duration
+                            </label>
+                            {{ form.duration }}
+                            {% if form.duration.help_text %}
+                                <div class="help-text">{{ form.duration.help_text }}</div>
+                            {% endif %}
+                            {% if form.duration.errors %}
+                                <div class="error-message">{{ form.duration.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.total_seats.id_for_label }}" class="form-label">
+                                Total Seats
+                            </label>
+                            {{ form.total_seats }}
+                            {% if form.total_seats.errors %}
+                                <div class="error-message">{{ form.total_seats.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.established_year.id_for_label }}" class="form-label">
+                                Established Year
+                            </label>
+                            {{ form.established_year }}
+                            {% if form.established_year.errors %}
+                                <div class="error-message">{{ form.established_year.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.curriculum.id_for_label }}" class="form-label">
+                        Curriculum Details
+                    </label>
+                    {{ form.curriculum }}
+                    {% if form.curriculum.errors %}
+                        <div class="error-message">{{ form.curriculum.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Eligibility & Admission Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-user-check me-2"></i>
+                    Eligibility & Admission
+                </h3>
+            </div>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.minimum_percentage.id_for_label }}" class="form-label">
+                                Minimum Percentage
+                            </label>
+                            {{ form.minimum_percentage }}
+                            {% if form.minimum_percentage.help_text %}
+                                <div class="help-text">{{ form.minimum_percentage.help_text }}</div>
+                            {% endif %}
+                            {% if form.minimum_percentage.errors %}
+                                <div class="error-message">{{ form.minimum_percentage.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.entrance_exam.id_for_label }}" class="form-label">
+                                Entrance Exam
+                            </label>
+                            {{ form.entrance_exam }}
+                            {% if form.entrance_exam.errors %}
+                                <div class="error-message">{{ form.entrance_exam.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.eligibility.id_for_label }}" class="form-label">
+                        Eligibility Criteria
+                    </label>
+                    {{ form.eligibility }}
+                    {% if form.eligibility.errors %}
+                        <div class="error-message">{{ form.eligibility.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.admission_process.id_for_label }}" class="form-label">
+                        Admission Process
+                    </label>
+                    {{ form.admission_process }}
+                    {% if form.admission_process.errors %}
+                        <div class="error-message">{{ form.admission_process.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Information Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-rupee-sign me-2"></i>
+                    Financial Information
+                </h3>
+            </div>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.fees.id_for_label }}" class="form-label">
+                                Annual Fees (INR)
+                            </label>
+                            {{ form.fees }}
+                            {% if form.fees.help_text %}
+                                <div class="help-text">{{ form.fees.help_text }}</div>
+                            {% endif %}
+                            {% if form.fees.errors %}
+                                <div class="error-message">{{ form.fees.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.average_salary.id_for_label }}" class="form-label">
+                                Average Salary
+                            </label>
+                            {{ form.average_salary }}
+                            {% if form.average_salary.help_text %}
+                                <div class="help-text">{{ form.average_salary.help_text }}</div>
+                            {% endif %}
+                            {% if form.average_salary.errors %}
+                                <div class="error-message">{{ form.average_salary.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-check form-switch">
+                            {{ form.scholarship_available }}
+                            <label class="form-check-label" for="{{ form.scholarship_available.id_for_label }}">
+                                Scholarships Available
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.scholarship_details.id_for_label }}" class="form-label">
+                        Scholarship Details
+                    </label>
+                    {{ form.scholarship_details }}
+                    {% if form.scholarship_details.errors %}
+                        <div class="error-message">{{ form.scholarship_details.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Career Opportunities Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-briefcase me-2"></i>
+                    Career Opportunities
+                </h3>
+            </div>
+            <div class="section-content">
+                <div class="form-group">
+                    <label for="{{ form.career_opportunities.id_for_label }}" class="form-label">
+                        Career Opportunities
+                    </label>
+                    {{ form.career_opportunities }}
+                    {% if form.career_opportunities.errors %}
+                        <div class="error-message">{{ form.career_opportunities.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.top_recruiters.id_for_label }}" class="form-label">
+                        Top Recruiters
+                    </label>
+                    {{ form.top_recruiters }}
+                    <div class="help-text">Enter one company name per line</div>
+                    {% if form.top_recruiters.errors %}
+                        <div class="error-message">{{ form.top_recruiters.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Media & Files Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-images me-2"></i>
+                    Media & Files
+                </h3>
+            </div>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.program_image.id_for_label }}" class="form-label">
+                                Program Image
+                            </label>
+                            <div class="file-upload-area" onclick="document.getElementById('{{ form.program_image.id_for_label }}').click()">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                <p class="mb-0">Click to upload program image</p>
+                                <small class="text-muted">Recommended: 800x600px, JPG/PNG</small>
+                            </div>
+                            {{ form.program_image }}
+                            {% if form.program_image.errors %}
+                                <div class="error-message">{{ form.program_image.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.brochure.id_for_label }}" class="form-label">
+                                Program Brochure
+                            </label>
+                            <div class="file-upload-area" onclick="document.getElementById('{{ form.brochure.id_for_label }}').click()">
+                                <i class="fas fa-file-pdf fa-3x text-muted mb-3"></i>
+                                <p class="mb-0">Click to upload brochure</p>
+                                <small class="text-muted">PDF, DOC, DOCX files only</small>
+                            </div>
+                            {{ form.brochure }}
+                            {% if form.brochure.errors %}
+                                <div class="error-message">{{ form.brochure.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fas fa-cog me-2"></i>
+                    Settings
+                </h3>
+            </div>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-check form-switch">
+                            {{ form.is_featured }}
+                            <label class="form-check-label" for="{{ form.is_featured.id_for_label }}">
+                                Featured Program
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check form-switch">
+                            {{ form.is_active }}
+                            <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                Active Program
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="{{ form.accreditation.id_for_label }}" class="form-label">
+                                Accreditation
+                            </label>
+                            {{ form.accreditation }}
+                            {% if form.accreditation.errors %}
+                                <div class="error-message">{{ form.accreditation.errors.0 }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="text-center py-4">
+            <button type="submit" class="btn btn-submit btn-lg me-3">
+                <i class="fas fa-save me-2"></i>
+                Save Program
+            </button>
+            <a href="{% url 'college_website:program_list' %}" class="btn btn-cancel btn-lg">
+                <i class="fas fa-times me-2"></i>
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Bootstrap 5 Enhanced JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+    
+    // File upload preview
+    const fileInputs = document.querySelectorAll('input[type="file"]');
+    fileInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const uploadArea = this.previousElementSibling;
+                const icon = uploadArea.querySelector('i');
+                const text = uploadArea.querySelector('p');
+                
+                if (file.type.startsWith('image/')) {
+                    icon.className = 'fas fa-image fa-3x text-success mb-3';
+                    text.textContent = `Selected: ${file.name}`;
+                } else if (file.type === 'application/pdf') {
+                    icon.className = 'fas fa-file-pdf fa-3x text-danger mb-3';
+                    text.textContent = `Selected: ${file.name}`;
+                } else {
+                    icon.className = 'fas fa-file fa-3x text-primary mb-3';
+                    text.textContent = `Selected: ${file.name}`;
+                }
+            }
+        });
+    });
+    
+    // Auto-save draft functionality
+    let autoSaveTimeout;
+    const formInputs = document.querySelectorAll('input, textarea, select');
+    formInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                // Auto-save logic can be implemented here
+                console.log('Auto-saving draft...');
+            }, 5000);
+        });
+    });
+});
+</script>
+{% endblock %}

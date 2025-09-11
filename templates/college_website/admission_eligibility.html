@@ -1,0 +1,1251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admission Eligibility - {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Bootstrap 5 Enhanced Admissions Eligibility Page */
+:root {
+    --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    --success-gradient: linear-gradient(135deg, #198754 0%, #157347 100%);
+    --info-gradient: linear-gradient(135deg, #0dcaf0 0%, #0aa2c0 100%);
+    --warning-gradient: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    --danger-gradient: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --shadow-heavy: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Bootstrap 5 Enhanced Hero Section */
+.eligibility-hero {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 0 3rem;
+    color: white;
+}
+
+.eligibility-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.1"><polygon points="0,100 1000,0 1000,100"/></svg>');
+    background-size: cover;
+    background-position: bottom;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-stats {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    color: #333;
+    box-shadow: var(--shadow-medium);
+    margin-top: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Bootstrap 5 Enhanced Cards */
+.eligibility-card {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow-light);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+}
+
+.eligibility-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+}
+
+.eligibility-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.card-header-custom {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: none;
+    padding: 1.5rem;
+    position: relative;
+}
+
+.eligibility-type-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--primary-gradient);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-gradient);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Bootstrap 5 Enhanced Process Steps */
+.process-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 25px;
+    padding: 3rem 2rem;
+    margin: 3rem 0;
+    position: relative;
+}
+
+.process-step {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    height: 100%;
+    transition: all 0.4s ease;
+    box-shadow: var(--shadow-light);
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.process-step:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+    border-color: rgba(13, 110, 253, 0.2);
+}
+
+.process-number {
+    width: 70px;
+    height: 70px;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
+
+/* Bootstrap 5 Enhanced Buttons */
+.btn-modern {
+    background: var(--primary-gradient);
+    border: none;
+    color: white;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+}
+
+.btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.4);
+    color: white;
+}
+
+.btn-success-modern {
+    background: var(--success-gradient);
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+}
+
+.btn-success-modern:hover {
+    box-shadow: 0 8px 25px rgba(25, 135, 84, 0.4);
+}
+
+.btn-outline-modern {
+    background: transparent;
+    border: 2px solid rgba(13, 110, 253, 0.3);
+    color: #0d6efd;
+    box-shadow: none;
+}
+
+.btn-outline-modern:hover {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    color: white;
+}
+
+/* Bootstrap 5 Enhanced Contact Section */
+.contact-section {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border-radius: 25px;
+    padding: 3rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-top: 4rem;
+}
+
+.contact-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.contact-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+}
+
+/* Bootstrap 5 Enhanced Feature Icons */
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--primary-gradient);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 8px 25px rgba(13, 110, 253, 0.3);
+}
+
+/* Bootstrap 5 Enhanced Responsive Design */
+@media (max-width: 768px) {
+    .eligibility-hero {
+        padding: 3rem 0 2rem;
+    }
+    
+    .hero-stats {
+        margin-top: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .process-container {
+        padding: 2rem 1rem;
+    }
+    
+    .contact-section {
+        padding: 2rem;
+        margin-top: 2rem;
+    }
+}
+
+/* Bootstrap 5 Enhanced Animations */
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+
+/* Bootstrap 5 Enhanced Card Hover Effects */
+.eligibility-card {
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.eligibility-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.eligibility-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.eligibility-card:hover::before {
+    transform: scaleX(1);
+}
+
+/* Bootstrap 5 Enhanced Process Step Hover Effects */
+.process-step {
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.process-step:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
+}
+
+.process-step .rounded-circle {
+    transition: all 0.3s ease;
+}
+
+.process-step:hover .rounded-circle {
+    transform: scale(1.1) rotate(10deg);
+}
+
+/* Bootstrap 5 Enhanced Button Hover Effects */
+.btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* Bootstrap 5 Enhanced List Group Item Hover */
+.list-group-item {
+    transition: all 0.3s ease;
+}
+
+.list-group-item:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+    transform: translateX(5px);
+}
+
+/* Bootstrap 5 Enhanced Backdrop Blur */
+.backdrop-blur {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Bootstrap 5 Enhanced Focus States */
+.btn:focus,
+.card:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Bootstrap 5 Enhanced Loading States */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Bootstrap 5 Enhanced Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .fade-in-up,
+    .eligibility-card,
+    .process-step,
+    .btn,
+    .list-group-item {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Bootstrap 5 Enhanced Text Visibility */
+.eligibility-hero {
+    color: white !important;
+}
+
+.eligibility-hero h1,
+.eligibility-hero h2,
+.eligibility-hero h3,
+.eligibility-hero h4,
+.eligibility-hero h5,
+.eligibility-hero h6 {
+    color: white !important;
+}
+
+.eligibility-hero p,
+.eligibility-hero .lead {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.hero-stats {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #333 !important;
+}
+
+.hero-stats .stat-number {
+    color: #0d6efd !important;
+    -webkit-text-fill-color: #0d6efd !important;
+    background: none !important;
+}
+
+.hero-stats .fw-bold,
+.hero-stats .fw-semibold {
+    color: #333 !important;
+}
+
+.eligibility-card {
+    color: #333 !important;
+}
+
+.eligibility-card h1,
+.eligibility-card h2,
+.eligibility-card h3,
+.eligibility-card h4,
+.eligibility-card h5,
+.eligibility-card h6 {
+    color: #333 !important;
+}
+
+.eligibility-card p,
+.eligibility-card .text-muted {
+    color: #6c757d !important;
+}
+
+.process-step {
+    color: #333 !important;
+}
+
+.process-step h5 {
+    color: #333 !important;
+}
+
+.process-step p {
+    color: #6c757d !important;
+}
+
+.contact-section {
+    color: white !important;
+}
+
+.contact-section h3,
+.contact-section h4,
+.contact-section h5,
+.contact-section h6 {
+    color: white !important;
+}
+
+.contact-section p,
+.contact-section .lead {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.bg-primary.bg-gradient {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+    color: white !important;
+    position: relative;
+    z-index: 1;
+}
+
+.bg-primary.bg-gradient * {
+    color: white !important;
+}
+
+.bg-primary.bg-gradient .card {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.bg-primary.bg-gradient .card-body {
+    color: white !important;
+}
+
+.bg-primary.bg-gradient .card h6 {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bg-primary.bg-gradient .card p {
+    color: white !important;
+    font-weight: bold !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bg-primary.bg-gradient .card small {
+    color: white !important;
+    font-weight: bold !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bg-primary.bg-gradient .bg-white.bg-opacity-50 {
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+.bg-primary.bg-gradient .bg-white.bg-opacity-50 i {
+    color: #0d6efd !important;
+    font-weight: bold !important;
+}
+
+.list-group-item {
+    color: #333 !important;
+}
+
+.list-group-item span {
+    color: #333 !important;
+}
+
+.btn-primary {
+    color: white !important;
+}
+
+.btn-outline-light {
+    color: white !important;
+    border-color: white !important;
+}
+
+.btn-outline-light:hover {
+    color: #0d6efd !important;
+    background-color: white !important;
+}
+
+.badge {
+    color: white !important;
+}
+
+.badge.bg-primary {
+    color: white !important;
+}
+
+.badge.bg-success {
+    color: white !important;
+}
+
+.badge.bg-info {
+    color: white !important;
+}
+
+.badge.bg-warning {
+    color: #212529 !important;
+}
+
+.form-control,
+.form-select {
+    color: #333 !important;
+}
+
+.form-control::placeholder,
+.form-select::placeholder {
+    color: #6c757d !important;
+}
+
+.alert {
+    color: #333 !important;
+}
+
+.alert-info {
+    color: #055160 !important;
+}
+
+.alert-success {
+    color: #0f5132 !important;
+}
+
+.alert-warning {
+    color: #664d03 !important;
+}
+
+.alert-danger {
+    color: #721c24 !important;
+}
+
+.fas,
+.far,
+.fab {
+    color: inherit !important;
+}
+
+.text-success {
+    color: #198754 !important;
+}
+
+.text-primary {
+    color: #0d6efd !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}
+
+.text-info {
+    color: #0dcaf0 !important;
+}
+
+.bg-white.bg-opacity-10 {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.bg-white.bg-opacity-25 {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.card {
+    color: #333 !important;
+}
+
+.card-body {
+    color: #333 !important;
+}
+
+.card-header {
+    color: #333 !important;
+}
+
+.text-white-75 {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.display-3,
+.display-4,
+.display-5,
+.display-6 {
+    color: inherit !important;
+}
+
+.breadcrumb-item.active {
+    color: white !important;
+}
+
+* {
+    color: inherit;
+}
+</style>
+{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:admissions' %}" class="text-white">Admissions</a></li>
+<li class="breadcrumb-item active text-white">Eligibility</li>
+{% endblock %}
+
+{% block content %}
+<!-- Bootstrap 5 Enhanced Hero Section -->
+<div class="eligibility-hero py-5">
+    <div class="container hero-content">
+        <!-- Bootstrap 5 Grid with alignment utilities -->
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <div class="fade-in-up">
+                    <!-- Bootstrap 5 Typography utilities -->
+                    <h1 class="display-3 fw-bold mb-4 text-white">Admission <span class="text-warning">Eligibility</span></h1>
+                    <p class="lead fs-5 mb-4 text-white-75 lh-base">Check your eligibility for our programs and understand the requirements for admission.</p>
+                    <!-- Bootstrap 5 Flexbox utilities with gap -->
+                    <div class="d-flex gap-3 flex-wrap mb-4">
+                        <a href="#undergraduate" class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            Undergraduate
+                        </a>
+                        <a href="#postgraduate" class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg">
+                            <i class="fas fa-user-graduate me-2"></i>
+                            Postgraduate
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Bootstrap 5 Grid column with text utilities -->
+            <div class="col-lg-4 text-center">
+                <div class="fade-in-up stagger-2">
+                    <div class="bg-white bg-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center shadow-lg" style="width: 140px; height: 140px;">
+                        <i class="fas fa-check-circle text-white" style="font-size: 4rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bootstrap 5 Enhanced Hero Stats -->
+        <div class="hero-stats bg-white bg-opacity-25 border border-white border-opacity-25 rounded-4 mt-5 p-4 shadow-lg backdrop-blur fade-in-up stagger-3">
+            <!-- Bootstrap 5 Grid system with gap utilities -->
+            <div class="row g-0">
+                <div class="col-md-3 border-end border-white border-opacity-25">
+                    <!-- Bootstrap 5 Text and spacing utilities -->
+                    <div class="text-center p-4">
+                        <div class="stat-number display-4 fw-black text-primary">50%</div>
+                        <div class="fw-bold text-dark fs-5">Minimum Marks</div>
+                    </div>
+                </div>
+                <div class="col-md-3 border-end border-white border-opacity-25">
+                    <div class="text-center p-4">
+                        <div class="stat-number display-4 fw-black text-primary">17+</div>
+                        <div class="fw-bold text-dark fs-5">Age Requirement</div>
+                    </div>
+                </div>
+                <div class="col-md-3 border-end border-white border-opacity-25">
+                    <div class="text-center p-4">
+                        <div class="stat-number display-4 fw-black text-primary">10+2</div>
+                        <div class="fw-bold text-dark fs-5">Qualification</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center p-4">
+                        <div class="stat-number display-4 fw-black text-primary">100%</div>
+                        <div class="fw-bold text-dark fs-5">Transparency</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 Enhanced Main Content -->
+<div class="container py-5">
+    <!-- Bootstrap 5 Enhanced Undergraduate Eligibility Section -->
+    <section id="undergraduate" class="mb-5">
+        <!-- Bootstrap 5 Typography and spacing utilities -->
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3 text-dark">Undergraduate Programs Eligibility</h2>
+            <p class="lead text-dark fs-5 fw-semibold">Requirements for Bachelor's degree programs</p>
+        </div>
+        
+        <!-- Bootstrap 5 Grid system with gap utilities -->
+        <div class="row g-4">
+            <!-- Bootstrap 5 Card component with enhanced styling -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-1 eligibility-card">
+                    <!-- Bootstrap 5 Card header with custom styling -->
+                    <div class="card-header bg-gradient border-0 p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <div class="d-flex align-items-center">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-success bg-gradient rounded-3 d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-check-circle text-white fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-bold mb-2 text-dark">General Eligibility</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bootstrap 5 Card body with list styling -->
+                    <div class="card-body p-4">
+                        <!-- Bootstrap 5 List group component -->
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Educational Qualification</h6>
+                                    <p class="text-muted mb-0 small">10+2 or equivalent from a recognized board with minimum 50% aggregate marks (45% for SC/ST/OBC)</p>
+                                </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Age Limit</h6>
+                                    <p class="text-muted mb-0 small">Minimum 17 years and maximum 25 years as on July 1st of the admission year</p>
+                                </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Subject Requirements</h6>
+                                    <p class="text-muted mb-0 small">Physics, Chemistry, Mathematics for Engineering programs; Any stream for Arts/Commerce programs</p>
+                                </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Entrance Examination</h6>
+                                    <p class="text-muted mb-0 small">Valid JEE Main score for Engineering programs; Merit-based for other programs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bootstrap 5 Card component with enhanced styling -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-2 eligibility-card">
+                    <!-- Bootstrap 5 Card header with custom styling -->
+                    <div class="card-header bg-gradient border-0 p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <div class="d-flex align-items-center">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-primary bg-gradient rounded-3 d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-book text-white fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-bold mb-2 text-dark">Program-Specific Requirements</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bootstrap 5 Card body with list styling -->
+                    <div class="card-body p-4">
+                        <!-- Bootstrap 5 List group component -->
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item border-0 px-0 py-3 border-start border-success border-4">
+                                <h6 class="fw-semibold mb-1 text-dark">B.Tech Programs</h6>
+                                <p class="text-muted mb-0 small">Physics, Chemistry, Mathematics with minimum 60% aggregate</p>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 border-start border-primary border-4">
+                                <h6 class="fw-semibold mb-1 text-dark">BBA Programs</h6>
+                                <p class="text-muted mb-0 small">Any stream with Mathematics/Business Mathematics</p>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 border-start border-info border-4">
+                                <h6 class="fw-semibold mb-1 text-dark">B.Com Programs</h6>
+                                <p class="text-muted mb-0 small">Commerce stream preferred, but any stream accepted</p>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 border-start border-warning border-4">
+                                <h6 class="fw-semibold mb-1 text-dark">BA Programs</h6>
+                                <p class="text-muted mb-0 small">Any stream with good communication skills</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 Enhanced Postgraduate Eligibility Section -->
+    <section id="postgraduate" class="mb-5">
+        <!-- Bootstrap 5 Typography and spacing utilities -->
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3 text-dark">Postgraduate Programs Eligibility</h2>
+            <p class="lead text-dark fs-5 fw-semibold">Requirements for Master's degree programs</p>
+        </div>
+        
+        <!-- Bootstrap 5 Grid system with gap utilities -->
+        <div class="row g-4">
+            <!-- Bootstrap 5 Card component with enhanced styling -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-1 eligibility-card">
+                    <!-- Bootstrap 5 Card header with custom styling -->
+                    <div class="card-header bg-gradient border-0 p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <div class="d-flex align-items-center">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-info bg-gradient rounded-3 d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-user-graduate text-white fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-bold mb-2 text-dark">General Eligibility</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bootstrap 5 Card body with list styling -->
+                    <div class="card-body p-4">
+                        <!-- Bootstrap 5 List group component -->
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Educational Qualification</h6>
+                                    <p class="text-muted mb-0 small">Bachelor's degree in relevant field with minimum 55% aggregate marks (50% for SC/ST/OBC)</p>
+                                </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Age Limit</h6>
+                                    <p class="text-muted mb-0 small">No upper age limit for most programs</p>
+                                </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Work Experience</h6>
+                                    <p class="text-muted mb-0 small">Preferred for MBA programs (minimum 2 years)</p>
+                                </div>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-start">
+                                <i class="fas fa-check-circle text-success me-3 fa-lg mt-1"></i>
+                                <div>
+                                    <h6 class="fw-semibold mb-1 text-dark">Entrance Examination</h6>
+                                    <p class="text-muted mb-0 small">GATE for M.Tech; CAT/MAT for MBA; Merit-based for other programs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bootstrap 5 Card component with enhanced styling -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-2 eligibility-card">
+                    <!-- Bootstrap 5 Card header with custom styling -->
+                    <div class="card-header bg-gradient border-0 p-4" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                        <div class="d-flex align-items-center">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-warning bg-gradient rounded-3 d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-certificate text-white fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-bold mb-2 text-dark">Program-Specific Requirements</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bootstrap 5 Card body with list styling -->
+                    <div class="card-body p-4">
+                        <!-- Bootstrap 5 List group component -->
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item border-0 px-0 py-3 border-start border-success border-4">
+                                <h6 class="fw-semibold mb-1 text-dark">M.Tech Programs</h6>
+                                <p class="text-muted mb-0 small">B.Tech/B.E. in relevant engineering discipline</p>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 border-start border-primary border-4">
+                                <h6 class="fw-semibold mb-1 text-dark">MBA Programs</h6>
+                                <p class="text-muted mb-0 small">Any Bachelor's degree with work experience preferred</p>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 border-start border-info border-4">
+                                <h6 class="fw-semibold mb-1 text-dark">M.Com Programs</h6>
+                                <p class="text-muted mb-0 small">B.Com or equivalent degree in commerce</p>
+                            </div>
+                            <div class="list-group-item border-0 px-0 py-3 border-start border-warning border-4">
+                                <h6 class="fw-semibold mb-1 text-dark">MA Programs</h6>
+                                <p class="text-muted mb-0 small">BA in relevant subject or equivalent</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 Enhanced Special Categories Section -->
+    <section class="mb-5">
+        <!-- Bootstrap 5 Typography and spacing utilities -->
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3 text-dark">Special Categories & Reservations</h2>
+            <p class="lead text-dark fs-5 fw-semibold">Additional information for reserved categories and special cases</p>
+        </div>
+        
+        <!-- Bootstrap 5 Grid system with gap utilities -->
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-1 eligibility-card border-start border-danger border-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-danger bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-users text-white"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1 text-dark">SC/ST/OBC</h5>
+                                <span class="badge bg-danger bg-gradient">5% Relaxation</span>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-0">5% relaxation in minimum percentage requirement for SC/ST/OBC candidates</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-2 eligibility-card border-start border-primary border-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-wheelchair text-white"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1 text-dark">PwD Candidates</h5>
+                                <span class="badge bg-primary bg-gradient">5% Relaxation</span>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-0">5% relaxation in minimum percentage requirement for Persons with Disabilities</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <!-- Bootstrap 5 Card component with enhanced styling -->
+                <div class="card border-0 shadow-lg h-100 fade-in-up stagger-3 eligibility-card border-start border-success border-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <!-- Bootstrap 5 Icon container -->
+                            <div class="bg-success bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-female text-white"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1 text-dark">Women Candidates</h5>
+                                <span class="badge bg-success bg-gradient">Special Consideration</span>
+                            </div>
+                        </div>
+                        <p class="text-muted mb-0">Special consideration and support for women candidates in all programs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 Enhanced Important Notes Section -->
+    <section class="mb-5">
+        <!-- Bootstrap 5 Typography and spacing utilities -->
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3 text-dark">Important Notes</h2>
+            <p class="lead text-dark fs-5 fw-semibold">Please read these important points before applying</p>
+        </div>
+        
+        <!-- Bootstrap 5 Grid system with gap utilities -->
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-8">
+                <!-- Bootstrap 5 Alert components with enhanced styling -->
+                <div class="alert alert-warning border-0 shadow-sm mb-4 fade-in-up stagger-1" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle text-warning fs-4 me-3"></i>
+                        <div>
+                            <h5 class="alert-heading fw-bold text-warning mb-2">Document Verification</h5>
+                            <p class="mb-0">All submitted documents will be verified. False information may lead to cancellation of admission.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info border-0 shadow-sm mb-4 fade-in-up stagger-2" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-info-circle text-info fs-4 me-3"></i>
+                        <div>
+                            <h5 class="alert-heading fw-bold text-info mb-2">Provisional Admission</h5>
+                            <p class="mb-0">Admission is provisional until all original documents are submitted and verified.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-success border-0 shadow-sm fade-in-up stagger-3" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-check-circle text-success fs-4 me-3"></i>
+                        <div>
+                            <h5 class="alert-heading fw-bold text-success mb-2">Merit List</h5>
+                            <p class="mb-0">Final selection will be based on merit, entrance exam scores, and availability of seats.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 Enhanced Contact Section -->
+    <section class="bg-primary bg-gradient rounded-4 p-5 my-5 shadow-lg text-white">
+        <!-- Bootstrap 5 Grid with alignment utilities -->
+        <div class="row align-items-center">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+                <!-- Bootstrap 5 Typography utilities with high contrast -->
+                <h3 class="display-6 fw-bold mb-4 text-white">Need Help with Eligibility?</h3>
+                <p class="lead mb-4 text-white lh-base fw-semibold">Our dedicated admission counselors are here to help you understand the requirements and guide you through the admission process.</p>
+                
+                <!-- Bootstrap 5 Grid for contact cards -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <!-- Bootstrap 5 Card with solid background for maximum visibility -->
+                        <div class="card border-0 bg-white bg-opacity-25 h-100 shadow">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center">
+                                    <!-- Bootstrap 5 Icon container with solid background -->
+                                    <div class="bg-white bg-opacity-50 rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 60px; height: 60px;">
+                                        <i class="fas fa-phone text-primary fa-lg fw-bold"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1 text-white">Call Us</h6>
+                                        <p class="mb-0 text-white fw-bold fs-6">+91-9425540666</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Bootstrap 5 Card with solid background for maximum visibility -->
+                        <div class="card border-0 bg-white bg-opacity-25 h-100 shadow">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center">
+                                    <!-- Bootstrap 5 Icon container with solid background -->
+                                    <div class="bg-white bg-opacity-50 rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 60px; height: 60px;">
+                                        <i class="fas fa-envelope text-primary fa-lg fw-bold"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1 text-white">Email Us</h6>
+                                        <p class="mb-0 text-white fw-bold fs-6">chaitanyapamgarh@gmail.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bootstrap 5 Grid column with text utilities -->
+            <div class="col-lg-4 text-center">
+                <!-- Bootstrap 5 Button component -->
+                <a href="{% url 'college_website:contact' %}" class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg mb-3">
+                    <i class="fas fa-comments me-2"></i>
+                    Contact Admissions
+                </a>
+                <div class="mt-3">
+                    <small class="text-white fw-bold fs-6">Available Monday - Saturday, 9 AM - 5 PM</small>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Bootstrap 5 Enhanced JavaScript for animations -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Bootstrap 5 Enhanced smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Bootstrap 5 Enhanced Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Bootstrap 5 Enhanced fade-in-up animations
+    document.querySelectorAll('.fade-in-up').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.8s ease-out';
+        observer.observe(el);
+    });
+    
+    // Bootstrap 5 Enhanced card hover effects
+    document.querySelectorAll('.eligibility-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+    
+    // Bootstrap 5 Enhanced button ripple effect
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+});
+</script>
+
+<!-- Bootstrap 5 Enhanced CSS for ripple effect -->
+<style>
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+</style>
+{% endblock %}

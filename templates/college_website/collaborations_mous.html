@@ -1,0 +1,1159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Collaborations & MOUs - {{ college_info.name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="text-center">
+                <h1 class="display-4 fw-bold text-primary mb-3">
+                    <i class="fas fa-handshake me-3"></i>Collaborations & MOUs
+                </h1>
+                <p class="lead text-muted mb-4">
+                    Building strategic partnerships and fostering international collaborations to advance research, education, and innovation across global boundaries.
+                </p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <span class="badge bg-primary fs-6 px-3 py-2">
+                        <i class="fas fa-university me-2"></i>25+ Universities
+                    </span>
+                    <span class="badge bg-success fs-6 px-3 py-2">
+                        <i class="fas fa-industry me-2"></i>15+ Industries
+                    </span>
+                    <span class="badge bg-info fs-6 px-3 py-2">
+                        <i class="fas fa-globe me-2"></i>12+ Countries
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-university text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-primary mb-1">25+</h3>
+                            <p class="text-muted mb-0">Partner Universities</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-success bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-industry text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-success mb-1">15+</h3>
+                            <p class="text-muted mb-0">Industry Partners</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-info bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-globe text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-info mb-1">12+</h3>
+                            <p class="text-muted mb-0">Countries</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm hover-lift">
+                        <div class="card-body text-center p-4">
+                            <div class="bg-warning bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-file-contract text-white fs-4"></i>
+                            </div>
+                            <h3 class="fw-bold text-warning mb-1">40+</h3>
+                            <p class="text-muted mb-0">Active MOUs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="h4 mb-4">
+                        <i class="fas fa-search text-primary me-2"></i>Search & Filter
+                    </h3>
+                    <div class="row g-3">
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-search text-primary me-2"></i>Search
+                            </label>
+                            <input type="text" class="form-control" placeholder="Search by name, country, or type..." id="searchInput">
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-filter text-primary me-2"></i>Type
+                            </label>
+                            <select class="form-select" id="typeFilter">
+                                <option value="">All Types</option>
+                                <option value="university">Universities</option>
+                                <option value="industry">Industry Partners</option>
+                                <option value="research">Research Institutes</option>
+                                <option value="government">Government Agencies</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-globe text-primary me-2"></i>Country
+                            </label>
+                            <select class="form-select" id="countryFilter">
+                                <option value="">All Countries</option>
+                                <option value="india">India</option>
+                                <option value="usa">United States</option>
+                                <option value="uk">United Kingdom</option>
+                                <option value="germany">Germany</option>
+                                <option value="japan">Japan</option>
+                                <option value="australia">Australia</option>
+                                <option value="canada">Canada</option>
+                                <option value="singapore">Singapore</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-sort text-primary me-2"></i>Sort By
+                            </label>
+                            <select class="form-select" id="sortFilter">
+                                <option value="name-asc">Name (A-Z)</option>
+                                <option value="name-desc">Name (Z-A)</option>
+                                <option value="country">Country</option>
+                                <option value="type">Type</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- International Universities Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-university text-primary me-2"></i>International Universities
+            </h3>
+        </div>
+        
+        <!-- University Cards -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="university" data-country="usa">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary">University</span>
+                        <span class="badge bg-info">USA</span>
+                    </div>
+                    <h5 class="card-title text-primary mb-3">
+                        <a href="#" class="text-decoration-none">Massachusetts Institute of Technology (MIT)</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Strategic partnership focusing on artificial intelligence, robotics, and sustainable technology research collaboration.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2020
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="university" data-country="uk">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary">University</span>
+                        <span class="badge bg-info">UK</span>
+                    </div>
+                    <h5 class="card-title text-primary mb-3">
+                        <a href="#" class="text-decoration-none">University of Cambridge</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Joint research programs in biotechnology, environmental science, and renewable energy technologies.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2019
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="university" data-country="germany">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary">University</span>
+                        <span class="badge bg-info">Germany</span>
+                    </div>
+                    <h5 class="card-title text-primary mb-3">
+                        <a href="#" class="text-decoration-none">Technical University of Munich</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Collaborative research in automotive engineering, artificial intelligence, and sustainable manufacturing.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2021
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="university" data-country="japan">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary">University</span>
+                        <span class="badge bg-info">Japan</span>
+                    </div>
+                    <h5 class="card-title text-primary mb-3">
+                        <a href="#" class="text-decoration-none">University of Tokyo</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Exchange programs and joint research in robotics, nanotechnology, and advanced materials science.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2018
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="university" data-country="australia">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary">University</span>
+                        <span class="badge bg-info">Australia</span>
+                    </div>
+                    <h5 class="card-title text-primary mb-3">
+                        <a href="#" class="text-decoration-none">University of Melbourne</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Student exchange programs and collaborative research in environmental science and public health.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2022
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="university" data-country="singapore">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary">University</span>
+                        <span class="badge bg-info">Singapore</span>
+                    </div>
+                    <h5 class="card-title text-primary mb-3">
+                        <a href="#" class="text-decoration-none">National University of Singapore</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Joint research initiatives in smart cities, digital transformation, and sustainable urban development.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2020
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Industry Partners Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-industry text-success me-2"></i>Industry Partners
+            </h3>
+        </div>
+        
+        <!-- Industry Cards -->
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="industry" data-country="usa">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-success">Industry</span>
+                        <span class="badge bg-info">USA</span>
+                    </div>
+                    <h5 class="card-title text-success mb-3">
+                        <a href="#" class="text-decoration-none">Microsoft Corporation</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Technology partnership focusing on cloud computing, artificial intelligence, and digital transformation initiatives.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2019
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="industry" data-country="india">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-success">Industry</span>
+                        <span class="badge bg-info">India</span>
+                    </div>
+                    <h5 class="card-title text-success mb-3">
+                        <a href="#" class="text-decoration-none">Tata Consultancy Services</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Research collaboration in software engineering, data analytics, and emerging technologies for industry solutions.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2018
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="industry" data-country="germany">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-success">Industry</span>
+                        <span class="badge bg-info">Germany</span>
+                    </div>
+                    <h5 class="card-title text-success mb-3">
+                        <a href="#" class="text-decoration-none">Siemens AG</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Industrial automation and smart manufacturing research partnership with focus on Industry 4.0 technologies.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2021
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research Institutes Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="h4 mb-4">
+                <i class="fas fa-flask text-info me-2"></i>Research Institutes
+            </h3>
+        </div>
+        
+        <!-- Research Institute Cards -->
+        <div class="col-lg-6 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="research" data-country="india">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-info">Research Institute</span>
+                        <span class="badge bg-info">India</span>
+                    </div>
+                    <h5 class="card-title text-info mb-3">
+                        <a href="#" class="text-decoration-none">Indian Institute of Science (IISc)</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Joint research programs in advanced materials, biotechnology, and renewable energy technologies with focus on sustainable development.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2017
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm hover-lift collaboration-card" data-type="research" data-country="usa">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-info">Research Institute</span>
+                        <span class="badge bg-info">USA</span>
+                    </div>
+                    <h5 class="card-title text-info mb-3">
+                        <a href="#" class="text-decoration-none">Stanford Research Institute</a>
+                    </h5>
+                    <p class="card-text text-muted mb-3">
+                        Collaborative research in artificial intelligence, machine learning, and human-computer interaction for next-generation technologies.
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="collaboration-info">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>Since 2020
+                            </small>
+                        </div>
+                        <div class="collaboration-status">
+                            <span class="badge bg-success">
+                                <i class="fas fa-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-external-link-alt me-1"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOU Benefits Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-gradient" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                <div class="card-body p-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h3 class="h4 text-primary mb-3">
+                                <i class="fas fa-star me-2"></i>Benefits of Our Collaborations
+                            </h3>
+                            <p class="text-muted mb-4">
+                                Our strategic partnerships and MOUs provide numerous benefits to students, faculty, and the institution, fostering global learning and research excellence.
+                            </p>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-graduation-cap text-primary me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">Student Exchange Programs</h6>
+                                            <small class="text-muted">International learning opportunities</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-microscope text-success me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">Joint Research Projects</h6>
+                                            <small class="text-muted">Collaborative research initiatives</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-users text-info me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">Faculty Exchange</h6>
+                                            <small class="text-muted">Knowledge sharing programs</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-certificate text-warning me-3 fs-4"></i>
+                                        <div>
+                                            <h6 class="mb-1">Dual Degree Programs</h6>
+                                            <small class="text-muted">International certification</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 120px;">
+                                <i class="fas fa-handshake text-white" style="font-size: 3rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg partnership-cta-card">
+                <div class="card-body p-5 text-center text-white">
+                    <div class="partnership-icon mb-4">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="h3 mb-4 fw-bold">
+                        <i class="fas fa-paper-plane me-3"></i>Interested in Partnership?
+                    </h3>
+                    <p class="lead mb-5 px-3">
+                        Join our global network of partners and contribute to advancing education, research, and innovation worldwide. We welcome new collaborations and partnerships.
+                    </p>
+                    <div class="d-flex justify-content-center gap-4 flex-wrap">
+                        <a href="mailto:partnerships@college.edu" class="btn btn-light btn-lg px-4 py-3 fw-semibold">
+                            <i class="fas fa-envelope me-2"></i>Contact Partnership Team
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-lg px-4 py-3 fw-semibold">
+                            <i class="fas fa-download me-2"></i>Download MOU Template
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Custom CSS for enhanced styling */
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.collaboration-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.collaboration-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Enhanced card-body styling */
+.card-body {
+    padding: 1.5rem !important;
+    background: #ffffff;
+    border-radius: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.card-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #007bff, #28a745, #17a2b8, #ffc107);
+    border-radius: 12px 12px 0 0;
+}
+
+/* Card content spacing */
+.card-body .card-title {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.card-body .card-text {
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+    color: #6c757d;
+}
+
+.card-body .badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.card-body .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.card-body .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Card title links */
+.card-title a {
+    transition: color 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-title a:hover {
+    color: #0056b3 !important;
+    text-decoration: none;
+}
+
+/* Collaboration info styling */
+.collaboration-info {
+    font-size: 0.875rem;
+}
+
+.collaboration-status .badge {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.6rem;
+}
+
+/* Animation for cards */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+/* Gradient backgrounds */
+.bg-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Statistics cards styling */
+.row.g-4 .card-body {
+    padding: 2rem 1.5rem !important;
+    text-align: center;
+}
+
+.row.g-4 .card-body .bg-gradient {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.row.g-4 .card-body h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.row.g-4 .card-body p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .card-body {
+        padding: 1.25rem !important;
+    }
+    
+    .card-body .card-title {
+        font-size: 1rem;
+    }
+    
+    .card-body .card-text {
+        font-size: 0.9rem;
+    }
+    
+    .d-flex.gap-3 {
+        flex-direction: column;
+        gap: 1rem !important;
+    }
+    
+    .row.g-4 .card-body {
+        padding: 1.5rem 1rem !important;
+    }
+    
+    .row.g-4 .card-body h3 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    .card-body .card-title {
+        font-size: 0.95rem;
+    }
+    
+    .card-body .card-text {
+        font-size: 0.85rem;
+    }
+    
+    .row.g-4 .card-body {
+        padding: 1.25rem 0.75rem !important;
+    }
+}
+
+/* Tailwind-inspired utilities */
+.shadow-sm {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.fw-bold {
+    font-weight: 700 !important;
+}
+
+.fw-semibold {
+    font-weight: 600 !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Form styling improvements */
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Search and filter section */
+.card.border-0.shadow-sm .card-body {
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+/* Benefits section styling */
+.card.bg-gradient .card-body {
+    background: transparent;
+}
+
+.card.bg-gradient .card-body::before {
+    display: none;
+}
+
+/* Partnership Call to Action Section */
+.partnership-cta-card {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 25%, #0a58ca 50%, #084298 75%, #052c65 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.partnership-cta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.1) 100%);
+    pointer-events: none;
+}
+
+.partnership-cta-card .card-body {
+    background: transparent !important;
+    position: relative;
+    z-index: 2;
+}
+
+.partnership-cta-card .card-body::before {
+    display: none;
+}
+
+.partnership-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.partnership-icon i {
+    font-size: 2.5rem;
+    color: #ffffff;
+}
+
+.partnership-cta-card h3 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.partnership-cta-card .lead {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.partnership-cta-card .btn-light {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #0d6efd;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.partnership-cta-card .btn-light:hover {
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    color: #0b5ed7;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.partnership-cta-card .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.8);
+    color: #ffffff;
+    background-color: transparent;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.partnership-cta-card .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #ffffff;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive adjustments for partnership CTA */
+@media (max-width: 768px) {
+    .partnership-cta-card .card-body {
+        padding: 3rem 2rem !important;
+    }
+    
+    .partnership-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .partnership-icon i {
+        font-size: 2rem;
+    }
+    
+    .partnership-cta-card h3 {
+        font-size: 1.5rem;
+    }
+    
+    .partnership-cta-card .lead {
+        font-size: 1rem;
+    }
+    
+    .partnership-cta-card .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .partnership-cta-card .card-body {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .partnership-cta-card .d-flex {
+        flex-direction: column;
+        gap: 1rem !important;
+    }
+    
+    .partnership-cta-card .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const typeFilter = document.getElementById('typeFilter');
+    const countryFilter = document.getElementById('countryFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    
+    const collaborationCards = document.querySelectorAll('.collaboration-card');
+    
+    function filterCards() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const type = typeFilter.value;
+        const country = countryFilter.value;
+        
+        collaborationCards.forEach(card => {
+            const title = card.querySelector('.card-title a').textContent.toLowerCase();
+            const description = card.querySelector('.card-text').textContent.toLowerCase();
+            const cardType = card.dataset.type;
+            const cardCountry = card.dataset.country;
+            
+            const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+            const matchesType = !type || cardType === type;
+            const matchesCountry = !country || cardCountry === country;
+            
+            if (matchesSearch && matchesType && matchesCountry) {
+                card.style.display = 'block';
+                card.style.animation = 'fadeInUp 0.6s ease-out';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    
+    // Event listeners
+    searchInput.addEventListener('input', filterCards);
+    typeFilter.addEventListener('change', filterCards);
+    countryFilter.addEventListener('change', filterCards);
+    
+    // Sort functionality
+    sortFilter.addEventListener('change', function() {
+        const sortValue = this.value;
+        const containers = document.querySelectorAll('.row.mb-5');
+        
+        containers.forEach(container => {
+            const cards = Array.from(container.querySelectorAll('.collaboration-card'));
+            
+            cards.sort((a, b) => {
+                const titleA = a.querySelector('.card-title a').textContent;
+                const titleB = b.querySelector('.card-title a').textContent;
+                const countryA = a.dataset.country;
+                const countryB = b.dataset.country;
+                const typeA = a.dataset.type;
+                const typeB = b.dataset.type;
+                
+                switch(sortValue) {
+                    case 'name-asc':
+                        return titleA.localeCompare(titleB);
+                    case 'name-desc':
+                        return titleB.localeCompare(titleA);
+                    case 'country':
+                        return countryA.localeCompare(countryB);
+                    case 'type':
+                        return typeA.localeCompare(typeB);
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Re-append sorted cards
+            cards.forEach(card => {
+                container.appendChild(card);
+            });
+        });
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all cards
+    collaborationCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
+});
+</script>
+{% endblock %}

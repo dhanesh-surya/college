@@ -3,759 +3,103 @@
 
 {% block title %}{{ college_info.name|default:"Chaitanya Science and Arts College" }} - Welcome{% endblock %}
 
-{% block banner %}
-<!-- Compact Hero Section with Text Slider -->
-<section class="position-relative overflow-hidden tw-bg-gradient-to-br tw-from-indigo-900 tw-via-blue-800 tw-to-purple-700">
-    <!-- Animated Background Elements -->
-    <div class="tw-absolute tw-inset-0 tw-overflow-hidden tw-opacity-30">
-        <div class="tw-absolute tw-top-0 tw-right-0 tw-w-32 tw-h-32 tw-bg-white tw-rounded-full tw-opacity-10 tw-animate-pulse"></div>
-        <div class="tw-absolute tw-bottom-0 tw-left-0 tw-w-24 tw-h-24 tw-bg-yellow-300 tw-rounded-full tw-opacity-20 tw-animate-bounce"></div>
-        <div class="tw-absolute tw-top-1/2 tw-right-1/4 tw-w-2 tw-h-2 tw-bg-white tw-rounded-full tw-opacity-40 tw-animate-ping"></div>
-    </div>
-    
-    <!-- Hero Text Carousel -->
-    <div class="container position-relative tw-z-10 py-4 py-md-5">
-        <div class="row align-items-center g-4">
-            <!-- Text Content Slider -->
-            <div class="col-lg-7">
-                <div id="heroTextCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
-                    <div class="carousel-inner">
-                        <!-- Slide 1: Welcome -->
-                        <div class="carousel-item active">
-                            <div class="hero-content text-white">
-                                <div class="mb-3">
-                                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill">
-                                        <i class="fas fa-star me-2"></i>NAAC Grade A+ Accredited
-                                    </span>
-                                </div>
-                                <h1 class="display-4 fw-bold mb-3">
-                                    Welcome to <span class="text-warning">{{ college_info.name|default:"Chaitanya College" }}</span>
-                                </h1>
-                                <p class="lead mb-4 tw-text-blue-100">
-                                    Empowering rural youth through quality education since 2001. Where knowledge meets innovation.
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 2: Excellence -->
-                        <div class="carousel-item">
-                            <div class="hero-content text-white">
-                                <div class="mb-3">
-                                    <span class="badge bg-success px-3 py-2 rounded-pill">
-                                        <i class="fas fa-trophy me-2"></i>Excellence in Education
-                                    </span>
-                                </div>
-                                <h1 class="display-4 fw-bold mb-3">
-                                    <span class="text-warning">25+ Years</span> of Educational Excellence
-                                </h1>
-                                <p class="lead mb-4 tw-text-blue-100">
-                                    Providing comprehensive education with modern facilities and experienced faculty.
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 3: Programs -->
-                        <div class="carousel-item">
-                            <div class="hero-content text-white">
-                                <div class="mb-3">
-                                    <span class="badge bg-info px-3 py-2 rounded-pill">
-                                        <i class="fas fa-graduation-cap me-2"></i>Diverse Programs
-                                    </span>
-                                </div>
-                                <h1 class="display-4 fw-bold mb-3">
-                                    <span class="text-warning">18+ Courses</span> Across Multiple Disciplines
-                                </h1>
-                                <p class="lead mb-4 tw-text-blue-100">
-                                    Science, Arts, Commerce, and Management programs designed for your success.
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <!-- Slide 4: Placements -->
-                        <div class="carousel-item">
-                            <div class="hero-content text-white">
-                                <div class="mb-3">
-                                    <span class="badge bg-primary px-3 py-2 rounded-pill">
-                                        <i class="fas fa-briefcase me-2"></i>Career Success
-                                    </span>
-                                </div>
-                                <h1 class="display-4 fw-bold mb-3">
-                                    <span class="text-warning">95% Placement</span> Success Rate
-                                </h1>
-                                <p class="lead mb-4 tw-text-blue-100">
-                                    Strong industry connections ensuring excellent career opportunities for our graduates.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="d-flex flex-wrap gap-3 mt-4">
-                    <a href="{% url 'college_website:programs_list' %}" 
-                       class="btn btn-warning btn-lg px-4 py-2 fw-bold tw-transition-all tw-duration-300 hover:tw-scale-105">
-                        <i class="fas fa-graduation-cap me-2"></i>Explore Programs
-                    </a>
-                    <a href="{% url 'college_website:about' %}" 
-                       class="btn btn-outline-light btn-lg px-4 py-2 fw-bold tw-transition-all tw-duration-300 hover:tw-scale-105">
-                        <i class="fas fa-info-circle me-2"></i>Learn More
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Quick Stats & Features -->
-            <div class="col-lg-5">
-                <div class="row g-3">
-                    <!-- Quick Stats -->
-                    <div class="col-6">
-                        <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3 text-center text-white h-100">
-                            <i class="fas fa-calendar-alt fa-2x text-warning mb-2"></i>
-                            <div class="h3 fw-bold mb-1">25+</div>
-                            <small class="opacity-90">Years Experience</small>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3 text-center text-white h-100">
-                            <i class="fas fa-users fa-2x text-success mb-2"></i>
-                            <div class="h3 fw-bold mb-1">8000+</div>
-                            <small class="opacity-90">Students</small>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3 text-center text-white h-100">
-                            <i class="fas fa-book-open fa-2x text-info mb-2"></i>
-                            <div class="h3 fw-bold mb-1">18+</div>
-                            <small class="opacity-90">Courses</small>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-3 p-3 text-center text-white h-100">
-                            <i class="fas fa-briefcase fa-2x text-primary mb-2"></i>
-                            <div class="h3 fw-bold mb-1">95%</div>
-                            <small class="opacity-90">Placement</small>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Trust Indicators -->
-                <div class="row g-2 mt-3">
-                    <div class="col-md-4 col-6">
-                        <div class="d-flex align-items-center justify-content-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-2 p-2 text-white">
-                            <i class="fas fa-shield-alt text-success me-2"></i>
-                            <small class="fw-medium">UGC Recognized</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-6">
-                        <div class="d-flex align-items-center justify-content-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-2 p-2 text-white">
-                            <i class="fas fa-star text-warning me-2"></i>
-                            <small class="fw-medium">NAAC Grade A</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-12">
-                        <div class="d-flex align-items-center justify-content-center tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm rounded-2 p-2 text-white">
-                            <i class="fas fa-award text-info me-2"></i>
-                            <small class="fw-medium">3 Star IIC Rating</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-{% endblock %}
-
-{% block content %}
-<!-- Image Slider/Carousel Section -->
-{% include 'partials/slider.html' %}
-
-<!-- Enhanced Stats Section -->
-<section class="py-5 tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-lg-3 col-md-6">
-                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
-                    <div class="card-body text-center p-4">
-                        <div class="tw-bg-gradient-to-r tw-from-red-500 tw-to-pink-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
-                            <i class="fas fa-calendar-alt text-white fa-2x"></i>
-                        </div>
-                        <div class="stat-number tw-text-3xl fw-bold text-primary mb-2">{{ college_info.years_of_excellence|default:"25+" }}</div>
-                        <div class="stat-label text-muted fw-medium">Years of Excellence</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
-                    <div class="card-body text-center p-4">
-                        <div class="tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
-                            <i class="fas fa-book-open text-white fa-2x"></i>
-                        </div>
-                        <div class="stat-number tw-text-3xl fw-bold text-primary mb-2">{{ college_info.courses_count|default:"18+" }}</div>
-                        <div class="stat-label text-muted fw-medium">Courses Offered</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
-                    <div class="card-body text-center p-4">
-                        <div class="tw-bg-gradient-to-r tw-from-green-500 tw-to-emerald-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
-                            <i class="fas fa-users text-white fa-2x"></i>
-                        </div>
-                        <div class="stat-number tw-text-3xl fw-bold text-primary mb-2">{{ college_info.students_count|default:"8000+" }}</div>
-                        <div class="stat-label text-muted fw-medium">Students Enrolled</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="card border-0 shadow-lg h-100 tw-transition-all tw-duration-300 tw-transform hover:tw-scale-105">
-                    <div class="card-body text-center p-4">
-                        <div class="tw-bg-gradient-to-r tw-from-purple-500 tw-to-pink-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto mb-3">
-                            <i class="fas fa-chalkboard-teacher text-white fa-2x"></i>
-                        </div>
-                        <div class="stat-number tw-text-3xl fw-bold text-primary mb-2">{{ college_info.faculty_staff_count|default:"50+" }}</div>
-                        <div class="stat-label text-muted fw-medium">Faculty & Staff</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Knowledge Meets Innovation Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 mb-4">
-                <h2 class="section-title text-primary">Knowledge Meets Innovation</h2>
-                <p class="lead text-muted mb-4">
-                    At Chaitanya Science and Arts College, we believe in fostering an environment where traditional knowledge meets modern innovation. Our commitment to academic excellence and holistic development has made us a beacon of education in rural Chhattisgarh.
-                </p>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-check-circle text-success me-3 fa-lg"></i>
-                            <span>NAAC Grade A Accredited</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-star text-warning me-3 fa-lg"></i>
-                            <span>IIC 3 Star Rating</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-users text-primary me-3 fa-lg"></i>
-                            <span>Experienced Faculty</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-laptop text-info me-3 fa-lg"></i>
-                            <span>Modern Infrastructure</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="position-relative">
-                    <img src="https://via.placeholder.com/600x400/dc2626/ffffff?text=Campus+View" alt="Campus Innovation" class="img-fluid rounded shadow">
-                    <div class="position-absolute top-50 start-50 translate-middle">
-                        <button class="btn btn-primary btn-lg rounded-circle" data-bs-toggle="modal" data-bs-target="#videoModal">
-                            <i class="fas fa-play"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Leadership Messages Section -->
-{% if director_message or principal_message %}
-<section class="py-5 tw-bg-gradient-to-r tw-from-blue-50 tw-to-indigo-100">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title text-primary">Message from Leadership</h2>
-            <p class="lead text-muted">Words of wisdom and vision from our esteemed leadership</p>
-        </div>
-        
-        <div class="row g-4">
-            {% if director_message %}
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100 border-0 shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="flex-shrink-0">
-                                {% if director_message.profile_photo %}
-                                <img src="{{ director_message.profile_photo.url }}" 
-                                     alt="{{ director_message.name }}" 
-                                     class="rounded-circle" 
-                                     style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #dc2626;">
-                                {% else %}
-                                <div class="tw-bg-gradient-to-r tw-from-red-500 tw-to-pink-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center">
-                                    <i class="fas fa-user-tie text-white fa-2x"></i>
-                                </div>
-                                {% endif %}
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5 class="card-title mb-1 text-primary">{{ director_message.name }}</h5>
-                                <p class="text-muted mb-0">{{ director_message.designation }}</p>
-                                {% if director_message.experience_years %}
-                                <small class="text-success">
-                                    <i class="fas fa-star me-1"></i>{{ director_message.experience_years }}+ Years Experience
-                                </small>
-                                {% endif %}
-                            </div>
-                        </div>
-                        
-                        <!-- Message Preview -->
-                        <div class="message-preview">
-                            {% if director_message.message_content %}
-                            <blockquote class="blockquote mb-3">
-                                <p class="text-dark" style="font-size: 0.95rem; line-height: 1.6;">
-                                    "{{ director_message.message_content|striptags|truncatewords:35 }}"
-                                </p>
-                            </blockquote>
-                            {% endif %}
-                            
-                            {% if director_message.vision %}
-                            <div class="vision-snippet mb-3">
-                                <h6 class="text-primary mb-2">
-                                    <i class="fas fa-lightbulb me-2"></i>Vision
-                                </h6>
-                                <p class="text-muted small mb-0" style="line-height: 1.5;">
-                                    {{ director_message.vision|truncatewords:25 }}
-                                </p>
-                            </div>
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Contact Info -->
-                        {% if director_message.show_contact_info %}
-                        <div class="contact-info mt-3 pt-3 border-top">
-                            <div class="row g-2">
-                                {% if director_message.email %}
-                                <div class="col-auto">
-                                    <a href="mailto:{{ director_message.email }}" class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-envelope me-1"></i>Email
-                                    </a>
-                                </div>
-                                {% endif %}
-                                {% if director_message.linkedin_url %}
-                                <div class="col-auto">
-                                    <a href="{{ director_message.linkedin_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                        <i class="fab fa-linkedin me-1"></i>LinkedIn
-                                    </a>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% endif %}
-                        
-                        <!-- Full Message Link -->
-                        <div class="mt-3">
-                            <a href="{{ director_message.get_absolute_url }}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-arrow-right me-2"></i>Read Full Message
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-            
-            {% if principal_message %}
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100 border-0 shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="flex-shrink-0">
-                                {% if principal_message.profile_photo %}
-                                <img src="{{ principal_message.profile_photo.url }}" 
-                                     alt="{{ principal_message.name }}" 
-                                     class="rounded-circle" 
-                                     style="width: 80px; height: 80px; object-fit: cover; border: 3px solid #2563eb;">
-                                {% else %}
-                                <div class="tw-bg-gradient-to-r tw-from-blue-500 tw-to-indigo-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center">
-                                    <i class="fas fa-user-graduate text-white fa-2x"></i>
-                                </div>
-                                {% endif %}
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h5 class="card-title mb-1 text-primary">{{ principal_message.name }}</h5>
-                                <p class="text-muted mb-0">{{ principal_message.designation }}</p>
-                                {% if principal_message.specialization %}
-                                <small class="text-info">
-                                    <i class="fas fa-graduation-cap me-1"></i>{{ principal_message.specialization }}
-                                </small>
-                                {% endif %}
-                            </div>
-                        </div>
-                        
-                        <!-- Message Preview -->
-                        <div class="message-preview">
-                            {% if principal_message.message_content %}
-                            <blockquote class="blockquote mb-3">
-                                <p class="text-dark" style="font-size: 0.95rem; line-height: 1.6;">
-                                    "{{ principal_message.message_content|striptags|truncatewords:35 }}"
-                                </p>
-                            </blockquote>
-                            {% endif %}
-                            
-                            {% if principal_message.educational_philosophy %}
-                            <div class="philosophy-snippet mb-3">
-                                <h6 class="text-primary mb-2">
-                                    <i class="fas fa-book-open me-2"></i>Educational Philosophy
-                                </h6>
-                                <p class="text-muted small mb-0" style="line-height: 1.5;">
-                                    {{ principal_message.educational_philosophy|truncatewords:25 }}
-                                </p>
-                            </div>
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Office Hours -->
-                        {% if principal_message.show_office_hours and principal_message.office_hours %}
-                        <div class="office-hours mb-3">
-                            <div class="d-flex align-items-center text-success">
-                                <i class="fas fa-clock me-2"></i>
-                                <small><strong>Office Hours:</strong> {{ principal_message.office_hours }}</small>
-                            </div>
-                        </div>
-                        {% endif %}
-                        
-                        <!-- Contact Info -->
-                        {% if principal_message.show_contact_info %}
-                        <div class="contact-info mt-3 pt-3 border-top">
-                            <div class="row g-2">
-                                {% if principal_message.email %}
-                                <div class="col-auto">
-                                    <a href="mailto:{{ principal_message.email }}" class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-envelope me-1"></i>Email
-                                    </a>
-                                </div>
-                                {% endif %}
-                                {% if principal_message.linkedin_url %}
-                                <div class="col-auto">
-                                    <a href="{{ principal_message.linkedin_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                        <i class="fab fa-linkedin me-1"></i>LinkedIn
-                                    </a>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        {% endif %}
-                        
-                        <!-- Full Message Link -->
-                        <div class="mt-3">
-                            <a href="{{ principal_message.get_absolute_url }}" class="btn btn-primary btn-sm">
-                                <i class="fas fa-arrow-right me-2"></i>Read Full Message
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-        
-        <!-- Single Column Layout for Mobile -->
-        <style>
-        @media (max-width: 991px) {
-            .leadership-messages .col-lg-6 {
-                margin-bottom: 1.5rem;
-            }
-        }
-        
-        /* Enhanced card styling for leadership messages */
-        .message-preview .blockquote {
-            position: relative;
-            font-style: italic;
-        }
-        
-        .message-preview .blockquote::before {
-            content: '"';
-            font-size: 2rem;
-            color: var(--bs-primary);
-            position: absolute;
-            left: -15px;
-            top: -5px;
-            font-family: serif;
-        }
-        
-        /* Gradient borders for profile photos */
-        .card .rounded-circle {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Hover effects for message cards */
-        .leadership-messages .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
-        }
-        
-        /* Responsive text sizing */
-        @media (max-width: 576px) {
-            .message-preview .blockquote p {
-                font-size: 0.9rem !important;
-            }
-            
-            .card-body {
-                padding: 1rem !important;
-            }
-        }
-        </style>
-    </div>
-</section>
-{% endif %}
-
-<!-- Explore Boundless Opportunities Section -->
-<section class="bg-light py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title text-primary">Explore Boundless Opportunities</h2>
-            <p class="lead text-muted">Discover the diverse academic programs and opportunities that await you at our college.</p>
-        </div>
-        
-        <div class="row">
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card h-100 card-hover border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-microscope fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">Science Programs</h5>
-                        <p class="card-text">Comprehensive science education with modern laboratories and research opportunities.</p>
-                        <a href="{% url 'college_website:programs_list' %}?discipline=science" class="btn btn-outline-primary">Explore Science</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card h-100 card-hover border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-palette fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">Arts Programs</h5>
-                        <p class="card-text">Liberal arts education fostering creativity, critical thinking, and cultural understanding.</p>
-                        <a href="{% url 'college_website:programs_list' %}?discipline=arts" class="btn btn-outline-primary">Explore Arts</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card h-100 card-hover border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">Commerce</h5>
-                        <p class="card-text">Business and commerce education preparing students for the corporate world.</p>
-                        <a href="{% url 'college_website:programs_list' %}?discipline=commerce" class="btn btn-outline-primary">Explore Commerce</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card h-100 card-hover border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <i class="fas fa-users-cog fa-3x text-primary mb-3"></i>
-                        <h5 class="card-title">Management</h5>
-                        <p class="card-text">Leadership and management skills development for future business leaders.</p>
-                        <a href="{% url 'college_website:programs_list' %}?discipline=management" class="btn btn-outline-primary">Explore Management</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Recent Happenings Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 mb-5">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="section-title text-primary">Upcoming Events</h3>
-                    <a href="{% url 'college_website:events' %}" class="btn btn-outline-primary btn-sm">View All</a>
-                </div>
-                
-                {% for event in recent_events %}
-                <div class="card mb-3 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <div class="bg-primary text-white text-center p-2 rounded">
-                                    <div class="fw-bold">{{ event.date|date:"d" }}</div>
-                                    <small>{{ event.date|date:"M" }}</small>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <h6 class="card-title mb-1">{{ event.title }}</h6>
-                                <small class="text-muted">
-                                    <i class="fas fa-clock me-1"></i>{{ event.time|default:"TBA" }}
-                                    <i class="fas fa-map-marker-alt ms-3 me-1"></i>{{ event.location }}
-                                </small>
-                                <p class="card-text mt-2 mb-0">{{ event.description|truncatewords:15|striptags }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <p class="text-muted">No upcoming events at the moment.</p>
-                {% endfor %}
-            </div>
-            
-            <div class="col-lg-6 mb-5">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="section-title text-primary">Notice Board</h3>
-                    <a href="{% url 'college_website:notices_list' %}" class="btn btn-outline-primary btn-sm">View All</a>
-                </div>
-                
-                {% for notice in recent_notices %}
-                <div class="card mb-3 border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="flex-grow-1">
-                                <h6 class="card-title mb-1">{{ notice.title }}</h6>
-                                <small class="text-muted">
-                                    <i class="fas fa-calendar me-1"></i>{{ notice.publish_date|date:"M d, Y" }}
-                                    <span class="badge bg-secondary ms-2">{{ notice.get_category_display }}</span>
-                                </small>
-                                <p class="card-text mt-2 mb-0">{{ notice.content|truncatewords:20|striptags }}</p>
-                            </div>
-                            {% if notice.attachment %}
-                            <div class="ms-3">
-                                <a href="{{ notice.attachment.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
-                                    <i class="fas fa-download"></i>
-                                </a>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                {% empty %}
-                <p class="text-muted">No recent notices.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Student Testimonials Section -->
-{% if testimonials %}
-<section class="bg-light py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title text-primary">Student Feedback</h2>
-            <p class="lead text-muted">Hear what our students have to say about their experience at our college.</p>
-        </div>
-        
-        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                {% for testimonial in testimonials %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="testimonial-card text-center">
-                                {% if testimonial.photo %}
-                                <img src="{{ testimonial.photo.url }}" alt="{{ testimonial.student_name }}" class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover;">
-                                {% else %}
-                                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                                    <i class="fas fa-user fa-2x"></i>
-                                </div>
-                                {% endif %}
-                                <blockquote class="blockquote mb-3">
-                                    <p>"{{ testimonial.feedback_text }}"</p>
-                                </blockquote>
-                                <div class="rating-stars mb-2">
-                                    {% for i in "12345" %}
-                                        {% if forloop.counter <= testimonial.rating %}
-                                            <i class="fas fa-star"></i>
-                                        {% else %}
-                                            <i class="far fa-star"></i>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                                <footer class="blockquote-footer">
-                                    <strong>{{ testimonial.student_name }}</strong>
-                                    <cite title="Program">{{ testimonial.program_studied }}</cite>
-                                </footer>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            
-            {% if testimonials|length > 1 %}
-            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon bg-primary rounded-circle p-3"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon bg-primary rounded-circle p-3"></span>
-            </button>
-            {% endif %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- Quick Links Section -->
-{% if quick_links %}
-<section class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="section-title text-primary">Quick Links</h2>
-            <p class="lead text-muted">Access important resources and information quickly.</p>
-        </div>
-        
-        <div class="row justify-content-center">
-            {% for link in quick_links %}
-            <div class="col-lg-2 col-md-4 col-6 mb-3">
-                <a href="{{ link.url }}" class="text-decoration-none" {% if 'http' in link.url %}target="_blank"{% endif %}>
-                    <div class="card h-100 card-hover border-0 shadow-sm text-center">
-                        <div class="card-body py-4">
-                            {% if link.icon_class %}
-                            <i class="{{ link.icon_class }} fa-2x text-primary mb-3"></i>
-                            {% else %}
-                            <i class="fas fa-link fa-2x text-primary mb-3"></i>
-                            {% endif %}
-                            <h6 class="card-title text-dark">{{ link.name }}</h6>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
-
-<!-- Video Modal -->
-<div class="modal fade" id="videoModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">College Overview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="ratio ratio-16x9">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Enhanced Custom Styles -->
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
 <style>
-/* Floating Animation */
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+/* Hero Carousel Custom Styles */
+.hero-carousel-section {
+    position: relative;
+    overflow: hidden;
 }
 
-.tw-animate-float {
-    animation: float 3s ease-in-out infinite;
+.hero-carousel-section .carousel-item {
+    transition: transform 0.6s ease-in-out;
 }
 
-/* Fade In Up Animation */
+.hero-carousel-section .carousel-item.active {
+    transform: translateX(0);
+}
+
+.hero-carousel-section .carousel-item-next:not(.carousel-item-start),
+.hero-carousel-section .active.carousel-item-end {
+    transform: translateX(100%);
+}
+
+.hero-carousel-section .carousel-item-prev:not(.carousel-item-end),
+.hero-carousel-section .active.carousel-item-start {
+    transform: translateX(-100%);
+}
+
+/* Custom carousel indicators */
+.hero-carousel-section .carousel-indicators {
+    bottom: 2rem;
+    margin-bottom: 0;
+}
+
+.hero-carousel-section .carousel-indicators button {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: transparent;
+    margin: 0 8px;
+    transition: all 0.3s ease;
+}
+
+.hero-carousel-section .carousel-indicators button.active {
+    background: white;
+    border-color: white;
+}
+
+.hero-carousel-section .carousel-indicators button:hover {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: white;
+}
+
+/* Custom carousel controls */
+.hero-carousel-section .carousel-control-prev,
+.hero-carousel-section .carousel-control-next {
+    width: 48px;
+    height: 48px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.hero-carousel-section .carousel-control-prev {
+    left: 1rem;
+}
+
+.hero-carousel-section .carousel-control-next {
+    right: 1rem;
+}
+
+.hero-carousel-section .carousel-control-prev:hover,
+.hero-carousel-section .carousel-control-next:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.hero-carousel-section .carousel-control-prev-icon,
+.hero-carousel-section .carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Animation for hero content */
+.tw-animate-fade-in-up {
+    animation: fadeInUp 1s ease-out;
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(50px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -763,210 +107,1445 @@
     }
 }
 
-.tw-animate-fade-in-up {
-    animation: fadeInUp 1s ease-out;
-}
-
-/* Enhanced Card Hover Effects */
-.card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
-}
-
-/* Testimonial Stars */
-.rating-stars {
-    color: #fbbf24;
-}
-
-/* Stats Counter Animation */
-@keyframes countUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.stat-number {
-    animation: countUp 0.8s ease-out forwards;
-}
-
-/* Section Title Styling */
-.section-title {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 1rem;
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--bs-primary), #fbbf24);
-    border-radius: 2px;
-}
-
-/* Button Enhancements */
-.btn {
-    position: relative;
-    overflow: hidden;
-    border-radius: 25px;
+/* Stat cards hover effects */
+.hero-carousel-section .stat-card {
     transition: all 0.3s ease;
 }
 
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
+.hero-carousel-section .stat-card:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-.btn:hover::before {
-    left: 100%;
+/* Button hover effects */
+.hero-carousel-section .btn {
+    transition: all 0.3s ease;
 }
 
-/* Card Hover Animation */
-.card-hover {
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.hero-carousel-section .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.card-hover:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-}
-
-/* Responsive Adjustments */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .display-2 {
-        font-size: 2.5rem;
+    .hero-carousel-section .carousel-control-prev,
+    .hero-carousel-section .carousel-control-next {
+        width: 40px;
+        height: 40px;
     }
     
-    .tw-py-24 {
-        padding-top: 3rem;
-        padding-bottom: 3rem;
+    .hero-carousel-section .carousel-control-prev {
+        left: 0.5rem;
     }
     
-    .card:hover {
-        transform: translateY(-4px);
+    .hero-carousel-section .carousel-control-next {
+        right: 0.5rem;
+    }
+    
+    .hero-carousel-section .carousel-indicators {
+        bottom: 1rem;
+    }
+    
+    .hero-carousel-section .carousel-indicators button {
+        width: 12px;
+        height: 12px;
+        margin: 0 4px;
     }
 }
 
-/* Background Animation */
-@keyframes backgroundMove {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    33% { transform: translate(30px, -30px) rotate(120deg); }
-    66% { transform: translate(-20px, 20px) rotate(240deg); }
-}
-
-.tw-animate-pulse {
-    animation: backgroundMove 8s ease-in-out infinite;
-}
-
-/* Scroll Indicator */
-@keyframes bounce {
-    0%, 20%, 53%, 80%, 100% {
-        transform: translate3d(0,0,0);
-    }
-    40%, 43% {
-        transform: translate3d(0,-15px,0);
-    }
-    70% {
-        transform: translate3d(0,-7px,0);
-    }
-    90% {
-        transform: translate3d(0,-3px,0);
+/* Mobile height adjustment */
+@media (max-width: 576px) {
+    .hero-carousel-section .carousel {
+        height: 24rem; /* More compact on mobile */
     }
 }
+</style>
+{% endblock %}
 
-.tw-animate-bounce {
-    animation: bounce 2s infinite;
+{% block content %}
+<!-- Hero Carousel Section -->
+<section class="hero-carousel-section tw-relative tw-overflow-hidden">
+    <div id="heroCarousel" class="carousel slide tw-h-96" data-bs-ride="carousel" data-bs-interval="5000">
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators tw-bottom-8">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-border-white tw-bg-transparent tw-transition-all tw-duration-300 hover:tw-bg-white" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-border-white tw-bg-transparent tw-transition-all tw-duration-300 hover:tw-bg-white" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-border-white tw-bg-transparent tw-transition-all tw-duration-300 hover:tw-bg-white" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-border-white tw-bg-transparent tw-transition-all tw-duration-300 hover:tw-bg-white" aria-label="Slide 4"></button>
+        </div>
+
+        <!-- Carousel Inner -->
+        <div class="carousel-inner tw-h-full">
+            <!-- Slide 1: Welcome & Programs -->
+            <div class="carousel-item active tw-h-full tw-bg-gradient-to-br tw-from-blue-900 tw-via-purple-800 tw-to-indigo-900">
+                <div class="container tw-h-full tw-flex tw-items-center tw-py-8">
+                    <div class="row tw-w-full tw-align-items-center">
+                        <div class="col-lg-6">
+                            <div class="hero-content tw-text-white">
+                                <div class="tw-animate-fade-in-up">
+                                    <span class="badge tw-bg-gradient-to-r tw-from-yellow-400 tw-to-orange-500 text-dark rounded-pill px-3 py-1 mb-3 fs-6 fw-bold">
+                                        <i class="fas fa-star me-2"></i>Welcome to Excellence
+                                    </span>
+                                    <h1 class="hero-title tw-text-3xl lg:tw-text-4xl tw-font-bold tw-leading-tight tw-mb-3">
+                                        Transform Your Future with Quality Education
+                                    </h1>
+                                    <p class="hero-subtitle tw-text-lg lg:tw-text-xl tw-opacity-90 tw-leading-relaxed tw-mb-4">
+                                        Discover 18+ courses across Science, Arts, Commerce, and Management programs designed for your success.
+                                    </p>
+                                    <div class="hero-buttons tw-flex tw-flex-wrap tw-gap-3">
+                                        <a href="{% url 'college_website:programs' %}" class="btn btn-warning btn-lg tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold tw-text-base tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                                            <i class="fas fa-graduation-cap tw-mr-2"></i>
+                                            Explore Programs
+                                        </a>
+                                        <a href="{% url 'college_website:about' %}" class="btn btn-outline-light btn-lg tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold tw-text-base tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                                            <i class="fas fa-info-circle tw-mr-2"></i>
+                                            Learn More
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="hero-stats tw-grid tw-grid-cols-2 tw-gap-3">
+                                <div class="stat-card tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-lg tw-p-4 tw-text-center tw-text-white tw-bg-gradient-to-br tw-from-blue-500 tw-to-blue-600">
+                                    <i class="fas fa-graduation-cap tw-text-2xl tw-mb-2"></i>
+                                    <div class="stat-number tw-text-2xl tw-font-bold">18+</div>
+                                    <div class="stat-label tw-text-xs tw-opacity-90">Courses</div>
+                                </div>
+                                <div class="stat-card tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-lg tw-p-4 tw-text-center tw-text-white tw-bg-gradient-to-br tw-from-purple-500 tw-to-purple-600">
+                                    <i class="fas fa-users tw-text-2xl tw-mb-2"></i>
+                                    <div class="stat-number tw-text-2xl tw-font-bold">5000+</div>
+                                    <div class="stat-label tw-text-xs tw-opacity-90">Students</div>
+                                </div>
+                                <div class="stat-card tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-lg tw-p-4 tw-text-center tw-text-white tw-bg-gradient-to-br tw-from-green-500 tw-to-green-600">
+                                    <i class="fas fa-chalkboard-teacher tw-text-2xl tw-mb-2"></i>
+                                    <div class="stat-number tw-text-2xl tw-font-bold">150+</div>
+                                    <div class="stat-label tw-text-xs tw-opacity-90">Faculty</div>
+                                </div>
+                                <div class="stat-card tw-bg-opacity-80 tw-backdrop-blur-sm tw-rounded-lg tw-p-4 tw-text-center tw-text-white tw-bg-gradient-to-br tw-from-orange-500 tw-to-orange-600">
+                                    <i class="fas fa-award tw-text-2xl tw-mb-2"></i>
+                                    <div class="stat-number tw-text-2xl tw-font-bold">25+</div>
+                                    <div class="stat-label tw-text-xs tw-opacity-90">Years</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Admissions -->
+            <div class="carousel-item tw-h-full tw-bg-gradient-to-br tw-from-green-900 tw-via-teal-800 tw-to-emerald-900">
+                <div class="container tw-h-full tw-flex tw-items-center tw-py-8">
+                    <div class="row tw-w-full tw-align-items-center">
+                        <div class="col-lg-6">
+                            <div class="hero-content tw-text-white">
+                                <div class="tw-animate-fade-in-up">
+                                    <span class="badge tw-bg-gradient-to-r tw-from-green-400 tw-to-emerald-500 text-dark rounded-pill px-3 py-1 mb-3 fs-6 fw-bold">
+                                        <i class="fas fa-door-open me-2"></i>Admissions Open
+                                    </span>
+                                    <h1 class="hero-title tw-text-3xl lg:tw-text-4xl tw-font-bold tw-leading-tight tw-mb-3">
+                                        Start Your Academic Journey Today
+                                    </h1>
+                                    <p class="hero-subtitle tw-text-lg lg:tw-text-xl tw-opacity-90 tw-leading-relaxed tw-mb-4">
+                                        Join thousands of successful graduates. Apply now for the upcoming academic session and secure your future.
+                                    </p>
+                                    <div class="hero-buttons tw-flex tw-flex-wrap tw-gap-3">
+                                        <a href="{% url 'college_website:admissions' %}" class="btn btn-success btn-lg tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold tw-text-base tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                                            <i class="fas fa-file-alt tw-mr-2"></i>
+                                            Apply Now
+                                        </a>
+                                        <a href="{% url 'college_website:online_application' %}" class="btn btn-outline-light btn-lg tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold tw-text-base tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                                            <i class="fas fa-laptop tw-mr-2"></i>
+                                            Online Application
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="tw-text-center">
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-2xl tw-p-6 tw-mx-auto" style="max-width: 350px;">
+                                    <i class="fas fa-university tw-text-5xl tw-text-white tw-mb-3 tw-opacity-80"></i>
+                                    <h3 class="tw-text-xl tw-font-bold tw-text-white tw-mb-3">Why Choose Us?</h3>
+                                    <ul class="tw-text-white tw-text-left tw-space-y-1">
+                                        <li class="tw-flex tw-items-center tw-text-sm">
+                                            <i class="fas fa-check-circle tw-text-green-400 tw-mr-2"></i>
+                                            Accredited Programs
+                                        </li>
+                                        <li class="tw-flex tw-items-center tw-text-sm">
+                                            <i class="fas fa-check-circle tw-text-green-400 tw-mr-2"></i>
+                                            Experienced Faculty
+                                        </li>
+                                        <li class="tw-flex tw-items-center tw-text-sm">
+                                            <i class="fas fa-check-circle tw-text-green-400 tw-mr-2"></i>
+                                            Modern Infrastructure
+                                        </li>
+                                        <li class="tw-flex tw-items-center tw-text-sm">
+                                            <i class="fas fa-check-circle tw-text-green-400 tw-mr-2"></i>
+                                            Placement Support
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Research & Innovation -->
+            <div class="carousel-item tw-h-full tw-bg-gradient-to-br tw-from-purple-900 tw-via-pink-800 tw-to-rose-900">
+                <div class="container tw-h-full tw-flex tw-items-center tw-py-8">
+                    <div class="row tw-w-full tw-align-items-center">
+                        <div class="col-lg-6">
+                            <div class="hero-content tw-text-white">
+                                <div class="tw-animate-fade-in-up">
+                                    <span class="badge tw-bg-gradient-to-r tw-from-purple-400 tw-to-pink-500 text-dark rounded-pill px-3 py-1 mb-3 fs-6 fw-bold">
+                                        <i class="fas fa-microscope me-2"></i>Research Excellence
+                                    </span>
+                                    <h1 class="hero-title tw-text-3xl lg:tw-text-4xl tw-font-bold tw-leading-tight tw-mb-3">
+                                        Innovation Through Research
+                                    </h1>
+                                    <p class="hero-subtitle tw-text-lg lg:tw-text-xl tw-opacity-90 tw-leading-relaxed tw-mb-4">
+                                        Discover cutting-edge research opportunities, publications, and collaborative projects that shape the future.
+                                    </p>
+                                    <div class="hero-buttons tw-flex tw-flex-wrap tw-gap-3">
+                                        <a href="{% url 'college_website:research' %}" class="btn btn-primary btn-lg tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold tw-text-base tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                                            <i class="fas fa-flask tw-mr-2"></i>
+                                            Explore Research
+                                        </a>
+                                        <a href="{% url 'college_website:publications' %}" class="btn btn-outline-light btn-lg tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold tw-text-base tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                                            <i class="fas fa-book-open tw-mr-2"></i>
+                                            Publications
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="tw-grid tw-grid-cols-2 tw-gap-3">
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-lightbulb tw-text-2xl tw-mb-2 tw-text-yellow-400"></i>
+                                    <div class="tw-text-base tw-font-bold">Innovation</div>
+                                    <div class="tw-text-xs tw-opacity-80">Labs & Centers</div>
+                                </div>
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-handshake tw-text-2xl tw-mb-2 tw-text-blue-400"></i>
+                                    <div class="tw-text-base tw-font-bold">Collaboration</div>
+                                    <div class="tw-text-xs tw-opacity-80">Industry Partners</div>
+                                </div>
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-certificate tw-text-2xl tw-mb-2 tw-text-green-400"></i>
+                                    <div class="tw-text-base tw-font-bold">Patents</div>
+                                    <div class="tw-text-xs tw-opacity-80">Research Output</div>
+                                </div>
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-globe tw-text-2xl tw-mb-2 tw-text-purple-400"></i>
+                                    <div class="tw-text-base tw-font-bold">Global</div>
+                                    <div class="tw-text-xs tw-opacity-80">Recognition</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Student Life -->
+            <div class="carousel-item tw-h-full tw-bg-gradient-to-br tw-from-orange-900 tw-via-red-800 tw-to-pink-900">
+                <div class="container tw-h-full tw-flex tw-items-center tw-py-8">
+                    <div class="row tw-w-full tw-align-items-center">
+                        <div class="col-lg-6">
+                            <div class="hero-content tw-text-white">
+                                <div class="tw-animate-fade-in-up">
+                                    <span class="badge tw-bg-gradient-to-r tw-from-orange-400 tw-to-red-500 text-dark rounded-pill px-3 py-1 mb-3 fs-6 fw-bold">
+                                        <i class="fas fa-heart me-2"></i>Student Life
+                                    </span>
+                                    <h1 class="hero-title tw-text-3xl lg:tw-text-4xl tw-font-bold tw-leading-tight tw-mb-3">
+                                        Beyond Academics: Enriching Experiences
+                                    </h1>
+                                    <p class="hero-subtitle tw-text-lg lg:tw-text-xl tw-opacity-90 tw-leading-relaxed tw-mb-4">
+                                        Join clubs, participate in sports, cultural events, and community service. Make memories that last a lifetime.
+                                    </p>
+                                    <div class="hero-buttons tw-flex tw-flex-wrap tw-gap-3">
+                                        <a href="{% url 'college_website:sports_cultural' %}" class="btn btn-warning btn-lg tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold tw-text-base tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                                            <i class="fas fa-running tw-mr-2"></i>
+                                            Sports & Culture
+                                        </a>
+                                        <a href="{% url 'college_website:nss_ncc_clubs' %}" class="btn btn-outline-light btn-lg tw-px-6 tw-py-2 tw-rounded-full tw-font-semibold tw-text-base tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-105">
+                                            <i class="fas fa-users tw-mr-2"></i>
+                                            Clubs & Activities
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="tw-grid tw-grid-cols-3 tw-gap-2">
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-futbol tw-text-xl tw-mb-1 tw-text-green-400"></i>
+                                    <div class="tw-text-xs tw-font-bold">Sports</div>
+                                </div>
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-music tw-text-xl tw-mb-1 tw-text-purple-400"></i>
+                                    <div class="tw-text-xs tw-font-bold">Music</div>
+                                </div>
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-palette tw-text-xl tw-mb-1 tw-text-pink-400"></i>
+                                    <div class="tw-text-xs tw-font-bold">Arts</div>
+                                </div>
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-users tw-text-xl tw-mb-1 tw-text-blue-400"></i>
+                                    <div class="tw-text-xs tw-font-bold">NSS</div>
+                                </div>
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-flag tw-text-xl tw-mb-1 tw-text-red-400"></i>
+                                    <div class="tw-text-xs tw-font-bold">NCC</div>
+                                </div>
+                                <div class="tw-bg-white tw-bg-opacity-10 tw-backdrop-blur-sm tw-rounded-lg tw-p-3 tw-text-center tw-text-white">
+                                    <i class="fas fa-camera tw-text-xl tw-mb-1 tw-text-yellow-400"></i>
+                                    <div class="tw-text-xs tw-font-bold">Events</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev tw-w-12 tw-h-12 tw-top-1/2 tw-left-4 tw-transform tw--translate-y-1/2 tw-bg-white tw-bg-opacity-20 tw-backdrop-blur-sm tw-rounded-full tw-border-0 tw-transition-all tw-duration-300 hover:tw-bg-opacity-30" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next tw-w-12 tw-h-12 tw-top-1/2 tw-right-4 tw-transform tw--translate-y-1/2 tw-bg-white tw-bg-opacity-20 tw-backdrop-blur-sm tw-rounded-full tw-border-0 tw-transition-all tw-duration-300 hover:tw-bg-opacity-30" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+<!-- Tailwind CSS Image Slider Section -->
+{% if slider_images %}
+<section class="tw-py-16 tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50">
+    <div class="tw-container tw-mx-auto tw-px-4">
+        <div class="tw-relative tw-overflow-hidden tw-rounded-3xl tw-shadow-2xl">
+            <!-- Slider Container -->
+            <div class="tw-relative tw-h-96 md:tw-h-[500px] lg:tw-h-[600px]">
+                <!-- Slides -->
+                <div class="tw-relative tw-h-full" id="slider-container">
+                    {% for slide in slider_images %}
+                    {% if slide.image %}
+                    <div class="tw-absolute tw-inset-0 tw-transition-opacity tw-duration-700 {% if forloop.first %}tw-opacity-100{% else %}tw-opacity-0{% endif %}" data-slide="{{ forloop.counter0 }}">
+                        <!-- Background Image -->
+                        <div class="tw-absolute tw-inset-0 tw-bg-cover tw-bg-center tw-bg-no-repeat" style="background-image: url('{{ slide.image.url }}');">
+                            <div class="tw-absolute tw-inset-0 tw-bg-black tw-bg-opacity-40"></div>
+                        </div>
+                        
+                        <!-- Content Overlay -->
+                        {% if slide.title or slide.caption %}
+                        <div class="tw-absolute tw-bottom-0 tw-left-0 tw-right-0 tw-p-6 tw-text-white">
+                            <div class="tw-bg-black tw-bg-opacity-60 tw-backdrop-blur-sm tw-rounded-2xl tw-p-5 tw-max-w-xl">
+                                {% if slide.title %}
+                                <h3 class="tw-text-2xl md:tw-text-3xl lg:tw-text-4xl tw-font-bold tw-mb-3 tw-leading-tight">{{ slide.title }}</h3>
+                                {% endif %}
+                                {% if slide.caption %}
+                                <p class="tw-text-sm md:tw-text-base lg:tw-text-lg tw-mb-4 tw-opacity-90 tw-leading-relaxed">{{ slide.caption }}</p>
+                                {% endif %}
+                                {% if slide.button_text and slide.button_url %}
+                                <a href="{{ slide.button_url }}" class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-bg-gradient-to-r tw-from-blue-600 tw-to-purple-600 tw-text-white tw-font-medium tw-text-sm tw-rounded-full tw-shadow-lg hover:tw-shadow-xl tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-from-blue-700 hover:tw-to-purple-700">
+                                    {{ slide.button_text }}
+                                    <i class="fas fa-arrow-right tw-ml-2 tw-transition-transform tw-duration-300 group-hover:tw-translate-x-1"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                
+                <!-- Navigation Arrows -->
+                <button class="tw-absolute tw-left-4 tw-top-1/2 tw-transform -tw-translate-y-1/2 tw-bg-white tw-bg-opacity-90 hover:tw-bg-opacity-100 tw-text-gray-800 tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-110 hover:tw-shadow-xl tw-z-10" id="prev-btn" aria-label="Previous slide">
+                    <i class="fas fa-chevron-left tw-text-xl"></i>
+                </button>
+                
+                <button class="tw-absolute tw-right-4 tw-top-1/2 tw-transform -tw-translate-y-1/2 tw-bg-white tw-bg-opacity-90 hover:tw-bg-opacity-100 tw-text-gray-800 tw-w-12 tw-h-12 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-shadow-lg tw-transition-all tw-duration-300 hover:tw-scale-110 hover:tw-shadow-xl tw-z-10" id="next-btn" aria-label="Next slide">
+                    <i class="fas fa-chevron-right tw-text-xl"></i>
+                </button>
+                
+                <!-- Slide Indicators -->
+                <div class="tw-absolute tw-bottom-8 tw-left-1/2 tw-transform -tw-translate-x-1/2 tw-flex tw-space-x-4 tw-z-10" id="slide-indicators">
+                    {% for slide in slider_images %}
+                    {% if slide.image %}
+                    <button class="slide-indicator {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.counter0 }}" data-slide-index="{{ forloop.counter0 }}" aria-label="Go to slide {{ forloop.counter }}"></button>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="tw-absolute tw-top-0 tw-left-0 tw-right-0 tw-h-1 tw-bg-white tw-bg-opacity-30 tw-z-10">
+                    <div class="tw-h-full tw-bg-gradient-to-r tw-from-blue-500 tw-to-purple-500 tw-transition-all tw-duration-100 tw-ease-linear" id="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% else %}
+<!-- No valid slides message -->
+<section class="tw-py-16 tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50">
+    <div class="tw-container tw-mx-auto tw-px-4">
+        <div class="tw-text-center tw-py-12">
+            <i class="fas fa-images tw-text-6xl tw-text-gray-400 tw-mb-4"></i>
+            <h3 class="tw-text-2xl tw-font-semibold tw-text-gray-600 tw-mb-2">Image Slider</h3>
+            <p class="tw-text-gray-500">No images available for the slider. Please add some images in the admin panel.</p>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Statistics Section -->
+<section class="stats-section tw-py-16 tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="stat-icon tw-bg-red-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-calendar-alt tw-text-white tw-text-2xl"></i>
+                    </div>
+                    <div class="stat-number tw-text-3xl tw-font-bold tw-text-red-600 tw-mb-2">{{ college_info.years_of_excellence|default:"25+" }}</div>
+                    <div class="stat-label tw-text-gray-600 tw-font-medium">Years of Excellence</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="stat-icon tw-bg-blue-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-book-open tw-text-white tw-text-2xl"></i>
+                    </div>
+                    <div class="stat-number tw-text-3xl tw-font-bold tw-text-blue-600 tw-mb-2">{{ college_info.courses_count|default:"18+" }}</div>
+                    <div class="stat-label tw-text-gray-600 tw-font-medium">Courses Offered</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="stat-icon tw-bg-green-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-users tw-text-white tw-text-2xl"></i>
+                    </div>
+                    <div class="stat-number tw-text-3xl tw-font-bold tw-text-green-600 tw-mb-2">{{ college_info.students_count|default:"8000+" }}</div>
+                    <div class="stat-label tw-text-gray-600 tw-font-medium">Students Enrolled</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="stat-icon tw-bg-purple-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-laptop tw-text-white tw-text-2xl"></i>
+                    </div>
+                    <div class="stat-number tw-text-3xl tw-font-bold tw-text-purple-600 tw-mb-2">{{ college_info.faculty_staff_count|default:"50+" }}</div>
+                    <div class="stat-label tw-text-gray-600 tw-font-medium">Faculty & Staff</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission Statement Section -->
+<section class="mission-section tw-py-16 tw-bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="mission-content">
+                    <h2 class="section-title tw-text-4xl tw-font-bold tw-text-red-600 tw-mb-6">Knowledge Meets Innovation</h2>
+                    <p class="mission-text tw-text-lg tw-text-gray-700 tw-leading-relaxed tw-mb-6">
+                        At Chaitanya Science and Arts College, we believe in fostering an environment where traditional knowledge meets modern innovation. Our commitment to academic excellence and holistic development has made us a beacon of education in rural Chhattisgarh.
+                    </p>
+                    <div class="features-grid tw-grid tw-grid-cols-2 tw-gap-4">
+                        <div class="feature-item tw-flex tw-items-center tw-space-x-3">
+                            <i class="fas fa-check-circle tw-text-green-500 tw-text-xl"></i>
+                            <span class="tw-text-gray-700">{{ college_info.naac_grade|default:"NAAC Grade A Accredited" }}</span>
+                        </div>
+                        <div class="feature-item tw-flex tw-items-center tw-space-x-3">
+                            <i class="fas fa-star tw-text-yellow-500 tw-text-xl"></i>
+                            <span class="tw-text-gray-700">{{ college_info.iic_rating|default:"IIC 3 Star Rating" }}</span>
+                        </div>
+                        <div class="feature-item tw-flex tw-items-center tw-space-x-3">
+                            <i class="fas fa-users tw-text-blue-500 tw-text-xl"></i>
+                            <span class="tw-text-gray-700">Experienced Faculty</span>
+                        </div>
+                        <div class="feature-item tw-flex tw-items-center tw-space-x-3">
+                            <i class="fas fa-desktop tw-text-purple-500 tw-text-xl"></i>
+                            <span class="tw-text-gray-700">Modern Infrastructure</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="campus-innovation tw-bg-gray-100 tw-rounded-xl tw-p-8 tw-text-center">
+                    <div class="innovation-icon tw-bg-red-500 tw-w-20 tw-h-20 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+                        <i class="fas fa-play tw-text-white tw-text-2xl"></i>
+                    </div>
+                    <h3 class="innovation-title tw-text-xl tw-font-semibold tw-text-gray-800 tw-mb-2">Campus Innovation</h3>
+                    <p class="innovation-text tw-text-gray-600">Discover our cutting-edge facilities and research opportunities</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Message from Leadership Section -->
+{% if director_message or principal_message %}
+<section class="leadership-section tw-py-12 tw-bg-gray-50">
+    <div class="container">
+        <div class="text-center tw-mb-8">
+            <h2 class="section-title tw-text-3xl tw-font-bold tw-text-red-600 tw-mb-3">Messages from Leadership</h2>
+            <p class="section-subtitle tw-text-base tw-text-gray-600">Words of wisdom and vision from our esteemed Director and Principal</p>
+        </div>
+        
+        <div class="row justify-content-center g-4">
+            {% if director_message %}
+            <div class="col-lg-6 col-md-8">
+                <div class="leadership-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center">
+                    <div class="leadership-avatar tw-bg-red-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-user tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="leader-name tw-text-xl tw-font-bold tw-text-red-600 tw-mb-2">{{ director_message.name|default:"Mr. Veerendra Tiwari" }}</h3>
+                    <p class="leader-title tw-text-gray-600 tw-mb-3">Director</p>
+                    <div class="leader-message tw-bg-blue-50 tw-rounded-lg tw-p-3 tw-mb-4">
+                        <p class="tw-text-gray-700 tw-italic tw-text-sm">"{{ director_message.message_content|striptags|truncatewords:15|default:"Welcome to our institution" }}"</p>
+                    </div>
+                    <a href="{% url 'college_website:director_message' %}" class="btn btn-danger tw-px-4 tw-py-2 tw-rounded-full tw-font-semibold tw-transition-all tw-duration-300 hover:tw-scale-105">
+                        <i class="fas fa-arrow-right tw-mr-2"></i>
+                        Read Full Message
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if principal_message %}
+            <div class="col-lg-6 col-md-8">
+                <div class="leadership-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-6 tw-text-center">
+                    <div class="leadership-avatar tw-bg-blue-500 tw-w-16 tw-h-16 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-user-graduate tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="leader-name tw-text-xl tw-font-bold tw-text-blue-600 tw-mb-2">{{ principal_message.name|default:"Dr. Vinod Kumar Gupta" }}</h3>
+                    <p class="leader-title tw-text-gray-600 tw-mb-3">Principal</p>
+                    <div class="leader-message tw-bg-blue-50 tw-rounded-lg tw-p-3 tw-mb-4">
+                        <p class="tw-text-gray-700 tw-italic tw-text-sm">"{{ principal_message.message_content|striptags|truncatewords:15|default:"Welcome to our institution" }}"</p>
+                    </div>
+                    <a href="{% url 'college_website:principal_message' %}" class="btn btn-primary tw-px-4 tw-py-2 tw-rounded-full tw-font-semibold tw-transition-all tw-duration-300 hover:tw-scale-105">
+                        <i class="fas fa-arrow-right tw-mr-2"></i>
+                        Read Full Message
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Academic Programs Section -->
+<section class="programs-section tw-py-12 tw-bg-white">
+    <div class="container">
+        <div class="text-center tw-mb-8">
+            <h2 class="section-title tw-text-3xl tw-font-bold tw-text-red-600 tw-mb-3">Explore Boundless Opportunities</h2>
+            <p class="section-subtitle tw-text-base tw-text-gray-600">Discover the diverse academic programs and opportunities that await you at our college.</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="program-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="program-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-flask tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="program-title tw-text-lg tw-font-bold tw-text-gray-800 tw-mb-2">Science Programs</h3>
+                    <p class="program-description tw-text-gray-600 tw-mb-3 tw-text-sm">Comprehensive science education with modern laboratories and research opportunities.</p>
+                    <a href="{% url 'college_website:programs' %}?discipline=science" class="btn btn-primary tw-w-full tw-rounded-full tw-font-semibold">Explore Science</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="program-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="program-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-palette tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="program-title tw-text-lg tw-font-bold tw-text-gray-800 tw-mb-2">Arts Programs</h3>
+                    <p class="program-description tw-text-gray-600 tw-mb-3 tw-text-sm">Liberal arts education fostering creativity, critical thinking, and cultural understanding.</p>
+                    <a href="{% url 'college_website:programs' %}?discipline=arts" class="btn btn-primary tw-w-full tw-rounded-full tw-font-semibold">Explore Arts</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="program-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="program-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-chart-line tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="program-title tw-text-lg tw-font-bold tw-text-gray-800 tw-mb-2">Commerce</h3>
+                    <p class="program-description tw-text-gray-600 tw-mb-3 tw-text-sm">Business and commerce education preparing students for the corporate world.</p>
+                    <a href="{% url 'college_website:programs' %}?discipline=commerce" class="btn btn-primary tw-w-full tw-rounded-full tw-font-semibold">Explore Commerce</a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="program-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105">
+                    <div class="program-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-cogs tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="program-title tw-text-lg tw-font-bold tw-text-gray-800 tw-mb-2">Management</h3>
+                    <p class="program-description tw-text-gray-600 tw-mb-3 tw-text-sm">Leadership and management skills development for future business leaders.</p>
+                    <a href="{% url 'college_website:programs' %}?discipline=management" class="btn btn-primary tw-w-full tw-rounded-full tw-font-semibold">Explore Management</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modern Events and Notices Section -->
+<section class="modern-events-notices tw-py-8 tw-bg-gradient-to-br tw-from-slate-50 tw-via-blue-50 tw-to-indigo-50">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="row tw-justify-center tw-mb-6">
+            <div class="col-lg-8 col-md-10 text-center">
+                <div class="section-badge tw-inline-flex tw-items-center tw-px-3 tw-py-1 tw-bg-blue-100 tw-text-blue-800 tw-text-sm tw-font-medium tw-rounded-full tw-mb-3">
+                    <i class="fas fa-star tw-mr-2 tw-text-yellow-500"></i>
+                    Stay Updated
+                </div>
+                <h2 class="section-title tw-text-3xl lg:tw-text-4xl tw-font-bold tw-text-gray-900 tw-mb-3">
+                    Campus <span class="tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-blue-600 tw-to-purple-600">Highlights</span>
+                </h2>
+                <p class="section-subtitle tw-text-base tw-text-gray-600 tw-max-w-2xl tw-mx-auto">
+                    Discover the latest events, announcements, and important updates from our vibrant college community.
+                </p>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="row g-3">
+            <!-- Events Column -->
+            <div class="col-lg-6">
+                <div class="events-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-overflow-hidden tw-border tw-border-gray-100">
+                    <!-- Card Header -->
+                    <div class="card-header tw-bg-gradient-to-r tw-from-blue-600 tw-to-blue-700 tw-px-4 tw-py-3">
+                        <div class="tw-flex tw-justify-between tw-items-center">
+                            <div class="tw-flex tw-items-center tw-space-x-3">
+                                <div class="tw-w-8 tw-h-8 tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-flex tw-items-center tw-justify-center">
+                                    <i class="fas fa-calendar-alt tw-text-white tw-text-base"></i>
+                                </div>
+                                <div>
+                                    <h3 class="tw-text-lg tw-font-bold tw-text-white">Upcoming Events</h3>
+                                    <p class="tw-text-blue-100 tw-text-xs">Mark your calendar</p>
+                                </div>
+                            </div>
+                            <a href="{% url 'college_website:events' %}" class="btn btn-light btn-sm tw-rounded-full tw-px-3 tw-py-1 tw-text-blue-700 tw-font-medium hover:tw-bg-blue-50 tw-transition-all tw-duration-300 tw-text-xs">
+                                View All
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body tw-p-4">
+                        {% if recent_events %}
+                            <div class="events-list tw-space-y-3 tw-max-h-80 tw-overflow-y-auto tw-pr-2 custom-scrollbar" id="auto-scroll-events">
+                                {% for event in recent_events %}
+                                <div class="event-item tw-group tw-bg-gradient-to-r tw-from-gray-50 tw-to-blue-50 tw-rounded-lg tw-p-3 tw-border tw-border-gray-100 hover:tw-border-blue-200 tw-transition-all tw-duration-300 hover:tw-shadow-md">
+                                    <div class="tw-flex tw-items-start tw-space-x-3">
+                                        <!-- Event Date Badge -->
+                                        <div class="event-date tw-flex-shrink-0 tw-w-12 tw-h-12 tw-bg-gradient-to-br tw-from-red-500 tw-to-red-600 tw-rounded-lg tw-flex tw-flex-col tw-items-center tw-justify-center tw-text-white tw-shadow-md">
+                                            <div class="tw-text-sm tw-font-bold tw-leading-none">{{ event.start_date|date:"d" }}</div>
+                                            <div class="tw-text-xs tw-font-medium tw-uppercase tw-tracking-wide">{{ event.start_date|date:"M" }}</div>
+                                        </div>
+                                        
+                                        <!-- Event Details -->
+                                        <div class="event-details tw-flex-1 tw-min-w-0">
+                                            <h4 class="event-title tw-font-semibold tw-text-gray-900 tw-mb-1 tw-group-hover:tw-text-blue-700 tw-transition-colors tw-duration-300 tw-text-sm">
+                                                {{ event.title }}
+                                            </h4>
+                                            <div class="event-meta tw-space-y-1">
+                                                <div class="tw-flex tw-items-center tw-text-xs tw-text-gray-600">
+                                                    <i class="fas fa-clock tw-mr-2 tw-text-blue-500 tw-w-3"></i>
+                                                    <span>{{ event.start_date|date:"g:i A" }}</span>
+                                                </div>
+                                                {% if event.venue %}
+                                                <div class="tw-flex tw-items-center tw-text-xs tw-text-gray-600">
+                                                    <i class="fas fa-map-marker-alt tw-mr-2 tw-text-red-500 tw-w-3"></i>
+                                                    <span>{{ event.venue }}</span>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <!-- Read More Link -->
+                                            <div class="tw-flex tw-items-center tw-justify-between tw-mt-2">
+                                                <a href="{% url 'college_website:event_detail' event.id %}" class="tw-inline-flex tw-items-center tw-text-xs tw-text-blue-600 hover:tw-text-blue-800 tw-font-medium tw-transition-colors tw-duration-300">
+                                                    Read More
+                                                    <i class="fas fa-arrow-right tw-ml-1 tw-text-xs"></i>
+                                                </a>
+                                                <div class="tw-w-20"></div> <!-- Spacer for consistent alignment -->
+                                            </div>
+                                        </div>
+                                        
+
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Auto-scroll JavaScript for Events -->
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const eventsContainer = document.getElementById('auto-scroll-events');
+                                    if (eventsContainer && eventsContainer.scrollHeight > eventsContainer.clientHeight) {
+                                        let scrollPosition = 0;
+                                        let scrollTimer = null;
+                                        let isPaused = false;
+                                        
+                                        function autoScroll() {
+                                            if (isPaused) return;
+                                            
+                                            scrollPosition += 0.5;
+                                            
+                                            // Reset to top when reaching bottom
+                                            if (scrollPosition >= eventsContainer.scrollHeight - eventsContainer.clientHeight) {
+                                                scrollPosition = 0;
+                                            }
+                                            
+                                            eventsContainer.scrollTop = scrollPosition;
+                                        }
+                                        
+                                        function startScrolling() {
+                                            if (!scrollTimer) {
+                                                scrollTimer = setInterval(autoScroll, 30);
+                                            }
+                                        }
+                                        
+                                        function stopScrolling() {
+                                            if (scrollTimer) {
+                                                clearInterval(scrollTimer);
+                                                scrollTimer = null;
+                                            }
+                                        }
+                                        
+                                        // Start auto-scrolling
+                                        startScrolling();
+                                        
+                                        // Pause scrolling on hover
+                                        eventsContainer.addEventListener('mouseenter', function() {
+                                            isPaused = true;
+                                            stopScrolling();
+                                        });
+                                        
+                                        // Resume scrolling when mouse leaves
+                                        eventsContainer.addEventListener('mouseleave', function() {
+                                            isPaused = false;
+                                            startScrolling();
+                                        });
+                                    }
+                                });
+                            </script>
+                        {% else %}
+                            <div class="no-events tw-text-center tw-py-8">
+                                <div class="tw-w-16 tw-h-16 tw-bg-gray-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                                    <i class="fas fa-calendar-times tw-text-gray-400 tw-text-xl"></i>
+                                </div>
+                                <h4 class="tw-text-base tw-font-medium tw-text-gray-900 tw-mb-1">No upcoming events</h4>
+                                <p class="tw-text-gray-500 tw-text-sm">Check back later for exciting campus activities!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notices Column -->
+            <div class="col-lg-6">
+                <div class="notices-card tw-bg-white tw-rounded-xl tw-shadow-lg tw-overflow-hidden tw-border tw-border-gray-100">
+                    <!-- Card Header -->
+                    <div class="card-header tw-bg-gradient-to-r tw-from-emerald-600 tw-to-emerald-700 tw-px-4 tw-py-3">
+                        <div class="tw-flex tw-justify-between tw-items-center">
+                            <div class="tw-flex tw-items-center tw-space-x-3">
+                                <div class="tw-w-8 tw-h-8 tw-bg-white tw-bg-opacity-20 tw-rounded-full tw-flex tw-items-center tw-justify-center">
+                                    <i class="fas fa-bullhorn tw-text-white tw-text-base"></i>
+                                </div>
+                                <div>
+                                    <h3 class="tw-text-lg tw-font-bold tw-text-white">Latest Notices</h3>
+                                    <p class="tw-text-emerald-100 tw-text-xs">
+                                        {% if recent_notices|length > 3 %}
+                                            Scroll for more ({{ recent_notices|length }} total)
+                                        {% else %}
+                                            Important updates
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            <a href="{% url 'college_website:notices_list' %}" class="btn btn-light btn-sm tw-rounded-full tw-px-3 tw-py-1 tw-text-emerald-700 tw-font-medium hover:tw-bg-emerald-50 tw-transition-all tw-duration-300 tw-text-xs">
+                                View All
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body tw-p-4">
+                        {% if recent_notices %}
+                            <div class="notices-list tw-space-y-3 tw-max-h-80 tw-overflow-y-auto tw-pr-2 custom-scrollbar" id="auto-scroll-notices">
+                                {% for notice in recent_notices %}
+                                <div class="notice-item tw-group tw-bg-gradient-to-r tw-from-gray-50 tw-to-emerald-50 tw-rounded-lg tw-p-3 tw-border tw-border-gray-100 hover:tw-border-emerald-200 tw-transition-all tw-duration-300 hover:tw-shadow-md">
+                                    <div class="tw-flex tw-items-start tw-space-x-3">
+                                        <!-- Notice Icon -->
+                                        <div class="notice-icon tw-flex-shrink-0 tw-w-10 tw-h-10 tw-bg-emerald-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-group-hover:tw-bg-emerald-200 tw-transition-all tw-duration-300">
+                                            <i class="fas fa-file-alt tw-text-emerald-600 tw-text-base"></i>
+                                        </div>
+                                        
+                                        <!-- Notice Details -->
+                                        <div class="notice-details tw-flex-1 tw-min-w-0">
+                                            <div class="tw-flex tw-items-start tw-justify-between tw-mb-1">
+                                                <h4 class="notice-title tw-font-semibold tw-text-gray-900 tw-group-hover:tw-text-emerald-700 tw-transition-colors tw-duration-300 tw-text-sm">
+                                                    {{ notice.title }}
+                                                </h4>
+                                                <span class="notice-category tw-bg-emerald-100 tw-text-emerald-800 tw-text-xs tw-px-2 tw-py-1 tw-rounded-full tw-font-medium tw-flex-shrink-0 tw-ml-2">
+                                                    {{ notice.category|title }}
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="notice-meta tw-flex tw-items-center tw-text-xs tw-text-gray-600 tw-mb-2">
+                                                <i class="fas fa-calendar tw-mr-2 tw-text-emerald-500 tw-w-3"></i>
+                                                <span>{{ notice.publish_date|date:"M d, Y" }}</span>
+                                            </div>
+                                            
+                                            <!-- Read More and Attachment Row -->
+                                            <div class="tw-flex tw-items-center tw-justify-between tw-mt-2">
+                                                <!-- Read More Link -->
+                                                <a href="{% url 'college_website:notice_detail' notice.slug %}" class="tw-inline-flex tw-items-center tw-text-xs tw-text-emerald-600 hover:tw-text-emerald-800 tw-font-medium tw-transition-colors tw-duration-300">
+                                                    Read More
+                                                    <i class="fas fa-arrow-right tw-ml-1 tw-text-xs"></i>
+                                                </a>
+                                                
+                                                <!-- Attachment Link -->
+                                                {% if notice.attachment %}
+                                                <a href="{{ notice.attachment.url }}" class="tw-inline-flex tw-items-center tw-px-2 tw-py-1 tw-bg-emerald-100 tw-text-emerald-700 tw-text-xs tw-rounded-full tw-font-medium hover:tw-bg-emerald-200 tw-transition-all tw-duration-300">
+                                                    <i class="fas fa-download tw-mr-1"></i>
+                                                    Attachment
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Auto-scroll JavaScript -->
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const noticesContainer = document.getElementById('auto-scroll-notices');
+                                    if (noticesContainer && noticesContainer.scrollHeight > noticesContainer.clientHeight) {
+                                        let scrollPosition = 0;
+                                        let scrollTimer = null;
+                                        let isPaused = false;
+                                        
+                                        function autoScroll() {
+                                            if (isPaused) return;
+                                            
+                                            scrollPosition += 0.5;
+                                            
+                                            // Reset to top when reaching bottom
+                                            if (scrollPosition >= noticesContainer.scrollHeight - noticesContainer.clientHeight) {
+                                                scrollPosition = 0;
+                                            }
+                                            
+                                            noticesContainer.scrollTop = scrollPosition;
+                                        }
+                                        
+                                        function startScrolling() {
+                                            if (!scrollTimer) {
+                                                scrollTimer = setInterval(autoScroll, 30);
+                                            }
+                                        }
+                                        
+                                        function stopScrolling() {
+                                            if (scrollTimer) {
+                                                clearInterval(scrollTimer);
+                                                scrollTimer = null;
+                                            }
+                                        }
+                                        
+                                        // Start auto-scrolling
+                                        startScrolling();
+                                        
+                                        // Pause scrolling on hover
+                                        noticesContainer.addEventListener('mouseenter', function() {
+                                            isPaused = true;
+                                            stopScrolling();
+                                        });
+                                        
+                                        // Resume scrolling when mouse leaves
+                                        noticesContainer.addEventListener('mouseleave', function() {
+                                            isPaused = false;
+                                            startScrolling();
+                                        });
+                                    }
+                                });
+                            </script>
+                        {% else %}
+                            <div class="no-notices tw-text-center tw-py-8">
+                                <div class="tw-w-16 tw-h-16 tw-bg-gray-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                                    <i class="fas fa-bullhorn tw-text-gray-400 tw-text-xl"></i>
+                                </div>
+                                <h4 class="tw-text-base tw-font-medium tw-text-gray-900 tw-mb-1">No notices available</h4>
+                                <p class="tw-text-gray-500 tw-text-sm">Stay tuned for important announcements!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Quick Links Section -->
+<section class="quick-links-section tw-py-12 tw-bg-white">
+    <div class="container">
+        <div class="text-center tw-mb-8">
+            <h2 class="section-title tw-text-3xl tw-font-bold tw-text-red-600 tw-mb-3">Quick Links</h2>
+            <p class="section-subtitle tw-text-base tw-text-gray-600">Access important resources and information quickly.</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <a href="{% url 'college_website:admissions' %}" class="quick-link-card tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl">
+                    <div class="quick-link-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-user-plus tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="quick-link-title tw-font-semibold tw-text-gray-800 tw-text-sm">Admission</h3>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <a href="{% url 'college_website:exam_results' %}" class="quick-link-card tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl">
+                    <div class="quick-link-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-file-alt tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="quick-link-title tw-font-semibold tw-text-gray-800 tw-text-sm">Results</h3>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <a href="{% url 'college_website:library' %}" class="quick-link-card tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl">
+                    <div class="quick-link-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-book tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="quick-link-title tw-font-semibold tw-text-gray-800 tw-text-sm">Library</h3>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <a href="{% url 'college_website:elearning' %}" class="quick-link-card tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl">
+                    <div class="quick-link-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-laptop tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="quick-link-title tw-font-semibold tw-text-gray-800 tw-text-sm">E-Learning</h3>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <a href="{% url 'college_website:placements' %}" class="quick-link-card tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl">
+                    <div class="quick-link-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-briefcase tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="quick-link-title tw-font-semibold tw-text-gray-800 tw-text-sm">Placement</h3>
+                </a>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-6">
+                <a href="{% url 'college_website:alumni' %}" class="quick-link-card tw-block tw-bg-white tw-rounded-xl tw-shadow-lg tw-p-5 tw-text-center tw-transition-all tw-duration-300 hover:tw-scale-105 hover:tw-shadow-xl">
+                    <div class="quick-link-icon tw-bg-red-500 tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-3">
+                        <i class="fas fa-users tw-text-white tw-text-xl"></i>
+                    </div>
+                    <h3 class="quick-link-title tw-font-semibold tw-text-gray-800 tw-text-sm">Alumni</h3>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Tailwind CSS Image Slider JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sliderContainer = document.getElementById('slider-container');
+    // Only select slides that actually have images (not blank slides)
+    const allSlides = document.querySelectorAll('[data-slide]');
+    const slides = Array.from(allSlides).filter(slide => {
+        // Check if the slide has a background image and it's not empty
+        const bgImage = slide.querySelector('div[style*="background-image"]');
+        if (!bgImage) return false;
+        
+        const bgStyle = bgImage.style.backgroundImage;
+        // Check if background image URL is valid and not empty
+        return bgStyle && 
+               bgStyle !== 'none' && 
+               bgStyle.includes('url(') && 
+               !bgStyle.includes('url("")') && 
+               !bgStyle.includes("url('')");
+    });
+    
+    const indicators = document.querySelectorAll('#slide-indicators button');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progressBar = document.getElementById('progress-bar');
+    
+    if (!sliderContainer || slides.length === 0) {
+        console.log('No valid slides found, hiding slider');
+        // Hide the entire slider section if no valid slides
+        const sliderSection = sliderContainer.closest('section');
+        if (sliderSection) {
+            sliderSection.style.display = 'none';
+        }
+        return;
+    }
+    
+    console.log(`Found ${slides.length} valid slides out of ${allSlides.length} total slides`);
+    
+    // Log any slides that don't have valid images for debugging
+    allSlides.forEach((slide, index) => {
+        if (!slides.includes(slide)) {
+            console.log(`Found invalid slide ${index} - will be ignored by slider logic`);
+        }
+    });
+    
+    let currentSlide = 0;
+    let isTransitioning = false;
+    let autoPlayInterval;
+    const slideDuration = 5000; // 5 seconds per slide
+    
+    // Initialize slider
+    function initSlider() {
+        console.log('Initializing slider with', slides.length, 'valid slides');
+        slides.forEach((slide, index) => {
+            console.log(`Slide ${index}:`, slide.dataset.slide, slide.dataset.slideIndex);
+        });
+        updateSlider();
+        startAutoPlay();
+        setupEventListeners();
+    }
+    
+    // Update slider display
+    function updateSlider() {
+        if (isTransitioning) return;
+        
+        isTransitioning = true;
+        
+        // Update slide visibility
+        slides.forEach((slide, index) => {
+            if (index === currentSlide) {
+                slide.classList.remove('tw-opacity-0');
+                slide.classList.add('tw-opacity-100');
+            } else {
+                slide.classList.remove('tw-opacity-100');
+                slide.classList.add('tw-opacity-0');
+            }
+        });
+        
+            // Update indicators
+    indicators.forEach((indicator, index) => {
+        if (index === currentSlide) {
+            indicator.classList.add('active');
+        } else {
+            indicator.classList.remove('active');
+        }
+    });
+        
+        // Update progress bar
+        if (progressBar) {
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+            }, 50);
+        }
+        
+        // Reset transition flag
+        setTimeout(() => {
+            isTransitioning = false;
+        }, 700);
+    }
+    
+    // Go to specific slide
+    function goToSlide(index) {
+        if (isTransitioning) return;
+        
+        // Ensure index is within valid range
+        if (index < 0) currentSlide = slides.length - 1;
+        else if (index >= slides.length) currentSlide = 0;
+        else currentSlide = index;
+        
+        updateSlider();
+        resetAutoPlay();
+    }
+    
+    // Next slide
+    function nextSlide() {
+        goToSlide(currentSlide + 1);
+    }
+    
+    // Previous slide
+    function prevSlide() {
+        goToSlide(currentSlide - 1);
+    }
+    
+    // Auto-play functionality
+    function startAutoPlay() {
+        if (autoPlayInterval) clearInterval(autoPlayInterval);
+        autoPlayInterval = setInterval(nextSlide, slideDuration);
+    }
+    
+    function resetAutoPlay() {
+        if (autoPlayInterval) clearInterval(autoPlayInterval);
+        startAutoPlay();
+    }
+    
+    // Pause auto-play on hover
+    function pauseAutoPlay() {
+        if (autoPlayInterval) clearInterval(autoPlayInterval);
+    }
+    
+    // Setup event listeners
+    function setupEventListeners() {
+        // Navigation buttons
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                pauseAutoPlay();
+                setTimeout(startAutoPlay, 2000);
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                pauseAutoPlay();
+                setTimeout(startAutoPlay, 2000);
+            });
+        }
+        
+        // Indicators
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                goToSlide(index);
+                pauseAutoPlay();
+                setTimeout(startAutoPlay, 2000);
+            });
+        });
+        
+        // Pause on hover
+        sliderContainer.addEventListener('mouseenter', pauseAutoPlay);
+        sliderContainer.addEventListener('mouseleave', startAutoPlay);
+        
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        sliderContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        sliderContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+                pauseAutoPlay();
+                setTimeout(startAutoPlay, 2000);
+            }
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+                pauseAutoPlay();
+                setTimeout(startAutoPlay, 2000);
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                nextSlide();
+                pauseAutoPlay();
+                setTimeout(startAutoPlay, 2000);
+            }
+        });
+    }
+    
+    // Initialize the slider only if we have valid slides
+    if (slides.length > 0) {
+        initSlider();
+    } else {
+        console.log('No valid slides to initialize');
+    }
+});
+</script>
+
+<!-- Floating Admin Controls (Only for Staff) -->
+{% if user.is_staff %}
+<div class="floating-admin-controls">
+    <div class="admin-fab" id="admin-fab">
+        <i class="fas fa-cog"></i>
+    </div>
+    <div class="admin-menu" id="admin-menu">
+        <a href="{% url 'college_website:hero_banner_management' %}" class="admin-menu-item">
+            <i class="fas fa-image"></i>
+            <span>Hero Banner</span>
+        </a>
+        <a href="/admin/" class="admin-menu-item">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Admin Panel</span>
+        </a>
+        <a href="/admin/college_website/sliderimage/" class="admin-menu-item">
+            <i class="fas fa-images"></i>
+            <span>Image Slider</span>
+        </a>
+    </div>
+</div>
+
+<style>
+.floating-admin-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.admin-fab {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.admin-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+.admin-menu {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    padding: 8px;
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.admin-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.admin-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #374151;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.admin-menu-item:hover {
+    background: #f3f4f6;
+    color: #667eea;
+    text-decoration: none;
+}
+
+.admin-menu-item i {
+    margin-right: 10px;
+    width: 16px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .floating-admin-controls {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .admin-fab {
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+    }
+    
+    .admin-menu {
+        min-width: 180px;
+        bottom: 60px;
+    }
 }
 </style>
 
-<!-- Enhanced JavaScript for Interactions -->
 <script>
-// Counter Animation
-function animateCounters() {
-    const counters = document.querySelectorAll('.stat-number');
-    const speed = 200;
-    
-    counters.forEach(counter => {
-        const target = +counter.innerText.replace(/\D/g, '');
-        const count = +counter.getAttribute('data-count') || 0;
-        const inc = target / speed;
-        
-        if (count < target) {
-            counter.setAttribute('data-count', Math.ceil(count + inc));
-            counter.innerText = Math.ceil(count + inc) + '+';
-            setTimeout(() => animateCounters(), 1);
-        } else {
-            counter.innerText = target + '+';
-        }
-    });
-}
-
-// Intersection Observer for Animations
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('animate-in');
-            
-            // Trigger counter animation for stats
-            if (entry.target.classList.contains('stats-section')) {
-                setTimeout(animateCounters, 300);
-            }
-        }
-    });
-}, observerOptions);
-
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
-    // Observe elements for animation
-    document.querySelectorAll('section, .card').forEach(el => {
-        observer.observe(el);
-    });
+    const adminFab = document.getElementById('admin-fab');
+    const adminMenu = document.getElementById('admin-menu');
     
-    // Smooth scrolling for internal links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+    if (adminFab && adminMenu) {
+        adminFab.addEventListener('click', function() {
+            adminMenu.classList.toggle('show');
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!adminFab.contains(event.target) && !adminMenu.contains(event.target)) {
+                adminMenu.classList.remove('show');
             }
         });
-    });
-    
-    // Add loading animation to cards
-    const cards = document.querySelectorAll('.card');
-    cards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
-        card.classList.add('fade-in-up');
-    });
+    }
 });
+</script>
+{% endif %}
 
-// Scroll indicator click
-document.querySelector('.tw-animate-bounce')?.addEventListener('click', () => {
-    window.scrollTo({
-        top: window.innerHeight,
-        behavior: 'smooth'
-    });
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Enhanced Hero Carousel Functionality
+    const heroCarousel = document.getElementById('heroCarousel');
+    if (heroCarousel) {
+        // Initialize carousel with custom settings
+        const carousel = new bootstrap.Carousel(heroCarousel, {
+            interval: 5000,
+            wrap: true,
+            touch: true,
+            keyboard: true
+        });
+
+        // Add smooth transition effects
+        heroCarousel.addEventListener('slide.bs.carousel', function (e) {
+            const activeItem = e.target.querySelector('.carousel-item.active');
+            const nextItem = e.relatedTarget;
+            
+            // Add fade effect
+            if (activeItem) {
+                activeItem.style.opacity = '0.8';
+            }
+            if (nextItem) {
+                nextItem.style.opacity = '0';
+                setTimeout(() => {
+                    nextItem.style.opacity = '1';
+                }, 50);
+            }
+        });
+
+        // Reset opacity after slide
+        heroCarousel.addEventListener('slid.bs.carousel', function (e) {
+            const activeItem = e.target.querySelector('.carousel-item.active');
+            if (activeItem) {
+                activeItem.style.opacity = '1';
+            }
+        });
+
+        // Pause carousel on hover
+        heroCarousel.addEventListener('mouseenter', function() {
+            carousel.pause();
+        });
+
+        // Resume carousel when mouse leaves
+        heroCarousel.addEventListener('mouseleave', function() {
+            carousel.cycle();
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                carousel.prev();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                carousel.next();
+            }
+        });
+
+        // Add touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        heroCarousel.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        heroCarousel.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    carousel.next();
+                } else {
+                    carousel.prev();
+                }
+            }
+        }
+
+        // Add indicator click effects
+        const indicators = heroCarousel.querySelectorAll('.carousel-indicators button');
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', function() {
+                // Add ripple effect
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(255, 255, 255, 0.6)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = '50%';
+                ripple.style.top = '50%';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.marginLeft = '-10px';
+                ripple.style.marginTop = '-10px';
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 });
 </script>
 {% endblock %}

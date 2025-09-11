@@ -1,0 +1,381 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Student Login - {{ college_info.college_name }}{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+    :root {
+        --bs-primary-rgb: 99, 102, 241;
+        --bs-secondary-rgb: 107, 114, 128;
+        --bs-success-rgb: 16, 185, 129;
+        --bs-info-rgb: 59, 130, 246;
+        --bs-warning-rgb: 245, 158, 11;
+        --bs-danger-rgb: 239, 68, 68;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+        min-height: 100vh;
+    }
+
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+    }
+
+    .login-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+        max-width: 450px;
+        width: 100%;
+    }
+
+    .login-header {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .login-header-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-icon {
+        width: 70px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 1.75rem;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .login-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-bottom: 0;
+    }
+
+    .login-body {
+        padding: 2.5rem 2rem;
+    }
+
+    .form-floating {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-floating > .form-control {
+        border-radius: 12px;
+        border: 2px solid #e5e7eb;
+        padding: 1rem 0.75rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-floating > .form-control:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+    }
+
+    .form-floating > label {
+        padding: 1rem 0.75rem;
+        color: #6b7280;
+    }
+
+    .form-check {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+
+    .form-check-input {
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 6px;
+        border: 2px solid #d1d5db;
+        margin-left: -2rem;
+        margin-top: 0.125rem;
+    }
+
+    .form-check-input:checked {
+        background-color: #6366f1;
+        border-color: #6366f1;
+    }
+
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+    }
+
+    .form-check-label {
+        color: #374151;
+        font-size: 0.95rem;
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        width: 100%;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-login::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-login:hover::before {
+        left: 100%;
+    }
+
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .register-link a {
+        color: #6366f1;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .register-link a:hover {
+        color: #4f46e5;
+    }
+
+    .forgot-password {
+        text-align: right;
+        margin-bottom: 1rem;
+    }
+
+    .forgot-password a {
+        color: #6366f1;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+    }
+
+    .forgot-password a:hover {
+        color: #4f46e5;
+    }
+
+    .alert {
+        border-radius: 12px;
+        border: none;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .alert-danger {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .alert-success {
+        background: #f0fdf4;
+        color: #16a34a;
+    }
+
+    @media (max-width: 768px) {
+        .login-container {
+            padding: 1rem;
+        }
+        
+        .login-header {
+            padding: 2rem 1.5rem;
+        }
+        
+        .login-body {
+            padding: 2rem 1.5rem;
+        }
+        
+        .login-title {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <div class="login-header-content">
+                <div class="login-icon">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <h1 class="login-title">Welcome Back</h1>
+                <p class="login-subtitle">Sign in to your student account</p>
+            </div>
+        </div>
+        
+        <div class="login-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-{% if message.tags == 'error' %}exclamation-triangle{% else %}check-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post" id="loginForm" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <div class="form-floating">
+                    {{ form.username }}
+                    <label for="{{ form.username.id_for_label }}">
+                        <i class="fas fa-user me-2"></i>{{ form.username.label }}
+                    </label>
+                    {% if form.username.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.username.errors.0 }}
+                        </div>
+                    {% endif %}
+                    {% if form.username.help_text %}
+                        <small class="form-text text-muted">{{ form.username.help_text }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating">
+                    {{ form.password }}
+                    <label for="{{ form.password.id_for_label }}">
+                        <i class="fas fa-lock me-2"></i>{{ form.password.label }}
+                    </label>
+                    {% if form.password.errors %}
+                        <div class="invalid-feedback d-block">
+                            {{ form.password.errors.0 }}
+                        </div>
+                    {% endif %}
+                    {% if form.password.help_text %}
+                        <small class="form-text text-muted">{{ form.password.help_text }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="forgot-password">
+                    <a href="{% url 'college_website:student_password_reset' %}" class="forgot-password-link">
+                        <i class="fas fa-key me-1"></i>Forgot Password?
+                    </a>
+                </div>
+
+                <div class="form-check">
+                    {{ form.remember_me }}
+                    <label class="form-check-label" for="{{ form.remember_me.id_for_label }}">
+                        {{ form.remember_me.label }}
+                    </label>
+                    {% if form.remember_me.help_text %}
+                        <small class="form-text text-muted">{{ form.remember_me.help_text }}</small>
+                    {% endif %}
+                </div>
+
+                <!-- Display form non-field errors -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="btn btn-login">
+                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                </button>
+            </form>
+
+            <div class="register-link">
+                <p class="mb-0">Don't have an account? <a href="{% url 'college_website:student_register' %}">Create one here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Form validation
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        
+        if (!username || !password) {
+            e.preventDefault();
+            alert('Please fill in all required fields.');
+            return false;
+        }
+    });
+    
+    // Forgot password functionality (placeholder)
+    document.querySelector('.forgot-password-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Forgot password functionality will be implemented soon!');
+    });
+</script>
+{% endblock %}
