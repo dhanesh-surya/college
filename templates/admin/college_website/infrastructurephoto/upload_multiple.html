@@ -1,0 +1,466 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+.upload-multiple-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.upload-section {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.upload-section h3 {
+    color: #495057;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.file-upload-area {
+    border: 2px dashed #6c757d;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.file-upload-area:hover {
+    border-color: #007bff;
+    background: #f8f9ff;
+}
+
+.file-upload-area.dragover {
+    border-color: #007bff;
+    background: #e3f2fd;
+}
+
+.upload-icon {
+    font-size: 48px;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.upload-text {
+    color: #6c757d;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.upload-hint {
+    color: #868e96;
+    font-size: 14px;
+}
+
+.form-section {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.form-section h4 {
+    color: #495057;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-check {
+    margin-bottom: 10px;
+}
+
+.form-check-input {
+    margin-right: 8px;
+}
+
+.help-text {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.btn-upload {
+    background: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-upload:hover {
+    background: #0056b3;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.btn-cancel:hover {
+    background: #545b62;
+}
+
+.file-list {
+    margin-top: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.file-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid #f1f3f4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-name {
+    font-size: 14px;
+    color: #495057;
+}
+
+.file-size {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.remove-file {
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.remove-file:hover {
+    color: #c82333;
+}
+
+.error-message {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.success-message {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="upload-multiple-container">
+    <h1>{{ title }}</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="{% if message.tags == 'error' %}error-message{% else %}success-message{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data" id="multiple-upload-form">
+        {% csrf_token %}
+        
+        <!-- File Upload Section -->
+        <div class="upload-section">
+            <h3>📁 Select Multiple Photos</h3>
+            <div class="file-upload-area" id="file-upload-area">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">Click to select files or drag and drop</div>
+                <div class="upload-hint">Supports JPEG, PNG, GIF, WebP (max 5MB each, up to 20 files)</div>
+                {{ form.images }}
+            </div>
+            <div class="file-list" id="file-list" style="display: none;">
+                <!-- File list will be populated by JavaScript -->
+            </div>
+            {% if form.images.errors %}
+                <div class="error-message">
+                    {{ form.images.errors.0 }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Common Settings Section -->
+        <div class="form-section">
+            <h4>⚙️ Common Settings for All Photos</h4>
+            
+            <div class="form-group">
+                <label for="{{ form.section_type.id_for_label }}">{{ form.section_type.label }}</label>
+                {{ form.section_type }}
+                {% if form.section_type.help_text %}
+                    <div class="help-text">{{ form.section_type.help_text }}</div>
+                {% endif %}
+                {% if form.section_type.errors %}
+                    <div class="error-message">{{ form.section_type.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.academic_facility.id_for_label }}">{{ form.academic_facility.label }}</label>
+                {{ form.academic_facility }}
+                {% if form.academic_facility.help_text %}
+                    <div class="help-text">{{ form.academic_facility.help_text }}</div>
+                {% endif %}
+                {% if form.academic_facility.errors %}
+                    <div class="error-message">{{ form.academic_facility.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.sports_facility.id_for_label }}">{{ form.sports_facility.label }}</label>
+                {{ form.sports_facility }}
+                {% if form.sports_facility.help_text %}
+                    <div class="help-text">{{ form.sports_facility.help_text }}</div>
+                {% endif %}
+                {% if form.sports_facility.errors %}
+                    <div class="error-message">{{ form.sports_facility.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.technology_infrastructure.id_for_label }}">{{ form.technology_infrastructure.label }}</label>
+                {{ form.technology_infrastructure }}
+                {% if form.technology_infrastructure.help_text %}
+                    <div class="help-text">{{ form.technology_infrastructure.help_text }}</div>
+                {% endif %}
+                {% if form.technology_infrastructure.errors %}
+                    <div class="error-message">{{ form.technology_infrastructure.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.student_amenity.id_for_label }}">{{ form.student_amenity.label }}</label>
+                {{ form.student_amenity }}
+                {% if form.student_amenity.help_text %}
+                    <div class="help-text">{{ form.student_amenity.help_text }}</div>
+                {% endif %}
+                {% if form.student_amenity.errors %}
+                    <div class="error-message">{{ form.student_amenity.errors.0 }}</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Display Options Section -->
+        <div class="form-section">
+            <h4>🎨 Display Options</h4>
+            
+            <div class="form-check">
+                {{ form.is_featured }}
+                <label for="{{ form.is_featured.id_for_label }}">{{ form.is_featured.label }}</label>
+                {% if form.is_featured.help_text %}
+                    <div class="help-text">{{ form.is_featured.help_text }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-check">
+                {{ form.is_active }}
+                <label for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label>
+                {% if form.is_active.help_text %}
+                    <div class="help-text">{{ form.is_active.help_text }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-check">
+                {{ form.auto_generate_titles }}
+                <label for="{{ form.auto_generate_titles.id_for_label }}">{{ form.auto_generate_titles.label }}</label>
+                {% if form.auto_generate_titles.help_text %}
+                    <div class="help-text">{{ form.auto_generate_titles.help_text }}</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{% url 'admin:college_website_infrastructurephoto_changelist' %}" class="btn-cancel">Cancel</a>
+            <button type="submit" class="btn-upload">Upload Photos</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('id_images');
+    const fileUploadArea = document.getElementById('file-upload-area');
+    const fileList = document.getElementById('file-list');
+    const selectedFiles = [];
+    
+    // Handle file selection
+    fileInput.addEventListener('change', function(e) {
+        handleFiles(e.target.files);
+    });
+    
+    // Handle drag and drop
+    fileUploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        fileUploadArea.classList.add('dragover');
+    });
+    
+    fileUploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        fileUploadArea.classList.remove('dragover');
+    });
+    
+    fileUploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        fileUploadArea.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+    });
+    
+    // Click to select files
+    fileUploadArea.addEventListener('click', function() {
+        fileInput.click();
+    });
+    
+    function handleFiles(files) {
+        // Clear previous files
+        selectedFiles.length = 0;
+        
+        // Add new files
+        for (let i = 0; i < files.length; i++) {
+            if (selectedFiles.length < 20) {
+                selectedFiles.push(files[i]);
+            }
+        }
+        
+        // Update file input
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        fileInput.files = dt.files;
+        
+        // Update file list display
+        updateFileList();
+    }
+    
+    function updateFileList() {
+        if (selectedFiles.length === 0) {
+            fileList.style.display = 'none';
+            return;
+        }
+        
+        fileList.style.display = 'block';
+        fileList.innerHTML = '';
+        
+        selectedFiles.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <div>
+                    <div class="file-name">${file.name}</div>
+                    <div class="file-size">${formatFileSize(file.size)}</div>
+                </div>
+                <span class="remove-file" onclick="removeFile(${index})">&times;</span>
+            `;
+            fileList.appendChild(fileItem);
+        });
+    }
+    
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    // Make removeFile function global
+    window.removeFile = function(index) {
+        selectedFiles.splice(index, 1);
+        
+        // Update file input
+        const dt = new DataTransfer();
+        selectedFiles.forEach(file => dt.items.add(file));
+        fileInput.files = dt.files;
+        
+        updateFileList();
+    };
+    
+    // Form validation
+    document.getElementById('multiple-upload-form').addEventListener('submit', function(e) {
+        if (selectedFiles.length === 0) {
+            e.preventDefault();
+            alert('Please select at least one image file.');
+            return false;
+        }
+        
+        // Check file sizes
+        for (let file of selectedFiles) {
+            if (file.size > 5 * 1024 * 1024) {
+                e.preventDefault();
+                alert(`File "${file.name}" is too large. Maximum size is 5MB.`);
+                return false;
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
+

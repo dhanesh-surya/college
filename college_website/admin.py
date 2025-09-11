@@ -7,7 +7,16 @@ from django.shortcuts import render
 from django import forms
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 from django_ckeditor_5.widgets import CKEditor5Widget
+<<<<<<< HEAD
 from .forms import TopUtilityBarForm, CustomLinkForm, NavbarInfoForm
+=======
+from .forms import (
+    TopUtilityBarForm, CustomLinkForm, InfrastructurePhotoForm, InfrastructurePhotoInlineForm, MultipleInfrastructurePhotoForm,
+    InfrastructureInfoForm, InfrastructureStatisticForm, AcademicFacilityForm, SportsFacilityForm, 
+    TechnologyInfrastructureForm, StudentAmenityForm
+)
+from .academic_forms import AcademicCalendarForm, AcademicEventForm, AcademicEventInlineForm
+>>>>>>> a11168e (Fix)
 from datetime import datetime, timezone, timedelta
 from .models import (
     ScrollingNotification, SliderImage, HeaderInfo, NavbarInfo, CollegeInfo, Program, Event, EventImage, Notice, SocialInitiative, 
@@ -20,6 +29,7 @@ from .models import (
     # IQAC Models
     IQACInfo, IQACReport, NAACInfo, NIRFInfo, QualityInitiative, 
     AccreditationInfo, IQACFeedback, SideMenu, SideMenuItem,
+<<<<<<< HEAD
     # Vision Mission Models
     VisionMissionContent, CoreValue,
     # History Models
@@ -46,6 +56,12 @@ from .models import (
     # NSS-NCC Models
     NSSNCCClub, NSSNCCNotice, NSSNCCGallery, NSSNCCAchievement,
     HeroCarouselSlide, HeroCarouselSettings
+=======
+    # Infrastructure Models
+    InfrastructureInfo, InfrastructureStatistic, AcademicFacility, SportsFacility, TechnologyInfrastructure, StudentAmenity, InfrastructurePhoto,
+    # Academic Calendar Models
+    AcademicCalendar, AcademicEvent
+>>>>>>> a11168e (Fix)
 )
 
 
@@ -3816,6 +3832,731 @@ class SideMenuItemAdmin(admin.ModelAdmin):
             'all': ('admin/css/iqac_admin.css',)
         }
         js = ('admin/js/iqac_admin.js',)
+
+
+# ============================================================================
+# INFRASTRUCTURE ADMIN CLASSES
+# ============================================================================
+
+# Infrastructure Photo Inline Admin Classes
+class InfrastructurePhotoInline(admin.TabularInline):
+    """Inline admin for Infrastructure Photos"""
+    model = InfrastructurePhoto
+    form = InfrastructurePhotoInlineForm
+    extra = 1
+    min_num = 0
+    max_num = 10
+    fields = ('title', 'image', 'is_featured', 'is_active', 'display_order')
+    readonly_fields = ('created_at', 'updated_at')
+    
+    class Media:
+        css = {
+            'all': ('admin/css/infrastructure_photo_inline.css',)
+        }
+        js = ('admin/js/infrastructure_photo_inline.js',)
+
+@admin.register(InfrastructureInfo)
+class InfrastructureInfoAdmin(admin.ModelAdmin):
+    """Enhanced admin interface for Infrastructure Information with improved form"""
+    
+    form = InfrastructureInfoForm
+    list_display = ['title', 'is_active', 'created_at', 'updated_at']
+    list_filter = ['is_active', 'created_at', 'updated_at']
+    search_fields = ['title', 'subtitle', 'hero_title', 'overview_title']
+    readonly_fields = ['created_at', 'updated_at']
+    list_editable = ['is_active']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'subtitle', 'is_active'),
+            'description': 'Main page information and visibility settings'
+        }),
+        ('Hero Section', {
+            'fields': ('hero_title', 'hero_subtitle', 'hero_image', 'hero_badge_text'),
+            'description': 'Hero/banner section content and styling'
+        }),
+        ('Overview Section', {
+            'fields': ('overview_title', 'overview_description'),
+            'description': 'Main overview content displayed prominently'
+        }),
+        ('Call to Action', {
+            'fields': ('cta_title', 'cta_description', 'cta_button_text', 'cta_button_url'),
+            'description': 'Call-to-action section to encourage visitor engagement'
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+            'description': 'Automatic timestamps for record tracking'
+        }),
+    )
+    
+    actions = ['make_active', 'make_inactive', 'duplicate_infrastructure_info']
+    
+    def make_active(self, request, queryset):
+        """Make selected infrastructure info active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} infrastructure info marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected infrastructure info inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} infrastructure info marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def duplicate_infrastructure_info(self, request, queryset):
+        """Duplicate selected infrastructure info"""
+        for obj in queryset:
+            obj.pk = None
+            obj.title = f"{obj.title} (Copy)"
+            obj.is_active = False
+            obj.save()
+        self.message_user(request, f'{queryset.count()} infrastructure info duplicated.')
+    duplicate_infrastructure_info.short_description = "Duplicate selected infrastructure info"
+    
+    class Media:
+        css = {
+            'all': ('admin/css/infrastructure_admin.css',)
+        }
+        js = ('admin/js/infrastructure_admin.js',)
+
+
+@admin.register(InfrastructureStatistic)
+class InfrastructureStatisticAdmin(admin.ModelAdmin):
+    """Enhanced admin interface for Infrastructure Statistics with improved form"""
+    
+    form = InfrastructureStatisticForm
+    list_display = ['title', 'value', 'statistic_type', 'color_class', 'is_active', 'display_order']
+    list_filter = ['statistic_type', 'color_class', 'is_active', 'created_at']
+    search_fields = ['title', 'value', 'description', 'icon_class']
+    list_editable = ['value', 'is_active', 'display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'value', 'description', 'statistic_type'),
+            'description': 'Core statistic information and categorization'
+        }),
+        ('Display Settings', {
+            'fields': ('icon_class', 'color_class', 'display_order', 'is_active'),
+            'description': 'Visual appearance and ordering settings'
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+            'description': 'Automatic timestamps for record tracking'
+        }),
+    )
+    
+    actions = ['make_active', 'make_inactive', 'reset_display_order', 'duplicate_statistic']
+    
+    def make_active(self, request, queryset):
+        """Make selected statistics active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} statistics marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected statistics inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} statistics marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def reset_display_order(self, request, queryset):
+        """Reset display order to 0 for selected statistics"""
+        updated = queryset.update(display_order=0)
+        self.message_user(request, f'Display order reset for {updated} statistics.')
+    reset_display_order.short_description = "Reset display order"
+    
+    def duplicate_statistic(self, request, queryset):
+        """Duplicate selected statistics"""
+        for obj in queryset:
+            obj.pk = None
+            obj.title = f"{obj.title} (Copy)"
+            obj.is_active = False
+            obj.save()
+        self.message_user(request, f'{queryset.count()} statistics duplicated.')
+    duplicate_statistic.short_description = "Duplicate selected statistics"
+    
+    class Media:
+        css = {
+            'all': ('admin/css/infrastructure_admin.css',)
+        }
+        js = ('admin/js/infrastructure_admin.js',)
+
+
+@admin.register(AcademicFacility)
+class AcademicFacilityAdmin(admin.ModelAdmin):
+    """Enhanced admin interface for Academic Facilities with improved form"""
+    
+    form = AcademicFacilityForm
+    inlines = [InfrastructurePhotoInline]
+    list_display = ['title', 'facility_type', 'color_class', 'is_featured', 'is_active', 'display_order', 'get_photo_count']
+    list_filter = ['facility_type', 'color_class', 'is_featured', 'is_active', 'created_at']
+    search_fields = ['title', 'description', 'features', 'icon_class']
+    list_editable = ['is_featured', 'is_active', 'display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'description', 'facility_type'),
+            'description': 'Core facility information and categorization'
+        }),
+        ('Display Settings', {
+            'fields': ('icon_class', 'color_class', 'image', 'display_order'),
+            'description': 'Visual appearance and ordering settings'
+        }),
+        ('Features', {
+            'fields': ('features',),
+            'description': 'Key features and capabilities of the facility (one per line)'
+        }),
+        ('Status', {
+            'fields': ('is_featured', 'is_active'),
+            'description': 'Visibility and prominence settings'
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+            'description': 'Automatic timestamps for record tracking'
+        }),
+    )
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive', 'reset_display_order', 'duplicate_facility']
+    
+    def make_featured(self, request, queryset):
+        """Make selected facilities featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} facilities marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected facilities unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} facilities marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected facilities active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} facilities marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected facilities inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} facilities marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def reset_display_order(self, request, queryset):
+        """Reset display order to 0 for selected facilities"""
+        updated = queryset.update(display_order=0)
+        self.message_user(request, f'Display order reset for {updated} facilities.')
+    reset_display_order.short_description = "Reset display order"
+    
+    def duplicate_facility(self, request, queryset):
+        """Duplicate selected facilities"""
+        for obj in queryset:
+            obj.pk = None
+            obj.title = f"{obj.title} (Copy)"
+            obj.is_featured = False
+            obj.is_active = False
+            obj.save()
+        self.message_user(request, f'{queryset.count()} facilities duplicated.')
+    duplicate_facility.short_description = "Duplicate selected facilities"
+    
+    def get_photo_count(self, obj):
+        """Get the number of photos for this facility"""
+        return obj.photos.count()
+    get_photo_count.short_description = "Photos"
+    
+    class Media:
+        css = {
+            'all': ('admin/css/infrastructure_admin.css',)
+        }
+        js = ('admin/js/infrastructure_admin.js',)
+
+
+@admin.register(SportsFacility)
+class SportsFacilityAdmin(admin.ModelAdmin):
+    """Enhanced admin interface for Sports Facilities with improved form"""
+    
+    form = SportsFacilityForm
+    inlines = [InfrastructurePhotoInline]
+    list_display = ['title', 'sports_type', 'color_class', 'is_active', 'display_order', 'get_photo_count']
+    list_filter = ['sports_type', 'color_class', 'is_active', 'created_at']
+    search_fields = ['title', 'description', 'icon_class']
+    list_editable = ['is_active', 'display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'description', 'sports_type'),
+            'description': 'Core sports facility information and categorization'
+        }),
+        ('Display Settings', {
+            'fields': ('icon_class', 'color_class', 'image', 'display_order'),
+            'description': 'Visual appearance and ordering settings'
+        }),
+        ('Status', {
+            'fields': ('is_active',),
+            'description': 'Visibility settings'
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+            'description': 'Automatic timestamps for record tracking'
+        }),
+    )
+    
+    actions = ['make_active', 'make_inactive', 'reset_display_order', 'duplicate_facility']
+    
+    def make_active(self, request, queryset):
+        """Make selected sports facilities active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} sports facilities marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected sports facilities inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} sports facilities marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def reset_display_order(self, request, queryset):
+        """Reset display order to 0 for selected facilities"""
+        updated = queryset.update(display_order=0)
+        self.message_user(request, f'Display order reset for {updated} sports facilities.')
+    reset_display_order.short_description = "Reset display order"
+    
+    def duplicate_facility(self, request, queryset):
+        """Duplicate selected sports facilities"""
+        for obj in queryset:
+            obj.pk = None
+            obj.title = f"{obj.title} (Copy)"
+            obj.is_active = False
+            obj.save()
+        self.message_user(request, f'{queryset.count()} sports facilities duplicated.')
+    duplicate_facility.short_description = "Duplicate selected sports facilities"
+    
+    def get_photo_count(self, obj):
+        """Get the number of photos for this facility"""
+        return obj.photos.count()
+    get_photo_count.short_description = "Photos"
+    
+    class Media:
+        css = {
+            'all': ('admin/css/infrastructure_admin.css',)
+        }
+        js = ('admin/js/infrastructure_admin.js',)
+
+
+@admin.register(TechnologyInfrastructure)
+class TechnologyInfrastructureAdmin(admin.ModelAdmin):
+    """Enhanced admin interface for Technology Infrastructure with improved form"""
+    
+    form = TechnologyInfrastructureForm
+    inlines = [InfrastructurePhotoInline]
+    list_display = ['title', 'tech_type', 'color_class', 'is_active', 'display_order', 'get_photo_count']
+    list_filter = ['tech_type', 'color_class', 'is_active', 'created_at']
+    search_fields = ['title', 'description', 'icon_class']
+    list_editable = ['is_active', 'display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'description', 'tech_type'),
+            'description': 'Core technology infrastructure information and categorization'
+        }),
+        ('Display Settings', {
+            'fields': ('icon_class', 'color_class', 'display_order'),
+            'description': 'Visual appearance and ordering settings'
+        }),
+        ('Status', {
+            'fields': ('is_active',),
+            'description': 'Visibility settings'
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+            'description': 'Automatic timestamps for record tracking'
+        }),
+    )
+    
+    actions = ['make_active', 'make_inactive', 'reset_display_order', 'duplicate_technology']
+    
+    def make_active(self, request, queryset):
+        """Make selected technology infrastructure active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} technology infrastructure marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected technology infrastructure inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} technology infrastructure marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def reset_display_order(self, request, queryset):
+        """Reset display order to 0 for selected technology infrastructure"""
+        updated = queryset.update(display_order=0)
+        self.message_user(request, f'Display order reset for {updated} technology infrastructure.')
+    reset_display_order.short_description = "Reset display order"
+    
+    def duplicate_technology(self, request, queryset):
+        """Duplicate selected technology infrastructure"""
+        for obj in queryset:
+            obj.pk = None
+            obj.title = f"{obj.title} (Copy)"
+            obj.is_active = False
+            obj.save()
+        self.message_user(request, f'{queryset.count()} technology infrastructure duplicated.')
+    duplicate_technology.short_description = "Duplicate selected technology infrastructure"
+    
+    def get_photo_count(self, obj):
+        """Get the number of photos for this technology infrastructure"""
+        return obj.photos.count()
+    get_photo_count.short_description = "Photos"
+    
+    class Media:
+        css = {
+            'all': ('admin/css/infrastructure_admin.css',)
+        }
+        js = ('admin/js/infrastructure_admin.js',)
+
+
+@admin.register(StudentAmenity)
+class StudentAmenityAdmin(admin.ModelAdmin):
+    """Enhanced admin interface for Student Amenities with improved form"""
+    
+    form = StudentAmenityForm
+    inlines = [InfrastructurePhotoInline]
+    list_display = ['title', 'amenity_type', 'color_class', 'is_active', 'display_order', 'get_photo_count']
+    list_filter = ['amenity_type', 'color_class', 'is_active', 'created_at']
+    search_fields = ['title', 'description', 'icon_class']
+    list_editable = ['is_active', 'display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'description', 'amenity_type'),
+            'description': 'Core student amenity information and categorization'
+        }),
+        ('Display Settings', {
+            'fields': ('icon_class', 'color_class', 'display_order'),
+            'description': 'Visual appearance and ordering settings'
+        }),
+        ('Status', {
+            'fields': ('is_active',),
+            'description': 'Visibility settings'
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+            'description': 'Automatic timestamps for record tracking'
+        }),
+    )
+    
+    actions = ['make_active', 'make_inactive', 'reset_display_order', 'duplicate_amenity']
+    
+    def make_active(self, request, queryset):
+        """Make selected amenities active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} amenities marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected amenities inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} amenities marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def reset_display_order(self, request, queryset):
+        """Reset display order to 0 for selected amenities"""
+        updated = queryset.update(display_order=0)
+        self.message_user(request, f'Display order reset for {updated} amenities.')
+    reset_display_order.short_description = "Reset display order"
+    
+    def duplicate_amenity(self, request, queryset):
+        """Duplicate selected amenities"""
+        for obj in queryset:
+            obj.pk = None
+            obj.title = f"{obj.title} (Copy)"
+            obj.is_active = False
+            obj.save()
+        self.message_user(request, f'{queryset.count()} amenities duplicated.')
+    duplicate_amenity.short_description = "Duplicate selected amenities"
+    
+    def get_photo_count(self, obj):
+        """Get the number of photos for this amenity"""
+        return obj.photos.count()
+    get_photo_count.short_description = "Photos"
+    
+    class Media:
+        css = {
+            'all': ('admin/css/infrastructure_admin.css',)
+        }
+        js = ('admin/js/infrastructure_admin.js',)
+
+
+@admin.register(InfrastructurePhoto)
+class InfrastructurePhotoAdmin(admin.ModelAdmin):
+    """Admin interface for Infrastructure Photos with multiple upload capability"""
+    
+    form = InfrastructurePhotoForm
+    list_display = ['title', 'get_facility_title', 'section_type', 'is_featured', 'is_active', 'display_order', 'created_at']
+    list_filter = ['section_type', 'is_featured', 'is_active', 'academic_facility', 'sports_facility', 'technology_infrastructure', 'student_amenity']
+    search_fields = ['title', 'description']
+    list_editable = ['is_featured', 'is_active', 'display_order']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Photo Information', {
+            'fields': ('title', 'description', 'image')
+        }),
+        ('Association', {
+            'fields': ('academic_facility', 'sports_facility', 'technology_infrastructure', 'student_amenity', 'section_type')
+        }),
+        ('Display Settings', {
+            'fields': ('is_featured', 'is_active', 'display_order')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['make_featured', 'make_unfeatured', 'make_active', 'make_inactive']
+    
+    def get_urls(self):
+        """Add custom URLs for multiple photo upload"""
+        urls = super().get_urls()
+        custom_urls = [
+            path('upload-multiple/', self.admin_site.admin_view(self.upload_multiple_photos), name='college_website_infrastructurephoto_upload_multiple'),
+        ]
+        return custom_urls + urls
+    
+    def upload_multiple_photos(self, request):
+        """Handle multiple photo upload"""
+        if request.method == 'POST':
+            form = MultipleInfrastructurePhotoForm(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    created_photos = form.save()
+                    self.message_user(
+                        request,
+                        f'Successfully uploaded {len(created_photos)} photos.',
+                        messages.SUCCESS
+                    )
+                    return HttpResponseRedirect(reverse('admin:college_website_infrastructurephoto_changelist'))
+                except Exception as e:
+                    self.message_user(
+                        request,
+                        f'Error uploading photos: {str(e)}',
+                        messages.ERROR
+                    )
+        else:
+            form = MultipleInfrastructurePhotoForm()
+        
+        context = {
+            'form': form,
+            'title': 'Upload Multiple Infrastructure Photos',
+            'has_permission': True,
+            'opts': self.model._meta,
+            'add': True,
+            'change': False,
+            'is_popup': False,
+            'save_as': False,
+            'has_add_permission': True,
+            'has_change_permission': True,
+            'has_delete_permission': True,
+            'has_view_permission': True,
+        }
+        
+        return render(request, 'admin/college_website/infrastructurephoto/upload_multiple.html', context)
+    
+    def make_featured(self, request, queryset):
+        """Make selected photos featured"""
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} photos marked as featured.')
+    make_featured.short_description = "Mark selected as featured"
+    
+    def make_unfeatured(self, request, queryset):
+        """Make selected photos unfeatured"""
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} photos marked as unfeatured.')
+    make_unfeatured.short_description = "Mark selected as unfeatured"
+    
+    def make_active(self, request, queryset):
+        """Make selected photos active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} photos marked as active.')
+    make_active.short_description = "Mark selected as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected photos inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} photos marked as inactive.')
+    make_inactive.short_description = "Mark selected as inactive"
+    
+    def get_facility_title(self, obj):
+        """Get the associated facility title for display in list view"""
+        if obj.academic_facility:
+            return f"Academic: {obj.academic_facility.title}"
+        elif obj.sports_facility:
+            return f"Sports: {obj.sports_facility.title}"
+        elif obj.technology_infrastructure:
+            return f"Technology: {obj.technology_infrastructure.title}"
+        elif obj.student_amenity:
+            return f"Amenity: {obj.student_amenity.title}"
+        else:
+            return "General Infrastructure"
+    get_facility_title.short_description = "Associated Facility"
+    get_facility_title.admin_order_field = 'academic_facility__title'
+
+
+# Academic Calendar Inline Admin
+class AcademicEventInline(admin.TabularInline):
+    """Inline admin for Academic Events"""
+    model = AcademicEvent
+    form = AcademicEventInlineForm
+    extra = 0
+    fields = ['title', 'event_type', 'semester', 'start_date', 'end_date', 'is_important', 'ordering', 'is_published']
+    readonly_fields = ['created_at', 'updated_at']
+    ordering = ['start_date', 'ordering']
+
+
+@admin.register(AcademicCalendar)
+class AcademicCalendarAdmin(admin.ModelAdmin):
+    """Enhanced admin interface for Academic Calendar with improved form"""
+    form = AcademicCalendarForm
+    inlines = [AcademicEventInline]
+    list_display = ['academic_year', 'title', 'is_active', 'is_published', 'has_pdf', 'download_count', 'start_date', 'end_date', 'created_at']
+    list_filter = ['is_active', 'is_published', 'academic_year', 'created_at', 'updated_at']
+    search_fields = ['academic_year', 'title', 'description']
+    readonly_fields = ['created_at', 'updated_at', 'pdf_file_size', 'download_count']
+    list_editable = ['is_active', 'is_published']
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('academic_year', 'title', 'description'),
+            'description': 'Main calendar information'
+        }),
+        ('Academic Year Period', {
+            'fields': ('start_date', 'end_date'),
+            'description': 'Academic year start and end dates'
+        }),
+        ('PDF File', {
+            'fields': ('pdf_file', 'pdf_file_size', 'download_count'),
+            'description': 'Upload and manage PDF version of the calendar'
+        }),
+        ('Status & Visibility', {
+            'fields': ('is_active', 'is_published'),
+            'description': 'Calendar status and visibility settings'
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+            'description': 'Automatic timestamps'
+        }),
+    )
+    actions = ['make_active', 'make_inactive', 'make_published', 'make_unpublished', 'duplicate_calendar']
+    
+    def has_pdf(self, obj):
+        """Check if calendar has PDF file"""
+        if obj.pdf_file:
+            return format_html('<span style="color: green;">✓ PDF Available</span>')
+        return format_html('<span style="color: red;">✗ No PDF</span>')
+    has_pdf.short_description = 'PDF Status'
+    has_pdf.admin_order_field = 'pdf_file'
+    
+    def make_active(self, request, queryset):
+        """Make selected calendars active"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} calendar(s) marked as active.')
+    make_active.short_description = "Mark selected calendars as active"
+    
+    def make_inactive(self, request, queryset):
+        """Make selected calendars inactive"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} calendar(s) marked as inactive.')
+    make_inactive.short_description = "Mark selected calendars as inactive"
+    
+    def make_published(self, request, queryset):
+        """Make selected calendars published"""
+        updated = queryset.update(is_published=True)
+        self.message_user(request, f'{updated} calendar(s) published.')
+    make_published.short_description = "Publish selected calendars"
+    
+    def make_unpublished(self, request, queryset):
+        """Make selected calendars unpublished"""
+        updated = queryset.update(is_published=False)
+        self.message_user(request, f'{updated} calendar(s) unpublished.')
+    make_unpublished.short_description = "Unpublish selected calendars"
+    
+    def duplicate_calendar(self, request, queryset):
+        """Duplicate selected calendars"""
+        for calendar in queryset:
+            calendar.pk = None
+            calendar.academic_year = f"{calendar.academic_year}_copy"
+            calendar.title = f"{calendar.title} (Copy)"
+            calendar.is_active = False
+            calendar.save()
+        self.message_user(request, f'{queryset.count()} calendar(s) duplicated.')
+    duplicate_calendar.short_description = "Duplicate selected calendars"
+
+
+@admin.register(AcademicEvent)
+class AcademicEventAdmin(admin.ModelAdmin):
+    """Enhanced admin interface for Academic Events with improved form"""
+    form = AcademicEventForm
+    list_display = ['title', 'calendar', 'event_type', 'semester', 'start_date', 'end_date', 'is_important', 'is_published', 'ordering']
+    list_filter = ['event_type', 'semester', 'is_important', 'is_published', 'calendar__academic_year', 'start_date']
+    search_fields = ['title', 'description', 'calendar__academic_year']
+    readonly_fields = ['created_at', 'updated_at']
+    list_editable = ['is_important', 'is_published', 'ordering']
+    fieldsets = (
+        ('Event Information', {
+            'fields': ('calendar', 'title', 'description'),
+            'description': 'Basic event information'
+        }),
+        ('Event Details', {
+            'fields': ('event_type', 'semester', 'start_date', 'end_date'),
+            'description': 'Event categorization and timing'
+        }),
+        ('Display Settings', {
+            'fields': ('is_important', 'is_published', 'ordering'),
+            'description': 'Event display and ordering settings'
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+            'description': 'Automatic timestamps'
+        }),
+    )
+    actions = ['make_important', 'make_normal', 'make_published', 'make_unpublished']
+    
+    def make_important(self, request, queryset):
+        """Make selected events important"""
+        updated = queryset.update(is_important=True)
+        self.message_user(request, f'{updated} event(s) marked as important.')
+    make_important.short_description = "Mark selected events as important"
+    
+    def make_normal(self, request, queryset):
+        """Make selected events normal"""
+        updated = queryset.update(is_important=False)
+        self.message_user(request, f'{updated} event(s) marked as normal.')
+    make_normal.short_description = "Mark selected events as normal"
+    
+    def make_published(self, request, queryset):
+        """Make selected events published"""
+        updated = queryset.update(is_published=True)
+        self.message_user(request, f'{updated} event(s) published.')
+    make_published.short_description = "Publish selected events"
+    
+    def make_unpublished(self, request, queryset):
+        """Make selected events unpublished"""
+        updated = queryset.update(is_published=False)
+        self.message_user(request, f'{updated} event(s) unpublished.')
+    make_unpublished.short_description = "Unpublish selected events"
 
 
 # Customize admin site

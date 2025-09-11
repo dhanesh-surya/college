@@ -693,6 +693,9 @@
                 <a href="{{ photo.image.url }}" 
                    data-lightbox="gallery-{{ gallery.slug }}" 
                    data-title="{{ photo.title|default:'Untitled' }}{% if photo.caption %} - {{ photo.caption }}{% endif %}{% if photo.photographer %} (Photo by: {{ photo.photographer }}){% endif %}"
+                   data-caption="{{ photo.caption|default:'' }}"
+                   data-photographer="{{ photo.photographer|default:'' }}"
+                   data-date="{{ photo.date_taken|date:'F j, Y'|default:'' }}"
                    aria-label="{{ photo.title|default:'Gallery Photo' }} - {{ gallery.title }}"
                    class="tw-block tw-relative tw-aspect-square tw-overflow-hidden">
                     <img src="{{ photo.image.url }}" 
@@ -802,23 +805,506 @@
     {% endif %}
 </div>
 
-<!-- Lightbox2 JavaScript -->
+<!-- Enhanced Lightbox2 JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+
+<!-- Custom Gallery Navigation Styles -->
+<style>
+/* Enhanced Lightbox Navigation */
+.lb-data .lb-caption {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    max-width: 600px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.lb-data .lb-number {
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+/* Custom Navigation Controls */
+.lb-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.lb-nav:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.lb-prev {
+    left: 20px;
+}
+
+.lb-next {
+    right: 20px;
+}
+
+/* Thumbnail Navigation */
+.lb-thumbnails {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    max-width: 80%;
+    overflow-x: auto;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.lb-thumbnail {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.lb-thumbnail:hover,
+.lb-thumbnail.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.lb-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Photo Metadata */
+.lb-metadata {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.lb-metadata h4 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.lb-metadata p {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.lb-metadata .lb-photographer {
+    font-style: italic;
+    color: #ccc;
+}
+
+.lb-metadata .lb-date {
+    color: #aaa;
+    font-size: 12px;
+}
+
+/* Control Panel */
+.lb-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.lb-control-btn {
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.lb-control-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+}
+
+.lb-control-btn.active {
+    background: rgba(59, 130, 246, 0.8);
+}
+
+/* Slideshow Progress Bar */
+.lb-slideshow-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: rgba(59, 130, 246, 0.3);
+    transition: width 0.1s linear;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .lb-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+    
+    .lb-prev {
+        left: 10px;
+    }
+    
+    .lb-next {
+        right: 10px;
+    }
+    
+    .lb-thumbnails {
+        bottom: 10px;
+        max-width: 90%;
+    }
+    
+    .lb-thumbnail {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .lb-metadata {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 10px 15px;
+    }
+    
+    .lb-controls {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .lb-control-btn {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+/* Loading Animation */
+.lb-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Configure Lightbox2
+    // Enhanced Lightbox2 Configuration
     lightbox.option({
         'resizeDuration': 200,
         'wrapAround': true,
         'albumLabel': "Image %1 of %2",
         'fadeDuration': 300,
         'imageFadeDuration': 300,
-        'maxWidth': '90%',
-        'maxHeight': '90%',
+        'maxWidth': '95%',
+        'maxHeight': '95%',
         'showImageNumberLabel': true,
-        'disableScrolling': true
+        'disableScrolling': true,
+        'positionFromTop': 50,
+        'showImageNumberLabel': true,
+        'alwaysShowNavOnTouchDevices': true
     });
+
+    // Enhanced Gallery Navigation System
+    let currentPhotoIndex = 0;
+    let totalPhotos = 0;
+    let photosData = [];
+    let slideshowInterval = null;
+    let isSlideshowActive = false;
+    let slideshowDuration = 5000; // 5 seconds
+
+    // Initialize gallery data
+    function initializeGalleryData() {
+        const photoItems = document.querySelectorAll('.photo-item a[data-lightbox]');
+        totalPhotos = photoItems.length;
+        photosData = [];
+        
+        photoItems.forEach((item, index) => {
+            const img = item.querySelector('img');
+            const photoData = {
+                index: index,
+                src: item.href,
+                title: img.alt || `Photo ${index + 1}`,
+                caption: item.dataset.caption || '',
+                photographer: item.dataset.photographer || '',
+                date: item.dataset.date || '',
+                thumbnail: img.src
+            };
+            photosData.push(photoData);
+        });
+    }
+
+    // Create enhanced navigation elements
+    function createNavigationElements() {
+        const lightboxContainer = document.querySelector('.lb-outerContainer');
+        if (!lightboxContainer) return;
+
+        // Create navigation buttons
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'lb-nav lb-prev';
+        prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevBtn.onclick = () => navigatePhoto(-1);
+
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'lb-nav lb-next';
+        nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextBtn.onclick = () => navigatePhoto(1);
+
+        // Create control panel
+        const controlsPanel = document.createElement('div');
+        controlsPanel.className = 'lb-controls';
+        controlsPanel.innerHTML = `
+            <button class="lb-control-btn" id="zoomBtn" title="Zoom">
+                <i class="fas fa-search-plus"></i>
+            </button>
+            <button class="lb-control-btn" id="slideshowBtn" title="Slideshow">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="lb-control-btn" id="downloadBtn" title="Download">
+                <i class="fas fa-download"></i>
+            </button>
+            <button class="lb-control-btn" id="fullscreenBtn" title="Fullscreen">
+                <i class="fas fa-expand"></i>
+            </button>
+        `;
+
+        // Create thumbnail navigation
+        const thumbnailsContainer = document.createElement('div');
+        thumbnailsContainer.className = 'lb-thumbnails';
+        thumbnailsContainer.id = 'thumbnailNav';
+
+        // Create metadata panel
+        const metadataPanel = document.createElement('div');
+        metadataPanel.className = 'lb-metadata';
+        metadataPanel.id = 'photoMetadata';
+
+        // Create slideshow progress bar
+        const progressBar = document.createElement('div');
+        progressBar.className = 'lb-slideshow-progress';
+        progressBar.id = 'slideshowProgress';
+
+        // Append elements
+        lightboxContainer.appendChild(prevBtn);
+        lightboxContainer.appendChild(nextBtn);
+        lightboxContainer.appendChild(controlsPanel);
+        lightboxContainer.appendChild(thumbnailsContainer);
+        lightboxContainer.appendChild(metadataPanel);
+        lightboxContainer.appendChild(progressBar);
+
+        // Setup control event listeners
+        setupControlListeners();
+    }
+
+    // Setup control button event listeners
+    function setupControlListeners() {
+        // Zoom functionality
+        document.getElementById('zoomBtn')?.addEventListener('click', toggleZoom);
+        
+        // Slideshow functionality
+        document.getElementById('slideshowBtn')?.addEventListener('click', toggleSlideshow);
+        
+        // Download functionality
+        document.getElementById('downloadBtn')?.addEventListener('click', downloadCurrentPhoto);
+        
+        // Fullscreen functionality
+        document.getElementById('fullscreenBtn')?.addEventListener('click', toggleFullscreen);
+    }
+
+    // Navigate to previous/next photo
+    function navigatePhoto(direction) {
+        currentPhotoIndex += direction;
+        
+        if (currentPhotoIndex < 0) {
+            currentPhotoIndex = totalPhotos - 1;
+        } else if (currentPhotoIndex >= totalPhotos) {
+            currentPhotoIndex = 0;
+        }
+        
+        // Find and click the corresponding photo link
+        const photoLinks = document.querySelectorAll('.photo-item a[data-lightbox]');
+        if (photoLinks[currentPhotoIndex]) {
+            photoLinks[currentPhotoIndex].click();
+        }
+    }
+
+    // Update navigation elements
+    function updateNavigation() {
+        updateThumbnails();
+        updateMetadata();
+        updatePhotoCounter();
+    }
+
+    // Create and update thumbnail navigation
+    function updateThumbnails() {
+        const thumbnailsContainer = document.getElementById('thumbnailNav');
+        if (!thumbnailsContainer) return;
+
+        thumbnailsContainer.innerHTML = '';
+        
+        photosData.forEach((photo, index) => {
+            const thumbnail = document.createElement('div');
+            thumbnail.className = `lb-thumbnail ${index === currentPhotoIndex ? 'active' : ''}`;
+            thumbnail.innerHTML = `<img src="${photo.thumbnail}" alt="${photo.title}">`;
+            thumbnail.onclick = () => {
+                currentPhotoIndex = index;
+                navigatePhoto(0);
+            };
+            thumbnailsContainer.appendChild(thumbnail);
+        });
+    }
+
+    // Update photo metadata
+    function updateMetadata() {
+        const metadataPanel = document.getElementById('photoMetadata');
+        if (!metadataPanel || !photosData[currentPhotoIndex]) return;
+
+        const photo = photosData[currentPhotoIndex];
+        metadataPanel.innerHTML = `
+            <h4>${photo.title}</h4>
+            ${photo.caption ? `<p>${photo.caption}</p>` : ''}
+            ${photo.photographer ? `<p class="lb-photographer">Photo by: ${photo.photographer}</p>` : ''}
+            ${photo.date ? `<p class="lb-date">${photo.date}</p>` : ''}
+        `;
+    }
+
+    // Update photo counter
+    function updatePhotoCounter() {
+        const counter = document.querySelector('.lb-number');
+        if (counter) {
+            counter.textContent = `${currentPhotoIndex + 1} of ${totalPhotos}`;
+        }
+    }
+
+    // Toggle zoom functionality
+    function toggleZoom() {
+        const image = document.querySelector('.lb-image img');
+        if (!image) return;
+
+        if (image.style.transform.includes('scale')) {
+            image.style.transform = 'scale(1)';
+            image.style.cursor = 'zoom-in';
+        } else {
+            image.style.transform = 'scale(2)';
+            image.style.cursor = 'zoom-out';
+        }
+    }
+
+    // Toggle slideshow
+    function toggleSlideshow() {
+        const slideshowBtn = document.getElementById('slideshowBtn');
+        const progressBar = document.getElementById('slideshowProgress');
+        
+        if (isSlideshowActive) {
+            // Stop slideshow
+            clearInterval(slideshowInterval);
+            isSlideshowActive = false;
+            slideshowBtn.innerHTML = '<i class="fas fa-play"></i>';
+            slideshowBtn.classList.remove('active');
+            progressBar.style.width = '0%';
+        } else {
+            // Start slideshow
+            isSlideshowActive = true;
+            slideshowBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            slideshowBtn.classList.add('active');
+            
+            slideshowInterval = setInterval(() => {
+                navigatePhoto(1);
+                // Reset progress bar
+                progressBar.style.width = '0%';
+                progressBar.style.transition = 'width 0.1s linear';
+                setTimeout(() => {
+                    progressBar.style.width = '100%';
+                }, 10);
+            }, slideshowDuration);
+            
+            // Start progress bar animation
+            progressBar.style.width = '100%';
+        }
+    }
+
+    // Download current photo
+    function downloadCurrentPhoto() {
+        const photo = photosData[currentPhotoIndex];
+        if (!photo) return;
+
+        const link = document.createElement('a');
+        link.href = photo.src;
+        link.download = photo.title.replace(/\s+/g, '_') + '.jpg';
+        link.click();
+    }
+
+    // Toggle fullscreen
+    function toggleFullscreen() {
+        const lightboxContainer = document.querySelector('.lb-outerContainer');
+        if (!lightboxContainer) return;
+
+        if (!document.fullscreenElement) {
+            lightboxContainer.requestFullscreen().catch(err => {
+                console.log('Error attempting to enable fullscreen:', err);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
 
     // Enhanced image loading and visibility
     const images = document.querySelectorAll('.photo-grid img');
@@ -924,6 +1410,112 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize layout
     adjustLayout();
     window.addEventListener('resize', adjustLayout);
+
+    // Keyboard navigation
+    function setupKeyboardNavigation() {
+        document.addEventListener('keydown', function(e) {
+            if (!document.querySelector('.lb-outerContainer')) return;
+
+            switch(e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    navigatePhoto(-1);
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    navigatePhoto(1);
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    toggleSlideshow();
+                    break;
+                case 'Escape':
+                    if (isSlideshowActive) {
+                        toggleSlideshow();
+                    }
+                    break;
+                case 'z':
+                case 'Z':
+                    e.preventDefault();
+                    toggleZoom();
+                    break;
+                case 'f':
+                case 'F':
+                    e.preventDefault();
+                    toggleFullscreen();
+                    break;
+            }
+        });
+    }
+
+    // Touch gesture support for mobile
+    function setupTouchGestures() {
+        let startX = 0;
+        let startY = 0;
+        let endX = 0;
+        let endY = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            if (!document.querySelector('.lb-outerContainer')) return;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            if (!document.querySelector('.lb-outerContainer')) return;
+            endX = e.changedTouches[0].clientX;
+            endY = e.changedTouches[0].clientY;
+            
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+            
+            // Horizontal swipe for navigation
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                if (diffX > 0) {
+                    navigatePhoto(1); // Swipe left - next photo
+                } else {
+                    navigatePhoto(-1); // Swipe right - previous photo
+                }
+            }
+        });
+    }
+
+    // Enhanced Lightbox event listeners
+    function setupLightboxEvents() {
+        // When lightbox opens
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.photo-item a[data-lightbox]')) {
+                const clickedLink = e.target.closest('a');
+                const photoLinks = document.querySelectorAll('.photo-item a[data-lightbox]');
+                currentPhotoIndex = Array.from(photoLinks).indexOf(clickedLink);
+                
+                setTimeout(() => {
+                    createNavigationElements();
+                    updateNavigation();
+                }, 100);
+            }
+        });
+
+        // When lightbox closes
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.lb-close') || e.target.closest('.lb-overlay')) {
+                if (isSlideshowActive) {
+                    toggleSlideshow();
+                }
+            }
+        });
+    }
+
+    // Initialize everything
+    function initializeEnhancedGallery() {
+        initializeGalleryData();
+        setupKeyboardNavigation();
+        setupTouchGestures();
+        setupLightboxEvents();
+    }
+
+    // Start the enhanced gallery
+    initializeEnhancedGallery();
 });
 </script>
 {% endblock %}

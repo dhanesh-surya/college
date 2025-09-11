@@ -162,6 +162,7 @@ def departments_context(request):
     }
 
 
+<<<<<<< HEAD
 def navbar_config_context(request):
     """Add comprehensive navbar configuration to all templates"""
     navbar_config = NavbarInfo.objects.filter(is_active=True).first()
@@ -220,6 +221,8 @@ def navbar_config_context(request):
     }
 
 
+=======
+>>>>>>> a11168e (Fix)
 def menu_visibility_context(request):
     """Add menu visibility settings to all templates"""
     try:

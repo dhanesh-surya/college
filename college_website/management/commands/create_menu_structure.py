@@ -91,10 +91,16 @@ class Command(BaseCommand):
                         'ordering': 4
                     },
                     {
+                        'title': 'Infrastructure',
+                        'path_type': 'named_url',
+                        'named_url': 'college_website:infrastructure',
+                        'ordering': 5
+                    },
+                    {
                         'title': 'Policies',
                         'path_type': 'named_url',
                         'named_url': 'college_website:policies',
-                        'ordering': 5,
+                        'ordering': 6,
                         'children': [
                             {
                                 'title': 'Anti-Ragging Policy',

@@ -69,7 +69,10 @@ TEMPLATES = [
                 'college_website.context_processors.slider_images',
                 'college_website.context_processors.header_info',
                 'college_website.context_processors.departments_context',
+<<<<<<< HEAD
                 'college_website.context_processors.navbar_config_context',
+=======
+>>>>>>> a11168e (Fix)
             ],
         },
     },

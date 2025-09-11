@@ -1,0 +1,1347 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load infrastructure_extras %}
+
+{% block title %}Infrastructure - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:about' %}" class="text-white">About</a></li>
+<li class="breadcrumb-item active text-white">Infrastructure</li>
+{% endblock %}
+
+{% block content %}
+
+<!-- Modern Gallery Styles -->
+<style>
+/* Modern Gallery Container - Clean White Theme */
+.modern-gallery {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Hero Section Styles */
+.hero-section {
+    background: #ffffff;
+    border-radius: 20px;
+    margin: 2rem 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.stats-row {
+    gap: 2rem;
+}
+
+.stat-item {
+    padding: 1rem;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.stat-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Overview Cards */
+.overview-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.overview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.icon-wrapper {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.overview-card:hover .icon-wrapper {
+    background: rgba(0, 0, 0, 0.05);
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Campus Highlights Section */
+.campus-highlights {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.highlight-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.highlight-card {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.highlight-card:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Virtual Tour Section */
+.virtual-tour-section {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.tour-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.tour-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.tour-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.tour-card:hover .tour-overlay {
+    opacity: 1;
+}
+
+.play-button {
+    background: rgba(220, 38, 38, 0.9);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.play-button:hover {
+    background: rgba(220, 38, 38, 1);
+    transform: scale(1.1);
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+}
+
+/* Contact & Visit Section */
+.contact-visit-section {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contact-card {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.contact-item {
+    padding: 1rem;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(220, 38, 38, 0.2);
+    border-color: #dc2626;
+}
+
+.gallery-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: all 0.3s ease;
+    display: block;
+    background-color: #f8f9fa;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23dee2e6"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 48px 48px;
+}
+
+.gallery-item:hover .gallery-image {
+    transform: scale(1.1);
+}
+
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(220, 38, 38, 0.9), rgba(153, 27, 27, 0.7));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
+}
+
+.gallery-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+    color: white;
+    padding: 1.5rem;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+}
+
+.gallery-item:hover .gallery-info {
+    transform: translateY(0);
+}
+
+.gallery-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.gallery-description {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    line-height: 1.4;
+}
+
+.gallery-count-badge {
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.gallery-count-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
+    background: linear-gradient(135deg, #b91c1c, #7f1d1d);
+}
+
+/* Full Screen Modal */
+.gallery-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+.gallery-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: scale(0.8) translateY(50px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.modal-image {
+    width: 100%;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+}
+
+.modal-info {
+    padding: 2rem;
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    color: white;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.modal-description {
+    font-size: 1rem;
+    opacity: 0.9;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.modal-facility {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: scale(1.1);
+}
+
+.modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.modal-nav:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.modal-prev {
+    left: 1rem;
+}
+
+.modal-next {
+    right: 1rem;
+}
+
+.modal-download {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+}
+
+.modal-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
+    background: linear-gradient(135deg, #b91c1c, #7f1d1d);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .gallery-image {
+        height: 200px;
+    }
+    
+    .modal-content {
+        max-width: 95vw;
+        max-height: 95vh;
+    }
+    
+    .modal-nav {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .modal-close {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+}
+
+/* Section Headers */
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+</style>
+
+<div class="container-fluid py-5">
+    <div class="modern-gallery">
+        <!-- Hero Section -->
+        <div class="hero-section text-center py-5 mb-5">
+            <div class="container">
+                <h1 class="display-4 fw-bold text-primary mb-4">
+                    <i class="fas fa-building me-3"></i>
+                    College Infrastructure
+                </h1>
+                <p class="lead text-muted mb-4">Explore our state-of-the-art facilities and modern infrastructure designed to provide the best learning environment for our students.</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="stats-row d-flex justify-content-around flex-wrap">
+                            <div class="stat-item text-center">
+                                <div class="stat-number text-primary fw-bold fs-2">{{ academic_facilities|length|add:academic_photos|length }}</div>
+                                <div class="stat-label text-muted">Academic Facilities</div>
+                            </div>
+                            <div class="stat-item text-center">
+                                <div class="stat-number text-primary fw-bold fs-2">{{ sports_facilities|length|add:sports_photos|length }}</div>
+                                <div class="stat-label text-muted">Sports Facilities</div>
+                            </div>
+                            <div class="stat-item text-center">
+                                <div class="stat-number text-primary fw-bold fs-2">{{ technology_infrastructure|length|add:technology_photos|length }}</div>
+                                <div class="stat-label text-muted">Tech Infrastructure</div>
+                            </div>
+                            <div class="stat-item text-center">
+                                <div class="stat-number text-primary fw-bold fs-2">{{ student_amenities|length|add:amenities_photos|length }}</div>
+                                <div class="stat-label text-muted">Student Amenities</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Infrastructure Overview Cards -->
+        <div class="infrastructure-overview mb-5">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="overview-card h-100">
+                            <div class="card-body text-center">
+                                <div class="icon-wrapper mb-3">
+                                    <i class="fas fa-graduation-cap fa-3x text-primary"></i>
+                                </div>
+                                <h5 class="card-title">Academic Excellence</h5>
+                                <p class="card-text text-muted">Modern classrooms, laboratories, and research facilities equipped with cutting-edge technology.</p>
+                                <div class="badge bg-primary-subtle text-primary">{{ academic_facilities|length|add:academic_photos|length }} Facilities</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="overview-card h-100">
+                            <div class="card-body text-center">
+                                <div class="icon-wrapper mb-3">
+                                    <i class="fas fa-running fa-3x text-success"></i>
+                                </div>
+                                <h5 class="card-title">Sports & Recreation</h5>
+                                <p class="card-text text-muted">Comprehensive sports facilities including gymnasium, courts, and outdoor sports areas.</p>
+                                <div class="badge bg-success-subtle text-success">{{ sports_facilities|length|add:sports_photos|length }} Facilities</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="overview-card h-100">
+                            <div class="card-body text-center">
+                                <div class="icon-wrapper mb-3">
+                                    <i class="fas fa-laptop-code fa-3x text-info"></i>
+                                </div>
+                                <h5 class="card-title">Technology Hub</h5>
+                                <p class="card-text text-muted">Advanced computer labs, high-speed internet, and digital learning resources.</p>
+                                <div class="badge bg-info-subtle text-info">{{ technology_infrastructure|length|add:technology_photos|length }} Facilities</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="overview-card h-100">
+                            <div class="card-body text-center">
+                                <div class="icon-wrapper mb-3">
+                                    <i class="fas fa-users fa-3x text-warning"></i>
+                                </div>
+                                <h5 class="card-title">Student Life</h5>
+                                <p class="card-text text-muted">Comfortable hostels, cafeteria, library, and recreational spaces for student well-being.</p>
+                                <div class="badge bg-warning-subtle text-warning">{{ student_amenities|length|add:amenities_photos|length }} Amenities</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campus Highlights Section -->
+        <div class="campus-highlights mb-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="highlights-content">
+                            <h2 class="display-6 fw-bold text-dark mb-4">
+                                <i class="fas fa-star me-3 text-primary"></i>
+                                Campus Highlights
+                            </h2>
+                            <div class="highlight-item mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="highlight-icon me-3">
+                                        <i class="fas fa-wifi text-warning"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-dark mb-1">High-Speed Internet</h6>
+                                        <p class="text-muted mb-0">Campus-wide WiFi connectivity with 24/7 access</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="highlight-item mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="highlight-icon me-3">
+                                        <i class="fas fa-shield-alt text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-dark mb-1">24/7 Security</h6>
+                                        <p class="text-muted mb-0">Round-the-clock security and surveillance systems</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="highlight-item mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="highlight-icon me-3">
+                                        <i class="fas fa-leaf text-info"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-dark mb-1">Eco-Friendly Campus</h6>
+                                        <p class="text-muted mb-0">Green initiatives and sustainable infrastructure</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="highlight-item">
+                                <div class="d-flex align-items-center">
+                                    <div class="highlight-icon me-3">
+                                        <i class="fas fa-wheelchair text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="text-dark mb-1">Accessibility</h6>
+                                        <p class="text-muted mb-0">Fully accessible facilities for all students</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="highlights-visual">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="highlight-card">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                                            <h6 class="text-dark">Student Capacity</h6>
+                                            <p class="text-muted mb-0">2000+ Students</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="highlight-card">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-building fa-2x text-success mb-2"></i>
+                                            <h6 class="text-dark">Buildings</h6>
+                                            <p class="text-muted mb-0">15+ Structures</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="highlight-card">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-car fa-2x text-warning mb-2"></i>
+                                            <h6 class="text-dark">Parking</h6>
+                                            <p class="text-muted mb-0">500+ Spaces</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="highlight-card">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-tree fa-2x text-info mb-2"></i>
+                                            <h6 class="text-dark">Green Space</h6>
+                                            <p class="text-muted mb-0">5 Acres</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Virtual Tour Section -->
+        <div class="virtual-tour-section mb-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="tour-content">
+                            <h2 class="display-6 fw-bold text-dark mb-4">
+                                <i class="fas fa-vr-cardboard me-3 text-primary"></i>
+                                Virtual Campus Tour
+                            </h2>
+                            <p class="text-muted mb-4">Experience our campus from anywhere in the world. Take a virtual tour of our state-of-the-art facilities and discover what makes our college special.</p>
+                            <div class="tour-features">
+                                <div class="feature-item mb-3">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="text-dark">360° Interactive Views</span>
+                                </div>
+                                <div class="feature-item mb-3">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="text-dark">HD Quality Images</span>
+                                </div>
+                                <div class="feature-item mb-3">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="text-dark">Mobile Friendly</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    <span class="text-dark">Detailed Information</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-lg mt-4">
+                                <i class="fas fa-play me-2"></i>
+                                Start Virtual Tour
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="tour-preview">
+                            <div class="tour-card">
+                                <div class="tour-image">
+                                    <img src="{% static 'img/campus-preview.jpg' %}" alt="Campus Preview" class="img-fluid rounded">
+                                    <div class="tour-overlay">
+                                        <div class="play-button">
+                                            <i class="fas fa-play fa-3x text-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Infrastructure Photo Galleries -->
+        
+        <!-- Academic Facilities Photos -->
+        {% if academic_photos %}
+        <div class="gallery-section">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-graduation-cap me-2"></i>
+                Academic Facilities
+            </h2>
+            <div class="gallery-grid">
+                {% for photo in academic_photos|slice:":8" %}
+                <div class="gallery-item" onclick="openGallery('{{ photo.image.url }}', '{{ photo.title|escapejs }}', '{{ photo.description|escapejs }}', 'Academic Facilities')">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand-arrows-alt fa-2x text-white"></i>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">{{ photo.title }}</div>
+                        <div class="gallery-description">{{ photo.description|truncatewords:15 }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if academic_photos|length > 8 %}
+                <div class="gallery-item" onclick="showAllAcademicPhotos()">
+                    <div class="gallery-overlay">
+                        <div class="gallery-count-badge">
+                            +{{ academic_photos|length|subtract:8 }} More
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">View All Academic Photos</div>
+                        <div class="gallery-description">Click to see all {{ academic_photos|length }} photos</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Sports Facilities Photos -->
+        {% if sports_photos %}
+        <div class="gallery-section">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-running me-2"></i>
+                Sports Facilities
+            </h2>
+            <div class="gallery-grid">
+                {% for photo in sports_photos|slice:":8" %}
+                <div class="gallery-item" onclick="openGallery('{{ photo.image.url }}', '{{ photo.title|escapejs }}', '{{ photo.description|escapejs }}', 'Sports Facilities')">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand-arrows-alt fa-2x text-white"></i>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">{{ photo.title }}</div>
+                        <div class="gallery-description">{{ photo.description|truncatewords:15 }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if sports_photos|length > 8 %}
+                <div class="gallery-item" onclick="showAllSportsPhotos()">
+                    <div class="gallery-overlay">
+                        <div class="gallery-count-badge">
+                            +{{ sports_photos|length|subtract:8 }} More
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">View All Sports Photos</div>
+                        <div class="gallery-description">Click to see all {{ sports_photos|length }} photos</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Technology Infrastructure Photos -->
+        {% if technology_photos %}
+        <div class="gallery-section">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-laptop-code me-2"></i>
+                Technology Infrastructure
+            </h2>
+            <div class="gallery-grid">
+                {% for photo in technology_photos|slice:":8" %}
+                <div class="gallery-item" onclick="openGallery('{{ photo.image.url }}', '{{ photo.title|escapejs }}', '{{ photo.description|escapejs }}', 'Technology Infrastructure')">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand-arrows-alt fa-2x text-white"></i>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">{{ photo.title }}</div>
+                        <div class="gallery-description">{{ photo.description|truncatewords:15 }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if technology_photos|length > 8 %}
+                <div class="gallery-item" onclick="showAllTechnologyPhotos()">
+                    <div class="gallery-overlay">
+                        <div class="gallery-count-badge">
+                            +{{ technology_photos|length|subtract:8 }} More
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">View All Technology Photos</div>
+                        <div class="gallery-description">Click to see all {{ technology_photos|length }} photos</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Student Amenities Photos -->
+        {% if amenities_photos %}
+        <div class="gallery-section">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-users me-2"></i>
+                Student Amenities
+            </h2>
+            <div class="gallery-grid">
+                {% for photo in amenities_photos|slice:":8" %}
+                <div class="gallery-item" onclick="openGallery('{{ photo.image.url }}', '{{ photo.title|escapejs }}', '{{ photo.description|escapejs }}', 'Student Amenities')">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand-arrows-alt fa-2x text-white"></i>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">{{ photo.title }}</div>
+                        <div class="gallery-description">{{ photo.description|truncatewords:15 }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if amenities_photos|length > 8 %}
+                <div class="gallery-item" onclick="showAllAmenitiesPhotos()">
+                    <div class="gallery-overlay">
+                        <div class="gallery-count-badge">
+                            +{{ amenities_photos|length|subtract:8 }} More
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">View All Student Amenities Photos</div>
+                        <div class="gallery-description">Click to see all {{ amenities_photos|length }} photos</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+
+        <!-- General Infrastructure Photos -->
+        {% if general_photos %}
+        <div class="gallery-section">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-building me-2"></i>
+                General Infrastructure
+            </h2>
+            <div class="gallery-grid">
+                {% for photo in general_photos|slice:":8" %}
+                <div class="gallery-item" onclick="openGallery('{{ photo.image.url }}', '{{ photo.title|escapejs }}', '{{ photo.description|escapejs }}', 'General Infrastructure')">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <i class="fas fa-expand-arrows-alt fa-2x text-white"></i>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">{{ photo.title }}</div>
+                        <div class="gallery-description">{{ photo.description|truncatewords:15 }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if general_photos|length > 8 %}
+                <div class="gallery-item" onclick="showAllGeneralPhotos()">
+                    <div class="gallery-overlay">
+                        <div class="gallery-count-badge">
+                            +{{ general_photos|length|subtract:8 }} More
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-title">View All General Infrastructure Photos</div>
+                        <div class="gallery-description">Click to see all {{ general_photos|length }} photos</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Facility Information Sections (when no photos available) -->
+        
+        <!-- Academic Facilities Information -->
+        {% if academic_facilities and not academic_photos %}
+        <div class="gallery-section">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-graduation-cap me-2"></i>
+                Academic Facilities
+            </h2>
+            <div class="row g-4">
+                {% for facility in academic_facilities %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="overview-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ facility.title }}</h5>
+                            <p class="card-text text-muted">{{ facility.description|truncatewords:20 }}</p>
+                            {% if facility.capacity %}
+                            <div class="badge bg-primary-subtle text-primary">{{ facility.capacity }} Capacity</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Sports Facilities Information -->
+        {% if sports_facilities and not sports_photos %}
+        <div class="gallery-section">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-running me-2"></i>
+                Sports Facilities
+            </h2>
+            <div class="row g-4">
+                {% for facility in sports_facilities %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="overview-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ facility.title }}</h5>
+                            <p class="card-text text-muted">{{ facility.description|truncatewords:20 }}</p>
+                            {% if facility.capacity %}
+                            <div class="badge bg-success-subtle text-success">{{ facility.capacity }} Capacity</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Technology Infrastructure Information -->
+        {% if technology_infrastructure and not technology_photos %}
+        <div class="gallery-section">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-laptop-code me-2"></i>
+                Technology Infrastructure
+            </h2>
+            <div class="row g-4">
+                {% for facility in technology_infrastructure %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="overview-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ facility.title }}</h5>
+                            <p class="card-text text-muted">{{ facility.description|truncatewords:20 }}</p>
+                            {% if facility.capacity %}
+                            <div class="badge bg-info-subtle text-info">{{ facility.capacity }} Capacity</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Student Amenities Information -->
+        {% if student_amenities and not amenities_photos %}
+        <div class="gallery-section">
+            <h2 class="text-center mb-4 text-primary">
+                <i class="fas fa-users me-2"></i>
+                Student Amenities
+            </h2>
+            <div class="row g-4">
+                {% for facility in student_amenities %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="overview-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ facility.title }}</h5>
+                            <p class="card-text text-muted">{{ facility.description|truncatewords:20 }}</p>
+                            {% if facility.capacity %}
+                            <div class="badge bg-warning-subtle text-warning">{{ facility.capacity }} Capacity</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Contact & Visit Section -->
+        <div class="contact-visit-section mb-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="contact-card text-center">
+                            <div class="card-body py-5">
+                                <h2 class="display-6 fw-bold text-dark mb-4">
+                                    <i class="fas fa-map-marker-alt me-3 text-primary"></i>
+                                    Plan Your Visit
+                                </h2>
+                                <p class="text-muted mb-4">Ready to experience our campus in person? Schedule a visit to explore our facilities and meet our faculty.</p>
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-4">
+                                        <div class="contact-item">
+                                            <i class="fas fa-calendar-alt fa-2x text-warning mb-3"></i>
+                                            <h6 class="text-dark">Schedule Visit</h6>
+                                            <p class="text-muted mb-0">Book a campus tour</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="contact-item">
+                                            <i class="fas fa-phone fa-2x text-success mb-3"></i>
+                                            <h6 class="text-dark">Call Us</h6>
+                                            <p class="text-muted mb-0">+1 (555) 123-4567</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="contact-item">
+                                            <i class="fas fa-envelope fa-2x text-info mb-3"></i>
+                                            <h6 class="text-dark">Email Us</h6>
+                                            <p class="text-muted mb-0">info@college.edu</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                                    <button class="btn btn-primary btn-lg">
+                                        <i class="fas fa-calendar me-2"></i>
+                                        Schedule Visit
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-lg">
+                                        <i class="fas fa-download me-2"></i>
+                                        Download Brochure
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+<!-- Full Screen Gallery Modal -->
+<div id="galleryModal" class="gallery-modal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeGallery()">&times;</button>
+        <button class="modal-nav modal-prev" onclick="previousImage()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="modal-nav modal-next" onclick="nextImage()">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <img id="modalImage" class="modal-image" src="" alt="">
+        <button class="modal-download" onclick="downloadImage()">
+            <i class="fas fa-download me-2"></i>Download
+        </button>
+        <div class="modal-info">
+            <h3 id="modalTitle" class="modal-title"></h3>
+            <p id="modalDescription" class="modal-description"></p>
+            <p id="modalFacility" class="modal-facility"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Gallery Data
+let currentGallery = [];
+let currentIndex = 0;
+
+// Open single image in gallery
+function openGallery(imageSrc, title, description, facility) {
+    currentGallery = [{
+        src: imageSrc,
+        title: title,
+        description: description,
+        facility: facility
+    }];
+    currentIndex = 0;
+    showModal();
+}
+
+// Show all photos for a specific category
+function showAllPhotos(category) {
+    // Collect all photos for this category
+    const categoryPhotos = [];
+    document.querySelectorAll('.gallery-item').forEach(item => {
+        const img = item.querySelector('.gallery-image');
+        if (img && item.onclick.toString().includes(category)) {
+            const title = img.alt;
+            const src = img.src;
+            const description = item.querySelector('.gallery-description')?.textContent || '';
+            categoryPhotos.push({
+                src: src,
+                title: title,
+                description: description,
+                facility: category
+            });
+        }
+    });
+    
+    if (categoryPhotos.length > 0) {
+        currentGallery = categoryPhotos;
+        currentIndex = 0;
+        showModal();
+    }
+}
+
+// Show all academic photos
+function showAllAcademicPhotos() {
+    showAllPhotos('Academic Facilities');
+}
+
+// Show all sports photos
+function showAllSportsPhotos() {
+    showAllPhotos('Sports Facilities');
+}
+
+// Show all technology photos
+function showAllTechnologyPhotos() {
+    showAllPhotos('Technology Infrastructure');
+}
+
+// Show all amenities photos
+function showAllAmenitiesPhotos() {
+    showAllPhotos('Student Amenities');
+}
+
+// Show all general infrastructure photos
+function showAllGeneralPhotos() {
+    showAllPhotos('General Infrastructure');
+}
+
+// Show modal with current image
+function showModal() {
+    if (currentGallery.length === 0) return;
+    
+    const modal = document.getElementById('galleryModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalFacility = document.getElementById('modalFacility');
+    
+    const currentImage = currentGallery[currentIndex];
+    
+    modalImage.src = currentImage.src;
+    modalImage.alt = currentImage.title;
+    modalTitle.textContent = currentImage.title;
+    modalDescription.textContent = currentImage.description;
+    modalFacility.textContent = currentImage.facility;
+    
+    modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+    // Update navigation buttons visibility
+    const prevBtn = document.querySelector('.modal-prev');
+    const nextBtn = document.querySelector('.modal-next');
+    
+    if (currentGallery.length <= 1) {
+        prevBtn.style.display = 'none';
+        nextBtn.style.display = 'none';
+    } else {
+        prevBtn.style.display = 'block';
+        nextBtn.style.display = 'block';
+    }
+}
+
+// Close gallery modal
+function closeGallery() {
+    const modal = document.getElementById('galleryModal');
+    modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+
+// Navigate to previous image
+function previousImage() {
+    if (currentGallery.length <= 1) return;
+    currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+    showModal();
+}
+
+// Navigate to next image
+function nextImage() {
+    if (currentGallery.length <= 1) return;
+    currentIndex = (currentIndex + 1) % currentGallery.length;
+    showModal();
+}
+
+// Download current image
+function downloadImage() {
+    if (currentGallery.length === 0) return;
+    
+    const currentImage = currentGallery[currentIndex];
+    const link = document.createElement('a');
+    link.href = currentImage.src;
+    link.download = currentImage.title.replace(/\s+/g, '_') + '.jpg';
+    link.click();
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+    const modal = document.getElementById('galleryModal');
+    if (!modal.classList.contains('show')) return;
+    
+            switch(e.key) {
+                case 'Escape':
+            closeGallery();
+                    break;
+                case 'ArrowLeft':
+            previousImage();
+                    break;
+                case 'ArrowRight':
+            nextImage();
+                    break;
+            }
+});
+
+// Close modal when clicking outside
+document.getElementById('galleryModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeGallery();
+    }
+});
+
+// Initialize gallery on page load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Modern Gallery initialized successfully!');
+    
+    // Add loading animation to images
+    const images = document.querySelectorAll('.gallery-image');
+    images.forEach(img => {
+        // Set initial opacity
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.3s ease';
+        
+        // Handle successful load
+        img.addEventListener('load', function() {
+            this.style.opacity = '1';
+            this.style.backgroundImage = 'none';
+        });
+        
+        // Handle load error
+        img.addEventListener('error', function() {
+            this.style.opacity = '1';
+            this.style.backgroundImage = 'url("data:image/svg+xml,<svg xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 24 24\\" fill=\\"%23dc2626\\"><path d=\\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z\\"/></svg>")';
+            this.style.backgroundSize = '64px 64px';
+        });
+        
+        // If image is already loaded
+        if (img.complete) {
+            img.style.opacity = '1';
+            if (img.naturalWidth > 0) {
+                img.style.backgroundImage = 'none';
+            }
+        }
+    });
+});
+</script>
+
+{% endblock %}

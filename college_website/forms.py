@@ -14,6 +14,7 @@ from .models import (
     BlockVideoEmbed, BlockDownloadList, BlockTableHTML, BlockForm,
     GalleryImage, DownloadFile, TopUtilityBar, CustomLink,
     IQACInfo, IQACReport, NAACInfo, NIRFInfo, AccreditationInfo, IQACFeedback, 
+<<<<<<< HEAD
     QualityInitiative, SideMenu, SideMenuItem, VisionMissionContent, CoreValue, HeroBanner,
     ExamTimetable, ExamTimetableWeek, ExamTimetableTimeSlot, ExamTimetableExam, QuestionPaper, RevaluationInfo, ExamRulesInfo, ResearchCenterInfo,
     PublicationInfo, Publication, PatentsProjectsInfo, Patent, ResearchProject, IndustryCollaboration,
@@ -21,6 +22,11 @@ from .models import (
     Student, StudentDocument, StudentLoginLog,
     NSSNCCClub, NSSNCCNotice, NSSNCCGallery, NSSNCCAchievement,
     HeroCarouselSlide, HeroCarouselSettings
+=======
+    QualityInitiative, SideMenu, SideMenuItem,
+    InfrastructureInfo, InfrastructureStatistic, AcademicFacility, SportsFacility, TechnologyInfrastructure, StudentAmenity, InfrastructurePhoto,
+    AcademicCalendar, AcademicEvent
+>>>>>>> a11168e (Fix)
 )
 
 
@@ -3473,6 +3479,7 @@ class SideMenuItemForm(forms.ModelForm):
         }
 
 
+<<<<<<< HEAD
 class VisionMissionContentForm(forms.ModelForm):
     """Form for managing Vision & Mission page content dynamically"""
     
@@ -5009,12 +5016,501 @@ class ResearchCenterInfoForm(forms.ModelForm):
             'cta_title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'e.g., Join Our Research Community'
+=======
+class MultipleFileInput(forms.FileInput):
+    """Custom widget that supports multiple file uploads"""
+    allow_multiple_selected = True
+
+    def __init__(self, attrs=None):
+        super().__init__(attrs)
+        if attrs is not None:
+            self.attrs.update(attrs)
+        self.attrs['multiple'] = True
+
+    def value_from_datadict(self, data, files, name):
+        if hasattr(files, 'getlist'):
+            return files.getlist(name)
+        return files.get(name)
+
+
+class MultipleInfrastructurePhotoForm(forms.Form):
+    """Form for uploading multiple infrastructure photos at once"""
+    
+    # Multiple file upload field
+    images = forms.FileField(
+        widget=MultipleFileInput(attrs={
+            'class': 'form-control',
+            'accept': 'image/jpeg,image/jpg,image/png,image/gif,image/webp',
+            'data-max-size': '5120',  # 5MB in KB
+            'data-allowed-types': 'jpeg,jpg,png,gif,webp'
+        }),
+        help_text='Select multiple image files (JPEG, PNG, GIF, WebP). Maximum size: 5MB per file. You can select multiple files at once.',
+        label='Photo Files'
+    )
+    
+    # Common settings for all photos
+    section_type = forms.ChoiceField(
+        choices=InfrastructurePhoto.PHOTO_SECTIONS,
+        widget=forms.Select(attrs={
+            'class': 'form-select',
+            'required': True
+        }),
+        help_text='Select the infrastructure section for all photos',
+        label='Section Type'
+    )
+    
+    academic_facility = forms.ModelChoiceField(
+        queryset=AcademicFacility.objects.filter(is_active=True),
+        required=False,
+        empty_label="Select Academic Facility (Optional)",
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        }),
+        help_text='Associate all photos with a specific academic facility (optional)',
+        label='Academic Facility'
+    )
+    
+    sports_facility = forms.ModelChoiceField(
+        queryset=SportsFacility.objects.filter(is_active=True),
+        required=False,
+        empty_label="Select Sports Facility (Optional)",
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        }),
+        help_text='Associate all photos with a specific sports facility (optional)',
+        label='Sports Facility'
+    )
+    
+    technology_infrastructure = forms.ModelChoiceField(
+        queryset=TechnologyInfrastructure.objects.filter(is_active=True),
+        required=False,
+        empty_label="Select Technology Infrastructure (Optional)",
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        }),
+        help_text='Associate all photos with specific technology infrastructure (optional)',
+        label='Technology Infrastructure'
+    )
+    
+    student_amenity = forms.ModelChoiceField(
+        queryset=StudentAmenity.objects.filter(is_active=True),
+        required=False,
+        empty_label="Select Student Amenity (Optional)",
+        widget=forms.Select(attrs={
+            'class': 'form-select'
+        }),
+        help_text='Associate all photos with a specific student amenity (optional)',
+        label='Student Amenity'
+    )
+    
+    # Common display settings
+    is_featured = forms.BooleanField(
+        required=False,
+        initial=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input'
+        }),
+        help_text='Feature all photos prominently in the gallery',
+        label='Featured Photos'
+    )
+    
+    is_active = forms.BooleanField(
+        required=False,
+        initial=True,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input'
+        }),
+        help_text='Make all photos visible on the website',
+        label='Active Photos'
+    )
+    
+    # Auto-generate titles option
+    auto_generate_titles = forms.BooleanField(
+        required=False,
+        initial=True,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input'
+        }),
+        help_text='Automatically generate titles from filenames (uncheck to set custom titles)',
+        label='Auto-generate Titles'
+    )
+    
+    def clean_images(self):
+        """Validate uploaded images"""
+        images = self.files.getlist('images')
+        
+        if not images:
+            raise forms.ValidationError('Please select at least one image file.')
+        
+        if len(images) > 20:
+            raise forms.ValidationError('You can upload a maximum of 20 images at once.')
+        
+        for image in images:
+            # Check file size (max 5MB)
+            if hasattr(image, 'size') and image.size > 5 * 1024 * 1024:
+                raise forms.ValidationError(
+                    f'Image "{image.name}" is too large. Maximum size allowed is 5MB. '
+                    f'Your file is {image.size / (1024 * 1024):.1f}MB.'
+                )
+            
+            # Check file type
+            if hasattr(image, 'content_type'):
+                allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+                if image.content_type not in allowed_types:
+                    raise forms.ValidationError(
+                        f'Invalid file type for "{image.name}". Please upload a JPEG, PNG, GIF, or WebP image.'
+                    )
+            
+            # Check file name extension
+            if hasattr(image, 'name'):
+                allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+                file_extension = os.path.splitext(image.name)[1].lower()
+                if file_extension not in allowed_extensions:
+                    raise forms.ValidationError(
+                        f'Invalid file extension for "{image.name}". Allowed extensions: .jpg, .jpeg, .png, .gif, .webp'
+                    )
+        
+        return images
+    
+    def clean(self):
+        """Comprehensive form validation"""
+        cleaned_data = super().clean()
+        
+        # Get facility selections
+        academic_facility = cleaned_data.get('academic_facility')
+        sports_facility = cleaned_data.get('sports_facility')
+        technology_infrastructure = cleaned_data.get('technology_infrastructure')
+        student_amenity = cleaned_data.get('student_amenity')
+        
+        # Validate that only one facility type is selected
+        facility_count = sum([
+            bool(academic_facility),
+            bool(sports_facility),
+            bool(technology_infrastructure),
+            bool(student_amenity)
+        ])
+        
+        if facility_count > 1:
+            raise forms.ValidationError(
+                'Please select only one facility type. All photos can only be associated with one specific facility.'
+            )
+        
+        return cleaned_data
+    
+    def save(self):
+        """Save multiple photos with the provided settings"""
+        images = self.cleaned_data['images']
+        section_type = self.cleaned_data['section_type']
+        academic_facility = self.cleaned_data.get('academic_facility')
+        sports_facility = self.cleaned_data.get('sports_facility')
+        technology_infrastructure = self.cleaned_data.get('technology_infrastructure')
+        student_amenity = self.cleaned_data.get('student_amenity')
+        is_featured = self.cleaned_data.get('is_featured', False)
+        is_active = self.cleaned_data.get('is_active', True)
+        auto_generate_titles = self.cleaned_data.get('auto_generate_titles', True)
+        
+        created_photos = []
+        
+        for i, image in enumerate(images):
+            # Generate title from filename if auto-generate is enabled
+            if auto_generate_titles:
+                title = os.path.splitext(image.name)[0].replace('_', ' ').replace('-', ' ').title()
+            else:
+                title = f"Photo {i + 1}"
+            
+            # Create InfrastructurePhoto instance
+            photo = InfrastructurePhoto(
+                title=title,
+                image=image,
+                section_type=section_type,
+                academic_facility=academic_facility,
+                sports_facility=sports_facility,
+                technology_infrastructure=technology_infrastructure,
+                student_amenity=student_amenity,
+                is_featured=is_featured,
+                is_active=is_active,
+                display_order=i  # Set display order based on upload order
+            )
+            
+            # Validate the photo instance
+            photo.full_clean()
+            photo.save()
+            created_photos.append(photo)
+        
+        return created_photos
+
+
+class InfrastructurePhotoForm(forms.ModelForm):
+    """Enhanced form for managing individual infrastructure photos with better validation and UI"""
+    
+    class Meta:
+        model = InfrastructurePhoto
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control tw-rounded-lg',
+                'placeholder': 'Enter photo title/caption',
+                'maxlength': '200',
+                'required': True
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control tw-rounded-lg',
+                'rows': 3,
+                'placeholder': 'Enter photo description (optional)',
+                'maxlength': '1000'
+            }),
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'form-control tw-rounded-lg',
+                'accept': 'image/jpeg,image/jpg,image/png,image/gif,image/webp',
+                'data-max-size': '5120',  # 5MB in KB
+                'data-allowed-types': 'jpeg,jpg,png,gif,webp'
+            }),
+            'section_type': forms.Select(attrs={
+                'class': 'form-select tw-rounded-lg',
+                'required': True
+            }),
+            'academic_facility': forms.Select(attrs={
+                'class': 'form-select tw-rounded-lg'
+            }),
+            'sports_facility': forms.Select(attrs={
+                'class': 'form-select tw-rounded-lg'
+            }),
+            'technology_infrastructure': forms.Select(attrs={
+                'class': 'form-select tw-rounded-lg'
+            }),
+            'student_amenity': forms.Select(attrs={
+                'class': 'form-select tw-rounded-lg'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control tw-rounded-lg',
+                'min': '0',
+                'max': '999',
+                'placeholder': '0'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+        
+        help_texts = {
+            'title': 'A descriptive title for the photo (required)',
+            'description': 'Optional detailed description of the photo content',
+            'image': 'Upload an image file (JPEG, PNG, GIF, WebP). Maximum size: 5MB. Recommended dimensions: 800x600px or larger.',
+            'section_type': 'Select the infrastructure section this photo belongs to',
+            'academic_facility': 'Associate this photo with a specific academic facility (optional)',
+            'sports_facility': 'Associate this photo with a specific sports facility (optional)',
+            'technology_infrastructure': 'Associate this photo with specific technology infrastructure (optional)',
+            'student_amenity': 'Associate this photo with a specific student amenity (optional)',
+            'display_order': 'Display order within the section (lower numbers appear first)',
+            'is_featured': 'Feature this photo prominently in the gallery',
+            'is_active': 'Make this photo visible on the website'
+        }
+        
+        labels = {
+            'title': 'Photo Title',
+            'description': 'Description',
+            'image': 'Photo File',
+            'section_type': 'Section Type',
+            'academic_facility': 'Academic Facility',
+            'sports_facility': 'Sports Facility',
+            'technology_infrastructure': 'Technology Infrastructure',
+            'student_amenity': 'Student Amenity',
+            'display_order': 'Display Order',
+            'is_featured': 'Featured Photo',
+            'is_active': 'Active'
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Add empty option for foreign key fields
+        self.fields['academic_facility'].empty_label = "Select Academic Facility (Optional)"
+        self.fields['sports_facility'].empty_label = "Select Sports Facility (Optional)"
+        self.fields['technology_infrastructure'].empty_label = "Select Technology Infrastructure (Optional)"
+        self.fields['student_amenity'].empty_label = "Select Student Amenity (Optional)"
+        
+        # Filter to only show active facilities
+        self.fields['academic_facility'].queryset = AcademicFacility.objects.filter(is_active=True)
+        self.fields['sports_facility'].queryset = SportsFacility.objects.filter(is_active=True)
+        self.fields['technology_infrastructure'].queryset = TechnologyInfrastructure.objects.filter(is_active=True)
+        self.fields['student_amenity'].queryset = StudentAmenity.objects.filter(is_active=True)
+        
+        # Add CSS classes for better styling
+        for field_name, field in self.fields.items():
+            if field_name not in ['image']:  # Image field already has custom styling
+                if 'class' not in field.widget.attrs:
+                    field.widget.attrs.update({'class': 'form-control tw-rounded-lg'})
+    
+    def clean_image(self):
+        """Validate uploaded image"""
+        image = self.cleaned_data.get('image')
+        if image:
+            # Check file size (max 5MB)
+            if hasattr(image, 'size') and image.size > 5 * 1024 * 1024:
+                raise forms.ValidationError(
+                    'Image file is too large. Maximum size allowed is 5MB. '
+                    f'Your file is {image.size / (1024 * 1024):.1f}MB.'
+                )
+            
+            # Check file type
+            if hasattr(image, 'content_type'):
+                allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+                if image.content_type not in allowed_types:
+                    raise forms.ValidationError(
+                        'Invalid file type. Please upload a JPEG, PNG, GIF, or WebP image.'
+                    )
+            
+            # Check file name extension
+            if hasattr(image, 'name'):
+                allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+                file_extension = os.path.splitext(image.name)[1].lower()
+                if file_extension not in allowed_extensions:
+                    raise forms.ValidationError(
+                        'Invalid file extension. Allowed extensions: .jpg, .jpeg, .png, .gif, .webp'
+                    )
+        
+        return image
+    
+    def clean_title(self):
+        """Validate title"""
+        title = self.cleaned_data.get('title')
+        if title:
+            title = title.strip()
+            if len(title) < 3:
+                raise forms.ValidationError('Title must be at least 3 characters long.')
+        return title
+    
+    def clean_display_order(self):
+        """Validate display order"""
+        display_order = self.cleaned_data.get('display_order')
+        if display_order is not None and display_order < 0:
+            raise forms.ValidationError('Display order must be a non-negative number.')
+        return display_order
+    
+    def clean(self):
+        """Comprehensive form validation"""
+        cleaned_data = super().clean()
+        
+        # Get facility selections
+        academic_facility = cleaned_data.get('academic_facility')
+        sports_facility = cleaned_data.get('sports_facility')
+        technology_infrastructure = cleaned_data.get('technology_infrastructure')
+        student_amenity = cleaned_data.get('student_amenity')
+        
+        # Validate that only one facility type is selected
+        facility_count = sum([
+            bool(academic_facility),
+            bool(sports_facility),
+            bool(technology_infrastructure),
+            bool(student_amenity)
+        ])
+        
+        if facility_count > 1:
+            raise forms.ValidationError(
+                'Please select only one facility type. A photo can only be associated with one specific facility.'
+            )
+        
+        # Note: It's okay to have no facility selected - photos can be general infrastructure
+        
+        return cleaned_data
+
+
+class InfrastructurePhotoInlineForm(forms.ModelForm):
+    """Simplified form for inline usage in admin"""
+    
+    class Meta:
+        model = InfrastructurePhoto
+        fields = ['title', 'image', 'is_featured', 'is_active', 'display_order']
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter photo title/caption',
+                'maxlength': '200',
+                'required': True
+            }),
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/jpeg,image/jpg,image/png,image/gif,image/webp'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '999',
+                'placeholder': '0'
+            }),
+            'is_featured': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+
+
+# Enhanced Infrastructure Model Forms
+
+class InfrastructureInfoForm(forms.ModelForm):
+    """Enhanced form for Infrastructure Information management with rich text editing"""
+    
+    class Meta:
+        model = InfrastructureInfo
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Infrastructure & Facilities',
+                'maxlength': '200'
+            }),
+            'subtitle': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Brief description of infrastructure',
+                'maxlength': '300'
+            }),
+            'hero_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Hero section title',
+                'maxlength': '200'
+            }),
+            'hero_subtitle': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Hero section subtitle/description',
+                'maxlength': '500'
+            }),
+            'hero_image': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/jpeg,image/jpg,image/png,image/gif,image/webp'
+            }),
+            'hero_badge_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Modern Facilities',
+                'maxlength': '100'
+            }),
+            'overview_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Overview section title',
+                'maxlength': '200'
+            }),
+            'overview_description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Detailed overview of infrastructure'
+            }),
+            'cta_title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Call to action title',
+                'maxlength': '200'
+>>>>>>> a11168e (Fix)
             }),
             'cta_description': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 3,
                 'placeholder': 'Call to action description'
             }),
+<<<<<<< HEAD
             'is_active': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
             }),
@@ -5096,11 +5592,22 @@ class ResearchCenterInfoQuickEditForm(forms.ModelForm):
             'office_email': forms.EmailInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'e.g., research.office@college.edu'
+=======
+            'cta_button_text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Schedule a Visit',
+                'maxlength': '100'
+            }),
+            'cta_button_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., /contact/ or https://example.com'
+>>>>>>> a11168e (Fix)
             }),
             'is_active': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
             }),
         }
+<<<<<<< HEAD
 
 
 class PublicationInfoForm(forms.ModelForm):
@@ -5973,10 +6480,52 @@ class ConsultancyInfoForm(forms.ModelForm):
     
     class Meta:
         model = ConsultancyInfo
+=======
+        
+        help_texts = {
+            'title': 'Main title displayed on the infrastructure page',
+            'subtitle': 'Brief subtitle or tagline for the page',
+            'hero_title': 'Title for the hero/banner section',
+            'hero_subtitle': 'Description text for the hero section',
+            'hero_image': 'Background image for the hero section (recommended: 1920x600px)',
+            'hero_badge_text': 'Small badge text displayed on the hero section',
+            'overview_title': 'Title for the overview section',
+            'overview_description': 'Detailed description of your infrastructure',
+            'cta_title': 'Title for the call-to-action section',
+            'cta_description': 'Description for the call-to-action section',
+            'cta_button_text': 'Text for the call-to-action button',
+            'cta_button_url': 'URL where the call-to-action button should link',
+            'is_active': 'Make this infrastructure information visible on the website'
+        }
+    
+    def clean_title(self):
+        """Validate title"""
+        title = self.cleaned_data.get('title')
+        if title:
+            title = title.strip()
+            if len(title) < 3:
+                raise forms.ValidationError('Title must be at least 3 characters long.')
+        return title
+    
+    def clean_cta_button_url(self):
+        """Validate CTA button URL"""
+        url = self.cleaned_data.get('cta_button_url')
+        if url and not url.startswith(('/', 'http://', 'https://')):
+            raise forms.ValidationError('URL must start with /, http://, or https://')
+        return url
+
+
+class InfrastructureStatisticForm(forms.ModelForm):
+    """Enhanced form for Infrastructure Statistics with icon and color selection"""
+    
+    class Meta:
+        model = InfrastructureStatistic
+>>>>>>> a11168e (Fix)
         fields = '__all__'
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
+<<<<<<< HEAD
                 'placeholder': 'Page title'
             }),
             'subtitle': forms.Textarea(attrs={
@@ -6100,21 +6649,50 @@ class ConsultancyServiceForm(forms.ModelForm):
             'icon_class': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'FontAwesome icon class (e.g., fas fa-laptop-code)'
+=======
+                'placeholder': 'e.g., Classrooms, Laboratories, WiFi Coverage',
+                'maxlength': '100'
+            }),
+            'value': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., 25+, 100%, 5000+',
+                'maxlength': '50'
+            }),
+            'description': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Optional description of the statistic',
+                'maxlength': '200'
+            }),
+            'icon_class': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-building, fas fa-wifi, fas fa-book',
+                'maxlength': '100'
+            }),
+            'statistic_type': forms.Select(attrs={
+                'class': 'form-select'
+>>>>>>> a11168e (Fix)
             }),
             'color_class': forms.Select(attrs={
                 'class': 'form-select'
             }),
             'display_order': forms.NumberInput(attrs={
                 'class': 'form-control',
+<<<<<<< HEAD
                 'min': 0
             }),
             'is_featured': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
+=======
+                'min': '0',
+                'max': '999',
+                'placeholder': '0'
+>>>>>>> a11168e (Fix)
             }),
             'is_active': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
             }),
         }
+<<<<<<< HEAD
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -6528,10 +7106,64 @@ class NSSNCCGalleryForm(forms.ModelForm):
     
     class Meta:
         model = NSSNCCGallery
+=======
+        
+        help_texts = {
+            'title': 'Name of the statistic (e.g., "Classrooms", "Laboratories")',
+            'value': 'The statistic value (e.g., "25+", "100%", "5000+")',
+            'description': 'Optional additional description for the statistic',
+            'icon_class': 'Font Awesome icon class (e.g., fas fa-building, fas fa-wifi)',
+            'statistic_type': 'Category of the statistic for better organization',
+            'color_class': 'Color theme for the statistic display (blue, emerald, purple, orange)',
+            'display_order': 'Order in which statistics appear (lower numbers first)',
+            'is_active': 'Make this statistic visible on the website'
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Add custom choices for color_class
+        self.fields['color_class'].widget = forms.Select(choices=[
+            ('blue', 'Blue'),
+            ('emerald', 'Emerald'),
+            ('purple', 'Purple'),
+            ('orange', 'Orange'),
+            ('red', 'Red'),
+            ('green', 'Green'),
+            ('indigo', 'Indigo'),
+            ('pink', 'Pink'),
+        ])
+    
+    def clean_title(self):
+        """Validate title"""
+        title = self.cleaned_data.get('title')
+        if title:
+            title = title.strip()
+            if len(title) < 2:
+                raise forms.ValidationError('Title must be at least 2 characters long.')
+        return title
+    
+    def clean_value(self):
+        """Validate value"""
+        value = self.cleaned_data.get('value')
+        if value:
+            value = value.strip()
+            if len(value) < 1:
+                raise forms.ValidationError('Value cannot be empty.')
+        return value
+
+
+class AcademicFacilityForm(forms.ModelForm):
+    """Enhanced form for Academic Facilities with features management"""
+    
+    class Meta:
+        model = AcademicFacility
+>>>>>>> a11168e (Fix)
         fields = '__all__'
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
+<<<<<<< HEAD
                 'placeholder': 'Image title'
             }),
             'description': forms.Textarea(attrs={
@@ -6576,10 +7208,15 @@ class NSSNCCAchievementForm(forms.ModelForm):
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Achievement title'
+=======
+                'placeholder': 'e.g., Smart Classrooms, Modern Laboratories',
+                'maxlength': '200'
+>>>>>>> a11168e (Fix)
             }),
             'description': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
+<<<<<<< HEAD
                 'placeholder': 'Achievement description'
             }),
             'achievement_type': forms.Select(attrs={
@@ -6650,6 +7287,35 @@ class NSSNCCAchievementQuickEditForm(forms.ModelForm):
             'achievement_date': forms.DateInput(attrs={
                 'class': 'form-control',
                 'type': 'date'
+=======
+                'placeholder': 'Detailed description of the facility'
+            }),
+            'facility_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'icon_class': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-chalkboard-teacher, fas fa-flask',
+                'maxlength': '100'
+            }),
+            'color_class': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/jpeg,image/jpg,image/png,image/gif,image/webp'
+            }),
+            'features': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 6,
+                'placeholder': 'List features one per line:\n• Feature 1\n• Feature 2\n• Feature 3'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '999',
+                'placeholder': '0'
+>>>>>>> a11168e (Fix)
             }),
             'is_featured': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
@@ -6658,6 +7324,7 @@ class NSSNCCAchievementQuickEditForm(forms.ModelForm):
                 'class': 'form-check-input'
             }),
         }
+<<<<<<< HEAD
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -6668,10 +7335,68 @@ class HeroCarouselSlideForm(forms.ModelForm):
     
     class Meta:
         model = HeroCarouselSlide
+=======
+        
+        help_texts = {
+            'title': 'Name of the academic facility',
+            'description': 'Detailed description of the facility and its capabilities',
+            'facility_type': 'Category of the academic facility',
+            'icon_class': 'Font Awesome icon class for the facility',
+            'color_class': 'Color theme for the facility display',
+            'image': 'Representative image of the facility (recommended: 800x600px)',
+            'features': 'List key features of the facility (one per line, use • for bullet points)',
+            'display_order': 'Order in which facilities appear (lower numbers first)',
+            'is_featured': 'Feature this facility prominently on the website',
+            'is_active': 'Make this facility visible on the website'
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Add custom choices for color_class
+        self.fields['color_class'].widget = forms.Select(choices=[
+            ('blue', 'Blue'),
+            ('emerald', 'Emerald'),
+            ('purple', 'Purple'),
+            ('orange', 'Orange'),
+            ('red', 'Red'),
+            ('green', 'Green'),
+            ('indigo', 'Indigo'),
+            ('pink', 'Pink'),
+        ])
+    
+    def clean_title(self):
+        """Validate title"""
+        title = self.cleaned_data.get('title')
+        if title:
+            title = title.strip()
+            if len(title) < 3:
+                raise forms.ValidationError('Title must be at least 3 characters long.')
+        return title
+    
+    def clean_features(self):
+        """Clean and format features"""
+        features = self.cleaned_data.get('features')
+        if features:
+            # Clean up the features text
+            features = features.strip()
+            # Remove empty lines and clean up formatting
+            feature_lines = [line.strip() for line in features.split('\n') if line.strip()]
+            features = '\n'.join(feature_lines)
+        return features
+
+
+class SportsFacilityForm(forms.ModelForm):
+    """Enhanced form for Sports Facilities"""
+    
+    class Meta:
+        model = SportsFacility
+>>>>>>> a11168e (Fix)
         fields = '__all__'
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
+<<<<<<< HEAD
                 'placeholder': 'Enter slide title...'
             }),
             'subtitle': forms.Textarea(attrs={
@@ -6800,10 +7525,56 @@ class HeroCarouselSlideForm(forms.ModelForm):
             'show_controls': forms.CheckboxInput(attrs={
                 'class': 'form-check-input'
             }),
+=======
+                'placeholder': 'e.g., Basketball Court, Swimming Pool',
+                'maxlength': '200'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Detailed description of the sports facility'
+            }),
+            'sports_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'icon_class': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-basketball-ball, fas fa-swimmer',
+                'maxlength': '100'
+            }),
+            'color_class': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'image': forms.ClearableFileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/jpeg,image/jpg,image/png,image/gif,image/webp'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '999',
+                'placeholder': '0'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+        
+        help_texts = {
+            'title': 'Name of the sports facility',
+            'description': 'Detailed description of the sports facility and its features',
+            'sports_type': 'Category of the sports facility',
+            'icon_class': 'Font Awesome icon class for the facility',
+            'color_class': 'Color theme for the facility display',
+            'image': 'Representative image of the sports facility (recommended: 800x600px)',
+            'display_order': 'Order in which facilities appear (lower numbers first)',
+            'is_active': 'Make this sports facility visible on the website'
+>>>>>>> a11168e (Fix)
         }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+<<<<<<< HEAD
         # Add help text for better user experience
         self.fields['title'].help_text = "Main heading that appears prominently on the slide"
         self.fields['subtitle'].help_text = "Descriptive text that appears below the title"
@@ -6923,10 +7694,83 @@ class HeroCarouselSettingsForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'e.g., 24rem, 100vh'
             }),
+=======
+        
+        # Add custom choices for color_class
+        self.fields['color_class'].widget = forms.Select(choices=[
+            ('green', 'Green'),
+            ('blue', 'Blue'),
+            ('orange', 'Orange'),
+            ('red', 'Red'),
+            ('purple', 'Purple'),
+            ('emerald', 'Emerald'),
+            ('indigo', 'Indigo'),
+            ('pink', 'Pink'),
+        ])
+    
+    def clean_title(self):
+        """Validate title"""
+        title = self.cleaned_data.get('title')
+        if title:
+            title = title.strip()
+            if len(title) < 3:
+                raise forms.ValidationError('Title must be at least 3 characters long.')
+        return title
+
+
+class TechnologyInfrastructureForm(forms.ModelForm):
+    """Enhanced form for Technology Infrastructure"""
+    
+    class Meta:
+        model = TechnologyInfrastructure
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., High-Speed WiFi, Video Conferencing',
+                'maxlength': '200'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Detailed description of the technology infrastructure'
+            }),
+            'tech_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'icon_class': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-wifi, fas fa-video, fas fa-shield-alt',
+                'maxlength': '100'
+            }),
+            'color_class': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '999',
+                'placeholder': '0'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+        
+        help_texts = {
+            'title': 'Name of the technology infrastructure',
+            'description': 'Detailed description of the technology and its capabilities',
+            'tech_type': 'Category of the technology infrastructure',
+            'icon_class': 'Font Awesome icon class for the technology',
+            'color_class': 'Color theme for the technology display',
+            'display_order': 'Order in which technologies appear (lower numbers first)',
+            'is_active': 'Make this technology infrastructure visible on the website'
+>>>>>>> a11168e (Fix)
         }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+<<<<<<< HEAD
         # Add help text for better user experience
         self.fields['is_enabled'].help_text = "Enable or disable the entire hero carousel"
         self.fields['auto_play'].help_text = "Automatically advance slides"
@@ -6941,3 +7785,146 @@ class HeroCarouselSettingsForm(forms.ModelForm):
         self.fields['mobile_height'].help_text = "Carousel height on mobile devices (CSS units)"
         self.fields['tablet_height'].help_text = "Carousel height on tablet devices (CSS units)"
         self.fields['desktop_height'].help_text = "Carousel height on desktop devices (CSS units)"
+=======
+        
+        # Add custom choices for color_class
+        self.fields['color_class'].widget = forms.Select(choices=[
+            ('indigo', 'Indigo'),
+            ('blue', 'Blue'),
+            ('purple', 'Purple'),
+            ('emerald', 'Emerald'),
+            ('orange', 'Orange'),
+            ('red', 'Red'),
+            ('green', 'Green'),
+            ('pink', 'Pink'),
+        ])
+    
+    def clean_title(self):
+        """Validate title"""
+        title = self.cleaned_data.get('title')
+        if title:
+            title = title.strip()
+            if len(title) < 3:
+                raise forms.ValidationError('Title must be at least 3 characters long.')
+        return title
+
+
+class StudentAmenityForm(forms.ModelForm):
+    """Enhanced form for Student Amenities"""
+    
+    class Meta:
+        model = StudentAmenity
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Cafeteria, Medical Center, Parking',
+                'maxlength': '200'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Detailed description of the student amenity'
+            }),
+            'amenity_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'icon_class': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., fas fa-utensils, fas fa-ambulance, fas fa-car',
+                'maxlength': '100'
+            }),
+            'color_class': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'display_order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': '0',
+                'max': '999',
+                'placeholder': '0'
+            }),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+        
+        help_texts = {
+            'title': 'Name of the student amenity',
+            'description': 'Detailed description of the amenity and its services',
+            'amenity_type': 'Category of the student amenity',
+            'icon_class': 'Font Awesome icon class for the amenity',
+            'color_class': 'Color theme for the amenity display',
+            'display_order': 'Order in which amenities appear (lower numbers first)',
+            'is_active': 'Make this student amenity visible on the website'
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Add custom choices for color_class
+        self.fields['color_class'].widget = forms.Select(choices=[
+            ('pink', 'Pink'),
+            ('blue', 'Blue'),
+            ('green', 'Green'),
+            ('orange', 'Orange'),
+            ('purple', 'Purple'),
+            ('emerald', 'Emerald'),
+            ('indigo', 'Indigo'),
+            ('red', 'Red'),
+        ])
+    
+    def clean_title(self):
+        """Validate title"""
+        title = self.cleaned_data.get('title')
+        if title:
+            title = title.strip()
+            if len(title) < 3:
+                raise forms.ValidationError('Title must be at least 3 characters long.')
+        return title
+    
+    def clean_image(self):
+        """Validate uploaded image"""
+        image = self.cleaned_data.get('image')
+        if image:
+            # Check file size (max 5MB)
+            if hasattr(image, 'size') and image.size > 5 * 1024 * 1024:
+                raise forms.ValidationError(
+                    'Image file is too large. Maximum size allowed is 5MB. '
+                    f'Your file is {image.size / (1024 * 1024):.1f}MB.'
+                )
+            
+            # Check file type
+            if hasattr(image, 'content_type'):
+                allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+                if image.content_type not in allowed_types:
+                    raise forms.ValidationError(
+                        'Invalid file type. Please upload a JPEG, PNG, GIF, or WebP image.'
+                    )
+            
+            # Check file name extension
+            if hasattr(image, 'name'):
+                allowed_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+                file_extension = os.path.splitext(image.name)[1].lower()
+                if file_extension not in allowed_extensions:
+                    raise forms.ValidationError(
+                        'Invalid file extension. Allowed extensions: .jpg, .jpeg, .png, .gif, .webp'
+                    )
+        
+        return image
+    
+    def clean_title(self):
+        """Validate title"""
+        title = self.cleaned_data.get('title')
+        if title:
+            title = title.strip()
+            if len(title) < 3:
+                raise forms.ValidationError('Title must be at least 3 characters long.')
+        return title
+    
+    def clean_display_order(self):
+        """Validate display order"""
+        display_order = self.cleaned_data.get('display_order')
+        if display_order is not None and display_order < 0:
+            raise forms.ValidationError('Display order must be a non-negative number.')
+        return display_order
+>>>>>>> a11168e (Fix)

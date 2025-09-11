@@ -21,10 +21,16 @@ from .models import (
     IQACFeedback, QualityInitiative, SideMenu, SideMenuItem, Department,
     HeroBanner, ExamTimetable, ExamTimetableWeek, ExamTimetableExam, RevaluationInfo, ExamRulesInfo, ResearchCenterInfo,
     PublicationInfo, Publication, PatentsProjectsInfo, Patent, ResearchProject, IndustryCollaboration,
+<<<<<<< HEAD
     ConsultancyInfo, ConsultancyService, ConsultancyExpertise, ConsultancySuccessStory,
     HeroCarouselSlide, HeroCarouselSettings
 )
 from .forms import ContactForm, SearchForm, ExamTimetableBulkForm, ExamTimetableWeekForm, ExamTimetableExamForm, ProgramForm, ProgramCreateForm, ProgramUpdateForm, ProgramQuickEditForm, ExamTimetableForm
+=======
+    ConsultancyInfo, ConsultancyService, ConsultancyExpertise, ConsultancySuccessStory
+)
+from .forms import ContactForm, ProgramForm
+>>>>>>> a11168e (Fix)
 
 
 def get_college_info():
@@ -58,18 +64,26 @@ def home_view(request):
     director_message = DirectorMessage.objects.filter(is_active=True, show_on_homepage=True).first()
     principal_message = PrincipalMessage.objects.filter(is_active=True, show_on_homepage=True).first()
 
+<<<<<<< HEAD
     # Get active hero banner
     active_hero_banner = HeroBanner.objects.filter(is_active=True).first()
+=======
+    # Get all active hero banners for carousel
+    active_hero_banners = HeroBanner.objects.filter(is_active=True).order_by('order', '-created_at')
+>>>>>>> a11168e (Fix)
     
     # Get slider images
     slider_images = SliderImage.objects.filter(is_active=True).order_by('ordering')
 
+<<<<<<< HEAD
     # Get hero carousel data
     hero_carousel_settings = HeroCarouselSettings.get_settings()
     hero_carousel_slides = HeroCarouselSlide.objects.filter(
         is_active=True
     ).order_by('display_order', 'created_at')
 
+=======
+>>>>>>> a11168e (Fix)
     # News & Announcements - Only "general" announcements
     recent_announcements = Notice.objects.filter(
         is_active=True, category="general"
@@ -84,10 +98,15 @@ def home_view(request):
         'director_message': director_message,
         'principal_message': principal_message,
         'recent_announcements': recent_announcements,
+<<<<<<< HEAD
         'active_hero_banner': active_hero_banner,
         'slider_images': slider_images,
         'hero_carousel_settings': hero_carousel_settings,
         'hero_carousel_slides': hero_carousel_slides,
+=======
+        'active_hero_banners': active_hero_banners,
+        'slider_images': slider_images,
+>>>>>>> a11168e (Fix)
     }
     return render(request, 'college_website/home.html', context)
 
@@ -357,6 +376,67 @@ def statutory_approvals_view(request):
     college_info = get_college_info()
     context = {'college_info': college_info}
     return render(request, 'college_website/statutory_approvals.html', context)
+
+def infrastructure_view(request):
+    """Infrastructure view with dynamic content"""
+    from .models import (
+        InfrastructureInfo, InfrastructureStatistic, AcademicFacility,
+        SportsFacility, TechnologyInfrastructure, StudentAmenity, InfrastructurePhoto
+    )
+
+    college_info = get_college_info()
+
+    # Get infrastructure information
+    infrastructure_info = InfrastructureInfo.get_active_info()
+
+    # Get all active infrastructure data
+    statistics = InfrastructureStatistic.objects.filter(is_active=True).order_by('display_order')
+    academic_facilities = AcademicFacility.objects.filter(is_active=True).order_by('display_order')
+    sports_facilities = SportsFacility.objects.filter(is_active=True).order_by('display_order')
+    technology_infrastructure = TechnologyInfrastructure.objects.filter(is_active=True).order_by('display_order')
+    student_amenities = StudentAmenity.objects.filter(is_active=True).order_by('display_order')
+
+    # Get all active infrastructure photos categorized by section type
+    academic_photos = InfrastructurePhoto.objects.filter(
+        is_active=True, 
+        section_type='academic'
+    ).order_by('display_order')
+    
+    sports_photos = InfrastructurePhoto.objects.filter(
+        is_active=True, 
+        section_type='sports'
+    ).order_by('display_order')
+    
+    technology_photos = InfrastructurePhoto.objects.filter(
+        is_active=True, 
+        section_type='technology'
+    ).order_by('display_order')
+    
+    amenities_photos = InfrastructurePhoto.objects.filter(
+        is_active=True, 
+        section_type='amenities'
+    ).order_by('display_order')
+    
+    general_photos = InfrastructurePhoto.objects.filter(
+        is_active=True, 
+        section_type='general'
+    ).order_by('display_order')
+
+    context = {
+        'college_info': college_info,
+        'infrastructure_info': infrastructure_info,
+        'statistics': statistics,
+        'academic_facilities': academic_facilities,
+        'sports_facilities': sports_facilities,
+        'technology_infrastructure': technology_infrastructure,
+        'student_amenities': student_amenities,
+        'academic_photos': academic_photos,
+        'sports_photos': sports_photos,
+        'technology_photos': technology_photos,
+        'amenities_photos': amenities_photos,
+        'general_photos': general_photos,
+    }
+    return render(request, 'college_website/infrastructure.html', context)
 
 def policies_view(request):
     """Policies main view"""
@@ -685,10 +765,247 @@ def phd_research_view(request):
     return render(request, 'college_website/phd_research.html', context)
 
 def academic_calendar_view(request):
-    """Academic Calendar view"""
+    """Academic Calendar view with dynamic data from models"""
+    from .models import AcademicCalendar, AcademicEvent
+    
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get all published academic calendars
+    calendars = AcademicCalendar.objects.filter(is_published=True).order_by('-academic_year')
+    
+    # Get the active calendar
+    active_calendar = AcademicCalendar.objects.filter(is_active=True, is_published=True).first()
+    
+    # Get events for the active calendar
+    events = []
+    if active_calendar:
+        events = AcademicEvent.objects.filter(
+            calendar=active_calendar, 
+            is_published=True
+        ).order_by('start_date', 'ordering')
+    
+    context = {
+        'college_info': college_info,
+        'calendars': calendars,
+        'active_calendar': active_calendar,
+        'events': events,
+    }
     return render(request, 'college_website/academic_calendar.html', context)
+
+
+def academic_calendar_pdf_view(request, year):
+    """Download PDF for academic calendar by year - either uploaded file or generated from data"""
+    from django.http import HttpResponse, Http404, FileResponse
+    from django.shortcuts import get_object_or_404
+    from .models import AcademicCalendar, AcademicEvent
+    
+    # Get the academic calendar for the specified year
+    calendar = get_object_or_404(AcademicCalendar, academic_year=year, is_published=True)
+    
+    # If there's an uploaded PDF file, serve it directly
+    if calendar.pdf_file:
+        # Increment download count
+        calendar.increment_download_count()
+        
+        # Serve the uploaded PDF file
+        response = FileResponse(
+            calendar.pdf_file.open('rb'),
+            content_type='application/pdf',
+            filename=f"academic_calendar_{year}.pdf"
+        )
+        response['Content-Disposition'] = f'attachment; filename="academic_calendar_{year}.pdf"'
+        return response
+    
+    # If no uploaded PDF, generate one from the data
+    return generate_academic_calendar_pdf(calendar)
+
+
+def generate_academic_calendar_pdf(calendar):
+    """Generate PDF for academic calendar from model data"""
+    from django.http import HttpResponse
+    from reportlab.lib.pagesizes import letter, A4
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import inch
+    from reportlab.lib import colors
+    from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+    import io
+    from .models import AcademicEvent
+    
+    college_info = get_college_info()
+    
+    # Get events for this calendar
+    events = AcademicEvent.objects.filter(
+        calendar=calendar, 
+        is_published=True
+    ).order_by('start_date', 'ordering')
+    
+    # Create response object
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="academic_calendar_{calendar.academic_year}.pdf"'
+    
+    # Create PDF buffer
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=18)
+    
+    # Get styles
+    styles = getSampleStyleSheet()
+    
+    # Custom styles
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=24,
+        spaceAfter=30,
+        alignment=TA_CENTER,
+        textColor=colors.darkblue
+    )
+    
+    heading_style = ParagraphStyle(
+        'CustomHeading',
+        parent=styles['Heading2'],
+        fontSize=16,
+        spaceAfter=12,
+        textColor=colors.darkblue
+    )
+    
+    subheading_style = ParagraphStyle(
+        'CustomSubHeading',
+        parent=styles['Heading3'],
+        fontSize=14,
+        spaceAfter=8,
+        textColor=colors.darkgreen
+    )
+    
+    normal_style = ParagraphStyle(
+        'CustomNormal',
+        parent=styles['Normal'],
+        fontSize=10,
+        spaceAfter=6
+    )
+    
+    # Build PDF content
+    story = []
+    
+    # Title
+    story.append(Paragraph(calendar.title, title_style))
+    story.append(Paragraph(f"{college_info.name}", styles['Heading2']))
+    story.append(Paragraph(f"Academic Year: {calendar.academic_year}", styles['Heading3']))
+    if calendar.description:
+        story.append(Paragraph(calendar.description, normal_style))
+    story.append(Spacer(1, 20))
+    
+    # Group events by semester
+    first_semester_events = events.filter(semester__in=['first', 'both'])
+    second_semester_events = events.filter(semester__in=['second', 'both'])
+    
+    # First Semester
+    if first_semester_events.exists():
+        story.append(Paragraph("First Semester (July - December)", heading_style))
+        story.append(Spacer(1, 10))
+        
+        # Group events by month
+        months = {}
+        for event in first_semester_events:
+            month_key = event.start_date.strftime('%B %Y')
+            if month_key not in months:
+                months[month_key] = []
+            months[month_key].append(event)
+        
+        for month, month_events in months.items():
+            story.append(Paragraph(month, subheading_style))
+            
+            # Create table for events
+            table_data = [['Date', 'Event', 'Type']]
+            for event in month_events:
+                date_str = event.start_date.strftime('%d %b')
+                if event.end_date and event.end_date != event.start_date:
+                    date_str += f" - {event.end_date.strftime('%d %b')}"
+                table_data.append([date_str, event.title, event.get_event_type_display()])
+            
+            table = Table(table_data, colWidths=[1*inch, 3.5*inch, 1*inch])
+            table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 10),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ]))
+            
+            story.append(table)
+            story.append(Spacer(1, 10))
+    
+    story.append(PageBreak())
+    
+    # Second Semester
+    if second_semester_events.exists():
+        story.append(Paragraph("Second Semester (January - June)", heading_style))
+        story.append(Spacer(1, 10))
+        
+        # Group events by month
+        months = {}
+        for event in second_semester_events:
+            month_key = event.start_date.strftime('%B %Y')
+            if month_key not in months:
+                months[month_key] = []
+            months[month_key].append(event)
+        
+        for month, month_events in months.items():
+            story.append(Paragraph(month, subheading_style))
+            
+            # Create table for events
+            table_data = [['Date', 'Event', 'Type']]
+            for event in month_events:
+                date_str = event.start_date.strftime('%d %b')
+                if event.end_date and event.end_date != event.start_date:
+                    date_str += f" - {event.end_date.strftime('%d %b')}"
+                table_data.append([date_str, event.title, event.get_event_type_display()])
+            
+            table = Table(table_data, colWidths=[1*inch, 3.5*inch, 1*inch])
+            table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 10),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ]))
+            
+            story.append(table)
+            story.append(Spacer(1, 10))
+    
+    # Important Notes
+    story.append(PageBreak())
+    story.append(Paragraph("Important Notes", heading_style))
+    story.append(Spacer(1, 10))
+    
+    notes = [
+        "• All dates are subject to change. Please check with the administration for updates.",
+        "• Examination schedules will be published separately before each semester.",
+        "• Holiday dates may vary based on government notifications.",
+        "• For any queries regarding the academic calendar, contact the academic office.",
+        f"• Contact: {college_info.phone} | Email: {college_info.email}"
+    ]
+    
+    for note in notes:
+        story.append(Paragraph(note, normal_style))
+    
+    # Build PDF
+    doc.build(story)
+    
+    # Get PDF content
+    pdf_content = buffer.getvalue()
+    buffer.close()
+    
+    response.write(pdf_content)
+    return response
+
+
 
 def syllabus_curriculum_view(request):
     """Syllabus & Curriculum view"""
@@ -1852,7 +2169,18 @@ def academic_events_view(request):
 def extracurricular_events_view(request):
     """Extracurricular Events view"""
     college_info = get_college_info()
+    
+    # Get all extracurricular events (exclude workshops)
     extracurricular_events = Event.objects.filter(is_active=True).exclude(type='workshop')
+    
+    # Apply type filter if specified
+    event_type = request.GET.get('type')
+    if event_type:
+        extracurricular_events = extracurricular_events.filter(type=event_type)
+    
+    # Order by date (upcoming events first)
+    extracurricular_events = extracurricular_events.order_by('date')
+    
     context = {
         'college_info': college_info,
         'events': extracurricular_events,
@@ -1871,8 +2199,22 @@ def events_gallery_view(request):
 
 def annual_reports_view(request):
     """Annual Reports view"""
+    from .models import IQACReport
+    
     college_info = get_college_info()
-    context = {'college_info': college_info}
+    
+    # Get all published IQAC reports, ordered by publish date
+    reports = IQACReport.objects.filter(is_published=True).order_by('-publish_date')
+    
+    # Apply type filter if specified
+    report_type = request.GET.get('type')
+    if report_type:
+        reports = reports.filter(report_type=report_type)
+    
+    context = {
+        'college_info': college_info,
+        'reports': reports,
+    }
     return render(request, 'college_website/annual_reports.html', context)
 
 # Mandatory Disclosure Section Views
@@ -3029,6 +3371,7 @@ def question_paper_download_view(request, slug):
     except QuestionPaper.DoesNotExist:
         messages.error(request, 'Question paper not found.')
         return redirect('college_website:question_papers')
+<<<<<<< HEAD
 
 
 def navigation_demo_view(request):
@@ -3050,3 +3393,5 @@ def test_navigation_view(request):
 def simple_nav_test_view(request):
     """Ultra-simple navigation test page"""
     return render(request, 'simple_nav_test.html')
+=======
+>>>>>>> a11168e (Fix)

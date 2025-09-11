@@ -26,6 +26,187 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
+<<<<<<< HEAD
+=======
+class AcademicCalendar(TimeStampedModel):
+    """Academic Calendar model for managing academic year information"""
+    
+    ACADEMIC_YEAR_CHOICES = [
+        ('2024-25', '2024-25'),
+        ('2023-24', '2023-24'),
+        ('2022-23', '2022-23'),
+        ('2021-22', '2021-22'),
+    ]
+    
+    academic_year = models.CharField(
+        max_length=7,
+        choices=ACADEMIC_YEAR_CHOICES,
+        unique=True,
+        help_text="Academic year (e.g., 2024-25)"
+    )
+    title = models.CharField(
+        max_length=200,
+        default="Academic Calendar",
+        help_text="Calendar title"
+    )
+    description = models.TextField(
+        blank=True,
+        help_text="Brief description of the academic year"
+    )
+    start_date = models.DateField(
+        help_text="Academic year start date"
+    )
+    end_date = models.DateField(
+        help_text="Academic year end date"
+    )
+    pdf_file = models.FileField(
+        upload_to='academic_calendars/pdfs/',
+        blank=True,
+        null=True,
+        help_text="Upload PDF version of the academic calendar"
+    )
+    pdf_file_size = models.CharField(
+        max_length=20,
+        blank=True,
+        help_text="PDF file size (auto-calculated)"
+    )
+    download_count = models.PositiveIntegerField(
+        default=0,
+        help_text="Number of times PDF has been downloaded"
+    )
+    is_active = models.BooleanField(
+        default=False,
+        help_text="Mark as current active academic year"
+    )
+    is_published = models.BooleanField(
+        default=True,
+        help_text="Make calendar publicly visible"
+    )
+    
+    class Meta:
+        ordering = ['-academic_year']
+        verbose_name = "Academic Calendar"
+        verbose_name_plural = "Academic Calendars"
+    
+    def __str__(self):
+        return f"Academic Calendar {self.academic_year}"
+    
+    def clean(self):
+        if self.start_date and self.end_date and self.start_date >= self.end_date:
+            raise ValidationError("End date must be after start date.")
+    
+    def save(self, *args, **kwargs):
+        # Ensure only one academic year is active
+        if self.is_active:
+            AcademicCalendar.objects.filter(is_active=True).update(is_active=False)
+        
+        # Calculate PDF file size if file exists
+        if self.pdf_file:
+            try:
+                file_size = self.pdf_file.size
+                if file_size < 1024:
+                    self.pdf_file_size = f"{file_size} B"
+                elif file_size < 1024 * 1024:
+                    self.pdf_file_size = f"{file_size / 1024:.1f} KB"
+                else:
+                    self.pdf_file_size = f"{file_size / (1024 * 1024):.1f} MB"
+            except (OSError, ValueError):
+                self.pdf_file_size = "Unknown"
+        
+        super().save(*args, **kwargs)
+    
+    def get_pdf_download_url(self):
+        """Get the download URL for the PDF file"""
+        if self.pdf_file:
+            return self.pdf_file.url
+        return None
+    
+    def increment_download_count(self):
+        """Increment the download count"""
+        self.download_count += 1
+        self.save(update_fields=['download_count'])
+
+
+class AcademicEvent(TimeStampedModel):
+    """Academic events and important dates"""
+    
+    EVENT_TYPE_CHOICES = [
+        ('academic', 'Academic'),
+        ('exam', 'Examination'),
+        ('holiday', 'Holiday'),
+        ('break', 'Break'),
+        ('event', 'Event'),
+        ('orientation', 'Orientation'),
+        ('result', 'Result'),
+    ]
+    
+    SEMESTER_CHOICES = [
+        ('first', 'First Semester'),
+        ('second', 'Second Semester'),
+        ('both', 'Both Semesters'),
+    ]
+    
+    calendar = models.ForeignKey(
+        AcademicCalendar,
+        on_delete=models.CASCADE,
+        related_name='events',
+        help_text="Associated academic calendar"
+    )
+    title = models.CharField(
+        max_length=200,
+        help_text="Event title"
+    )
+    description = models.TextField(
+        blank=True,
+        help_text="Event description"
+    )
+    event_type = models.CharField(
+        max_length=20,
+        choices=EVENT_TYPE_CHOICES,
+        default='academic',
+        help_text="Type of event"
+    )
+    semester = models.CharField(
+        max_length=10,
+        choices=SEMESTER_CHOICES,
+        default='both',
+        help_text="Associated semester"
+    )
+    start_date = models.DateField(
+        help_text="Event start date"
+    )
+    end_date = models.DateField(
+        blank=True,
+        null=True,
+        help_text="Event end date (optional)"
+    )
+    is_important = models.BooleanField(
+        default=False,
+        help_text="Mark as important event"
+    )
+    is_published = models.BooleanField(
+        default=True,
+        help_text="Make event publicly visible"
+    )
+    ordering = models.PositiveIntegerField(
+        default=0,
+        help_text="Display order"
+    )
+    
+    class Meta:
+        ordering = ['start_date', 'ordering']
+        verbose_name = "Academic Event"
+        verbose_name_plural = "Academic Events"
+    
+    def __str__(self):
+        return f"{self.title} - {self.calendar.academic_year}"
+    
+    def clean(self):
+        if self.end_date and self.start_date and self.end_date < self.start_date:
+            raise ValidationError("End date must be after or equal to start date.")
+
+
+>>>>>>> a11168e (Fix)
 class Student(TimeStampedModel):
     """Student model with comprehensive profile information"""
     
@@ -1085,6 +1266,7 @@ class Program(TimeStampedModel):
     scholarship_available = models.BooleanField(default=False, help_text="Scholarships available for this program")
     scholarship_details = models.TextField(blank=True, help_text="Details about available scholarships")
     
+<<<<<<< HEAD
     # Course Syllabus Information
     first_year_subjects = CKEditor5Field(blank=True, help_text="First year subjects and curriculum")
     second_year_subjects = CKEditor5Field(blank=True, help_text="Second year subjects and curriculum")
@@ -1118,6 +1300,8 @@ class Program(TimeStampedModel):
     assessment_methods = CKEditor5Field(blank=True, help_text="Assessment and evaluation methods")
     global_opportunities = CKEditor5Field(blank=True, help_text="International and global opportunities")
     
+=======
+>>>>>>> a11168e (Fix)
     # Additional Information
     brochure = models.FileField(upload_to='programs/brochures/', blank=True, help_text="Program brochure PDF")
     program_image = models.ImageField(upload_to='programs/images/', blank=True, help_text="Program representative image")
@@ -3798,6 +3982,7 @@ class Faculty(TimeStampedModel):
     phone = models.CharField(max_length=20, blank=True)
     office_location = models.CharField(max_length=200, blank=True)
     
+<<<<<<< HEAD
     # Social Media & Academic Profiles
     linkedin_url = models.URLField(blank=True, help_text="LinkedIn profile URL")
     google_scholar_url = models.URLField(blank=True, help_text="Google Scholar profile URL")
@@ -3809,6 +3994,8 @@ class Faculty(TimeStampedModel):
     instagram_url = models.URLField(blank=True, help_text="Instagram profile URL")
     website_url = models.URLField(blank=True, help_text="Personal website URL")
     
+=======
+>>>>>>> a11168e (Fix)
     # Academic Details
     research_interests = models.TextField(blank=True, help_text="Research interests, one per line")
     publications = CKEditor5Field(blank=True, help_text="Publications and research papers")
@@ -3862,6 +4049,7 @@ class Faculty(TimeStampedModel):
         if self.courses_taught:
             return [course.strip() for course in self.courses_taught.split('\n') if course.strip()]
         return []
+<<<<<<< HEAD
     
     def get_social_media_links(self):
         """Get all social media and academic profile links"""
@@ -4021,6 +4209,8 @@ class NonAcademicStaff(TimeStampedModel):
         if self.website_url:
             links['website'] = self.website_url
         return links
+=======
+>>>>>>> a11168e (Fix)
 
 
 class DepartmentEvent(TimeStampedModel):
@@ -4176,6 +4366,17 @@ class HeroBanner(models.Model):
         null=True,
         help_text="Background image (optional)"
     )
+<<<<<<< HEAD
+=======
+    
+    # Hero Image (for right side display)
+    hero_image = models.ImageField(
+        upload_to='hero_banner/',
+        blank=True,
+        null=True,
+        help_text="Hero image displayed on the right side (optional)"
+    )
+>>>>>>> a11168e (Fix)
     background_image_opacity = models.IntegerField(
         default=100,
         validators=[MinValueValidator(0), MaxValueValidator(100)],
@@ -4465,7 +4666,13 @@ class HeroBanner(models.Model):
             return f"background-color: {self.solid_background_color}"
         elif self.background_type == 'image' and self.background_image:
             opacity = self.background_image_opacity / 100
+<<<<<<< HEAD
             return f"background-image: url('{self.background_image.url}'); background-size: cover; background-position: center;"
+=======
+            return f"background-image: url('{self.background_image.url}'); background-size: cover; background-position: center; background-repeat: no-repeat;"
+        elif self.background_type == 'video':
+            return f"background-color: {self.solid_background_color};"
+>>>>>>> a11168e (Fix)
         return ""
     
     def get_title_classes(self):
@@ -5972,6 +6179,7 @@ class NSSNCCAchievement(TimeStampedModel):
         return colors.get(self.achievement_type, 'secondary')
 
 
+<<<<<<< HEAD
 class HeroCarouselSlide(TimeStampedModel):
     """Model for managing hero carousel slides with dynamic content"""
     
@@ -6134,3 +6342,333 @@ class HeroCarouselSettings(TimeStampedModel):
         """Get or create default settings"""
         settings, created = cls.objects.get_or_create(pk=1)
         return settings
+=======
+# ============================================================================
+# INFRASTRUCTURE MODELS
+# ============================================================================
+
+class InfrastructureInfo(TimeStampedModel):
+    """Main infrastructure page information and settings"""
+    
+    # Basic Information
+    title = models.CharField(max_length=200, default="Infrastructure & Facilities", help_text="Page title")
+    subtitle = models.CharField(max_length=300, default="State-of-the-art infrastructure designed to provide students with the best learning environment and modern amenities for academic excellence.", help_text="Page subtitle")
+    
+    # Hero Section
+    hero_title = models.CharField(max_length=200, default="Infrastructure & Facilities", help_text="Hero section title")
+    hero_subtitle = models.CharField(max_length=500, default="State-of-the-art infrastructure designed to provide students with the best learning environment and modern amenities for academic excellence.", help_text="Hero section subtitle")
+    hero_image = models.ImageField(upload_to='infrastructure/hero/', blank=True, null=True, help_text="Hero section background image")
+    hero_badge_text = models.CharField(max_length=100, default="Modern Facilities", help_text="Hero section badge text")
+    
+    # Overview Section
+    overview_title = models.CharField(max_length=200, default="Our Infrastructure at a Glance", help_text="Overview section title")
+    overview_description = models.TextField(default="We provide world-class infrastructure that supports academic excellence and student development through modern facilities and technology.", help_text="Overview section description")
+    
+    # Call to Action
+    cta_title = models.CharField(max_length=200, default="Experience Our World-Class Infrastructure", help_text="Call to action title")
+    cta_description = models.TextField(default="Visit our campus to see our modern facilities and infrastructure that support academic excellence and student success.", help_text="Call to action description")
+    cta_button_text = models.CharField(max_length=100, default="Schedule a Visit", help_text="Call to action button text")
+    cta_button_url = models.CharField(max_length=200, default="/contact/", help_text="Call to action button URL")
+    
+    # Status
+    is_active = models.BooleanField(default=True, help_text="Make this infrastructure information visible")
+    
+    class Meta:
+        verbose_name = "Infrastructure Information"
+        verbose_name_plural = "Infrastructure Information"
+    
+    def __str__(self):
+        return f"Infrastructure Information - {self.title}"
+    
+    @classmethod
+    def get_active_info(cls):
+        """Get the currently active infrastructure information"""
+        return cls.objects.filter(is_active=True).first()
+
+
+class InfrastructureStatistic(TimeStampedModel):
+    """Infrastructure statistics and metrics"""
+    
+    STATISTIC_TYPES = [
+        ('classrooms', 'Classrooms'),
+        ('laboratories', 'Laboratories'),
+        ('library_books', 'Library Books'),
+        ('wifi_coverage', 'WiFi Coverage'),
+        ('campus_area', 'Campus Area'),
+        ('computer_labs', 'Computer Labs'),
+        ('sports_facilities', 'Sports Facilities'),
+        ('other', 'Other'),
+    ]
+    
+    title = models.CharField(max_length=100, help_text="Statistic title (e.g., 'Classrooms')")
+    value = models.CharField(max_length=50, help_text="Statistic value (e.g., '25+', '100%')")
+    description = models.CharField(max_length=200, blank=True, help_text="Optional description")
+    icon_class = models.CharField(max_length=100, default="fas fa-building", help_text="Font Awesome icon class")
+    statistic_type = models.CharField(max_length=50, choices=STATISTIC_TYPES, default='other', help_text="Type of statistic")
+    color_class = models.CharField(max_length=50, default="blue", help_text="Color theme (blue, emerald, purple, orange)")
+    
+    # Status
+    is_active = models.BooleanField(default=True, help_text="Make this statistic visible")
+    display_order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers first)")
+    
+    class Meta:
+        verbose_name = "Infrastructure Statistic"
+        verbose_name_plural = "Infrastructure Statistics"
+        ordering = ['display_order', 'title']
+    
+    def __str__(self):
+        return f"{self.title}: {self.value}"
+
+
+class AcademicFacility(TimeStampedModel):
+    """Academic facilities like classrooms, labs, library, etc."""
+    
+    FACILITY_TYPES = [
+        ('classroom', 'Smart Classrooms'),
+        ('laboratory', 'Modern Laboratories'),
+        ('library', 'Digital Library'),
+        ('computer_lab', 'Computer Laboratories'),
+        ('research_lab', 'Research Laboratories'),
+        ('seminar_hall', 'Seminar Halls'),
+        ('auditorium', 'Auditorium'),
+        ('other', 'Other'),
+    ]
+    
+    title = models.CharField(max_length=200, help_text="Facility title")
+    description = models.TextField(help_text="Facility description")
+    facility_type = models.CharField(max_length=50, choices=FACILITY_TYPES, default='other', help_text="Type of facility")
+    icon_class = models.CharField(max_length=100, default="fas fa-building", help_text="Font Awesome icon class")
+    color_class = models.CharField(max_length=50, default="blue", help_text="Color theme")
+    image = models.ImageField(upload_to='infrastructure/facilities/', blank=True, null=True, help_text="Facility image")
+    
+    # Features list (stored as JSON or text)
+    features = models.TextField(blank=True, help_text="Features list (one per line)")
+    
+    # Status
+    is_active = models.BooleanField(default=True, help_text="Make this facility visible")
+    is_featured = models.BooleanField(default=False, help_text="Feature this facility prominently")
+    display_order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers first)")
+    
+    class Meta:
+        verbose_name = "Academic Facility"
+        verbose_name_plural = "Academic Facilities"
+        ordering = ['display_order', 'title']
+    
+    def __str__(self):
+        return self.title
+    
+    def get_features_list(self):
+        """Get features as a list"""
+        if self.features:
+            return [feature.strip() for feature in self.features.split('\n') if feature.strip()]
+        return []
+
+
+class SportsFacility(TimeStampedModel):
+    """Sports and recreation facilities"""
+    
+    SPORTS_TYPES = [
+        ('outdoor', 'Outdoor Sports'),
+        ('indoor', 'Indoor Sports'),
+        ('gymnasium', 'Gymnasium'),
+        ('swimming', 'Swimming Pool'),
+        ('other', 'Other'),
+    ]
+    
+    title = models.CharField(max_length=200, help_text="Sports facility title")
+    description = models.TextField(help_text="Sports facility description")
+    sports_type = models.CharField(max_length=50, choices=SPORTS_TYPES, default='other', help_text="Type of sports facility")
+    icon_class = models.CharField(max_length=100, default="fas fa-futbol", help_text="Font Awesome icon class")
+    color_class = models.CharField(max_length=50, default="green", help_text="Color theme")
+    image = models.ImageField(upload_to='infrastructure/sports/', blank=True, null=True, help_text="Sports facility image")
+    
+    # Status
+    is_active = models.BooleanField(default=True, help_text="Make this sports facility visible")
+    display_order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers first)")
+    
+    class Meta:
+        verbose_name = "Sports Facility"
+        verbose_name_plural = "Sports Facilities"
+        ordering = ['display_order', 'title']
+    
+    def __str__(self):
+        return self.title
+
+
+class TechnologyInfrastructure(TimeStampedModel):
+    """Technology infrastructure and IT facilities"""
+    
+    TECH_TYPES = [
+        ('internet', 'High-Speed Internet'),
+        ('it_infrastructure', 'IT Infrastructure'),
+        ('video_conferencing', 'Video Conferencing'),
+        ('security', 'Security Systems'),
+        ('network', 'Network Infrastructure'),
+        ('software', 'Software Systems'),
+        ('other', 'Other'),
+    ]
+    
+    title = models.CharField(max_length=200, help_text="Technology infrastructure title")
+    description = models.TextField(help_text="Technology infrastructure description")
+    tech_type = models.CharField(max_length=50, choices=TECH_TYPES, default='other', help_text="Type of technology")
+    icon_class = models.CharField(max_length=100, default="fas fa-wifi", help_text="Font Awesome icon class")
+    color_class = models.CharField(max_length=50, default="indigo", help_text="Color theme")
+    
+    # Status
+    is_active = models.BooleanField(default=True, help_text="Make this technology infrastructure visible")
+    display_order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers first)")
+    
+    class Meta:
+        verbose_name = "Technology Infrastructure"
+        verbose_name_plural = "Technology Infrastructure"
+        ordering = ['display_order', 'title']
+    
+    def __str__(self):
+        return self.title
+
+
+class StudentAmenity(TimeStampedModel):
+    """Student amenities and services"""
+    
+    AMENITY_TYPES = [
+        ('cafeteria', 'Cafeteria'),
+        ('transport', 'Transport'),
+        ('parking', 'Parking'),
+        ('medical', 'Medical Center'),
+        ('hostel', 'Hostel'),
+        ('banking', 'Banking'),
+        ('atm', 'ATM'),
+        ('bookstore', 'Bookstore'),
+        ('other', 'Other'),
+    ]
+    
+    title = models.CharField(max_length=200, help_text="Amenity title")
+    description = models.TextField(help_text="Amenity description")
+    amenity_type = models.CharField(max_length=50, choices=AMENITY_TYPES, default='other', help_text="Type of amenity")
+    icon_class = models.CharField(max_length=100, default="fas fa-utensils", help_text="Font Awesome icon class")
+    color_class = models.CharField(max_length=50, default="pink", help_text="Color theme")
+    
+    # Status
+    is_active = models.BooleanField(default=True, help_text="Make this amenity visible")
+    display_order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers first)")
+    
+    class Meta:
+        verbose_name = "Student Amenity"
+        verbose_name_plural = "Student Amenities"
+        ordering = ['display_order', 'title']
+    
+    def __str__(self):
+        return self.title
+
+
+class InfrastructurePhoto(TimeStampedModel):
+    """Photos for infrastructure sections"""
+    
+    PHOTO_SECTIONS = [
+        ('academic', 'Academic Facilities'),
+        ('sports', 'Sports Facilities'),
+        ('technology', 'Technology Infrastructure'),
+        ('amenities', 'Student Amenities'),
+        ('general', 'General Infrastructure'),
+    ]
+    
+    # Foreign key relationships to infrastructure models
+    academic_facility = models.ForeignKey(
+        AcademicFacility, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        related_name='photos',
+        help_text="Associated academic facility"
+    )
+    sports_facility = models.ForeignKey(
+        SportsFacility, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        related_name='photos',
+        help_text="Associated sports facility"
+    )
+    technology_infrastructure = models.ForeignKey(
+        TechnologyInfrastructure, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        related_name='photos',
+        help_text="Associated technology infrastructure"
+    )
+    student_amenity = models.ForeignKey(
+        StudentAmenity, 
+        on_delete=models.CASCADE, 
+        null=True, 
+        blank=True,
+        related_name='photos',
+        help_text="Associated student amenity"
+    )
+    
+    # Photo details
+    title = models.CharField(max_length=200, help_text="Photo title/caption")
+    description = models.TextField(blank=True, help_text="Photo description")
+    image = models.ImageField(upload_to='infrastructure/photos/', help_text="Infrastructure photo")
+    section_type = models.CharField(max_length=50, choices=PHOTO_SECTIONS, default='general', help_text="Section type")
+    
+    # Display settings
+    is_featured = models.BooleanField(default=False, help_text="Feature this photo prominently")
+    is_active = models.BooleanField(default=True, help_text="Make this photo visible")
+    display_order = models.PositiveIntegerField(default=0, help_text="Display order (lower numbers first)")
+    
+    class Meta:
+        verbose_name = "Infrastructure Photo"
+        verbose_name_plural = "Infrastructure Photos"
+        ordering = ['display_order', 'title']
+    
+    def __str__(self):
+        return f"{self.title} - {self.get_section_type_display()}"
+    
+    def get_associated_facility(self):
+        """Get the associated facility object"""
+        if self.academic_facility:
+            return self.academic_facility
+        elif self.sports_facility:
+            return self.sports_facility
+        elif self.technology_infrastructure:
+            return self.technology_infrastructure
+        elif self.student_amenity:
+            return self.student_amenity
+        return None
+    
+    def get_facility_title(self):
+        """Get the title of the associated facility"""
+        facility = self.get_associated_facility()
+        return facility.title if facility else "General"
+    
+    def get_section_display_name(self):
+        """Get the display name for the section type"""
+        section_names = {
+            'academic': 'Academic Facility',
+            'sports': 'Sports Facility', 
+            'technology': 'Technology Infrastructure',
+            'amenities': 'Student Amenity',
+            'general': 'General Infrastructure'
+        }
+        return section_names.get(self.section_type, 'Infrastructure')
+    
+    def clean(self):
+        """Validate that only one facility is selected"""
+        from django.core.exceptions import ValidationError
+        
+        facilities = [
+            self.academic_facility,
+            self.sports_facility,
+            self.technology_infrastructure,
+            self.student_amenity
+        ]
+        
+        selected_facilities = [f for f in facilities if f is not None]
+        
+        if len(selected_facilities) > 1:
+            raise ValidationError("Only one facility can be selected per photo.")
+        
+        if len(selected_facilities) == 0:
+            raise ValidationError("At least one facility must be selected.")
+>>>>>>> a11168e (Fix)

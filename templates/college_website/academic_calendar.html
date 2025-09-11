@@ -1,0 +1,469 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Academic Calendar - {{ college_info.name|default:"Chaitanya Science and Arts College" }}{% endblock %}
+
+{% block meta_description %}View the academic calendar, important dates, and schedule for {{ college_info.name|default:"Chaitanya Science and Arts College" }}.{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="{% url 'college_website:academics' %}" class="text-white">Academics</a></li>
+<li class="breadcrumb-item active text-white">Academic Calendar</li>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="position-relative overflow-hidden tw-bg-gradient-to-br tw-from-blue-900 tw-via-indigo-800 tw-to-purple-700 tw-py-20 tw-px-4">
+    <div class="tw-absolute tw-inset-0 tw-bg-black tw-opacity-20"></div>
+    <div class="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full">
+        <div class="tw-absolute tw-top-10 tw-left-10 tw-w-32 tw-h-32 tw-bg-white tw-rounded-full tw-opacity-10 tw-animate-pulse"></div>
+        <div class="tw-absolute tw-top-32 tw-right-20 tw-w-20 tw-h-20 tw-bg-yellow-300 tw-rounded-full tw-opacity-20 tw-animate-bounce"></div>
+        <div class="tw-absolute tw-bottom-20 tw-left-1/4 tw-w-16 tw-h-16 tw-bg-blue-400 tw-rounded-full tw-opacity-15"></div>
+    </div>
+    
+    <div class="container position-relative tw-z-10">
+        <div class="text-center text-white">
+            <div class="tw-animate-fade-in-up">
+                <h1 class="display-3 fw-bold mb-4 tw-text-transparent tw-bg-clip-text tw-bg-gradient-to-r tw-from-white tw-to-blue-200">
+                    Academic Calendar
+                </h1>
+                <p class="lead fs-4 mb-5 tw-text-blue-100 tw-max-w-3xl tw-mx-auto">
+                    Stay updated with important academic dates, events, and schedules throughout the academic year
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Academic Calendar Content -->
+<div class="container tw-py-12">
+    <!-- Current Academic Year -->
+    {% if active_calendar %}
+    <div class="row tw-mb-8">
+        <div class="col-12">
+            <div class="tw-bg-gradient-to-r tw-from-blue-600 tw-to-purple-600 tw-text-white tw-p-6 tw-rounded-2xl tw-shadow-lg">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="tw-text-2xl tw-font-bold tw-mb-2">{{ active_calendar.title }}</h2>
+                        <p class="tw-text-blue-100 tw-mb-0">{{ active_calendar.description|default:"Current academic session" }}</p>
+                        <p class="tw-text-blue-200 tw-text-sm tw-mt-2">
+                            {{ active_calendar.start_date|date:"F j, Y" }} - {{ active_calendar.end_date|date:"F j, Y" }}
+                        </p>
+                    </div>
+                    <div class="col-md-4 tw-text-center md:tw-text-right">
+                        <div class="tw-bg-white tw-bg-opacity-20 tw-px-4 tw-py-2 tw-rounded-full tw-inline-block">
+                            <span class="tw-text-sm tw-font-semibold">Session Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Calendar Navigation -->
+    {% if calendars|length > 1 %}
+    <div class="row tw-mb-6">
+        <div class="col-12">
+            <div class="tw-flex tw-flex-wrap tw-gap-2 tw-justify-center">
+                {% for calendar in calendars %}
+                <button class="tw-px-6 tw-py-3 tw-rounded-lg tw-font-semibold tw-transition-colors {% if calendar.is_active %}tw-bg-blue-600 tw-text-white active-calendar-tab{% else %}tw-bg-gray-200 tw-text-gray-700 hover:tw-bg-gray-300{% endif %}" 
+                        data-year="{{ calendar.academic_year }}">
+                    Academic Year {{ calendar.academic_year }}
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Dynamic Academic Calendar Content -->
+    {% if active_calendar and events %}
+    <div class="calendar-year" id="calendar-{{ active_calendar.academic_year }}">
+        <div class="row">
+            <!-- First Semester -->
+            <div class="col-lg-6 tw-mb-8">
+                <div class="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-overflow-hidden">
+                    <div class="tw-bg-gradient-to-r tw-from-green-500 tw-to-emerald-600 tw-text-white tw-p-4">
+                        <h3 class="tw-text-xl tw-font-bold tw-mb-0">
+                            <i class="fas fa-leaf tw-mr-2"></i>
+                            First Semester
+                        </h3>
+                    </div>
+                    <div class="tw-p-6">
+                        <div class="tw-space-y-4">
+                            {% regroup events|dictsort:"start_date" by start_date|date:"F Y" as month_groups %}
+                            {% for month_group in month_groups %}
+                                {% if month_group.grouper|date:"m"|add:0 <= 6 or month_group.grouper|date:"m"|add:0 >= 7 %}
+                                <div class="tw-border-l-4 tw-border-green-500 tw-pl-4">
+                                    <h4 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-2">{{ month_group.grouper }}</h4>
+                                    <div class="tw-space-y-2">
+                                        {% for event in month_group.list %}
+                                            {% if event.semester == 'first' or event.semester == 'both' %}
+                                            <div class="tw-flex tw-items-center tw-gap-3">
+                                                <span class="tw-px-2 tw-py-1 tw-rounded tw-text-sm tw-font-medium
+                                                    {% if event.event_type == 'holiday' %}tw-bg-red-100 tw-text-red-800
+                                                    {% elif event.event_type == 'exam' %}tw-bg-yellow-100 tw-text-yellow-800
+                                                    {% elif event.event_type == 'break' %}tw-bg-orange-100 tw-text-orange-800
+                                                    {% elif event.event_type == 'event' %}tw-bg-purple-100 tw-text-purple-800
+                                                    {% else %}tw-bg-blue-100 tw-text-blue-800{% endif %}">
+                                                    {{ event.start_date|date:"j M" }}
+                                                </span>
+                                                <span class="tw-text-gray-700">
+                                                    {{ event.title }}
+                                                    {% if event.is_important %}<i class="fas fa-star tw-text-yellow-500 tw-ml-1"></i>{% endif %}
+                                                </span>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Semester -->
+            <div class="col-lg-6 tw-mb-8">
+                <div class="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-overflow-hidden">
+                    <div class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-red-600 tw-text-white tw-p-4">
+                        <h3 class="tw-text-xl tw-font-bold tw-mb-0">
+                            <i class="fas fa-sun tw-mr-2"></i>
+                            Second Semester
+                        </h3>
+                    </div>
+                    <div class="tw-p-6">
+                        <div class="tw-space-y-4">
+                            {% for month_group in month_groups %}
+                                {% if month_group.grouper|date:"m"|add:0 >= 1 and month_group.grouper|date:"m"|add:0 <= 6 %}
+                                <div class="tw-border-l-4 tw-border-orange-500 tw-pl-4">
+                                    <h4 class="tw-text-lg tw-font-semibold tw-text-gray-800 tw-mb-2">{{ month_group.grouper }}</h4>
+                                    <div class="tw-space-y-2">
+                                        {% for event in month_group.list %}
+                                            {% if event.semester == 'second' or event.semester == 'both' %}
+                                            <div class="tw-flex tw-items-center tw-gap-3">
+                                                <span class="tw-px-2 tw-py-1 tw-rounded tw-text-sm tw-font-medium
+                                                    {% if event.event_type == 'holiday' %}tw-bg-red-100 tw-text-red-800
+                                                    {% elif event.event_type == 'exam' %}tw-bg-yellow-100 tw-text-yellow-800
+                                                    {% elif event.event_type == 'break' %}tw-bg-orange-100 tw-text-orange-800
+                                                    {% elif event.event_type == 'event' %}tw-bg-purple-100 tw-text-purple-800
+                                                    {% else %}tw-bg-blue-100 tw-text-blue-800{% endif %}">
+                                                    {{ event.start_date|date:"j M" }}
+                                                </span>
+                                                <span class="tw-text-gray-700">
+                                                    {{ event.title }}
+                                                    {% if event.is_important %}<i class="fas fa-star tw-text-yellow-500 tw-ml-1"></i>{% endif %}
+                                                </span>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- No Calendar Data -->
+    <div class="row">
+        <div class="col-12">
+            <div class="tw-bg-white tw-rounded-2xl tw-shadow-lg tw-p-6">
+                <div class="tw-text-center tw-py-12">
+                    <i class="fas fa-calendar-alt fa-4x tw-text-gray-300 tw-mb-4"></i>
+                    <h3 class="tw-text-xl tw-font-semibold tw-text-gray-600 tw-mb-2">Academic Calendar</h3>
+                    <p class="tw-text-gray-500">Academic calendar information will be available here.</p>
+                    <p class="tw-text-sm tw-text-gray-400">Contact the administration office for detailed information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Important Notes -->
+    <div class="row tw-mt-8">
+        <div class="col-12">
+            <div class="tw-bg-yellow-50 tw-border tw-border-yellow-200 tw-rounded-2xl tw-p-6">
+                <div class="tw-flex tw-items-start tw-gap-4">
+                    <div class="tw-bg-yellow-100 tw-p-3 tw-rounded-full">
+                        <i class="fas fa-exclamation-triangle tw-text-yellow-600 tw-text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="tw-text-lg tw-font-semibold tw-text-yellow-800 tw-mb-2">Important Notes</h4>
+                        <ul class="tw-text-yellow-700 tw-space-y-1">
+                            <li>• All dates are subject to change. Please check with the administration for updates.</li>
+                            <li>• Examination schedules will be published separately before each semester.</li>
+                            <li>• Holiday dates may vary based on government notifications.</li>
+                            <li>• For any queries regarding the academic calendar, contact the academic office.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Download Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-gradient-primary text-white py-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h3 class="card-title mb-0">
+                                <i class="fas fa-file-pdf me-3"></i>
+                                Academic Calendar Downloads
+                            </h3>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <span class="badge bg-light text-dark fs-6">PDF Format</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        {% for calendar in calendars %}
+                        <div class="col-lg-6">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-header {% if calendar.is_active %}bg-success{% else %}bg-secondary{% endif %} text-white d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="card-title mb-1">Academic Year {{ calendar.academic_year }}</h5>
+                                        <small class="opacity-75">{% if calendar.is_active %}Current Session{% else %}Previous Session{% endif %}</small>
+                                    </div>
+                                    <span class="badge bg-light {% if calendar.is_active %}text-success{% else %}text-secondary{% endif %}">
+                                        {% if calendar.is_active %}Active{% else %}Archive{% endif %}
+                                    </span>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-calendar-alt text-primary me-2"></i>
+                                            <span class="text-muted">{{ calendar.start_date|date:"F Y" }} - {{ calendar.end_date|date:"F Y" }}</span>
+                                        </div>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-graduation-cap text-info me-2"></i>
+                                            <span class="text-muted">Complete Schedule</span>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-clock text-warning me-2"></i>
+                                            <span class="text-muted">Updated: {{ calendar.updated_at|date:"M Y" }}</span>
+                                        </div>
+                                        {% if calendar.pdf_file %}
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-file-pdf text-danger me-2"></i>
+                                            <span class="text-muted">{{ calendar.pdf_file_size|default:"PDF Available" }}</span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{% url 'college_website:academic_calendar_pdf' calendar.academic_year %}" 
+                                       class="btn {% if calendar.is_active %}btn-primary{% else %}btn-outline-secondary{% endif %} w-100 d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-download me-2"></i>
+                                        Download PDF
+                                    </a>
+                                    <small class="text-muted d-block text-center mt-2">~2.5 MB</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-phone me-2"></i>
+                        Contact Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <strong>Academic Office:</strong> +91-9425540666
+                    </div>
+                    <div class="mb-2">
+                        <strong>Email:</strong> {{ college_info.email|default:"chaitanyapamgarh@gmail.com" }}
+                    </div>
+                    <div class="mb-0">
+                        <strong>Office Hours:</strong> 9:00 AM - 5:00 PM (Mon-Fri)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        PDF Contents
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-1"><i class="fas fa-check text-success me-2"></i>Complete academic schedule</li>
+                        <li class="mb-1"><i class="fas fa-check text-success me-2"></i>Important dates & holidays</li>
+                        <li class="mb-1"><i class="fas fa-check text-success me-2"></i>Examination schedules</li>
+                        <li class="mb-0"><i class="fas fa-check text-success me-2"></i>Contact information</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Custom Bootstrap Enhancements */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #0d6efd, #6610f2) !important;
+}
+
+.card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Calendar Navigation */
+.active-calendar-tab {
+    background: linear-gradient(135deg, #0d6efd, #6610f2) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.calendar-year {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero Section Animation */
+.tw-animate-fade-in-up {
+    animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* PDF Download Section Enhancements */
+.card-header.bg-success {
+    background: linear-gradient(135deg, #198754, #20c997) !important;
+}
+
+.card-header.bg-secondary {
+    background: linear-gradient(135deg, #6c757d, #adb5bd) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .btn {
+        font-size: 0.9rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Calendar year navigation
+    const calendarTabs = document.querySelectorAll('[data-year]');
+    const calendarYears = document.querySelectorAll('.calendar-year');
+
+    calendarTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const year = this.dataset.year;
+            
+            // Update active tab
+            calendarTabs.forEach(t => {
+                t.classList.remove('active-calendar-tab');
+                t.classList.add('tw-bg-gray-200', 'tw-text-gray-700');
+                t.classList.remove('tw-bg-blue-600', 'tw-text-white');
+            });
+            
+            this.classList.add('active-calendar-tab');
+            this.classList.remove('tw-bg-gray-200', 'tw-text-gray-700');
+            this.classList.add('tw-bg-blue-600', 'tw-text-white');
+            
+            // Show/hide calendar years
+            calendarYears.forEach(calendar => {
+                calendar.classList.add('tw-hidden');
+            });
+            
+            const targetCalendar = document.getElementById(`calendar-${year}`);
+            if (targetCalendar) {
+                targetCalendar.classList.remove('tw-hidden');
+            }
+        });
+    });
+
+    // Smooth scrolling for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // PDF Download functionality
+    function setupPDFDownloads() {
+        const downloadLinks = document.querySelectorAll('a[href*="academic_calendar_pdf"]');
+        
+        downloadLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Add loading state
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating PDF...';
+                this.classList.add('disabled');
+                
+                // Reset button after a delay
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.remove('disabled');
+                }, 3000);
+            });
+        });
+    }
+
+    // Initialize PDF download functionality
+    setupPDFDownloads();
+});
+</script>
+{% endblock %}

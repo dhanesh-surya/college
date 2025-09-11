@@ -4,7 +4,12 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+<<<<<<< HEAD
     const heroBannerForm = document.querySelector('.hero-banner-admin form');
+=======
+    // Look for hero banner admin form in Django admin
+    const heroBannerForm = document.querySelector('#herobanner_form, .hero-banner-admin form, form[action*="herobanner"]');
+>>>>>>> a11168e (Fix)
     if (!heroBannerForm) return;
 
     // Initialize the interface
@@ -12,8 +17,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initHeroBannerAdmin() {
+<<<<<<< HEAD
     // Get form elements
     const backgroundTypeSelect = document.getElementById('background-type-select');
+=======
+    // Get form elements - try multiple selectors for Django admin
+    const backgroundTypeSelect = document.getElementById('background-type-select') || 
+                                document.querySelector('select[name="background_type"]');
+>>>>>>> a11168e (Fix)
     const gradientFields = document.querySelector('.gradient-fields');
     const solidFields = document.querySelector('.solid-fields');
     const imageFields = document.querySelector('.image-fields');
@@ -123,8 +134,15 @@ function initRealTimePreview() {
     const previewContainer = createPreviewContainer();
     if (!previewContainer) return;
     
+<<<<<<< HEAD
     // Add preview after the form
     const form = document.querySelector('.hero-banner-admin form');
+=======
+    // Add preview after the form - try multiple selectors
+    const form = document.querySelector('.hero-banner-admin form') || 
+                 document.querySelector('#herobanner_form') ||
+                 document.querySelector('form[action*="herobanner"]');
+>>>>>>> a11168e (Fix)
     if (form) {
         form.parentNode.insertBefore(previewContainer, form.nextSibling);
     }
@@ -181,7 +199,13 @@ function createPreviewContainer() {
 }
 
 function addPreviewListeners(previewContainer) {
+<<<<<<< HEAD
     const form = document.querySelector('.hero-banner-admin form');
+=======
+    const form = document.querySelector('.hero-banner-admin form') || 
+                 document.querySelector('#herobanner_form') ||
+                 document.querySelector('form[action*="herobanner"]');
+>>>>>>> a11168e (Fix)
     if (!form) return;
     
     // Title preview
@@ -354,7 +378,13 @@ function updatePreviewBackground(backgroundType, previewContainer) {
 }
 
 function initFormValidation() {
+<<<<<<< HEAD
     const form = document.querySelector('.hero-banner-admin form');
+=======
+    const form = document.querySelector('.hero-banner-admin form') || 
+                 document.querySelector('#herobanner_form') ||
+                 document.querySelector('form[action*="herobanner"]');
+>>>>>>> a11168e (Fix)
     if (!form) return;
     
     form.addEventListener('submit', function(e) {
@@ -367,7 +397,13 @@ function initFormValidation() {
 
 function validateForm() {
     let isValid = true;
+<<<<<<< HEAD
     const form = document.querySelector('.hero-banner-admin form');
+=======
+    const form = document.querySelector('.hero-banner-admin form') || 
+                 document.querySelector('#herobanner_form') ||
+                 document.querySelector('form[action*="herobanner"]');
+>>>>>>> a11168e (Fix)
     
     // Clear previous validation
     clearValidationErrors();

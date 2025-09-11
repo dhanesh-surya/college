@@ -11,11 +11,14 @@ urlpatterns = [
     # Menu Test (for debugging)
     path('menu-test/', views.menu_test_view, name='menu_test'),
     
+<<<<<<< HEAD
     # Navbar Configuration
     path('admin/navbar-config/', navbar_views.navbar_config_view, name='navbar_config'),
     path('admin/navbar-config/reset/', navbar_views.navbar_config_reset, name='navbar_config_reset'),
     path('admin/navbar-preview/', navbar_views.navbar_preview, name='navbar_preview'),
     
+=======
+>>>>>>> a11168e (Fix)
     # Home Section
     path('home/', include([
         path('', views.home_view, name='home_index'),
@@ -34,6 +37,7 @@ urlpatterns = [
         path('administration/', views.administration_view, name='administration'),
         path('organizational-structure/', views.organizational_structure_view, name='organizational_structure'),
         path('statutory-approvals/', views.statutory_approvals_view, name='statutory_approvals'),
+        path('infrastructure/', views.infrastructure_view, name='infrastructure'),
         path('policies/', include([
             path('', views.policies_view, name='policies'),
             path('anti-ragging/', views.anti_ragging_policy_view, name='anti_ragging_policy'),
@@ -62,6 +66,7 @@ urlpatterns = [
             path('phd-research/', views.phd_research_view, name='phd_research'),
         ])),
         path('academic-calendar/', views.academic_calendar_view, name='academic_calendar'),
+        path('academic-calendar/<str:year>/pdf/', views.academic_calendar_pdf_view, name='academic_calendar_pdf'),
         path('syllabus-curriculum/', views.syllabus_curriculum_view, name='syllabus_curriculum'),
         path('teaching-learning-resources/', views.teaching_learning_resources_view, name='teaching_learning_resources'),
         path('library/', views.LibraryListView.as_view(), name='academics_library'),
@@ -223,6 +228,9 @@ urlpatterns = [
     path('navigation-demo/', views.navigation_demo_view, name='navigation_demo'),
     path('test-nav/', views.test_navigation_view, name='test_navigation'),
     path('simple-nav-test/', views.simple_nav_test_view, name='simple_nav_test'),
+    
+    # Hero Banner Management
+    path('hero-banner/', views.hero_banner_management, name='hero_banner_management'),
     
     # Hero Banner Management
     path('hero-banner/', views.hero_banner_management, name='hero_banner_management'),

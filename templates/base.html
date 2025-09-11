@@ -214,6 +214,29 @@
             position: relative !important;
             z-index: 1 !important;
             clear: both !important;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Breadcrumb styling */
+        .hero-section .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .hero-section .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .hero-section .breadcrumb-item a:hover {
+            color: white;
+        }
+        
+        .hero-section .breadcrumb-item.active {
+            color: rgba(255, 255, 255, 0.7);
         }
         
         /* Specific navbar visibility fixes only */
@@ -3858,6 +3881,7 @@
     </div>
     {% endif %}
     
+<<<<<<< HEAD
     <!-- Bootstrap 5 Navbar -->
     {% load static %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
@@ -4136,6 +4160,16 @@
     {% block banner %}
     {% if show_banner|default:True %}
     <div class="hero-section" style="margin-top: 0 !important; padding: 0.1rem 0 !important;">
+=======
+    <!-- HYBRID NAVBAR: Beautiful Static Design + CMS Menu System -->
+    {% include 'includes/hybrid_navbar.html' %}
+    
+    {% block banner %}
+    {% if show_banner|default:True %}
+    <!-- Only show breadcrumb if not on homepage -->
+    {% if request.resolver_match.url_name != 'home' %}
+    <div class="hero-section py-3" style="margin-top: 10px !important;">
+>>>>>>> a11168e (Fix)
         <div class="container">
             {% block breadcrumbs %}
             <nav aria-label="breadcrumb">
@@ -4147,6 +4181,7 @@
             {% endblock %}
         </div>
     </div>
+    {% endif %}
     {% endif %}
     {% endblock %}
     

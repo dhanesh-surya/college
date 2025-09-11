@@ -116,6 +116,139 @@
     background-clip: text;
 }
 
+<<<<<<< HEAD
+=======
+/* Fresh Statistics Section */
+.fresh-stats-section {
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Floating Animation */
+@keyframes floatUpDown {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Fresh Statistics Cards */
+.fresh-stat-card {
+    border: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.fresh-stat-card:hover {
+    transform: translateY(-20px) scale(1.05);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 1);
+}
+
+.fresh-stat-card:hover > div:first-child {
+    opacity: 1;
+}
+
+.fresh-stat-card:hover > div:last-child {
+    transform: scaleX(1);
+}
+
+.fresh-stat-card:hover .position-relative:first-child {
+    transform: scale(1.2) rotate(10deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.fresh-stat-card:hover .mb-3:first-of-type {
+    transform: scale(1.1);
+}
+
+.fresh-stat-card:hover .mb-3:last-of-type {
+    transform: translateY(-5px);
+}
+
+/* Animation for section entrance */
+.fresh-stats-section .fresh-stat-card {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.fresh-stats-section .fresh-stat-card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.fresh-stats-section .fresh-stat-card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.fresh-stats-section .fresh-stat-card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.fresh-stats-section .fresh-stat-card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+/* Responsive adjustments for fresh statistics */
+@media (max-width: 768px) {
+    .fresh-stats-section {
+        padding: 1.5rem 0 !important;
+    }
+    
+    .fresh-stat-card {
+        margin-bottom: 0.75rem;
+        padding: 0.75rem 0.5rem !important;
+    }
+    
+    .fresh-stat-card .position-relative:first-child {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    .fresh-stat-card .position-relative:first-child i {
+        font-size: 1.1rem !important;
+    }
+    
+    .fresh-stat-card .mb-1:first-of-type {
+        font-size: 1.5rem !important;
+    }
+    
+    .fresh-stat-card .mb-1:last-of-type {
+        font-size: 0.7rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .fresh-stats-section {
+        padding: 1rem 0 !important;
+    }
+    
+    .fresh-stat-card {
+        padding: 0.75rem 0.5rem !important;
+    }
+    
+    .fresh-stat-card .position-relative:first-child {
+        width: 35px !important;
+        height: 35px !important;
+    }
+    
+    .fresh-stat-card .position-relative:first-child i {
+        font-size: 1rem !important;
+    }
+    
+    .fresh-stat-card .mb-1:first-of-type {
+        font-size: 1.3rem !important;
+    }
+    
+    .fresh-stat-card .mb-1:last-of-type {
+        font-size: 0.65rem !important;
+    }
+}
+
+>>>>>>> a11168e (Fix)
 /* Mission Section */
 .mission-section {
     position: relative;
